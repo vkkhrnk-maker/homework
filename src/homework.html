@@ -606,7 +606,7 @@ const UI = {
   speakBetter:  { ru: "Как сказать лучше", en: "A better way to say it" },
   speakEmpty:   { ru: "Ответ не расслышан. Попробуйте ещё раз, ближе к микрофону.", en: "The answer wasn't heard. Try again, closer to the microphone." },
   speakNeedKey: { ru: "Чтобы ИИ проверял ответы, подключите бесплатный Gemini.", en: "Connect free Gemini to get your answers checked." },
-  speakNeedGemini:{ ru: "Голос слушает только Gemini. Подключите его в меню или напишите ответ.", en: "Only Gemini can listen to voice. Connect it in the menu or type the answer." },
+  speakNeedGemini:{ ru: "Claude не умеет слушать аудио, поэтому голос проверяет бесплатный Gemini. Подключите его в меню — или напишите ответ, его проверит и Claude.", en: "Claude can't listen to audio, so voice answers are checked by free Gemini. Connect it in the menu, or type the answer and Claude will check it." },
   micDenied:    { ru: "Нет доступа к микрофону. Разрешите его в настройках телефона и попробуйте снова.", en: "No microphone access. Allow it in your phone settings and try again." },
   reportSpeak:  { ru: "Говорение", en: "Speaking" },
   reportAnswer: { ru: "Ответ", en: "Answer" },
@@ -629,15 +629,20 @@ const UI = {
   aiGemini:     { ru: "Gemini · бесплатно", en: "Gemini · free" },
   aiGeminiHow:  { ru: 'Ключ выдают бесплатно в <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>. На бесплатном тарифе Google может использовать запросы для улучшения своих продуктов.',
                   en: 'Get a free key in <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>. On the free tier Google may use requests to improve its products.' },
-  aiClaudeHow:  { ru: 'Оплата по факту с аккаунта Anthropic: разбор одного урока стоит несколько центов (модель Sonnet). Ключ создаётся на <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.',
+  aiClaudeHow:  { ru: 'Оплата по факту с аккаунта Anthropic: разбор одного урока стоит несколько центов (модель Sonnet). Голосовые ответы Claude не слушает, их проверяет только Gemini. Ключ создаётся на <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.',
                   en: 'Pay as you go from your Anthropic account: one lesson costs a few cents (Sonnet model). Create a key at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.' },
   aiKeyLabel:   { ru: n => `Ключ API ${n}`, en: n => `${n} API key` },
   aiSave:       { ru: "Сохранить", en: "Save" },
   aiOff:        { ru: "Отключить", en: "Disconnect" },
   aiConnected:  { ru: n => `${n} подключён`, en: n => `${n} connected` },
   aiDisconnected:{ ru: n => `${n} отключён`, en: n => `${n} disconnected` },
-  aiBadGemini:  { ru: "Ключ Gemini начинается с AIza", en: "A Gemini key starts with AIza" },
-  aiBadClaude:  { ru: "Ключ Claude начинается с sk-ant-", en: "A Claude key starts with sk-ant-" },
+  aiChecking:   { ru: "Проверяю ключ…", en: "Checking the key…" },
+  aiKeyShort:   { ru: "Ключ слишком короткий. Скопируйте его целиком.", en: "The key is too short. Copy it in full." },
+  aiLooksClaude:{ ru: "Это ключ Claude. Переключитесь сверху на Claude.", en: "This is a Claude key. Switch to Claude above." },
+  aiLooksGemini:{ ru: "Это ключ Gemini. Переключитесь сверху на Gemini.", en: "This is a Gemini key. Switch to Gemini above." },
+  aiKeyBadGemini:{ ru: "Gemini не принял ключ. Скопируйте его заново в Google AI Studio: кнопка «Copy» рядом с ключом.", en: "Gemini rejected the key. Copy it again in Google AI Studio with the Copy button." },
+  aiKeyBadClaude:{ ru: "Claude не принял ключ. Проверьте его на console.anthropic.com.", en: "Claude rejected the key. Check it at console.anthropic.com." },
+  aiKeyUnchecked:{ ru: "Ключ сохранён, но проверить его не вышло: нет связи. Если разбор не пойдёт, введите ключ заново.", en: "Key saved but couldn't be checked: no connection. If lessons fail, enter it again." },
   parseLocal:   { ru: "Урок сохранён только в этом браузере: база страницы сейчас недоступна.",
                   en: "The lesson is saved in this browser only: the page's storage is unavailable right now." },
   deleteBtn:    { ru: "Удалить урок", en: "Delete lesson" },
@@ -2023,6 +2028,17 @@ new MutationObserver(() => {
   if (getTheme() === "auto" && document.documentElement.hasAttribute("data-theme")) document.documentElement.removeAttribute("data-theme");
 }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
+/* ключ проверяем бесплатным запросом списка моделей, а не по первым буквам: форматы ключей меняются.
+   "ok" — сервис принял ключ, "bad" — отказал, "unknown" — проверить не вышло (нет сети) */
+async function testKey(pv, key) {
+  try {
+    const r = pv === "gemini"
+      ? await fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=1", { headers: { "x-goog-api-key": key } })
+      : await fetch("https://api.anthropic.com/v1/models?limit=1", { headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" } });
+    if (r.ok) return "ok";
+    return [400, 401, 403].includes(r.status) ? "bad" : "unknown";
+  } catch(e) { return "unknown"; }
+}
 function keySheet(pv = aiProvider()) {
   const isG = pv === "gemini", store = isG ? KEY_GEMINI : KEY_CLAUDE, has = !!lsGet(store);
   openSheet(`<h3>${t("aiSheetTitle")}</h3>
@@ -2036,12 +2052,20 @@ function keySheet(pv = aiProvider()) {
     inp.onfocus = () => { if (inp.value === "••••••••") inp.value = ""; };
     el.querySelector("[data-a=no]")?.addEventListener("click", closeSheet);
     el.querySelector("[data-a=del]")?.addEventListener("click", () => { lsDel(store); if (!isG) claudeP = null; closeSheet(); toast(t("aiDisconnected", AI_NAMES[pv])); });
-    el.querySelector("[data-a=ok]").onclick = () => {
-      const v = inp.value.trim();
-      if (v === "••••••••" || (!v && has)) { lsSet("et-ai", pv); closeSheet(); return; }
-      if (isG ? !/^AIza/.test(v) : !/^sk-ant-/.test(v)) { toast(isG ? t("aiBadGemini") : t("aiBadClaude")); return; }
+    const okBtn = el.querySelector("[data-a=ok]");
+    okBtn.onclick = async () => {
+      const raw = inp.value.trim();
+      if (raw === "••••••••" || (!raw && has)) { lsSet("et-ai", pv); closeSheet(); return; }
+      const v = raw.replace(/\s+/g, "").replace(/^["'«»“”]+|["'«»“”]+$/g, "");   // ключ часто копируется с пробелом или в кавычках
+      if (v.length < 20) return toast(t("aiKeyShort"));
+      if (isG && /^sk-ant-/.test(v)) return toast(t("aiLooksClaude"));
+      if (!isG && /^AIza/.test(v)) return toast(t("aiLooksGemini"));
+      okBtn.disabled = true; okBtn.textContent = t("aiChecking");
+      const res = await testKey(pv, v);
+      okBtn.disabled = false; okBtn.textContent = t("aiSave");
+      if (res === "bad") return toast(t(isG ? "aiKeyBadGemini" : "aiKeyBadClaude"), 4500);
       lsSet(store, v); lsSet("et-ai", pv); if (!isG) claudeP = null;
-      closeSheet(); toast(t("aiConnected", AI_NAMES[pv]));
+      closeSheet(); toast(res === "ok" ? t("aiConnected", AI_NAMES[pv]) : t("aiKeyUnchecked"), res === "ok" ? 2600 : 4500);
       if ($("#paste-area").value.trim()) parseHint("parseReady");
     };
   });
