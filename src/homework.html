@@ -32,7 +32,7 @@
 *{box-sizing:border-box}
 html,body{min-height:100%}
 html{overflow-x:hidden}
-body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s;overflow-x:hidden}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 input,textarea{font:inherit;color:inherit}
 button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -134,7 +134,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .toc a{display:block;padding:7px 10px;border-radius:var(--r-s);font-size:14px;color:var(--fg-2);text-decoration:none}
 .toc a:hover{background:var(--surface);color:var(--fg)}
 .toc a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
-.theory-body{max-width:680px;display:grid;gap:12px}
+.theory-body{max-width:680px;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
 .rule{background:var(--surface);border-radius:var(--r-l);padding:18px 18px 20px;scroll-margin-top:calc(120px + env(safe-area-inset-top,0px))}
 .rule .modal-name{display:block;font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
 .rule .gloss{display:block;font-size:14px;color:var(--fg-2);margin-top:2px}
@@ -152,7 +152,11 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .examples li.wrong::before{background:var(--danger)}
 .callout{background:var(--accent-soft);border-radius:var(--r-s);padding:12px 14px;margin-top:12px;font-size:14px}
 .callout b{color:var(--accent)}
-.prob-table,.sum-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+.use-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fix-btn{flex:none;font-size:12px;font-weight:600;color:var(--fg-2);background:var(--bg);border-radius:999px;padding:5px 12px}
+.fix-btn:hover{background:var(--surface-2);color:var(--fg)}
+.table-scroll{overflow-x:auto;margin-top:6px;-webkit-overflow-scrolling:touch}
+.prob-table,.sum-table{width:100%;border-collapse:collapse;font-size:14px}
 .prob-table td,.sum-table td{padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:top}
 .prob-table tr:last-child td,.sum-table tr:last-child td{border-bottom:0}
 .prob-table td:first-child,.sum-table td:first-child{font-weight:600;color:var(--accent);white-space:nowrap}
@@ -571,6 +575,20 @@ const UI = {
   parseBusy:    { ru: "Слишком много запросов к Claude. Подождите пару минут и попробуйте снова.",
                   en: "Too many requests to Claude. Wait a couple of minutes and try again." },
   parseTooLong: { ru: "Текст слишком длинный. Вставьте урок частями.", en: "The text is too long. Paste the lesson in parts." },
+  fixBtn:       { ru: "Исправить", en: "Fix" },
+  fixSheetTitle:{ ru: "Что здесь не так?", en: "What's wrong here?" },
+  fixSheetLead: { ru: "Опишите проблему своими словами — ИИ перепишет этот кусок урока.",
+                  en: "Describe the problem in your own words — the AI will rewrite this part of the lesson." },
+  fixPh:        { ru: "Например: непонятно, что отвечать в первом вопросе", en: "For example: unclear what to answer in the first question" },
+  fixCancel:    { ru: "Отмена", en: "Cancel" },
+  fixEmpty:     { ru: "Напишите, что здесь не так.", en: "Write what's wrong here." },
+  fixThinking:  { ru: "Переписываю…", en: "Rewriting…" },
+  fixDone:      { ru: "Готово, исправила.", en: "Done, fixed." },
+  fixOffline:   { ru: "Нет связи с интернетом.", en: "No internet connection." },
+  fixBusy:      { ru: "Слишком много запросов к ИИ. Подождите немного и попробуйте снова.",
+                  en: "Too many requests to the AI. Wait a bit and try again." },
+  fixFailed:    { ru: "Не получилось переписать. Попробуйте ещё раз или переформулируйте просьбу.",
+                  en: "Couldn't rewrite it. Try again or rephrase your note." },
   parseBad:     { ru: "ИИ вернул урок в неудобном виде. Нажмите «Разобрать урок» ещё раз.",
                   en: "The AI returned the lesson in an unusable shape. Press the button again." },
   parseRefused: { ru: "ИИ не стал разбирать этот текст. Проверьте, что вставлен именно урок.",
@@ -1541,8 +1559,8 @@ const BUILTIN_LESSONS = [
       items: flattenSpeak(PAST_SPEAK),
       seconds: 120,
       eyebrow: { ru: "11 заданий · своя история вслух", en: "11 tasks · your own story, out loud" },
-      howTo: { ru: "Выберите тему: поездка, которая пошла не так · таинственный незнакомец · неловкий момент · неожиданная находка · опасная ситуация. Детали можно придумать, но постарайтесь использовать все четыре времени.",
-               en: "Choose a topic: a journey that went wrong · a mysterious stranger · an embarrassing experience · a surprising discovery · a dangerous situation. You can invent details, but try to use all four past tenses." },
+      howTo: { ru: "Отвечайте по одному шагу за раз — история соберётся постепенно, не нужно сразу рассказывать её целиком. Тему придумайте сами: поездка, которая пошла не так · таинственный незнакомец · неловкий момент · неожиданная находка · опасная ситуация.",
+               en: "Answer one step at a time — the story builds up gradually, you don't need to tell it all at once. Pick any topic: a journey that went wrong · a mysterious stranger · an embarrassing experience · a surprising discovery · a dangerous situation." },
       tips: PAST_LINKERS,
       tipsLabel: { ru: "Связки", en: "Linking words" }
     }
@@ -1727,10 +1745,37 @@ function buildLesson({ id, createdAt, lesson: x }) {
 }
 
 let LESSONS = BUILTIN_LESSONS.slice();
+/* точечные правки формулировок через ассистента: хранятся отдельно от самого урока,
+   чтобы встроенные уроки не трогать, а переживают переразбор своих уроков */
+const OVERRIDES_KEY = "et-overrides-v1";
+let overrides = {};
+try { overrides = JSON.parse(localStorage.getItem(OVERRIDES_KEY) || "{}"); } catch(e) {}
+function saveOverrides() { try { localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides)); } catch(e) {} }
+function setAtPath(obj, path, value) {
+  const keys = path.split(".");
+  const last = keys.pop();
+  let o = obj;
+  for (const k of keys) { if (!o) return; o = o[k]; }
+  if (o) o[last] = value;
+}
+function getAtPath(obj, path) { return path.split(".").reduce((o, k) => o?.[k], obj); }
+function applyOverride(lessonId, path, value) {
+  (overrides[lessonId] ??= {})[path] = value;
+  saveOverrides();
+  setAtPath(LESSONS.find(l => l.id === lessonId), path, value);
+}
+function applyOverrides() {
+  for (const [id, patches] of Object.entries(overrides)) {
+    const l = LESSONS.find(x => x.id === id);
+    if (!l) continue;
+    for (const [path, value] of Object.entries(patches)) setAtPath(l, path, value);
+  }
+}
 function rebuildLessons() {
   const own = customRaw.slice().sort((a, b) => b.createdAt - a.createdAt)
     .map(r => { try { return buildLesson(r); } catch(e) { return null; } }).filter(Boolean);
   LESSONS = [...own, ...BUILTIN_LESSONS];
+  applyOverrides();
 }
 rebuildLessons();
 
@@ -1921,7 +1966,7 @@ async function geminiJSON(prompt, { signal, audio }) {
   try {
     r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent", {
       method: "POST", signal, headers: { "Content-Type": "application/json", "x-goog-api-key": lsGet(KEY_GEMINI) },
-      body: JSON.stringify({ contents: [{ role: "user", parts: [...(audio ? [{ inline_data: { mime_type: audio.mime, data: audio.data } }] : []), { text: prompt }] }], generationConfig: { responseMimeType: "application/json", maxOutputTokens: 32768 } })
+      body: JSON.stringify({ contents: [{ role: "user", parts: [...(audio ? [{ inline_data: { mime_type: audio.mime, data: audio.data } }] : []), { text: prompt }] }], generationConfig: { responseMimeType: "application/json", maxOutputTokens: 32768, thinkingConfig: { thinkingBudget: 0 } } })
     });
   } catch(e) { throw { code: signal?.aborted ? "cancelled" : "offline" }; }
   if (!r.ok) {
@@ -2068,6 +2113,50 @@ function keySheet(pv = aiProvider()) {
       closeSheet(); toast(res === "ok" ? t("aiConnected", AI_NAMES[pv]) : t("aiKeyUnchecked"), res === "ok" ? 2600 : 4500);
       if ($("#paste-area").value.trim()) parseHint("parseReady");
     };
+  });
+}
+
+/* точечная правка куска урока голосом ассистента: рядом с вопросом/правилом —
+   кнопка «Исправить», ассистент переписывает только этот JSON-объект */
+function fixPrompt(label, data, note) {
+  return `You are fixing one small part of an English-lesson app for a Russian-speaking student. Below is one JSON object from the lesson — ${label} — and a note in Russian describing what is wrong with it.
+
+Return ONLY a corrected JSON object with exactly the same keys and types as the original. Fix only what the note asks; otherwise keep everything as close to the original as makes sense. Bilingual fields are {"ru":"...","en":"..."} objects — keep both languages filled in and natural. Inside strings only <b>, <i> and <br> are allowed, no Markdown.
+
+<original>
+${JSON.stringify(data)}
+</original>
+
+<note>
+${note}
+</note>`;
+}
+function fixSheet(label, data, onApply) {
+  openSheet(`<h3>${t("fixSheetTitle")}</h3>
+    <p>${t("fixSheetLead")}</p>
+    <textarea class="sp-text" id="fix-text" placeholder="${t("fixPh")}"></textarea>
+    <div class="acts"><button class="ghost-btn" data-a="cancel">${t("fixCancel")}</button><button class="primary-btn" data-a="ok">${t("fixBtn")}</button></div>`, el => {
+    el.querySelector("[data-a=cancel]").addEventListener("click", closeSheet);
+    el.querySelector("#fix-text").focus();
+    const okBtn = el.querySelector("[data-a=ok]");
+    okBtn.addEventListener("click", async () => {
+      const note = el.querySelector("#fix-text").value.trim();
+      if (!note) return toast(t("fixEmpty"));
+      const ai = await lessonAI();
+      if (!ai) { closeSheet(); return keySheet(); }
+      okBtn.disabled = true; okBtn.textContent = t("fixThinking");
+      try {
+        const raw = await ai.json(fixPrompt(label, data, note), {});
+        if (!raw || typeof raw !== "object" || Array.isArray(raw)) throw { code: "invalid_json" };
+        closeSheet();
+        onApply({ ...data, ...raw });
+        toast(t("fixDone"));
+      } catch (e) {
+        okBtn.disabled = false; okBtn.textContent = t("fixBtn");
+        if (e?.code === "cancelled") return;
+        toast(t(e?.code === "offline" ? "fixOffline" : e?.code === "rate_limited" ? "fixBusy" : e?.code === "bad_key" ? "parseBadKey" : "fixFailed"), 4000);
+      }
+    });
   });
 }
 
@@ -2274,15 +2363,15 @@ function renderTheory() {
   $("#theory-body").innerHTML = T.map((r, i) => `
     <section class="rule" id="rule-${i}">
       <div class="rule-head"><span class="modal-name">${L(r.modal)}</span><span class="gloss">${L(r.gloss)}</span></div>
-      ${r.uses.map(u => `
+      ${r.uses.map((u, j) => `
         <div class="use">
-          <div class="use-name">${L(u.name)}</div>
+          <div class="use-head"><div class="use-name">${L(u.name)}</div><button class="fix-btn" data-fix-path="theory.${i}.uses.${j}">${t("fixBtn")}</button></div>
           ${u.note ? `<p class="use-note">${L(u.note)}</p>` : ""}
           ${u.forms ? u.forms.map(f => `<div class="formula">${L(f[0]) ? `<span class="formula-label">${L(f[0])}</span>` : ""}${f[1]}</div>`).join("") : ""}
-          ${u.table ? `<table class="prob-table">${u.table.map(row =>
-            `<tr><td>${row[0]}</td><td>${L(row[1])}<div style="color:var(--muted);font-family:var(--serif);font-size:13.5px;margin-top:2px">${row[2]}</div></td></tr>`).join("")}</table>` : ""}
-          ${u.summary ? `<table class="sum-table">${u.summary.map(row =>
-            `<tr><td>${row[0]}</td><td>${L(row[1])}</td><td>${row[2]}</td></tr>`).join("")}</table>` : ""}
+          ${u.table ? `<div class="table-scroll"><table class="prob-table">${u.table.map(row =>
+            `<tr><td>${row[0]}</td><td>${L(row[1])}<div style="color:var(--muted);font-family:var(--serif);font-size:13.5px;margin-top:2px">${row[2]}</div></td></tr>`).join("")}</table></div>` : ""}
+          ${u.summary ? `<div class="table-scroll"><table class="sum-table">${u.summary.map(row =>
+            `<tr><td>${row[0]}</td><td>${L(row[1])}</td><td>${row[2]}</td></tr>`).join("")}</table></div>` : ""}
           ${u.ex ? `<ul class="examples">${u.ex.map(e => `<li>${L(e)}</li>`).join("")}
             ${(u.wrong||[]).map(e => `<li class="wrong">${e}</li>`).join("")}</ul>` : ""}
           ${u.callout ? `<div class="callout">${L(u.callout)}</div>` : ""}
@@ -2293,6 +2382,11 @@ function renderTheory() {
     e.preventDefault();
     $("#rule-" + a.dataset.rule).scrollIntoView({ behavior: "smooth", block: "start" });
     setActiveToc(+a.dataset.rule);
+  }));
+  $$("#theory-body .fix-btn").forEach(b => b.addEventListener("click", () => {
+    const path = b.dataset.fixPath;
+    fixSheet("a theory explanation block (one 'use' inside a rule)", getAtPath(lesson(), path),
+      patched => { applyOverride(lesson().id, path, patched); renderTheory(); });
   }));
   observeRules();
   setActiveToc(0);
@@ -2349,6 +2443,7 @@ function renderDrill() {
     <div class="q-counter">
       <span>${t("qCounter", i+1, items.length)}</span>
       ${q.part ? `<span class="part-badge">${t("partBadge", q.part)}</span>` : ""}
+      <button class="fix-btn" id="drill-fix">${t("fixBtn")}</button>
     </div>
     <p class="q-sentence">${q.s[0]}<span class="blank ${state ? "" : "empty"}">${state ? q.a[0] : "&nbsp;&nbsp;&nbsp;&nbsp;"}</span>${cue}${q.s[1]}</p>
     ${state ? "" : `
@@ -2381,6 +2476,10 @@ function wireDrill(i) {
   $("#check-btn")?.addEventListener("click", () => check(i));
   $("#next-btn")?.addEventListener("click", () => { p.i = i+1; save(); renderDrill(); });
   $("#prev-btn")?.addEventListener("click", () => { p.i = i-1; save(); renderDrill(); });
+  $("#drill-fix")?.addEventListener("click", () => {
+    fixSheet("a fill-in-the-gap practice question", items[i],
+      patched => { applyOverride(lesson().id, `drill.items.${i}`, patched); renderDrill(); });
+  });
   $("#skip-btn")?.addEventListener("click", () => { p.i = Math.min(i+1, items.length); save(); renderDrill(); });
 }
 function check(i) {
@@ -2512,7 +2611,7 @@ function renderMatch() {
   const i = p.i, q = items[i], done = i in p.answered, chosen = p.chosen?.[i];
   const opts = optionsFor(M, i);
   $("#match-card").innerHTML = `
-    <div class="q-counter">${t("qCounter", i+1, items.length)}</div>
+    <div class="q-counter"><span>${t("qCounter", i+1, items.length)}</span><button class="fix-btn" id="match-fix">${t("fixBtn")}</button></div>
     <p class="q-sentence" style="max-width:28ch">${L(q.s)}</p>
     <div class="eyebrow" style="margin-bottom:8px">${M.ask ? L(M.ask) : t("matchAsk")}</div>
     <div class="match-options">
@@ -2534,6 +2633,10 @@ function renderMatch() {
     save(); renderMatch(); updateProgress();
   }));
   $("#m-next")?.addEventListener("click", () => { p.i = i+1; save(); renderMatch(); updateProgress(); });
+  $("#match-fix")?.addEventListener("click", () => {
+    fixSheet("a multiple-choice or vocabulary-matching question", items[i],
+      patched => { applyOverride(lesson().id, `match.items.${i}`, patched); renderMatch(); });
+  });
 }
 
 /* ============ говорение ============ */
@@ -2594,6 +2697,7 @@ function renderSpeak() {
     <div class="q-counter">
       <span>${t("qCounter", i+1, SP.length)}</span>
       ${q.group ? `<span class="part-badge">${L(q.group)}</span>` : ""}
+      <button class="fix-btn" id="speak-fix">${t("fixBtn")}</button>
     </div>
     <p class="speak-q">${q.q}</p>
     ${q.starter ? `<p class="starter">${t("starterLead")} <b>${q.starter}</b></p>` : ""}
@@ -2613,6 +2717,10 @@ function renderSpeak() {
   $("#s-check")?.addEventListener("click", () => { const v = $("#sp-text").value.trim(); if (v) checkAnswer(i, { text: v }); });
   $("#s-next")?.addEventListener("click", () => { p.i = i+1; save(); renderSpeak(); updateProgress(); });
   $("#s-prev")?.addEventListener("click", () => { p.i = i-1; save(); renderSpeak(); });
+  $("#speak-fix")?.addEventListener("click", () => {
+    fixSheet("a speaking practice question", q,
+      patched => { applyOverride(l.id, `speak.items.${i}`, patched); renderSpeak(); });
+  });
 }
 
 function speakResultHTML(a) {
