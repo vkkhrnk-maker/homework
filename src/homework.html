@@ -1966,13 +1966,20 @@ async function claudeJSON(prompt, { signal, onText }) {
   }
 }
 async function geminiJSON(prompt, { signal, audio }) {
+  const body = JSON.stringify({ contents: [{ role: "user", parts: [...(audio ? [{ inline_data: { mime_type: audio.mime, data: audio.data } }] : []), { text: prompt }] }], generationConfig: { responseMimeType: "application/json", maxOutputTokens: 32768, thinkingConfig: { thinkingBudget: 0 } } });
   let r;
-  try {
-    r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent", {
-      method: "POST", signal, headers: { "Content-Type": "application/json", "x-goog-api-key": lsGet(KEY_GEMINI) },
-      body: JSON.stringify({ contents: [{ role: "user", parts: [...(audio ? [{ inline_data: { mime_type: audio.mime, data: audio.data } }] : []), { text: prompt }] }], generationConfig: { responseMimeType: "application/json", maxOutputTokens: 32768, thinkingConfig: { thinkingBudget: 0 } } })
-    });
-  } catch(e) { throw { code: signal?.aborted ? "cancelled" : "offline" }; }
+  for (let attempt = 0; ; attempt++) {
+    const bounded = signal && AbortSignal.any ? AbortSignal.any([signal, AbortSignal.timeout(45000)]) : (signal || AbortSignal.timeout(45000));
+    try {
+      r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent", {
+        method: "POST", signal: bounded, headers: { "Content-Type": "application/json", "x-goog-api-key": lsGet(KEY_GEMINI) }, body
+      });
+      break;
+    } catch(e) {
+      if (signal?.aborted) throw { code: "cancelled" };
+      if (attempt > 0) throw { code: "offline" };   // мобильная сеть иногда рвёт один такой запрос с голосом, или ответ зависает — пробуем ещё раз, прежде чем сдаться
+    }
+  }
   if (!r.ok) {
     let j = null; try { j = await r.json(); } catch(e) {}
     const m = (j?.error?.message || "") + " " + (j?.error?.status || "");
@@ -2800,6 +2807,11 @@ async function toWav(blob) {
   return new Blob([view], { type: "audio/wav" });
 }
 const toBase64 = blob => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(",")[1]); fr.onerror = rej; fr.readAsDataURL(blob); });
+/* decodeAudioData иногда зависает насмерть на очень коротких записях в iOS Safari — лимит, чтобы не крутить вечно */
+const withTimeout = (promise, ms) => new Promise((res, rej) => {
+  const id = setTimeout(() => rej(new Error("timeout")), ms);
+  promise.then(v => { clearTimeout(id); res(v); }, e => { clearTimeout(id); rej(e); });
+});
 
 function speakPrompt(q, how) {
   const l = lesson();
@@ -2825,7 +2837,7 @@ async function checkAnswer(i, { audio, text }) {
     let check;
     if (audio) {
       let wav = audio;
-      try { wav = await toWav(audio); } catch(e) {}
+      try { wav = await withTimeout(toWav(audio), 5000); } catch(e) {}
       check = await geminiJSON(speakPrompt(q, "The attached audio is the student's spoken answer. In \"transcript\" write down exactly what they said, keeping their mistakes: never correct the transcript."),
         { signal: speakCtl.signal, audio: { mime: wav.type || "audio/mp4", data: await toBase64(wav) } });
     } else {
