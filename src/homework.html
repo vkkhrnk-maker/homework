@@ -1966,7 +1966,7 @@ async function claudeJSON(prompt, { signal, onText }) {
   }
 }
 async function geminiJSON(prompt, { signal, audio }) {
-  const body = JSON.stringify({ contents: [{ role: "user", parts: [...(audio ? [{ inline_data: { mime_type: audio.mime, data: audio.data } }] : []), { text: prompt }] }], generationConfig: { responseMimeType: "application/json", maxOutputTokens: 32768, thinkingConfig: { thinkingBudget: 0 } } });
+  const body = JSON.stringify({ contents: [{ role: "user", parts: [...(audio ? [{ inline_data: { mime_type: audio.mime, data: audio.data } }] : []), { text: prompt }] }], generationConfig: { responseMimeType: "application/json", maxOutputTokens: 32768 } });
   let r;
   for (let attempt = 0; ; attempt++) {
     const ctl = new AbortController();
@@ -1991,7 +1991,7 @@ async function geminiJSON(prompt, { signal, audio }) {
     const m = (j?.error?.message || "") + " " + (j?.error?.status || "");
     if (r.status === 401 || r.status === 403 || /API key|API_KEY/i.test(m)) throw { code: "bad_key" };
     if (r.status === 429) throw { code: "rate_limited" };
-    throw { code: "upstream_error" };
+    throw { code: "upstream_error", message: `${r.status}: ${m.trim() || "no details"}` };
   }
   const j = await r.json();
   if (j?.promptFeedback?.blockReason) throw { code: "refused" };
@@ -2860,7 +2860,7 @@ async function checkAnswer(i, { audio, text }) {
     save(); renderSpeak(); updateProgress();
   } catch (e) {
     speakUI.mode = "idle";
-    speakUI.err = e?.code === "cancelled" ? "" : t(PARSE_ERRORS[e?.code] || "parseFailed");
+    speakUI.err = e?.code === "cancelled" ? "" : t(PARSE_ERRORS[e?.code] || "parseFailed") + (e?.code === "upstream_error" && e.message ? ` (${e.message})` : "");
     renderSpeak();
   } finally { speakCtl = null; }
 }
