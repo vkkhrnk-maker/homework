@@ -1972,7 +1972,7 @@ async function geminiJSON(prompt, { signal, audio }) {
     const ctl = new AbortController();
     const onAbort = () => ctl.abort();
     signal?.addEventListener("abort", onAbort);
-    const timer = setTimeout(() => ctl.abort(), 45000);
+    const timer = setTimeout(() => ctl.abort(), 60000);
     try {
       r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent", {
         method: "POST", signal: ctl.signal, headers: { "Content-Type": "application/json", "x-goog-api-key": lsGet(KEY_GEMINI) }, body
@@ -1980,7 +1980,8 @@ async function geminiJSON(prompt, { signal, audio }) {
       break;
     } catch(e) {
       if (signal?.aborted) throw { code: "cancelled" };
-      if (attempt > 0) throw { code: "offline" };   // мобильная сеть иногда рвёт один такой запрос с голосом, или ответ зависает — пробуем ещё раз, прежде чем сдаться
+      // большая запись голоса иногда не проходит одним куском на мобильной сети — пробуем ещё пару раз, прежде чем сдаться
+      if (attempt > 1) throw { code: "offline", message: `${e?.name || "Error"}: ${e?.message || e}` };
     } finally {
       clearTimeout(timer);
       signal?.removeEventListener("abort", onAbort);
@@ -2860,7 +2861,7 @@ async function checkAnswer(i, { audio, text }) {
     save(); renderSpeak(); updateProgress();
   } catch (e) {
     speakUI.mode = "idle";
-    speakUI.err = e?.code === "cancelled" ? "" : t(PARSE_ERRORS[e?.code] || "parseFailed") + (e?.code === "upstream_error" && e.message ? ` (${e.message})` : "");
+    speakUI.err = e?.code === "cancelled" ? "" : t(PARSE_ERRORS[e?.code] || "parseFailed") + (e?.message ? ` (${e.message})` : "");
     renderSpeak();
   } finally { speakCtl = null; }
 }
