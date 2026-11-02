@@ -399,6 +399,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
     <div class="opts">
       <button class="opt" id="report-btn" hidden></button>
       <button class="opt" id="extend-btn" hidden></button>
+      <button class="opt" id="moveq-btn" hidden></button>
       <button class="opt" id="reset-btn" hidden></button>
       <button class="opt dz" id="delete-btn" hidden></button>
       <button class="opt" id="ai-btn"></button>
@@ -650,6 +651,9 @@ const UI = {
   fixKeys:      { ru: { s: "Предложение", verb: "Глагол-подсказка", a: "Ответ", also: "Другие ответы", why: "Разбор", hint: "Подсказка", name: "Заголовок", note: "Пояснение", forms: "Формулы", ex: "Примеры", wrong: "Ошибки", summary: "Таблица", callout: "Заметка", q: "Вопрос", starter: "Начало фразы" },
                   en: { s: "Sentence", verb: "Verb cue", a: "Answer", also: "Other answers", why: "Explanation", hint: "Hint", name: "Heading", note: "Note", forms: "Formulas", ex: "Examples", wrong: "Mistakes", summary: "Table", callout: "Callout", q: "Question", starter: "Sentence opener" } },
   extendBtn:    { ru: "Дополнить урок", en: "Extend the lesson" },
+  moveqBtn:     { ru: "Вопросы из теории — в говорение", en: "Move questions to speaking" },
+  moveqAsk:     { ru: n => `Перенести вопросы из теории в говорение: ${n}? Из теории они пропадут.`, en: n => `Move ${n} question(s) from theory to speaking? They will be removed from theory.` },
+  moveqDone:    { ru: "Готово, вопросы теперь в говорении.", en: "Done, the questions are now in speaking." },
   extendLead:   { ru: "Опишите, что добавить или изменить. ИИ покажет, что получится, и ничего не поменяет без вашего подтверждения.",
                   en: "Describe what to add or change. The AI shows the result first and changes nothing until you confirm." },
   extendPh:     { ru: "Например: добавь 15 слов уровня B2 по теме «путешествия»", en: "For example: add 15 B2 words about travel" },
@@ -1950,6 +1954,7 @@ speak = {"groups": [{"group": {"ru","en"}, "items": [{"q": "question or task in 
 const LESSON_RULES = `- drill: gap-fill items on the lesson's grammar or vocabulary. Exactly one gap per item: "s" holds the text before and after it and never contains the answer. Each answer must follow unambiguously from the context; put real alternatives in "also". Answers are 1–4 words, lowercase unless a proper noun. Use "part" only to group items into 2–3 sections.
 - match: "a" must exactly equal one of "options" (choice) or be one of the lesson's words (vocab).
 - Russian: natural and short, addressing the student with «вы». English: plain.
+- Questions for the student to discuss or answer (e.g. "Question: …") are not theory: put them in "speak", never in a rule's "callout" or "note". A "callout" is only a short tip or reminder.
 - Inside strings only <b>, <i> and <br> are allowed. No Markdown.`;
 
 /* урок из текста учителя */
@@ -2509,7 +2514,7 @@ async function commitExtension(l, ex) {
     S.progress[id] = prog;
   }
   S.lessonId = id; save();
-  renderTabs(); show(S.view, true);
+  renderTabs(); renderTheory(); show(S.view, true);
   toast(t(copy ? "extendDoneCopy" : "extendDone"), 3600);
 }
 function extendSheet(draft = "") {
@@ -2557,6 +2562,29 @@ function extendPreview(l, ex, request) {
   });
 }
 $("#extend-btn").addEventListener("click", () => extendSheet());
+
+/* вопросы для обсуждения, попавшие в теорию как «Вопрос: …», переезжают в тренажёр говорения */
+const QUESTION_RE = /^\s*(вопрос|question)\s*[:：]\s*/i;
+const isQuestionCallout = c => c && (QUESTION_RE.test(stripTags(c.ru)) || QUESTION_RE.test(stripTags(c.en)));
+const questionCallouts = l => (l.theory || []).flatMap(r => (r.uses || []).filter(u => isQuestionCallout(u.callout)));
+async function moveQuestionsToSpeak() {
+  const l = lesson(), n = questionCallouts(l).length;
+  if (!n) return;
+  if (!await ask(t("moveqAsk", n))) return;
+  const next = JSON.parse(JSON.stringify(l)), items = [];
+  next.theory.forEach(r => (r.uses || []).forEach(u => {
+    if (!isQuestionCallout(u.callout)) return;
+    const q = stripTags(u.callout.en || u.callout.ru).replace(QUESTION_RE, "").trim();
+    if (q) items.push({ q, group: r.modal });
+    delete u.callout;
+  }));
+  const sp = next.speak || { items: [], seconds: 60, howTo: UI.speakDefault, tipsLabel: UI.tipsDefault };
+  sp.items.push(...items);
+  sp.eyebrow = eyebrowFor("speak", false, sp.items.length);
+  next.speak = sp;
+  await commitExtension(l, { next, changes: [{ block: "speak", mode: "add", n: items.length, items }] });
+}
+$("#moveq-btn").addEventListener("click", () => { closeMenu?.(); moveQuestionsToSpeak(); });
 
 /* окно подтверждения внутри страницы: в просмотрщике claude.ai confirm() сразу отвечает «нет» */
 function ask(message, yesKey = "askYes") {
@@ -2715,6 +2743,8 @@ function show(view, keepScroll) {
   $("#delete-btn").hidden = atHome || !l.own;
   $("#report-btn").hidden = atHome || view === "report";
   $("#extend-btn").hidden = atHome || view === "report";
+  $("#moveq-btn").hidden = atHome || view === "report" || !questionCallouts(l).length;
+  $("#moveq-btn").textContent = t("moveqBtn");
   $("#brand-home").disabled = atHome;
   $("#brand-home").title = atHome ? "" : t("navHome");
   $$("#tabs .tab").forEach(x => x.setAttribute("aria-selected", String(x.dataset.view === view)));
