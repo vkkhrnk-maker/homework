@@ -172,8 +172,18 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .examples li.wrong::before{background:var(--danger)}
 .callout{background:var(--accent-soft);border-radius:var(--r-s);padding:12px 14px;margin-top:12px;font-size:14px}
 .callout b{color:var(--accent)}
-.tr{text-decoration:underline dotted;text-decoration-thickness:1px;text-decoration-color:var(--muted);text-underline-offset:4px;cursor:pointer;border-radius:3px}
-.tr:hover{text-decoration-color:var(--accent)}
+.rule .gloss,.use-note,.callout{font-size:15px}
+.formula{font-size:14.5px}
+@media (min-width:700px){
+  .rule .gloss,.use-note,.callout{font-size:16.5px}
+  .use-note{line-height:1.5}
+  .formula{font-size:15.5px}
+  .use-name{font-size:13px}
+  .toc a{font-size:15px}
+  .examples li i{font-size:15px}
+}
+.tr{text-decoration:underline dotted transparent;text-decoration-thickness:1px;text-underline-offset:4px;cursor:pointer;border-radius:3px}
+.tr:hover,.tr:focus-visible{text-decoration-color:var(--accent)}
 .tr.tr-on{text-decoration-style:solid;text-decoration-color:var(--accent);background:var(--accent-soft)}
 .tr-alt{display:block;font-style:italic;color:var(--muted);font-size:.92em;margin-top:2px}
 #tr-pop{position:fixed;z-index:40;max-width:min(420px,calc(100vw - 24px));background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:var(--r-s);box-shadow:0 8px 28px rgba(0,0,0,.14);padding:10px 14px;font-size:15px;line-height:1.45}
@@ -2815,7 +2825,7 @@ function biParts(v) {
 function TR(v) {
   const p = biParts(v);
   if (!p) return v ?? "";
-  if (S.lang === "en" || !p.en || p.en === p.ru) return p.en ?? "";
+  if (!p.en || p.en === p.ru) return p.en ?? "";
   if (trMode() === "show") return `${p.en}<span class="tr-alt">${p.ru}</span>`;
   TRS.push(p);
   return `<span class="tr" tabindex="0" role="button" data-tr="${TRS.length - 1}">${p.en}</span>`;
