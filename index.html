@@ -259,7 +259,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .card{background:var(--surface);border-radius:var(--r-l);padding:24px 22px;min-width:0}
 .q-counter{font-size:13px;font-weight:600;color:var(--fg-2);display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-variant-numeric:tabular-nums}
 .part-badge{background:var(--bg);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;color:var(--fg-2)}
-.q-sentence{font-family:var(--read-font);font-size:23px;line-height:1.55;margin:14px 0 20px;max-width:32ch}
+.q-sentence{font-family:var(--read-font);font-size:23px;line-height:1.55;margin:14px 0 20px;max-width:min(100%,44ch)}
 .blank{display:inline-block;min-width:4.5ch;border-bottom:2px solid var(--accent);text-align:center;color:var(--accent);padding:0 .15em}
 .blank.empty{border-bottom-color:var(--fg-3)}
 .blank.miss{color:var(--danger);border-bottom-color:var(--danger);text-decoration:line-through}
@@ -311,7 +311,9 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .match-btn:disabled{cursor:default}
 
 /* ---------- speaking ---------- */
-.speak-q{font-family:var(--read-font);font-size:24px;line-height:1.45;margin:14px 0 14px;max-width:28ch}
+.speak-q{font-family:var(--read-font);font-size:24px;line-height:1.45;margin:14px 0 14px;max-width:min(100%,40ch)}
+/* длинные задания (ролевые игры) — шире и мельче, чтобы не вытягиваться в узкую колонку */
+.speak-q.long{font-size:20px;line-height:1.6;max-width:min(100%,70ch)}
 .starter{font-size:14px;color:var(--fg-2);margin:0}
 .starter b{font-family:var(--read-font);font-weight:500;font-size:16px;color:var(--accent)}
 
@@ -457,6 +459,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
   .card{padding:20px 16px}
   .q-sentence{font-size:21px}
   .speak-q{font-size:21px}
+  .speak-q.long{font-size:18px}
   .match-options{grid-template-columns:minmax(0,1fr)}
   .answer-row .primary-btn{width:100%}
   .section-heading h1{font-size:24px}
@@ -3854,7 +3857,7 @@ function renderSpeak() {
       ${q.group ? `<span class="part-badge">${L(q.group)}</span>` : ""}
       <button class="fix-btn" id="speak-fix">${t("fixBtn")}</button>
     </div>
-    <p class="speak-q">${TR(q.q)}</p>
+    <p class="speak-q ${plain(q.q).length > 90 ? "long" : ""}">${TR(q.q)}</p>
     ${q.starter ? `<p class="starter">${t("starterLead")} <b>${q.starter}</b></p>` : ""}
     ${body}
     ${speakUI.err ? `<p class="hint err sp-err">${speakUI.err}</p>` : ""}
