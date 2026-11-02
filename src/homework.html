@@ -844,6 +844,8 @@ const UI = {
   resultsBtn:   { ru: "Итоги →", en: "Results →" },
   verdictGood:  { ru: "Верно", en: "Correct" },
   verdictAlso:  { ru: "Тоже подходит", en: "Also works" },
+  wrongWhy:     { ru: w => `Почему не «${w}»:`, en: w => `Why not "${w}":` },
+  wrongWhyLoading: { ru: "Разбираю ваш ответ…", en: "Looking at your answer…" },
   verdictTypo:  { ru: "Опечатка — засчитано", en: "Typo — counted" },
   typoLead:     { ru: (raw, best) => `Вы написали «${raw}» — это опечатка, верно <b>${best}</b>.`, en: (raw, best) => `You wrote "${raw}" — a small typo, it's <b>${best}</b>.` },
   correctIs:    { ru: "Правильно:", en: "Correct:" },
@@ -3271,7 +3273,7 @@ function renderRuleBox(i, q) {
   const box = $("#rule-box"), cheat = lesson().drill?.cheatsheet;
   if (!cheat) { box.innerHTML = ""; return; }
   const st = ruleState;
-  if (st.i !== i) { box.innerHTML = `<button class="link-btn" id="rule-btn" style="margin-top:10px">${t("ruleBtn")}</button>`; $("#rule-btn").onclick = async () => {
+  if (st.i !== i) { box.innerHTML = `<button class="fix-btn" id="rule-btn" style="margin-top:12px">${t("ruleBtn")}</button>`; $("#rule-btn").onclick = async () => {
     ruleState = { i, loading: true }; renderRuleBox(i, q);
     const rows = await ruleRows(q, cheat, `${S.lessonId}|${i}`);
     if (ruleState.i !== i) return;
@@ -3381,9 +3383,41 @@ function showFeedback(i, raw) {
       <span class="verdict">${verdict}</span>
       <p class="full">${state === "bad" ? `<small class="correct-lbl">${t("correctIs")}</small> ` : ""}${full}</p>
       ${lead ? `<p class="why">${lead}</p>` : ""}
+      ${state === "bad" ? `<p class="why wrong-why" id="why-wrong" hidden></p>` : ""}
       <p class="why">${TR(q.why)}</p>
       ${alsoLine ? `<p class="also">${alsoLine}</p>` : ""}
     </div>`;
+  if (state === "bad") {
+    const el = $("#why-wrong");
+    el.hidden = false; el.textContent = t("wrongWhyLoading");
+    explainWrong(q, raw, i).then(ex => {
+      const cur = $("#why-wrong");
+      if (cur !== el || !document.contains(el)) return;
+      if (!ex) { el.hidden = true; return; }
+      el.innerHTML = `<b>${t("wrongWhy", escH(raw))}</b> ${TR(ex)}`;
+    });
+  }
+}
+/* почему именно ваше слово не подходит: ИИ объясняет по-английски и по-русски (русский — по клику), ответ запоминается */
+async function explainWrong(q, raw, i) {
+  const key = `${S.lessonId}|${i}|${norm(raw)}`, cache = readJSON("et-wrong-cache-v1", {});
+  let ex = cache[key];
+  if (!ex) {
+    const ai = await lessonAI();
+    if (!ai) return null;
+    try {
+      const sentence = stripTags(q.s[0]) + "___" + stripTags(q.s[1]) + (q.verb ? ` (${q.verb})` : "");
+      const r = await ai.json(`A learner (B1–B2) filled the gap in: "${sentence}"
+Correct answer: "${q.a[0]}". The learner wrote: "${raw}".
+Explain in one or two short sentences why "${raw}" does not fit here (grammar, meaning or a fixed expression), and say why it might look right at first glance. Be kind and concrete. Reply with ONLY one JSON object: {"en": "explanation in simple English", "ru": "the same in Russian"}`, {});
+      if (!r?.en) return null;
+      ex = { en: safe(r.en), ru: safe(r.ru || r.en) };
+      cache[key] = ex;
+      const keys = Object.keys(cache); if (keys.length > 300) delete cache[keys[0]];
+      lsSet("et-wrong-cache-v1", JSON.stringify(cache));
+    } catch(e) { return null; }
+  }
+  return ex;
 }
 function renderDrillDone() {
   const l = lesson(), items = l.drill.items, p = prog().drill;
