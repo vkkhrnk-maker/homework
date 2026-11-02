@@ -691,10 +691,12 @@ const UI = {
   reportWarnYes:{ ru: "Да, к отчёту", en: "Yes, go to report" },
   gapNone:      { ru: "не начато", en: "not started" },
   gapPart:      { ru: (d, n) => `${d} из ${n}`, en: (d, n) => `${d} of ${n}` },
+  speakVoiceLead:{ ru: "Голос проверяет Gemini: он умеет слушать аудио, а Claude нет. Ключ бесплатный — вставьте его ниже, и запись заработает.", en: "Gemini checks voice answers: it can listen to audio, Claude can't. The key is free — paste it below and recording will work." },
   ruleBtn:      { ru: "Правило", en: "Rule" },
   ruleAll:      { ru: "Все формы урока", en: "All forms from the lesson" },
   ruleLoading:  { ru: "Подбираю правило…", en: "Finding the rule…" },
-  trNoAI:       { ru: "Перевода этого текста нет в уроке. Подключите ИИ в меню ⋯, и он переведёт.", en: "This text has no stored translation. Connect AI in the ⋯ menu to translate it." },
+  trNoAI:       { ru: "Перевода этого текста нет в уроке. Подключите ИИ, и он переведёт.", en: "This text has no stored translation. Connect AI and it will translate it." },
+  connectAI:    { ru: "Подключить ИИ →", en: "Connect AI →" },
   trFail:       { ru: "Не получилось перевести. Нажмите на текст ещё раз.", en: "Couldn't translate. Tap the text again." },
   trLoading:    { ru: "Перевожу…", en: "Translating…" },
   syncBtn:      { ru: "Синхронизация устройств", en: "Sync devices" },
@@ -719,7 +721,7 @@ const UI = {
   vbRemove:     { ru: "Убрать из словаря", en: "Remove" },
   wdHint:       { ru: "Нажмите на слово, чтобы разобрать и сохранить его", en: "Tap a word to look it up and save it" },
   wdLoading:    { ru: "Разбираю слово…", en: "Looking it up…" },
-  wdNoAI:       { ru: "Чтобы получить перевод, подключите ИИ в меню ⋯. Слово всё равно можно сохранить.", en: "Connect AI in the ⋯ menu to get a translation. You can still save the word." },
+  wdNoAI:       { ru: "Чтобы получить перевод, подключите ИИ. Слово всё равно можно сохранить.", en: "Connect AI to get a translation. You can still save the word." },
   wdFail:       { ru: "Не получилось разобрать слово. Его всё равно можно сохранить.", en: "Couldn't look the word up. You can still save it." },
   wdSave:       { ru: "Сохранить в словарь", en: "Save to vocabulary" },
   wdSaved:      { ru: "Сохранено", en: "Saved" },
@@ -778,6 +780,8 @@ const UI = {
   speakCancel:  { ru: "Отменить", en: "Cancel" },
   speakRecording:{ ru: "Идёт запись. Говорите", en: "Recording. Speak now" },
   speakChecking:{ ru: "Слушаю и проверяю ответ…", en: "Listening and checking…" },
+  secShort:     { ru: "с", en: "s" },
+  speakSlow:    { ru: "Gemini отвечает медленно, пробую запасную модель или нажмите «Стоп»", en: "Gemini is slow, trying a backup model — or press Stop" },
   speakCheckingText:{ ru: "Проверяю ответ…", en: "Checking the answer…" },
   speakCheck:   { ru: "Проверить", en: "Check" },
   speakTextPh:  { ru: "Напишите ответ по-английски", en: "Type your answer in English" },
@@ -2152,18 +2156,20 @@ async function claudeJSON(prompt, { signal, onText }) {
 }
 async function geminiJSON(prompt, { signal, audio }) {
   const body = JSON.stringify({ contents: [{ role: "user", parts: [...(audio ? [{ inline_data: { mime_type: audio.mime, data: audio.data } }] : []), { text: prompt }] }], generationConfig: { responseMimeType: "application/json", maxOutputTokens: 32768 } });
-  const RETRYABLE = new Set([429, 500, 502, 503, 504]);   // перегрузка модели или сеть — есть смысл повторить
+  const RETRYABLE = new Set([404, 429, 500, 502, 503, 504]);   // перегрузка модели или сеть — есть смысл повторить
   let lastErr;
+  /* если «последняя» модель тормозит или недоступна, следующая попытка идёт на запасной — запасные живут дольше */
+  const MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-2.5-flash-lite"];
   for (let attempt = 0; attempt < 3; attempt++) {
     if (signal?.aborted) throw { code: "cancelled" };
     if (attempt > 0) await new Promise(res => setTimeout(res, 1500 * attempt));
     const ctl = new AbortController();
     const onAbort = () => ctl.abort();
     signal?.addEventListener("abort", onAbort);
-    const timer = setTimeout(() => ctl.abort(), 60000);
+    const timer = setTimeout(() => ctl.abort(), audio ? 30000 : 60000);   // голос короткий — ждать дольше смысла нет; разбор целого урока может идти долго
     let r;
     try {
-      r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent", {
+      r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODELS[attempt]}:generateContent`, {
         method: "POST", signal: ctl.signal, headers: { "Content-Type": "application/json", "x-goog-api-key": lsGet(KEY_GEMINI) }, body
       });
     } catch(e) {
@@ -2293,10 +2299,10 @@ async function testKey(pv, key) {
     return [400, 401, 403].includes(r.status) ? "bad" : "unknown";
   } catch(e) { return "unknown"; }
 }
-function keySheet(pv = aiProvider()) {
+function keySheet(pv = aiProvider(), leadKey = "aiSheetLead") {
   const isG = pv === "gemini", store = isG ? KEY_GEMINI : KEY_CLAUDE, has = !!lsGet(store);
   openSheet(`<h3>${t("aiSheetTitle")}</h3>
-    <p>${t("aiSheetLead")}</p>
+    <p>${t(leadKey)}</p>
     <div class="seg" role="group" style="margin-bottom:12px"><button data-pv="gemini" aria-pressed="${isG}">${t("aiGemini")}</button><button data-pv="claude" aria-pressed="${!isG}">Claude</button></div>
     <p>${isG ? t("aiGeminiHow") : t("aiClaudeHow")}</p>
     <div class="field"><label for="k-in">${t("aiKeyLabel", AI_NAMES[pv])}</label><input id="k-in" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${isG ? "AIza…" : "sk-ant-…"}" value="${has ? "••••••••" : ""}"></div>
@@ -2904,6 +2910,9 @@ function biParts(v) {
 }
 /* любой английский текст кликабелен: если русская версия хранится — берём её, если нет — переведёт ИИ и запомнит */
 const CYR = /[А-Яа-яЁё]/;
+/* вместо «подключите ИИ в меню» — кнопка, которая сразу открывает окно подключения */
+const connectBtn = () => `<button class="link-btn" data-connect style="padding:6px 0">${t("connectAI")}</button>`;
+document.addEventListener("click", e => { if (e.target.closest("[data-connect]")) { closeTr(); keySheet(); } });
 const trIdx = (en, ru = null) => { TRS.push({ en, ru }); return TRS.length - 1; };
 function TR(v) {
   let p = biParts(v);
@@ -2947,7 +2956,7 @@ function openTr(el) {
   if (!p.ru && !p.err) ensureRu(p).then(() => { if (trActive === el) paintTr(el, p); });
 }
 function paintTr(el, p) {
-  const ru = p.ru ?? (p.err === "noAI" ? t("trNoAI") : p.err ? t("trFail") : t("trLoading"));
+  const ru = p.ru ?? (p.err === "noAI" ? `${t("trNoAI")}<br>${connectBtn()}` : p.err ? t("trFail") : t("trLoading"));
   const words = wordsHTML(p.en, +el.dataset.tr);
   if (matchMedia("(max-width:699px)").matches) { openSheet(`<p class="tr-en">${words}</p><p class="tr-ru">${ru}</p><p class="tr-hint">${t("wdHint")}</p>`); return; }
   trPop.innerHTML = `<div>${ru}</div><div class="tr-words">${words}</div><div class="tr-hint">${t("wdHint")}</div>`; trPop.hidden = false;
@@ -3015,7 +3024,7 @@ async function wordSheet(word, sentence) {
         <div class="wd-tr">${escH(data.translation_ru || "—")}</div>
         ${data.meaning_en ? `<div class="wd-line">${escH(data.meaning_en)}</div>` : ""}
         ${data.example ? `<div class="wd-line"><i>${escH(data.example)}</i></div>` : ""}` :
-        `<div class="wd-line">${res.loading ? t("wdLoading") : res.noAI ? t("wdNoAI") : t("wdFail")}</div>`}
+        `<div class="wd-line">${res.loading ? t("wdLoading") : res.noAI ? `${t("wdNoAI")}<br>${connectBtn()}` : t("wdFail")}</div>`}
       ${sentence ? `<div class="wd-line"><i>«${escH(sentence)}»</i></div>` : ""}
       <div class="acts"><button class="ghost-btn" data-a="close">${saved ? t("vbRemove") : t("wdClose")}</button>
         ${saved ? `<button class="primary-btn" data-a="close2" disabled>${t("wdSaved")} ✓</button>` : `<button class="primary-btn" data-a="save" ${res.loading ? "disabled" : ""}>${t("wdSave")}</button>`}</div>`;
@@ -3677,7 +3686,7 @@ function renderSpeak() {
     body = `<div class="rec-live"><span class="rec-dot"></span>${t("speakRecording")}</div>
       <div class="sp-actions"><button class="primary-btn" id="s-stop">${t("speakStopCheck")}</button><button class="link-btn" id="s-cancel">${t("speakCancel")}</button></div>`;
   } else if (speakUI.mode === "checking") {
-    body = `<div class="parse-status sp-wait"><span class="spinner" aria-hidden="true"></span>${t(speakUI.voice ? "speakChecking" : "speakCheckingText")}</div>
+    body = `<div class="parse-status sp-wait"><span class="spinner" aria-hidden="true"></span>${t(speakUI.voice ? "speakChecking" : "speakCheckingText")}<span id="sp-secs"></span></div>
       <div class="sp-actions"><button class="link-btn" id="s-abort">${t("parseStop")}</button></div>`;
   } else if (speakUI.mode === "typing") {
     body = `<textarea class="sp-text" id="sp-text" placeholder="${t("speakTextPh")}" autocapitalize="sentences"></textarea>
@@ -3738,9 +3747,9 @@ function speakResultHTML(a) {
 
 async function startRecording(i) {
   if (!voiceReady()) {
-    speakUI.err = t(aiKey() ? "speakNeedGemini" : "speakNeedKey");
+    speakUI.err = "";
     renderSpeak();
-    if (!aiKey()) keySheet("gemini");
+    keySheet("gemini", "speakVoiceLead");   // сразу окно подключения, а не отправка в меню
     return;
   }
   if (!recStream || !recStream.getTracks().some(tr => tr.readyState === "live")) {
@@ -3819,6 +3828,12 @@ async function checkAnswer(i, { audio, text }) {
   speakCtl = new AbortController();
   speakUI.mode = "checking"; speakUI.voice = !!audio; speakUI.err = "";
   renderSpeak();
+  const started = Date.now();
+  const waitTimer = setInterval(() => {
+    const el = $("#sp-secs"); if (!el) return;
+    const s = Math.round((Date.now() - started) / 1000);
+    el.textContent = s < 8 ? "" : ` · ${s} ${t("secShort")}${s >= 20 ? " — " + t("speakSlow") : ""}`;
+  }, 1000);
   try {
     let check;
     if (audio) {
@@ -3842,7 +3857,7 @@ async function checkAnswer(i, { audio, text }) {
     speakUI.mode = "idle";
     speakUI.err = e?.code === "cancelled" ? "" : t(PARSE_ERRORS[e?.code] || "parseFailed") + (e?.message ? ` (${e.message})` : "");
     renderSpeak();
-  } finally { speakCtl = null; }
+  } finally { speakCtl = null; clearInterval(waitTimer); }
 }
 
 function renderLessonDone() {
