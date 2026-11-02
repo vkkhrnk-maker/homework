@@ -50,7 +50,7 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 *{box-sizing:border-box}
 html,body{min-height:100%}
 html{overflow-x:hidden}
-body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 input,textarea{font:inherit;color:inherit}
 button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -138,7 +138,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .lesson-row:hover{background:var(--surface-2)}
 .lesson-row > div:first-child{min-width:0}
 .lesson-row .eyebrow{color:var(--accent);margin-bottom:2px!important}
-.lesson-row h3{font-size:17px;font-weight:600;line-height:1.25}
+.lesson-row h3{font-size:17px;font-weight:600;line-height:1.3}
 .lesson-row .meta{font-size:13px;color:var(--fg-2);margin-top:3px}
 .lesson-row .right{display:flex;align-items:center;gap:12px;flex:none}
 .lesson-row .go{color:var(--fg-3);font-size:20px;line-height:1}
@@ -172,11 +172,16 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .examples li.wrong::before{background:var(--danger)}
 .callout{background:var(--accent-soft);border-radius:var(--r-s);padding:12px 14px;margin-top:12px;font-size:14px}
 .callout b{color:var(--accent)}
-.rule .gloss,.use-note,.callout{font-size:15px}
-.formula{font-size:14.5px}
+.rule .gloss,.use-note,.callout{font-size:15px;line-height:1.55}
+.formula{font-size:14.5px;line-height:1.5;margin:10px 0}
+.use{padding-top:16px;margin-top:18px}
+.use-note{margin:8px 0 12px}
+.examples{gap:10px;margin-top:12px}
+.examples li{line-height:1.6}
+.callout{padding:14px 16px;margin-top:16px}
+.prob-table td,.sum-table td{line-height:1.5}
 @media (min-width:700px){
   .rule .gloss,.use-note,.callout{font-size:16.5px}
-  .use-note{line-height:1.5}
   .formula{font-size:15.5px}
   .use-name{font-size:13px}
   .toc a{font-size:15px}
@@ -188,8 +193,37 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .tr-alt{display:block;font-style:italic;color:var(--muted);font-size:.92em;margin-top:2px}
 #tr-pop{position:fixed;z-index:40;max-width:min(420px,calc(100vw - 24px));background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:var(--r-s);box-shadow:0 8px 28px rgba(0,0,0,.14);padding:10px 14px;font-size:15px;line-height:1.45}
 #tr-pop[hidden]{display:none}
-.tr-en{font-family:var(--read-font);font-size:17px;margin:0 0 10px}
-.tr-ru{color:var(--fg-2);margin:0}
+.sheet .tr-en{font-family:var(--read-font);font-size:18px;line-height:1.6;margin:0 0 10px;color:var(--fg)}
+.sheet .tr-ru{color:var(--fg-2);font-size:16px;margin:0 0 10px}
+.sheet .tr-hint{font-size:13px;color:var(--muted);margin:0}
+.wd{cursor:pointer;border-radius:4px}
+.wd:hover{background:var(--accent-soft);color:var(--accent)}
+.tr-words{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-family:var(--read-font);font-size:16px;line-height:1.6}
+.tr-hint{font-size:13px;color:var(--muted);margin-top:6px}
+.vocab-box{margin-top:32px}
+.vb-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.vb-head h2{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:0}
+.vb-head h2 small{font-size:15px;font-weight:500;color:var(--fg-2);margin-left:8px}
+.vb-empty{color:var(--fg-2);font-size:15px;line-height:1.6;max-width:56ch;margin:0}
+.vb-list{display:grid;gap:6px;max-height:420px;overflow:auto}
+.vb-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;background:var(--surface);border-radius:var(--r-m);padding:12px 14px}
+.vb-row b{font-family:var(--read-font);font-size:17px;font-weight:600}
+.vb-row .vb-tr{color:var(--fg-2);font-size:15px;flex:1;text-align:right}
+.vb-row button{color:var(--fg-3);font-size:18px;line-height:1;padding:2px 6px}
+.vb-row button:hover{color:var(--danger)}
+.wd-title{font-family:var(--read-font);font-size:26px!important;font-weight:600}
+.wd-tr{font-size:20px;font-weight:600;margin:8px 0 4px}
+.wd-meta{font-size:13px;color:var(--muted);margin-bottom:6px}
+.wd-line{font-size:15px;line-height:1.55;color:var(--fg-2);margin:6px 0}
+.wd-line i{font-family:var(--read-font);color:var(--fg)}
+.fcard{text-align:center;padding:12px 4px 4px}
+.fc-prog{font-size:13px;color:var(--muted)}
+.fc-word{font-family:var(--read-font);font-size:32px;font-weight:600;margin:10px 0}
+.fc-tr{font-size:22px;font-weight:600;margin:10px 0 4px}
+.fc-mean{font-size:15px;color:var(--fg-2);line-height:1.5}
+.fc-sent{font-family:var(--read-font);font-style:italic;color:var(--fg-2);font-size:16px;line-height:1.55;margin:12px 0}
+.fc-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.fc-btns .ghost-btn{padding:0 8px}
 .use-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .fix-btn{flex:none;font-size:12px;font-weight:600;color:var(--fg-2);background:var(--bg);border-radius:999px;padding:5px 12px}
 .fix-btn:hover{background:var(--surface-2);color:var(--fg)}
@@ -215,7 +249,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .card{background:var(--surface);border-radius:var(--r-l);padding:24px 22px;min-width:0}
 .q-counter{font-size:13px;font-weight:600;color:var(--fg-2);display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-variant-numeric:tabular-nums}
 .part-badge{background:var(--bg);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;color:var(--fg-2)}
-.q-sentence{font-family:var(--read-font);font-size:23px;line-height:1.45;margin:14px 0 20px;max-width:32ch}
+.q-sentence{font-family:var(--read-font);font-size:23px;line-height:1.55;margin:14px 0 20px;max-width:32ch}
 .blank{display:inline-block;min-width:4.5ch;border-bottom:2px solid var(--accent);text-align:center;color:var(--accent);padding:0 .15em}
 .blank.empty{border-bottom-color:var(--fg-3)}
 .verb-cue{font-family:var(--font);font-size:13px;font-weight:600;color:var(--fg-2);background:var(--bg);border-radius:999px;padding:3px 10px;margin-left:6px;vertical-align:middle;white-space:nowrap}
@@ -226,7 +260,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .answer-row{display:flex;gap:8px;flex-wrap:wrap}
 .answer-row input{flex:1;min-width:0;width:100%;height:48px;border-radius:999px;border:1px solid var(--line);background:var(--bg);padding:0 18px;font-size:16px}
 .answer-row .primary-btn{height:48px}
-.feedback{margin-top:16px;border-radius:var(--r-m);padding:14px 16px;font-size:15px;line-height:1.5}
+.feedback{margin-top:16px;border-radius:var(--r-m);padding:14px 16px;font-size:15px;line-height:1.6}
 .feedback.good{background:var(--accent-soft)}
 .feedback.bad{background:var(--danger-soft)}
 .feedback .verdict{display:block;font-weight:700;margin-bottom:4px}
@@ -263,7 +297,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .match-btn:disabled{cursor:default}
 
 /* ---------- speaking ---------- */
-.speak-q{font-family:var(--read-font);font-size:24px;line-height:1.35;margin:14px 0 14px;max-width:28ch}
+.speak-q{font-family:var(--read-font);font-size:24px;line-height:1.45;margin:14px 0 14px;max-width:28ch}
 .starter{font-size:14px;color:var(--fg-2);margin:0}
 .starter b{font-family:var(--read-font);font-weight:500;font-size:16px;color:var(--accent)}
 
@@ -277,7 +311,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .sp-text{width:100%;min-height:120px;margin-top:16px;border-radius:var(--r-m);border:1px solid var(--line);background:var(--bg);padding:12px 14px;font-family:var(--read-font);font-size:17px;line-height:1.5;resize:vertical}
 .sp-result{display:grid;gap:8px;margin-top:16px}
 .sp-label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2);margin-top:6px}
-.sp-said,.sp-better{margin:0;background:var(--bg);border-radius:var(--r-m);padding:12px 14px;font-family:var(--read-font);font-size:17px;line-height:1.5}
+.sp-said,.sp-better{margin:0;background:var(--bg);border-radius:var(--r-m);padding:12px 14px;font-family:var(--read-font);font-size:17px;line-height:1.6}
 .sp-better{background:var(--accent-soft)}
 .sp-target{border-radius:var(--r-m);padding:10px 14px;font-size:14px;font-weight:500}
 .sp-target.ok{background:var(--accent-soft);color:var(--accent)}
@@ -291,7 +325,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .sp-note{margin:0;font-size:14px;color:var(--fg-2)}
 .sp-rep{display:grid;gap:4px;background:var(--bg);border-radius:var(--r-m);padding:12px 14px;margin-bottom:8px}
 .sp-rep b{font-size:14px}
-.sp-rep p{margin:0;font-family:var(--read-font);font-size:15px;line-height:1.45}
+.sp-rep p{margin:0;font-family:var(--read-font);font-size:15px;line-height:1.55}
 .sp-rep small{font-size:13px;color:var(--fg-2)}
 
 /* ---------- report ---------- */
@@ -309,7 +343,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .answers-table td{padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:top}
 .answers-table tr:last-child td{border-bottom:0}
 .answers-table .num{color:var(--fg-3);width:1%;white-space:nowrap}
-.answers-table .sentence{font-family:var(--read-font);font-size:15px;line-height:1.4}
+.answers-table .sentence{font-family:var(--read-font);font-size:15px;line-height:1.55}
 .answers-table .given{white-space:nowrap;font-weight:600}
 .answers-table .given.ok{color:var(--accent)}
 .answers-table .given.no{color:var(--danger)}
@@ -329,7 +363,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .done-card > .ghost-btn,.done-card > .primary-btn{width:100%;max-width:340px}
 .done-score{font-size:44px;font-weight:700;color:var(--accent);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .review-list{display:grid;gap:8px;text-align:left;width:100%;max-width:640px;margin:4px auto 10px}
-.review-item{background:var(--bg);border-radius:var(--r-m);padding:12px 14px;font-family:var(--read-font);font-size:16px;line-height:1.45}
+.review-item{background:var(--bg);border-radius:var(--r-m);padding:12px 14px;font-family:var(--read-font);font-size:16px;line-height:1.55}
 .review-item .n{font-family:var(--font);color:var(--fg-2);font-size:12px}
 .review-item b{font-weight:500;color:var(--accent)}
 
@@ -347,7 +381,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .fx-note{font-size:13px;color:var(--fg-2)}
 .fx-diff{display:flex;flex-direction:column;gap:14px;margin-top:12px;max-height:50vh;overflow:auto}
 .fx-key{font-size:12px;font-weight:600;color:var(--fg-2);margin-bottom:6px}
-.fx-old,.fx-new{border-radius:var(--r-m);padding:10px 12px;font-size:15px;line-height:1.45}
+.fx-old,.fx-new{border-radius:var(--r-m);padding:10px 12px;font-size:15px;line-height:1.55}
 .fx-old{background:var(--surface);color:var(--fg-2)}
 .fx-new{background:var(--bg);border:1px solid var(--line);margin-top:6px}
 .fx-old>span,.fx-new>span{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;opacity:.7;margin-bottom:2px}
@@ -357,7 +391,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .ex-chips button:hover{background:var(--surface-2);color:var(--fg)}
 .ex-change{margin-top:12px;border-radius:var(--r-m);background:var(--surface);padding:12px 14px}
 .ex-change b{display:block;font-size:15px;margin-bottom:6px}
-.ex-change ul{margin:0;padding-left:18px;font-size:14px;line-height:1.45;color:var(--fg-2)}
+.ex-change ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55;color:var(--fg-2)}
 .opts{display:grid;gap:4px;margin-top:4px}
 .opt{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:var(--r-s);text-align:left;font-weight:500;width:100%}
 .opt:hover{background:var(--surface)}
@@ -419,6 +453,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
       <button class="opt" id="extend-btn" hidden></button>
       <button class="opt" id="moveq-btn" hidden></button>
       <button class="opt" id="tr-btn" hidden></button>
+      <button class="opt" id="sync-btn"></button>
       <button class="opt" id="reset-btn" hidden></button>
       <button class="opt dz" id="delete-btn" hidden></button>
       <button class="opt" id="ai-btn"></button>
@@ -472,6 +507,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
       </div>
     </div>
     <div class="lesson-list" id="lesson-list"></div>
+    <div class="vocab-box" id="vocab-box"></div>
   </section>
 
   <!-- ===== THEORY ===== -->
@@ -671,6 +707,39 @@ const UI = {
                   en: { s: "Sentence", verb: "Verb cue", a: "Answer", also: "Other answers", why: "Explanation", hint: "Hint", name: "Heading", note: "Note", forms: "Formulas", ex: "Examples", wrong: "Mistakes", summary: "Table", callout: "Callout", q: "Question", starter: "Sentence opener" } },
   extendBtn:    { ru: "Дополнить урок", en: "Extend the lesson" },
   trBtn:        { ru: m => `Перевод теории: ${m === "show" ? "сразу" : "по тапу"}`, en: m => `Theory translation: ${m === "show" ? "always shown" : "on tap"}` },
+  syncBtn:      { ru: "Синхронизация устройств", en: "Sync devices" },
+  syncOn:       { ru: "включена", en: "on" },
+  syncOff:      { ru: "выключена", en: "off" },
+  syncLead:     { ru: "Словарь, прогресс и ваши уроки будут одинаковыми на телефоне и компьютере. На обоих устройствах введите один и тот же код.", en: "Your vocabulary, progress and lessons will match on phone and computer. Enter the same code on both devices." },
+  syncUrl:      { ru: "Адрес сервера", en: "Server address" },
+  syncCode:     { ru: "Код синхронизации", en: "Sync code" },
+  syncMake:     { ru: "Создать код", en: "Generate code" },
+  syncGo:       { ru: "Сохранить и синхронизировать", en: "Save and sync" },
+  syncOffBtn:   { ru: "Отключить", en: "Turn off" },
+  syncKeep:     { ru: "Храните код в надёжном месте: по нему сервер находит ваши данные. Кому-то его лучше не показывать.", en: "Keep the code safe: it is how the server finds your data. Don't share it." },
+  syncShort:    { ru: "Код должен быть не короче 16 символов.", en: "The code must be at least 16 characters." },
+  syncBusyMsg:  { ru: "Синхронизирую… сервер мог уснуть, первый запрос иногда идёт до полминуты.", en: "Syncing… the server may have been asleep; the first request can take up to 30 seconds." },
+  syncDone:     { ru: (w, l) => `Готово: слов ${w}, уроков ${l}.`, en: (w, l) => `Done: ${w} words, ${l} lessons.` },
+  syncFail:     { ru: "Не получилось связаться с сервером. Проверьте адрес и интернет и попробуйте ещё раз.", en: "Couldn't reach the server. Check the address and your connection and try again." },
+  syncBadCode:  { ru: "Сервер не принял код. Проверьте, что он введён без ошибок.", en: "The server rejected the code. Check it for typos." },
+  vbTitle:      { ru: "Словарь", en: "Vocabulary" },
+  vbCount:      { ru: n => `${n} ${plural(n, "слово", "слова", "слов")}`, en: n => `${n} ${n === 1 ? "word" : "words"}` },
+  vbEmpty:      { ru: "Нажмите на предложение в теории, затем на слово в нём — и сохраните его сюда. Из слов получатся карточки для повторения.", en: "Tap a sentence in the theory, then a word in it, and save it here. Saved words become review cards." },
+  vbReview:     { ru: n => n ? `Повторить · ${n}` : "Всё повторено", en: n => n ? `Review · ${n}` : "All reviewed" },
+  vbRemove:     { ru: "Убрать из словаря", en: "Remove" },
+  wdHint:       { ru: "Нажмите на слово, чтобы разобрать и сохранить его", en: "Tap a word to look it up and save it" },
+  wdLoading:    { ru: "Разбираю слово…", en: "Looking it up…" },
+  wdNoAI:       { ru: "Чтобы получить перевод, подключите ИИ в меню ⋯. Слово всё равно можно сохранить.", en: "Connect AI in the ⋯ menu to get a translation. You can still save the word." },
+  wdFail:       { ru: "Не получилось разобрать слово. Его всё равно можно сохранить.", en: "Couldn't look the word up. You can still save it." },
+  wdSave:       { ru: "Сохранить в словарь", en: "Save to vocabulary" },
+  wdSaved:      { ru: "Сохранено", en: "Saved" },
+  wdClose:      { ru: "Закрыть", en: "Close" },
+  wdSpeak:      { ru: "Произнести", en: "Pronounce" },
+  cardShow:     { ru: "Показать перевод", en: "Show translation" },
+  cardAgain:    { ru: "Не помню", en: "Forgot" },
+  cardHard:     { ru: "Сложно", en: "Hard" },
+  cardGood:     { ru: "Помню", en: "Got it" },
+  cardsDone:    { ru: "На сегодня всё повторено. Возвращайтесь позже.", en: "All reviewed for today. Come back later." },
   moveqBtn:     { ru: "Вопросы из теории — в говорение", en: "Move questions to speaking" },
   moveqAsk:     { ru: n => `Перенести вопросы из теории в говорение: ${n}? Из теории они пропадут.`, en: n => `Move ${n} question(s) from theory to speaking? They will be removed from theory.` },
   moveqDone:    { ru: "Готово, вопросы теперь в говорении.", en: "Done, the questions are now in speaking." },
@@ -1749,7 +1818,7 @@ const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const LS_KEY = "homework-english-v3";
 try { Object.assign(S, JSON.parse(localStorage.getItem(LS_KEY) || "{}")); } catch(e) {}
-function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch(e) {} queueStateSync(); }
+function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch(e) {} queueStateSync(); try { queueHttpSync(); } catch(e) {} }
 
 /* ============ свои уроки: Claude разбирает текст, база страницы их хранит ============ */
 /* Запись урока: { id, createdAt, lesson } — lesson в том виде, как его вернул Claude.
@@ -1757,7 +1826,7 @@ function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch
 const LESSONS_CACHE_KEY = "homework-english-lessons-v1";
 let customRaw = [];
 try { customRaw = JSON.parse(localStorage.getItem(LESSONS_CACHE_KEY) || "[]"); } catch(e) {}
-function cacheCustom() { try { localStorage.setItem(LESSONS_CACHE_KEY, JSON.stringify(customRaw)); } catch(e) {} }
+function cacheCustom() { try { localStorage.setItem(LESSONS_CACHE_KEY, JSON.stringify(customRaw)); } catch(e) {} try { queueHttpSync(); } catch(e) {} }
 
 /* текст от Claude попадает в разметку: оставляем только <b>, <i> и <br> */
 function safe(s) {
@@ -1856,7 +1925,7 @@ let LESSONS = BUILTIN_LESSONS.slice();   // сразу пересобирает�
 const OVERRIDES_KEY = "et-overrides-v1";
 let overrides = {};
 try { overrides = JSON.parse(localStorage.getItem(OVERRIDES_KEY) || "{}"); } catch(e) {}
-function saveOverrides() { try { localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides)); } catch(e) {} }
+function saveOverrides() { try { localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides)); } catch(e) {} try { queueHttpSync(); } catch(e) {} }
 function setAtPath(obj, path, value) {
   const keys = path.split(".");
   const last = keys.pop();
@@ -2732,6 +2801,7 @@ function renderLessonList() {
   $$("#lesson-list [data-lesson]").forEach(b => b.addEventListener("click", () => {
     openLesson(b.dataset.lesson);
   }));
+  renderVocabBox();
 }
 
 /* ============ вкладки ============ */
@@ -2767,6 +2837,7 @@ function show(view, keepScroll) {
   $("#moveq-btn").textContent = t("moveqBtn");
   $("#tr-btn").hidden = atHome || view === "report";
   $("#tr-btn").textContent = t("trBtn", trMode());
+  $("#sync-btn").innerHTML = `<span>${t("syncBtn")}<small>${syncCfg().code ? t("syncOn") : t("syncOff")}</small></span><span aria-hidden="true">›</span>`;
   $("#brand-home").disabled = atHome;
   $("#brand-home").title = atHome ? "" : t("navHome");
   $$("#tabs .tab").forEach(x => x.setAttribute("aria-selected", String(x.dataset.view === view)));
@@ -2787,6 +2858,7 @@ $("#delete-btn").addEventListener("click", async () => {
   const id = S.lessonId;
   if (!(await ask(t("confirmDelete"), "deleteBtn"))) return;
   customRaw = customRaw.filter(r => r.id !== id);
+  const gone = readJSON(VOCAB_DEL_KEY, {}); gone[id] = Date.now(); lsSet(VOCAB_DEL_KEY, JSON.stringify(gone));   // «надгробие»: удаление дойдёт и до других устройств
   cacheCustom(); rebuildLessons();
   delete S.progress[id];
   S.lessonId = null; save(); show("home");
@@ -2841,8 +2913,9 @@ function openTr(el) {
   const p = TRS[+el.dataset.tr];
   if (same || !p) return;
   el.classList.add("tr-on"); trActive = el;
-  if (matchMedia("(max-width:699px)").matches) { openSheet(`<p class="tr-en">${p.en}</p><p class="tr-ru">${p.ru}</p>`); return; }
-  trPop.innerHTML = p.ru; trPop.hidden = false;
+  const words = wordsHTML(p.en, +el.dataset.tr);
+  if (matchMedia("(max-width:699px)").matches) { openSheet(`<p class="tr-en">${words}</p><p class="tr-ru">${p.ru}</p><p class="tr-hint">${t("wdHint")}</p>`); return; }
+  trPop.innerHTML = `<div>${p.ru}</div><div class="tr-words">${words}</div><div class="tr-hint">${t("wdHint")}</div>`; trPop.hidden = false;
   const r = el.getBoundingClientRect(), w = trPop.offsetWidth, h = trPop.offsetHeight;
   trPop.style.left = Math.max(12, Math.min(r.left, innerWidth - w - 12)) + "px";
   trPop.style.top = (r.bottom + 8 + h > innerHeight - 8 ? Math.max(8, r.top - h - 8) : r.bottom + 8) + "px";
@@ -2854,6 +2927,255 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeTr(); }
 document.addEventListener("scroll", () => { if (!trPop.hidden) closeTr(); }, { passive: true, capture: true });
 new MutationObserver(() => { if ($("#sheet").hidden && trPop.hidden && trActive) closeTr(); }).observe($("#sheet"), { attributes: true, attributeFilter: ["hidden"] });
 $("#tr-btn").addEventListener("click", () => { lsSet("et-tr", trMode() === "show" ? "click" : "show"); renderTheory(); });
+
+/* ============ словарь и карточки ============
+   слово из предложения → разбор (ИИ) → «Сохранить в словарь» → карточки с интервальным повторением
+   (те же ящики Лейтнера, что в проекте про аудиокнигу: 8 минут · 1 · 3 · 7 · 16 · 35 дней) */
+const VOCAB_KEY = "et-vocab-v1", VOCAB_DEL_KEY = "et-vocab-del-v1", WORD_CACHE_KEY = "et-word-cache-v1";
+const VINT = [8 * 60e3, 864e5, 3 * 864e5, 7 * 864e5, 16 * 864e5, 35 * 864e5];
+const readJSON = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || "") ?? d; } catch(e) { return d; } };
+const getVocab = () => readJSON(VOCAB_KEY, []);
+const setVocab = v => { lsSet(VOCAB_KEY, JSON.stringify(v)); try { queueHttpSync(); } catch(e) {} };
+const wordKey = w => String(w).toLowerCase().replace(/’/g, "'").trim();
+const escH = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const dueWords = () => getVocab().filter(v => (v.due || 0) <= Date.now());
+const cleanWordTok = s => s.replace(/^[^A-Za-z]+|[^A-Za-z]+$/g, "");
+function wordsHTML(en, i) {
+  return escH(stripTags(en)).split(/\s+/).filter(Boolean).map(tok => {
+    const w = cleanWordTok(tok);
+    return w ? `<span class="wd" data-w="${w}" data-i="${i}">${tok}</span>` : tok;
+  }).join(" ");
+}
+document.addEventListener("click", e => {
+  const el = e.target.closest(".wd");
+  if (!el) return;
+  const p = TRS[+el.dataset.i];
+  closeTr();
+  wordSheet(el.dataset.w, p ? stripTags(p.en) : "");
+});
+function speakWord(w) { try { const u = new SpeechSynthesisUtterance(w); u.lang = "en-US"; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch(e) {} }
+async function lookupWord(word, sentence) {
+  const k = wordKey(word), cache = readJSON(WORD_CACHE_KEY, {});
+  if (cache[k + "|" + sentence]) return { data: cache[k + "|" + sentence] };
+  const ai = await lessonAI();
+  if (!ai) return { noAI: true };
+  try {
+    const data = await ai.json(`You are an English teacher for a Russian-speaking learner (B1–B2). Explain the word "${word}" as it is used in this sentence: "${sentence}".
+Reply with ONLY one JSON object: {"lemma": "base form of the word", "pos": "part of speech in English, one or two words", "translation_ru": "1–3 Russian translations that fit this context, comma-separated", "meaning_en": "simple English definition, at most 15 words", "example": "one new short example sentence in English"}`, {});
+    if (!data || typeof data !== "object") return { failed: true };
+    const clean = { lemma: safe(data.lemma || ""), pos: safe(data.pos || ""), translation_ru: safe(data.translation_ru || ""), meaning_en: safe(data.meaning_en || ""), example: safe(data.example || "") };
+    cache[k + "|" + sentence] = clean;
+    lsSet(WORD_CACHE_KEY, JSON.stringify(cache));
+    return { data: clean };
+  } catch(e) { return { failed: true }; }
+}
+async function wordSheet(word, sentence) {
+  const findSaved = d => getVocab().find(v => v.key === wordKey(word) || (d?.lemma && v.key === wordKey(d.lemma)));
+  let res = {}, data = null;
+  const draw = () => {
+    const saved = findSaved(data);
+    $("#sheet-body").innerHTML = `<div class="grab"></div>
+      <h3 class="wd-title">${escH(data?.lemma && wordKey(data.lemma) !== wordKey(word) ? data.lemma : word)} <button class="link-btn" id="wd-say" aria-label="${t("wdSpeak")}">🔊</button></h3>
+      ${data ? `<div class="wd-meta">${[data.pos, wordKey(data.lemma || word) !== wordKey(word) ? word : ""].filter(Boolean).map(escH).join(" · ")}</div>
+        <div class="wd-tr">${escH(data.translation_ru || "—")}</div>
+        ${data.meaning_en ? `<div class="wd-line">${escH(data.meaning_en)}</div>` : ""}
+        ${data.example ? `<div class="wd-line"><i>${escH(data.example)}</i></div>` : ""}` :
+        `<div class="wd-line">${res.loading ? t("wdLoading") : res.noAI ? t("wdNoAI") : t("wdFail")}</div>`}
+      ${sentence ? `<div class="wd-line"><i>«${escH(sentence)}»</i></div>` : ""}
+      <div class="acts"><button class="ghost-btn" data-a="close">${saved ? t("vbRemove") : t("wdClose")}</button>
+        ${saved ? `<button class="primary-btn" data-a="close2" disabled>${t("wdSaved")} ✓</button>` : `<button class="primary-btn" data-a="save" ${res.loading ? "disabled" : ""}>${t("wdSave")}</button>`}</div>`;
+    $("#wd-say").onclick = () => speakWord(data?.lemma || word);
+    $("#sheet-body [data-a=close]").onclick = () => {
+      if (saved) { removeWord(saved.id); renderVocabBox(); }
+      closeSheet();
+    };
+    const sv = $("#sheet-body [data-a=save]");
+    if (sv) sv.onclick = () => {
+      const d = data || {}, now = Date.now(), w = d.lemma || word;
+      setVocab([{ id: "w-" + now.toString(36), key: wordKey(w), word: w, form: word, pos: d.pos || "", translation_ru: d.translation_ru || "", meaning_en: d.meaning_en || "", example: d.example || "", sentence, lessonId: S.lessonId || "", createdAt: now, updatedAt: now, box: 0, reps: 0, due: now }, ...getVocab()]);
+      renderVocabBox(); draw(); toast(t("wdSaved"), 1600);
+    };
+  };
+  res = { loading: true };
+  openSheet("");
+  draw();
+  const known = findSaved(null);
+  if (known && (known.translation_ru || known.meaning_en)) { res = {}; data = { lemma: known.word, pos: known.pos, translation_ru: known.translation_ru, meaning_en: known.meaning_en, example: known.example }; return draw(); }
+  res = await lookupWord(word, sentence);
+  data = res.data || null;
+  if ($("#sheet").hidden) return;
+  draw();
+}
+function removeWord(id) {
+  setVocab(getVocab().filter(v => v.id !== id));
+  const del = readJSON(VOCAB_DEL_KEY, {}); del[id] = Date.now(); lsSet(VOCAB_DEL_KEY, JSON.stringify(del));
+}
+function renderVocabBox() {
+  const box = $("#vocab-box");
+  if (!box) return;
+  const list = getVocab(), due = dueWords().length;
+  box.innerHTML = `<div class="vb-head"><h2>${t("vbTitle")}${list.length ? `<small>${t("vbCount", list.length)}</small>` : ""}</h2>
+      ${list.length ? `<button class="primary-btn" id="vb-review" ${due ? "" : "disabled"}>${t("vbReview", due)}</button>` : ""}</div>` +
+    (list.length ? `<div class="vb-list">${list.map(v => `<div class="vb-row"><b>${escH(v.word)}</b><span class="vb-tr">${escH(v.translation_ru || v.meaning_en || "")}</span><button data-del="${v.id}" aria-label="${t("vbRemove")}">×</button></div>`).join("")}</div>`
+      : `<p class="vb-empty">${t("vbEmpty")}</p>`);
+  $$("#vocab-box [data-del]").forEach(b => b.onclick = () => { removeWord(b.dataset.del); renderVocabBox(); });
+  const r = $("#vb-review");
+  if (r) r.onclick = () => startReview();
+}
+let review = null;
+function startReview() {
+  const queue = dueWords();
+  if (!queue.length) return;
+  review = { queue, i: 0, shown: false, total: queue.length };
+  drawCard();
+}
+function drawCard() {
+  const r = review, v = r?.queue[r.i];
+  if (!v) { closeSheet(); renderVocabBox(); toast(t("cardsDone"), 2800); return; }
+  openSheet(`<div class="fcard"><div class="fc-prog">${r.i + 1} / ${r.total}</div>
+      <div class="fc-word">${escH(v.word)} <button class="link-btn" id="fc-say" aria-label="${t("wdSpeak")}">🔊</button></div>
+      ${r.shown ? `<div class="fc-tr">${escH(v.translation_ru || "—")}</div>${v.meaning_en ? `<div class="fc-mean">${escH(v.meaning_en)}</div>` : ""}` : (v.pos ? `<div class="fc-mean">${escH(v.pos)}</div>` : "")}
+      ${v.sentence ? `<div class="fc-sent">«${escH(v.sentence)}»</div>` : ""}</div>
+    ${r.shown ? `<div class="fc-btns"><button class="ghost-btn" data-g="again">${t("cardAgain")}</button><button class="ghost-btn" data-g="hard">${t("cardHard")}</button><button class="primary-btn" data-g="good">${t("cardGood")}</button></div>`
+      : `<div class="acts"><button class="primary-btn" id="fc-show" style="flex:1">${t("cardShow")}</button></div>`}`, el => {
+    el.querySelector("#fc-say").onclick = () => speakWord(v.word);
+    const show = el.querySelector("#fc-show");
+    if (show) show.onclick = () => { r.shown = true; drawCard(); };
+    el.querySelectorAll("[data-g]").forEach(b => b.onclick = () => gradeWord(v, b.dataset.g));
+  });
+}
+function gradeWord(v, g) {
+  const all = getVocab(), it = all.find(x => x.id === v.id);
+  if (it) {
+    if (g === "again") it.box = 0; else if (g === "good") it.box = Math.min(5, (it.box || 0) + 1);
+    it.reps = (it.reps || 0) + 1;
+    it.due = Date.now() + VINT[it.box || 0];
+    it.updatedAt = Date.now();
+    setVocab(all);
+  }
+  review.i++; review.shown = false;
+  drawCard();
+}
+
+/* ============ синхронизация между устройствами: свой маленький сервер ============
+   на сервер уходят словарь, прогресс, свои уроки и правки; побеждает то, что менялось позже.
+   Что изменилось на этом устройстве, замечаем по «отпечатку» (SYNC_META) и ставим время правки. */
+const SYNC_KEY = "et-sync-v1", SYNC_META_KEY = "et-sync-meta-v1", SYNC_DEFAULT_URL = "https://homework-sync-vika.fly.dev";
+const syncCfg = () => readJSON(SYNC_KEY, {});
+let syncBusy = false, syncTimerH = null, lastSyncAt = 0;
+function queueHttpSync() {
+  if (syncBusy || !syncCfg().code) return;
+  clearTimeout(syncTimerH);
+  syncTimerH = setTimeout(() => runSync().catch(() => {}), 2500);
+}
+const without = (o, k) => Object.fromEntries(Object.entries(o || {}).filter(([x]) => x !== k));
+async function runSync() {
+  const cfg = syncCfg();
+  if (!cfg.code) return null;
+  if (syncBusy) return null;
+  syncBusy = true;
+  try {
+    const now = Date.now(), meta = readJSON(SYNC_META_KEY, {});
+    meta.p ??= {}; meta.l ??= {}; meta.o ??= {};
+    for (const [id, p] of Object.entries(S.progress || {})) {
+      const h = JSON.stringify(without(p, "_updatedAt"));
+      if (meta.p[id] !== h) { p._updatedAt = now; meta.p[id] = h; }
+    }
+    for (const r of customRaw) {
+      const h = JSON.stringify(r.lesson);
+      if (meta.l[r.id] !== h) { r.updatedAt = now; meta.l[r.id] = h; }
+    }
+    const ovOut = {};
+    for (const [id, patches] of Object.entries(overrides)) {
+      const h = JSON.stringify(patches);
+      if (meta.o[id]?.h !== h) meta.o[id] = { h, ts: now };
+      ovOut[id] = { updatedAt: meta.o[id].ts, patches };
+    }
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 45000);
+    let res;
+    try {
+      res = await fetch((cfg.url || SYNC_DEFAULT_URL).replace(/\/+$/, "") + "/api/state", {
+        method: "POST", signal: ctl.signal,
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + cfg.code },
+        body: JSON.stringify({
+          vocab: getVocab(), known: [], deleted: readJSON(VOCAB_DEL_KEY, {}),
+          lessons: customRaw.map(r => ({ id: r.id, createdAt: r.createdAt, updatedAt: r.updatedAt || r.createdAt, lesson: r.lesson })),
+          progress: S.progress || {}, overrides: ovOut
+        })
+      });
+    } finally { clearTimeout(timer); }
+    if (res.status === 401) throw Object.assign(new Error("401"), { code: "badcode" });
+    if (!res.ok) throw new Error(String(res.status));
+    const m = await res.json();
+
+    lsSet(VOCAB_KEY, JSON.stringify(arr(m.vocab)));
+    lsSet(VOCAB_DEL_KEY, JSON.stringify(m.deleted || {}));
+    let lessonsChanged = false;
+    const localSig = customRaw.map(r => r.id + ":" + (r.updatedAt || r.createdAt)).sort().join();
+    const mergedLessons = arr(m.lessons).filter(r => r && r.id && r.lesson);
+    if (mergedLessons.map(r => r.id + ":" + (r.updatedAt || r.createdAt)).sort().join() !== localSig) {
+      customRaw = mergedLessons.map(r => ({ ...r }));
+      customRaw.forEach(r => { meta.l[r.id] = JSON.stringify(r.lesson); });
+      cacheCustom(); lessonsChanged = true;
+    }
+    for (const [id, p] of Object.entries(m.progress || {})) {
+      if (!p || typeof p !== "object") continue;
+      const local = S.progress[id];
+      if (!local || (p._updatedAt || 0) > (local._updatedAt || 0)) { S.progress[id] = p; meta.p[id] = JSON.stringify(without(p, "_updatedAt")); }
+    }
+    for (const id of Object.keys(S.progress)) if (!customRaw.some(r => r.id === id) && !LESSONS.some(l => l.id === id)) delete S.progress[id];
+    for (const [id, o] of Object.entries(m.overrides || {})) {
+      if (o && o.patches && (o.updatedAt || 0) > (meta.o[id]?.ts || 0)) {
+        overrides[id] = o.patches; meta.o[id] = { h: JSON.stringify(o.patches), ts: o.updatedAt }; lessonsChanged = true;
+      }
+    }
+    if (lessonsChanged) { saveOverrides(); rebuildLessons(); }
+    lsSet(SYNC_META_KEY, JSON.stringify(meta));
+    save();
+    lastSyncAt = Date.now();
+    if (!LESSONS.some(l => l.id === S.lessonId)) { S.lessonId = null; save(); }
+    renderLessonList(); renderVocabBox();
+    if (S.lessonId && $("#view-theory") && !$("#view-theory").hidden) renderTheory();
+    return { words: arr(m.vocab).length, lessons: mergedLessons.length };
+  } finally { syncBusy = false; }
+}
+function syncSheet() {
+  const cfg = syncCfg();
+  openSheet(`<h3>${t("syncBtn")}</h3>
+    <p>${t("syncLead")}</p>
+    <label class="sh-sub">${t("syncUrl")}</label>
+    <input class="sp-text" id="sy-url" style="min-height:0;height:44px;margin-top:4px" value="${escH(cfg.url || SYNC_DEFAULT_URL)}" autocapitalize="off" spellcheck="false">
+    <label class="sh-sub" style="margin-top:12px;display:block">${t("syncCode")}</label>
+    <input class="sp-text" id="sy-code" style="min-height:0;height:44px;margin-top:4px;font-family:var(--mono)" value="${escH(cfg.code || "")}" autocapitalize="off" autocomplete="off" spellcheck="false">
+    <p class="fx-note" style="margin-top:8px">${t("syncKeep")}</p>
+    <p id="sy-status" aria-live="polite"></p>
+    <div class="acts"><button class="ghost-btn" data-a="make">${t("syncMake")}</button><button class="primary-btn" data-a="go">${t("syncGo")}</button></div>
+    ${cfg.code ? `<div class="acts"><button class="ghost-btn" data-a="off" style="flex:1">${t("syncOffBtn")}</button></div>` : ""}`, el => {
+    const status = m => { el.querySelector("#sy-status").textContent = m; };
+    el.querySelector("[data-a=make]").onclick = () => {
+      const a = new Uint8Array(15); crypto.getRandomValues(a);
+      const c = Array.from(a, x => "abcdefghjkmnpqrstuvwxyz23456789"[x % 31]).join("");
+      el.querySelector("#sy-code").value = c.match(/.{5}/g).join("-");
+    };
+    el.querySelector("[data-a=off]")?.addEventListener("click", () => { localStorage.removeItem(SYNC_KEY); closeSheet(); toast(t("syncOff")); });
+    el.querySelector("[data-a=go]").onclick = async () => {
+      const code = el.querySelector("#sy-code").value.trim(), url = el.querySelector("#sy-url").value.trim() || SYNC_DEFAULT_URL;
+      if (code.length < 16) return status(t("syncShort"));
+      lsSet(SYNC_KEY, JSON.stringify({ url, code }));
+      status(t("syncBusyMsg"));
+      const btn = el.querySelector("[data-a=go]"); btn.disabled = true;
+      try {
+        const r = await runSync();
+        status(r ? t("syncDone", r.words, r.lessons) : "");
+        if (r) setTimeout(closeSheet, 1400);
+      } catch(e) { status(t(e?.code === "badcode" ? "syncBadCode" : "syncFail")); }
+      btn.disabled = false;
+    };
+  });
+}
+$("#sync-btn").addEventListener("click", syncSheet);
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && syncCfg().code && Date.now() - lastSyncAt > 30000) runSync().catch(() => {}); });
+setTimeout(() => { if (syncCfg().code) runSync().catch(() => {}); }, 1500);
 
 function renderTheory() {
   const T = lesson().theory;
