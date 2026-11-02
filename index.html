@@ -58,7 +58,9 @@ svg{display:block}
 h1,h2,h3{margin:0;text-wrap:balance}
 p,li{text-wrap:pretty}
 .num{font-variant-numeric:tabular-nums}
-.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:700px){.wrap{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
+@media (min-width:1920px){.wrap{padding-left:80px;padding-right:80px}}
 
 /* ---------- header ---------- */
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
@@ -179,6 +181,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .prob-table tr:last-child td,.sum-table tr:last-child td{border-bottom:0}
 .prob-table td:first-child,.sum-table td:first-child{font-weight:600;color:var(--accent);white-space:nowrap}
 .sum-table td:nth-child(2){color:var(--fg-2);font-size:13px}
+.sum-table .alt-tr{font-family:var(--read-font);font-style:italic;font-size:13.5px;margin-top:3px}
 .sum-table td:last-child{font-family:var(--read-font)}
 
 /* ---------- practice ---------- */
@@ -2237,6 +2240,11 @@ function norm(v) {
 }
 
 const L = o => (o && typeof o === "object" && !Array.isArray(o)) ? (o[S.lang] ?? o.ru) : o;
+const Lalt = o => {
+  if (!o || typeof o !== "object" || Array.isArray(o)) return "";
+  const other = S.lang === "ru" ? o.en : o.ru;
+  return other && other !== L(o) ? `<div class="alt-tr">${other}</div>` : "";
+};
 const t = (key, ...args) => { const v = L(UI[key]); return typeof v === "function" ? v(...args) : v; };
 
 const lesson = () => LESSONS.find(l => l.id === S.lessonId) || LESSONS[0];
@@ -2414,7 +2422,7 @@ function renderTheory() {
           ${u.table ? `<div class="table-scroll"><table class="prob-table">${u.table.map(row =>
             `<tr><td>${row[0]}</td><td>${L(row[1])}<div style="color:var(--muted);font-family:var(--serif);font-size:13.5px;margin-top:2px">${row[2]}</div></td></tr>`).join("")}</table></div>` : ""}
           ${u.summary ? `<div class="table-scroll"><table class="sum-table">${u.summary.map(row =>
-            `<tr><td>${row[0]}</td><td>${L(row[1])}</td><td>${row[2]}</td></tr>`).join("")}</table></div>` : ""}
+            `<tr><td>${row[0]}</td><td>${L(row[1])}${Lalt(row[1])}</td><td>${row[2]}</td></tr>`).join("")}</table></div>` : ""}
           ${u.ex ? `<ul class="examples">${u.ex.map(e => `<li>${L(e)}</li>`).join("")}
             ${(u.wrong||[]).map(e => `<li class="wrong">${e}</li>`).join("")}</ul>` : ""}
           ${u.callout ? `<div class="callout">${L(u.callout)}</div>` : ""}
