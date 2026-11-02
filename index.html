@@ -707,6 +707,9 @@ const UI = {
                   en: { s: "Sentence", verb: "Verb cue", a: "Answer", also: "Other answers", why: "Explanation", hint: "Hint", name: "Heading", note: "Note", forms: "Formulas", ex: "Examples", wrong: "Mistakes", summary: "Table", callout: "Callout", q: "Question", starter: "Sentence opener" } },
   extendBtn:    { ru: "Дополнить урок", en: "Extend the lesson" },
   trBtn:        { ru: m => `Перевод теории: ${m === "show" ? "сразу" : "по тапу"}`, en: m => `Theory translation: ${m === "show" ? "always shown" : "on tap"}` },
+  trNoAI:       { ru: "Перевода этого текста нет в уроке. Подключите ИИ в меню ⋯, и он переведёт.", en: "This text has no stored translation. Connect AI in the ⋯ menu to translate it." },
+  trFail:       { ru: "Не получилось перевести. Нажмите на текст ещё раз.", en: "Couldn't translate. Tap the text again." },
+  trLoading:    { ru: "Перевожу…", en: "Translating…" },
   syncBtn:      { ru: "Синхронизация устройств", en: "Sync devices" },
   syncOn:       { ru: "включена", en: "on" },
   syncOff:      { ru: "выключена", en: "off" },
@@ -2894,13 +2897,34 @@ function biParts(v) {
   const m = typeof v === "string" && SPLIT_RE.exec(v);
   return m ? { en: m[1], ru: m[2] } : null;
 }
+/* любой английский текст кликабелен: если русская версия хранится — берём её, если нет — переведёт ИИ и запомнит */
+const CYR = /[А-Яа-яЁё]/;
+const trIdx = (en, ru = null) => { TRS.push({ en, ru }); return TRS.length - 1; };
 function TR(v) {
-  const p = biParts(v);
-  if (!p) return v ?? "";
-  if (!p.en || p.en === p.ru) return p.en ?? "";
-  if (trMode() === "show") return `${p.en}<span class="tr-alt">${p.ru}</span>`;
-  TRS.push(p);
-  return `<span class="tr" tabindex="0" role="button" data-tr="${TRS.length - 1}">${p.en}</span>`;
+  let p = biParts(v);
+  if (p) {
+    if (!p.en) return "";
+    if (p.en === p.ru) { if (CYR.test(p.en)) return p.en; p = { en: p.en, ru: null }; }
+  } else if (typeof v === "string" && v.trim() && !CYR.test(v) && /[A-Za-z]/.test(v)) p = { en: v, ru: null };
+  else return v ?? "";
+  if (trMode() === "show" && p.ru) return `${p.en}<span class="tr-alt">${p.ru}</span>`;
+  return `<span class="tr" tabindex="0" role="button" data-tr="${trIdx(p.en, p.ru)}">${p.en}</span>`;
+}
+const TR_CACHE_KEY = "et-tr-cache-v1";
+async function ensureRu(p) {
+  if (p.ru) return;
+  const key = stripTags(p.en), cache = readJSON(TR_CACHE_KEY, {});
+  if (cache[key]) { p.ru = cache[key]; return; }
+  const ai = await lessonAI();
+  if (!ai) { p.err = "noAI"; return; }
+  try {
+    const r = await ai.json(`Translate this English text into natural Russian for a language learner. Keep it short and faithful. Reply with ONLY one JSON object: {"ru": "the translation"}.\nText: ${JSON.stringify(key)}`, {});
+    const ru = safe(r?.ru || "");
+    if (!ru) { p.err = "fail"; return; }
+    p.ru = ru; cache[key] = ru;
+    const keys = Object.keys(cache); if (keys.length > 400) delete cache[keys[0]];
+    lsSet(TR_CACHE_KEY, JSON.stringify(cache));
+  } catch(e) { p.err = "fail"; }
 }
 const EN = o => (o && typeof o === "object" && !Array.isArray(o)) ? (o.en ?? o.ru) : o;
 const trPop = document.createElement("div");
@@ -2912,16 +2936,22 @@ function openTr(el) {
   closeTr();
   const p = TRS[+el.dataset.tr];
   if (same || !p) return;
+  delete p.err;
   el.classList.add("tr-on"); trActive = el;
+  paintTr(el, p);
+  if (!p.ru && !p.err) ensureRu(p).then(() => { if (trActive === el) paintTr(el, p); });
+}
+function paintTr(el, p) {
+  const ru = p.ru ?? (p.err === "noAI" ? t("trNoAI") : p.err ? t("trFail") : t("trLoading"));
   const words = wordsHTML(p.en, +el.dataset.tr);
-  if (matchMedia("(max-width:699px)").matches) { openSheet(`<p class="tr-en">${words}</p><p class="tr-ru">${p.ru}</p><p class="tr-hint">${t("wdHint")}</p>`); return; }
-  trPop.innerHTML = `<div>${p.ru}</div><div class="tr-words">${words}</div><div class="tr-hint">${t("wdHint")}</div>`; trPop.hidden = false;
+  if (matchMedia("(max-width:699px)").matches) { openSheet(`<p class="tr-en">${words}</p><p class="tr-ru">${ru}</p><p class="tr-hint">${t("wdHint")}</p>`); return; }
+  trPop.innerHTML = `<div>${ru}</div><div class="tr-words">${words}</div><div class="tr-hint">${t("wdHint")}</div>`; trPop.hidden = false;
   const r = el.getBoundingClientRect(), w = trPop.offsetWidth, h = trPop.offsetHeight;
   trPop.style.left = Math.max(12, Math.min(r.left, innerWidth - w - 12)) + "px";
   trPop.style.top = (r.bottom + 8 + h > innerHeight - 8 ? Math.max(8, r.top - h - 8) : r.bottom + 8) + "px";
 }
-$("#theory-body").addEventListener("click", e => { const el = e.target.closest(".tr"); if (el) openTr(el); });
-$("#theory-body").addEventListener("keydown", e => { const el = e.target.closest?.(".tr"); if (el && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openTr(el); } });
+document.addEventListener("click", e => { const el = e.target.closest(".tr"); if (el && !e.target.closest(".wd, button, input")) openTr(el); });
+document.addEventListener("keydown", e => { const el = e.target.closest?.(".tr"); if (el && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openTr(el); } });
 document.addEventListener("click", e => { if (trActive && !e.target.closest(".tr, #tr-pop")) closeTr(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeTr(); });
 document.addEventListener("scroll", () => { if (!trPop.hidden) closeTr(); }, { passive: true, capture: true });
@@ -3185,10 +3215,10 @@ function renderTheory() {
 
   $("#theory-body").innerHTML = T.map((r, i) => `
     <section class="rule" id="rule-${i}">
-      <div class="rule-head"><span class="modal-name">${EN(r.modal)}</span><span class="gloss">${TR(r.gloss)}</span></div>
+      <div class="rule-head"><span class="modal-name">${TR(r.modal)}</span><span class="gloss">${TR(r.gloss)}</span></div>
       ${r.uses.map((u, j) => `
         <div class="use">
-          <div class="use-head"><div class="use-name">${EN(u.name)}</div><button class="fix-btn" data-fix-path="theory.${i}.uses.${j}">${t("fixBtn")}</button></div>
+          <div class="use-head"><div class="use-name">${TR(u.name)}</div><button class="fix-btn" data-fix-path="theory.${i}.uses.${j}">${t("fixBtn")}</button></div>
           ${u.note ? `<p class="use-note">${TR(u.note)}</p>` : ""}
           ${u.forms ? u.forms.map(f => `<div class="formula">${EN(f[0]) ? `<span class="formula-label">${EN(f[0])}</span>` : ""}${f[1]}</div>`).join("") : ""}
           ${u.table ? `<div class="table-scroll"><table class="prob-table">${u.table.map(row =>
@@ -3196,7 +3226,7 @@ function renderTheory() {
           ${u.summary ? `<div class="table-scroll"><table class="sum-table">${u.summary.map(row =>
             `<tr><td>${row[0]}</td><td>${TR(row[1])}</td><td>${TR(row[2])}</td></tr>`).join("")}</table></div>` : ""}
           ${u.ex ? `<ul class="examples">${u.ex.map(e => `<li>${TR(e)}</li>`).join("")}
-            ${(u.wrong||[]).map(e => `<li class="wrong">${e}</li>`).join("")}</ul>` : ""}
+            ${(u.wrong||[]).map(e => `<li class="wrong">${TR(e)}</li>`).join("")}</ul>` : ""}
           ${u.callout ? `<div class="callout">${TR(u.callout)}</div>` : ""}
         </div>`).join("")}
     </section>`).join("");
@@ -3258,7 +3288,7 @@ function renderDrill() {
   if (p.i >= items.length) return renderDrillDone();
 
   const i = Math.min(p.i, items.length - 1), q = items[i], state = p.answered[i];
-  $("#hint-text").textContent = L(q.hint);
+  $("#hint-text").innerHTML = TR(q.hint);
 
   const cue = q.verb ? `<span class="verb-cue">${q.verb}</span>` : "";
   $("#drill-card").innerHTML = `
@@ -3267,7 +3297,7 @@ function renderDrill() {
       ${q.part ? `<span class="part-badge">${t("partBadge", q.part)}</span>` : ""}
       <button class="fix-btn" id="drill-fix">${t("fixBtn")}</button>
     </div>
-    <p class="q-sentence">${q.s[0]}<span class="blank ${state ? "" : "empty"}">${state ? q.a[0] : "&nbsp;&nbsp;&nbsp;&nbsp;"}</span>${cue}${q.s[1]}</p>
+    <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? q.a[0] : "___") + stripTags(q.s[1]))}">${q.s[0]}<span class="blank ${state ? "" : "empty"}">${state ? q.a[0] : "&nbsp;&nbsp;&nbsp;&nbsp;"}</span>${cue}${q.s[1]}</p>
     ${state ? "" : `
       ${D.chips ? `<div class="chips">${D.chips.map(c => `<button class="chip" data-chip="${c}" aria-pressed="false">${c}</button>`).join("")}</div>` : ""}
       <div class="answer-row">
@@ -3323,7 +3353,7 @@ function showFeedback(i, raw) {
       <span class="verdict">${verdict}</span>
       <p class="full">${full}</p>
       ${lead ? `<p class="why">${lead}</p>` : ""}
-      <p class="why">${L(q.why)}</p>
+      <p class="why">${TR(q.why)}</p>
       ${alsoLine ? `<p class="also">${alsoLine}</p>` : ""}
     </div>`;
 }
@@ -3433,7 +3463,7 @@ function renderMatch() {
   const opts = optionsFor(M, i);
   $("#match-card").innerHTML = `
     <div class="q-counter"><span>${t("qCounter", i+1, items.length)}</span><button class="fix-btn" id="match-fix">${t("fixBtn")}</button></div>
-    <p class="q-sentence" style="max-width:28ch">${L(q.s)}</p>
+    <p class="q-sentence" style="max-width:28ch">${TR(q.s)}</p>
     <div class="eyebrow" style="margin-bottom:8px">${M.ask ? L(M.ask) : t("matchAsk")}</div>
     <div class="match-options">
       ${opts.map(m => {
@@ -3445,7 +3475,7 @@ function renderMatch() {
     </div>
     ${done ? `<div class="feedback ${p.answered[i] ? "good" : "bad"}" style="margin-top:18px">
         <span class="verdict">${p.answered[i] ? t("verdictGood") : t("rightAnswer", q.a)}</span>
-        ${q.why ? `<p class="why">${L(q.why)}</p>` : ""}</div>
+        ${q.why ? `<p class="why">${TR(q.why)}</p>` : ""}</div>
       <div class="nav-row"><button class="primary-btn" id="m-next">${i === items.length-1 ? t("resultsBtn") : t("nextBtn")}</button></div>` : ""}`;
 
   $$("#match-card .match-btn").forEach(b => b.addEventListener("click", () => {
@@ -3519,7 +3549,7 @@ function renderSpeak() {
       ${q.group ? `<span class="part-badge">${L(q.group)}</span>` : ""}
       <button class="fix-btn" id="speak-fix">${t("fixBtn")}</button>
     </div>
-    <p class="speak-q">${q.q}</p>
+    <p class="speak-q">${TR(q.q)}</p>
     ${q.starter ? `<p class="starter">${t("starterLead")} <b>${q.starter}</b></p>` : ""}
     ${body}
     ${speakUI.err ? `<p class="hint err sp-err">${speakUI.err}</p>` : ""}
