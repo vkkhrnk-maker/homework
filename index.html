@@ -3783,9 +3783,11 @@ function speakResultHTML(a) {
   const c = a.check || {};
   const fixes = (c.mistakes || []).filter(m => m && m.said);
   /* вывод — первым и крупно: что получилось, как это связано с темой урока и что делать дальше */
-  const main = c.praise || c.target?.note, sub = c.praise ? c.target?.note : "";
-  const verdict = main || c.tip ? `<div class="sp-verdict ${c.target && c.target.ok === false ? "no" : "ok"}">
-      <div class="sp-verdict-head">${c.target && c.target.ok === false ? "!" : "✓"} ${t("speakVerdict")}</div>
+  const bad = c.meaning?.ok === false || (!c.meaning && c.target?.ok === false);
+  const main = c.meaning?.note || c.praise || c.target?.note;
+  const sub = [c.meaning?.note ? c.praise : "", c.meaning?.note || c.praise ? c.target?.note : ""].filter(Boolean).join(" ");
+  const verdict = main || c.tip ? `<div class="sp-verdict ${bad ? "no" : "ok"}">
+      <div class="sp-verdict-head">${bad ? "!" : "✓"} ${t("speakVerdict")}</div>
       ${main ? `<p class="sp-verdict-main">${escT(main)}</p>` : ""}
       ${sub ? `<p class="sp-verdict-sub">${escT(sub)}</p>` : ""}
       ${c.tip ? `<p class="sp-verdict-tip"><b>${t("speakNext")}</b> ${escT(c.tip)}</p>` : ""}
@@ -3872,11 +3874,12 @@ How the student was asked to answer: ${plain(l.speak?.howTo ? L(l.speak.howTo) :
 Question: "${plain(q.q)}"${q.starter ? `\nSuggested opener: "${plain(q.starter)}"` : ""}
 
 Reply with ONLY one JSON object:
-{"transcript": "the student's answer", "target": {"ok": true or false, "note": "one sentence in Russian: did the answer use what the lesson practises, and how"},
+{"transcript": "the student's answer", "meaning": {"ok": true or false, "note": "one honest sentence in Russian: does the answer really answer the question and make sense? If not, say plainly what is missing, unclear or off-topic"},
+ "target": {"ok": true or false, "note": "one sentence in Russian: did the answer use what the lesson practises, and how"},
  "mistakes": [{"said": "the student's exact words", "better": "the corrected words", "why": "short reason in Russian"}],
- "better": "the student's answer rewritten as a natural, correct answer at the same level, keeping their ideas, 1–4 sentences",
- "praise": "one specific thing done well, in Russian", "tip": "one concrete next step, in Russian"}
-Rules: write "note", "praise" and "tip" in Russian, addressing the student directly as «вы» (never "студент" or "ученик"); "praise" is the verdict shown first, so make it one specific short sentence about what worked and what to fix; list only real mistakes in grammar, word choice or word order, at most 6, most important first; ignore fillers, hesitations and small slips of the tongue. If the answer is empty, unclear or not in English, give what you understood as transcript (or "") and explain in "tip". Address the student with «вы». Plain text only, no Markdown.`;
+ "better": "a model answer to the question: complete, natural and correct, at the same level, 2–4 sentences; keep the student's ideas where they make sense, and where the answer is unclear or off-topic write what a good answer would say",
+ "praise": "one specific thing done well, in Russian (empty string if there is nothing real to praise)", "tip": "one concrete next step, in Russian"}
+Rules: judge the MEANING first: set meaning.ok to false when the answer is nonsense, incomplete, off-topic or does not answer the question, and never flatter in that case; write "note", "praise" and "tip" in Russian, addressing the student directly as «вы» (never "студент" or "ученик"); keep each of them to one specific short sentence; list only real mistakes in grammar, word choice or word order, at most 6, most important first; ignore fillers, hesitations and small slips of the tongue. If the answer is empty, unclear or not in English, give what you understood as transcript (or "") and explain in "tip". Address the student with «вы». Plain text only, no Markdown.`;
 }
 
 /* убирает слова-паузы (uh, um, er, hmm, mm) вместе с запятой после них; настоящие слова вроде «umbrella» не трогает */
