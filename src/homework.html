@@ -234,6 +234,8 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .q-sentence{font-family:var(--read-font);font-size:23px;line-height:1.55;margin:14px 0 20px;max-width:32ch}
 .blank{display:inline-block;min-width:4.5ch;border-bottom:2px solid var(--accent);text-align:center;color:var(--accent);padding:0 .15em}
 .blank.empty{border-bottom-color:var(--fg-3)}
+.blank.miss{color:var(--danger);border-bottom-color:var(--danger);text-decoration:line-through}
+.feedback .correct-lbl{font-family:var(--font);font-size:13px;font-weight:600;color:var(--fg-2);text-transform:uppercase;letter-spacing:.05em;margin-right:4px}
 .verb-cue{font-family:var(--font);font-size:13px;font-weight:600;color:var(--fg-2);background:var(--bg);border-radius:999px;padding:3px 10px;margin-left:6px;vertical-align:middle;white-space:nowrap}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .chip{height:36px;padding:0 14px;border-radius:999px;background:var(--bg);font-size:14px;font-weight:600}
@@ -263,6 +265,8 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .form-list b{color:var(--accent);font-weight:600;white-space:nowrap}
 .tips-list li{font-family:var(--read-font);font-size:15px;color:var(--fg)}
 .dots{display:flex;flex-wrap:wrap;gap:5px}
+.q-strip{display:flex;align-items:center;gap:6px 14px;flex-wrap:wrap;background:var(--surface);border-radius:var(--r-l);padding:10px 16px;margin-bottom:16px}
+.q-strip>span{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2);white-space:nowrap}
 .dot-q{width:28px;height:28px;border-radius:9px;background:var(--bg);font-size:12px;font-weight:600;color:var(--fg-2);display:grid;place-items:center;font-variant-numeric:tabular-nums}
 .dot-q.done-good{background:var(--accent);color:var(--accent-fg)}
 .dot-q.done-bad{background:var(--danger-soft);color:var(--danger)}
@@ -511,20 +515,18 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
       <div><div class="eyebrow" id="drill-eyebrow"></div><h1 data-ui="drillTitle"></h1></div>
       <span class="score-pill" id="drill-score">0 / 0</span>
     </div>
+    <div class="q-strip"><span data-ui="questionsLabel"></span><div class="dots" id="drill-dots"></div></div>
     <div class="drill-layout">
       <div><div class="card" id="drill-card"></div></div>
       <aside class="aside">
         <div class="aside-card">
           <h4 data-ui="hintLabel"></h4>
           <p id="hint-text"></p>
+          <div id="rule-box"></div>
         </div>
         <div class="aside-card" id="forms-card" hidden>
           <h4 data-ui="formsLabel"></h4>
           <ul class="form-list" id="forms-list"></ul>
-        </div>
-        <div class="aside-card">
-          <h4 data-ui="questionsLabel"></h4>
-          <div class="dots" id="drill-dots"></div>
         </div>
       </aside>
     </div>
@@ -536,15 +538,8 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
       <div><div class="eyebrow" data-ui="matchEyebrow"></div><h1 data-ui="matchTitle"></h1></div>
       <span class="score-pill" id="match-score">0 / 0</span>
     </div>
-    <div class="drill-layout">
-      <div class="card" id="match-card"></div>
-      <aside class="aside">
-        <div class="aside-card">
-          <h4 data-ui="questionsLabel"></h4>
-          <div class="dots" id="match-dots"></div>
-        </div>
-      </aside>
-    </div>
+    <div class="q-strip"><span data-ui="questionsLabel"></span><div class="dots" id="match-dots"></div></div>
+    <div class="card" id="match-card"></div>
   </section>
 
   <!-- ===== REPORT ===== -->
@@ -576,6 +571,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
       <div><div class="eyebrow" data-ui="speakEyebrow"></div><h1 data-ui="speakTitle"></h1></div>
       <span class="timer" id="timer">01:00</span>
     </div>
+    <div class="q-strip"><span data-ui="questionsLabel"></span><div class="dots" id="speak-dots"></div></div>
     <div class="drill-layout">
       <div class="card" id="speak-card"></div>
       <aside class="aside">
@@ -586,10 +582,6 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
         <div class="aside-card" id="speak-tips" hidden>
           <h4></h4>
           <ul class="tips-list" id="speak-tips-list"></ul>
-        </div>
-        <div class="aside-card">
-          <h4 data-ui="questionsLabel"></h4>
-          <div class="dots" id="speak-dots"></div>
         </div>
       </aside>
     </div>
@@ -688,6 +680,9 @@ const UI = {
                   en: { s: "Sentence", verb: "Verb cue", a: "Answer", also: "Other answers", why: "Explanation", hint: "Hint", name: "Heading", note: "Note", forms: "Formulas", ex: "Examples", wrong: "Mistakes", summary: "Table", callout: "Callout", q: "Question", starter: "Sentence opener" } },
   extendBtn:    { ru: "Дополнить урок", en: "Extend the lesson" },
   trBtn:        { ru: m => `Перевод теории: ${m === "show" ? "сразу" : "по тапу"}`, en: m => `Theory translation: ${m === "show" ? "always shown" : "on tap"}` },
+  ruleBtn:      { ru: "Правило", en: "Rule" },
+  ruleAll:      { ru: "Все формы урока", en: "All forms from the lesson" },
+  ruleLoading:  { ru: "Подбираю правило…", en: "Finding the rule…" },
   trNoAI:       { ru: "Перевода этого текста нет в уроке. Подключите ИИ в меню ⋯, и он переведёт.", en: "This text has no stored translation. Connect AI in the ⋯ menu to translate it." },
   trFail:       { ru: "Не получилось перевести. Нажмите на текст ещё раз.", en: "Couldn't translate. Tap the text again." },
   trLoading:    { ru: "Перевожу…", en: "Translating…" },
@@ -849,6 +844,9 @@ const UI = {
   resultsBtn:   { ru: "Итоги →", en: "Results →" },
   verdictGood:  { ru: "Верно", en: "Correct" },
   verdictAlso:  { ru: "Тоже подходит", en: "Also works" },
+  verdictTypo:  { ru: "Опечатка — засчитано", en: "Typo — counted" },
+  typoLead:     { ru: (raw, best) => `Вы написали «${raw}» — это опечатка, верно <b>${best}</b>.`, en: (raw, best) => `You wrote "${raw}" — a small typo, it's <b>${best}</b>.` },
+  correctIs:    { ru: "Правильно:", en: "Correct:" },
   verdictBad:   { ru: "Не подходит", en: "Doesn't fit" },
   alsoLead:     { ru: (raw, best) => `«${raw}» грамматически возможно, но по контексту точнее <b>${best}</b>.`,
                   en: (raw, best) => `"${raw}" is grammatically possible, but <b>${best}</b> fits the context better.` },
@@ -3250,6 +3248,42 @@ function syncToc() {
 window.addEventListener("scroll", () => { if (S.view === "theory") syncToc(); }, { passive: true });
 
 /* ============ тренажёр ============ */
+/* «Правило»: кнопка под подсказкой открывает только ту строку шпаргалки урока, которая относится к вопросу
+   (подбирает ИИ один раз и запоминает); без ИИ показываются все формы */
+const RULE_CACHE_KEY = "et-rule-cache-v1";
+let ruleState = { i: -1 };
+async function ruleRows(q, cheat, key) {
+  const cache = readJSON(RULE_CACHE_KEY, {});
+  if (cache[key]) return cache[key];
+  const ai = await lessonAI();
+  if (!ai) return null;
+  try {
+    const sentence = stripTags(q.s[0]) + "___" + stripTags(q.s[1]) + (q.verb ? ` (${q.verb})` : "");
+    const list = cheat.map(([f, m], n) => `${n}. ${stripTags(f)} — ${stripTags(plainEn(m))}`).join("\n");
+    const r = await ai.json(`A student fills the gap in this sentence: "${sentence}"\nHere is the lesson's list of forms:\n${list}\nWhich one or two entries of the list explain the rule needed for this gap? Reply with ONLY one JSON object: {"rows": [indexes from the list]}`, {});
+    const rows = arr(r?.rows).map(Number).filter(n => Number.isInteger(n) && n >= 0 && n < cheat.length).slice(0, 2);
+    if (!rows.length) return null;
+    cache[key] = rows; lsSet(RULE_CACHE_KEY, JSON.stringify(cache));
+    return rows;
+  } catch(e) { return null; }
+}
+function renderRuleBox(i, q) {
+  const box = $("#rule-box"), cheat = lesson().drill?.cheatsheet;
+  if (!cheat) { box.innerHTML = ""; return; }
+  const st = ruleState;
+  if (st.i !== i) { box.innerHTML = `<button class="link-btn" id="rule-btn" style="margin-top:10px">${t("ruleBtn")}</button>`; $("#rule-btn").onclick = async () => {
+    ruleState = { i, loading: true }; renderRuleBox(i, q);
+    const rows = await ruleRows(q, cheat, `${S.lessonId}|${i}`);
+    if (ruleState.i !== i) return;
+    ruleState = { i, rows, all: !rows };
+    renderRuleBox(i, q);
+  }; return; }
+  if (st.loading) { box.innerHTML = `<p class="hint" style="margin-top:10px">${t("ruleLoading")}</p>`; return; }
+  const shown = st.all ? cheat.map((_, n) => n) : st.rows;
+  box.innerHTML = `<ul class="form-list" style="margin-top:10px">${shown.map(n => `<li><b>${cheat[n][0]}</b><span>${L(cheat[n][1])}</span></li>`).join("")}</ul>` +
+    (st.all ? "" : `<button class="link-btn" id="rule-all" style="margin-top:6px">${t("ruleAll")}</button>`);
+  $("#rule-all")?.addEventListener("click", () => { ruleState.all = true; renderRuleBox(i, q); });
+}
 function drillStats() {
   const vals = Object.values(prog().drill.answered);
   return { done: vals.length, ok: vals.filter(v => v === "good" || v === "also").length };
@@ -3261,15 +3295,13 @@ function renderDrill() {
   $("#drill-score").textContent = `${st.ok} / ${st.done}`;
   renderDots("#drill-dots", items.length, p.i, p.answered, i => { p.i = i; save(); renderDrill(); });
 
-  const cheat = D.cheatsheet;
-  $("#forms-card").hidden = !cheat;
-  $("#forms-card h4").textContent = D.cheatsheetLabel ? L(D.cheatsheetLabel) : t("formsLabel");
-  if (cheat) $("#forms-list").innerHTML = cheat.map(([f, m]) => `<li><b>${f}</b><span>${L(m)}</span></li>`).join("");
+  $("#forms-card").hidden = true;   // шпаргалка больше не висит постоянно: правило открывается кнопкой под подсказкой
 
-  if (p.i >= items.length) return renderDrillDone();
+  if (p.i >= items.length) { $("#rule-box").innerHTML = ""; return renderDrillDone(); }
 
   const i = Math.min(p.i, items.length - 1), q = items[i], state = p.answered[i];
   $("#hint-text").innerHTML = TR(q.hint);
+  renderRuleBox(i, q);
 
   const cue = q.verb ? `<span class="verb-cue">${q.verb}</span>` : "";
   $("#drill-card").innerHTML = `
@@ -3278,7 +3310,7 @@ function renderDrill() {
       ${q.part ? `<span class="part-badge">${t("partBadge", q.part)}</span>` : ""}
       <button class="fix-btn" id="drill-fix">${t("fixBtn")}</button>
     </div>
-    <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? q.a[0] : "___") + stripTags(q.s[1]))}">${q.s[0]}<span class="blank ${state ? "" : "empty"}">${state ? q.a[0] : "&nbsp;&nbsp;&nbsp;&nbsp;"}</span>${cue}${q.s[1]}</p>
+    <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? q.a[0] : "___") + stripTags(q.s[1]))}">${q.s[0]}<span class="blank ${state ? (state === "bad" ? "miss" : "") : "empty"}">${state ? (state === "bad" ? (escH(p.lastInput?.[i] || "") || "…") : q.a[0]) : "&nbsp;&nbsp;&nbsp;&nbsp;"}</span>${cue}${q.s[1]}</p>
     ${state ? "" : `
       ${D.chips ? `<div class="chips">${D.chips.map(c => `<button class="chip" data-chip="${c}" aria-pressed="false">${c}</button>`).join("")}</div>` : ""}
       <div class="answer-row">
@@ -3314,25 +3346,40 @@ function wireDrill(i) {
   });
   $("#skip-btn")?.addEventListener("click", () => { p.i = Math.min(i+1, items.length); save(); renderDrill(); });
 }
+/* опечатка: в слове от 7 букв пропущена, добавлена лишняя или переставлена соседняя буква — не в конце слова.
+   Правки на конце и замены букв не считаем: так «arrive» и «arrived» или «studied» и «studies» остаются разными ответами. */
+function isTypo(v, answers) {
+  if (v.length < 7 || /\s/.test(v)) return false;
+  return answers.some(a => {
+    if (a === v || /\s/.test(a) || Math.abs(a.length - v.length) > 1) return false;
+    let i = 0;
+    while (i < a.length && i < v.length && a[i] === v[i]) i++;
+    if (i >= Math.min(a.length, v.length) - 1 && a.length !== v.length) return false;   // расхождение в самом конце — это окончание, а не опечатка
+    if (a.length === v.length) return i < a.length - 2 && a[i] === v[i + 1] && a[i + 1] === v[i] && a.slice(i + 2) === v.slice(i + 2);
+    const [long, short] = a.length > v.length ? [a, v] : [v, a];
+    return long.slice(0, i) + long.slice(i + 1) === short && i < long.length - 2;
+  });
+}
 function check(i) {
   const raw = ($("#drill-input")?.value || "").trim();
   if (!raw) return;
   const q = lesson().drill.items[i], p = prog().drill, v = norm(raw);
   const best = q.a.map(norm), also = (q.also || []).map(norm);
-  p.answered[i] = best.includes(v) ? "good" : also.includes(v) ? "also" : "bad";
+  p.answered[i] = best.includes(v) ? "good" : also.includes(v) || isTypo(v, best) ? "also" : "bad";
   p.lastInput[i] = raw;
   save(); renderDrill(); updateProgress();
 }
 function showFeedback(i, raw) {
   const q = lesson().drill.items[i], state = prog().drill.answered[i];
   const full = `${q.s[0]}<b>${q.a[0]}</b>${q.s[1]}`;
-  const verdict = state === "good" ? t("verdictGood") : state === "also" ? t("verdictAlso") : t("verdictBad");
-  const lead = state === "also" ? t("alsoLead", raw, q.a[0]) : state === "bad" ? t("badLead", raw) : "";
+  const typo = state === "also" && !(q.also || []).map(norm).includes(norm(raw));
+  const verdict = state === "good" ? t("verdictGood") : typo ? t("verdictTypo") : state === "also" ? t("verdictAlso") : t("verdictBad");
+  const lead = typo ? t("typoLead", raw, q.a[0]) : state === "also" ? t("alsoLead", raw, q.a[0]) : state === "bad" ? t("badLead", raw) : "";
   const alsoLine = q.also ? t("alsoLine", q.also.join(", ")) : "";
   $("#drill-feedback").innerHTML = `
     <div class="feedback ${state === "bad" ? "bad" : "good"}">
       <span class="verdict">${verdict}</span>
-      <p class="full">${full}</p>
+      <p class="full">${state === "bad" ? `<small class="correct-lbl">${t("correctIs")}</small> ` : ""}${full}</p>
       ${lead ? `<p class="why">${lead}</p>` : ""}
       <p class="why">${TR(q.why)}</p>
       ${alsoLine ? `<p class="also">${alsoLine}</p>` : ""}
