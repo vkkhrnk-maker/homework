@@ -182,6 +182,21 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .wd:hover{background:var(--accent-soft);color:var(--accent)}
 .tr-words{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-family:var(--read-font);font-size:16px;line-height:1.6}
 .tr-hint{font-size:13px;color:var(--muted);margin-top:6px}
+.cz-text{font-family:var(--read-font);font-size:21px;line-height:2.1;max-width:70ch;margin:8px 0 6px}
+.gap{font:inherit;display:inline-block;min-width:5.5em;margin:0 2px;padding:0 10px;border-radius:8px;background:var(--accent-soft);color:var(--accent);border-bottom:2px solid var(--accent);cursor:pointer;text-align:center;line-height:1.6}
+.gap sup{font-family:var(--font);font-size:.55em;font-weight:700;margin-left:3px;opacity:.7}
+.gap.active{box-shadow:0 0 0 2px var(--accent)}
+.gap.right{background:var(--good-soft,var(--accent-soft));color:var(--accent)}
+.gap.wrong{background:var(--warn-soft);color:var(--danger);border-bottom-color:var(--danger);text-decoration:line-through}
+.cz-opts{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.cz-opts .chip{font-size:17px;padding:10px 18px}
+.cz-whys{display:grid;gap:8px;margin-top:14px}
+.cz-why{background:var(--bg);border-radius:var(--r-m);padding:12px 14px;font-size:15px;line-height:1.55}
+.cz-why b{font-family:var(--read-font);font-size:17px;font-weight:600}
+.cz-why.ok b{color:var(--accent)}
+.cz-why.no b{color:var(--danger)}
+.cz-why span{color:var(--fg-2);font-size:14px;margin-left:6px}
+.cz-why p{margin:4px 0 0;color:var(--fg-2)}
 .out-box{text-align:left;background:var(--accent-soft);border-radius:var(--r-l);padding:18px 20px;margin:20px auto 0;max-width:620px;display:grid;gap:12px}
 .out-box h3{margin:0;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
 .out-main{margin:0;font-size:19px;font-weight:600;line-height:1.45;color:var(--fg)}
@@ -763,6 +778,9 @@ const UI = {
   sugRemove:    { ru: "Убрать из списка", en: "Remove from the list" },
   sugAdd:       { ru: n => `Добавить все (${n})`, en: n => `Add all (${n})` },
   sugDone:      { ru: n => `Добавлено в словарь: ${n}`, en: n => `Added to vocabulary: ${n}` },
+  czAsk:        { ru: "Выберите форму, которая подходит по смыслу", en: "Pick the form that fits the meaning" },
+  czCheck:      { ru: "Проверить", en: "Check" },
+  czYouPicked:  { ru: w => `Вы выбрали: ${w}`, en: w => `You picked: ${w}` },
   vbTitle:      { ru: "Словарь", en: "Vocabulary" },
   vbCount:      { ru: n => `${n} ${plural(n, "слово", "слова", "слов")}`, en: n => `${n} ${n === 1 ? "word" : "words"}` },
   vbEmpty:      { ru: "Нажмите на предложение в теории, затем на слово в нём — и сохраните его сюда. Из слов получатся карточки для повторения.", en: "Tap a sentence in the theory, then a word in it, and save it here. Saved words become review cards." },
@@ -1715,6 +1733,33 @@ const PAST_DRILL = [
 ];
 
 const PAST_TENSES = ["Past simple", "Past continuous", "Past perfect", "Past perfect continuous"];
+/* мини-истории: время выбирается по смыслу всего абзаца, а не по названию; в тексте {1}, {2}, {3} — места выбора */
+const PAST_STORIES = [
+  { s: "It was a rainy evening. I {1} through the old town when I {2} a strange noise behind me. I {3} what it was, so I turned around.",
+    gaps: [
+      { options: ["was walking", "walked"], a: "was walking", why: { ru: "Это фон: действие шло, когда что-то произошло. Время «Past continuous» рисует сцену.", en: "This is the background: the action was in progress when something happened. Past continuous paints the scene." } },
+      { options: ["heard", "was hearing"], a: "heard", why: { ru: "Короткое событие, которое прервало прогулку: «Past simple».", en: "A short event that interrupted the walk: Past simple." } },
+      { options: ["didn't know", "hadn't known"], a: "didn't know", why: { ru: "Это состояние в тот самый момент. Назад, к более раннему событию, здесь ничего не указывает, поэтому «Past perfect» не нужен.", en: "A state at that very moment. Nothing points back to an earlier event, so Past perfect is not needed." } }
+    ] },
+  { s: "When I got to the station, the train {1}. I {2} my ticket on the kitchen table, so I had to buy a new one. Luckily, the next train {3} ten minutes later.",
+    gaps: [
+      { options: ["had already left", "was already leaving"], a: "had already left", why: { ru: "Поезд ушёл раньше, чем я пришёл: «Past perfect» показывает, что это было до момента в истории.", en: "The train left before I arrived: Past perfect shows it happened before that point in the story." } },
+      { options: ["had left", "was leaving"], a: "had left", why: { ru: "Билет остался дома ещё до поездки на станцию, это более раннее событие.", en: "The ticket was left at home before the trip to the station, an earlier event." } },
+      { options: ["arrived", "had arrived"], a: "arrived", why: { ru: "Новое событие, которое снова движет историю вперёд: «Past simple».", en: "A new event that moves the story forward again: Past simple." } }
+    ] },
+  { s: "Anna was exhausted when she finally got home. She {1} on the project since six in the morning, and she {2} nothing but a sandwich all day. She {3} straight to bed.",
+    gaps: [
+      { options: ["had been working", "was working"], a: "had been working", why: { ru: "Важно, как долго это длилось до момента «пришла домой»: «Past perfect continuous».", en: "What matters is how long it had been going on before she got home: Past perfect continuous." } },
+      { options: ["had eaten", "was eating"], a: "had eaten", why: { ru: "Результат до того, как она пришла: за день съела только бутерброд. «Past perfect».", en: "A result before she came home: she had eaten only a sandwich all day. Past perfect." } },
+      { options: ["went", "had gone"], a: "went", why: { ru: "Главное событие в конце: «Past simple».", en: "The main event at the end: Past simple." } }
+    ] },
+  { s: "Last summer we {1} to Italy for the first time. While we {2} lunch in a small café, it started to rain heavily. We realised we {3} an umbrella, so we waited inside for an hour.",
+    gaps: [
+      { options: ["went", "were going"], a: "went", why: { ru: "Законченное событие, с которого начинается история: «Past simple».", en: "A completed event that starts the story: Past simple." } },
+      { options: ["were having", "had"], a: "were having", why: { ru: "Действие в процессе, которое прервал дождь: «Past continuous» после «while».", en: "An action in progress that the rain interrupted: Past continuous after \"while\"." } },
+      { options: ["hadn't brought", "weren't bringing"], a: "hadn't brought", why: { ru: "Мы поняли это позже, а не взяли зонт раньше: «Past perfect».", en: "We realised it later; not bringing the umbrella came earlier: Past perfect." } }
+    ] }
+];
 const PAST_MATCH = [
   { s: "I <b>walked</b> into the hotel.", a: "Past simple",
     why: { ru: "Законченное событие, которое двигает историю.", en: "A completed event that moves the story." } },
@@ -1784,13 +1829,12 @@ const BUILTIN_LESSONS = [
     drill: { mode: "form", items: PAST_DRILL, cheatsheet: PAST_FORMS_CHEATSHEET, cheatsheetLabel: { ru: "Прошедшие времена", en: "Past tenses" },
              eyebrow: { ru: "22 предложения в двух частях", en: "22 sentences in two parts" } },
     match: {
-      kind: "choice",
-      navLabel: { ru: "Какое время", en: "Which tense" },
-      title: { ru: "Какое время", en: "Which tense" },
-      eyebrow: { ru: "12 предложений", en: "12 sentences" },
-      ask: { ru: "Какое время у выделенного глагола?", en: "Which tense is the highlighted verb?" },
-      items: PAST_MATCH,
-      options: PAST_TENSES
+      kind: "cloze",
+      navLabel: { ru: "Мини-истории", en: "Mini-stories" },
+      title: { ru: "Мини-истории", en: "Mini-stories" },
+      eyebrow: { ru: "4 истории · 12 выборов", en: "4 stories · 12 choices" },
+      ask: { ru: "Выберите форму, которая подходит по смыслу истории", en: "Pick the form that fits the story" },
+      items: PAST_STORIES
     },
     speak: {
       items: flattenSpeak(PAST_SPEAK),
@@ -1949,7 +1993,16 @@ function buildLesson({ id, createdAt, lesson: x }) {
 
   const M = x.match;
   const match = arr(M?.items).filter(q => q && q.s && q.a);
-  if (match.length) {
+  const stories = M?.kind === "cloze" ? arr(M.items).filter(q => q && typeof q.s === "string" && arr(q.gaps).length && arr(q.gaps).every(g => g && arr(g.options).length >= 2 && arr(g.options).includes(g.a))) : [];
+  if (stories.length) {
+    const label = bi(M.title || { ru: "Мини-истории", en: "Mini-stories" });
+    l.match = {
+      kind: "cloze", navLabel: label, title: label,
+      eyebrow: { ru: `${stories.length} ${plural(stories.length, "история", "истории", "историй")} · ${stories.reduce((s, q) => s + q.gaps.length, 0)} выборов`, en: `${stories.length} stories · ${stories.reduce((s, q) => s + q.gaps.length, 0)} choices` },
+      ask: bi(M.ask || { ru: "Выберите форму, которая подходит по смыслу", en: "Pick the form that fits the meaning" }),
+      items: stories.map(q => ({ s: safe(q.s), gaps: q.gaps.map(g => ({ options: g.options.map(safe), a: safe(g.a), why: g.why ? bi(g.why) : undefined })) }))
+    };
+  } else if (match.length) {
     const vocab = M.kind === "vocab", n = match.length;
     const items = match.map(q => ({ s: bi(q.s), a: safe(q.a), why: q.why ? bi(q.why) : undefined }));
     const label = bi(M.title || (vocab ? { ru: "Слова", en: "Words" } : { ru: "Значения", en: "Meanings" }));
@@ -2103,6 +2156,8 @@ match = {"kind": "choice" (pick the category a sentence shows) or "vocab" (defin
          "title": {"ru","en"} 1–3 words, "ask": {"ru","en"} the question above the options,
          "options": ["2–6 category names"] (choice only),
          "items": [{"s": "sentence with the key part in <b>bold</b>" (vocab: {"ru","en"} definition), "a": "the correct option or word", "why"?: {"ru","en"}}]}
+match (kind "cloze", for grammar lessons about choosing between forms or tenses) = {"kind": "cloze", "title": {"ru","en"}, "ask"?: {"ru","en"},
+         "items": [{"s": "a short story paragraph of 3–4 sentences with 3 gaps written as {1}, {2}, {3}", "gaps": [{"options": ["right form", "tempting wrong form"], "a": "the right form, exactly one of options", "why": {"ru","en"} one sentence: why this form fits the meaning}]}]}
 speak = {"groups": [{"group": {"ru","en"}, "items": [{"q": "question or task in English", "starter"?: "sentence opener"}]}],
          "howTo": {"ru","en"} how to answer, "tips"?: ["useful phrases"], "tipsLabel"?: {"ru","en"}, "seconds": 60–180}`;
 const LESSON_RULES = `- drill: gap-fill items on the lesson's grammar or vocabulary. Exactly one gap per item: "s" holds the text before and after it and never contains the answer. Each answer must follow unambiguously from the context; put real alternatives in "also". Answers are 1–4 words, lowercase unless a proper noun. Use "part" only to group items into 2–3 sections.
@@ -2809,6 +2864,9 @@ function prog() {
   p.drill ??= { i: 0, answered: {}, lastInput: {} };
   p.match ??= { i: 0, answered: {}, chosen: {} };
   p.speak ??= { i: 0, seen: {} };
+  /* урок перешёл на мини-истории: старые ответы на 12 отдельных предложений к ним не относятся */
+  const ml = LESSONS.find(x => x.id === S.lessonId)?.match;
+  if (ml?.kind === "cloze" && p.match.kind !== "cloze") p.match = { i: 0, answered: {}, chosen: {}, kind: "cloze" };
   return p;
 }
 function lessonSteps(l) {
@@ -3787,6 +3845,51 @@ function optionsFor(M, i) {
   for (let k = 0; k < shift; k++) rotated.push(rotated.shift());
   return rotated.map(w => ({ key: w, label: w, plain: true }));
 }
+/* ===== мини-истории (match.kind === "cloze"): абзац с несколькими выборами, проверка, когда заполнены все места ===== */
+let clozeUI = { i: -1, picks: [], active: 0 };
+const clozeText = (q, picks, wrap) => String(q.s).replace(/\{(\d+)\}/g, (_, n) => { const v = picks?.[n - 1]; return wrap ? `[${v ?? "___"}]` : (v ?? "___"); });
+const clozeRotate = (opts, seed) => { const k = seed % opts.length; return opts.slice(k).concat(opts.slice(0, k)); };   // правильный вариант не всегда первый
+function renderCloze(M, items, p) {
+  const i = p.i, q = items[i], gaps = q.gaps, checked = i in p.answered;
+  if (clozeUI.i !== i) clozeUI = { i, picks: checked ? (p.chosen?.[i] || []).slice() : [], active: 0 };
+  const U = clozeUI, filled = gaps.every((_, g) => U.picks[g]);
+  const text = String(q.s).split(/\{(\d+)\}/).map((x, k) => {
+    if (k % 2 === 0) return x;
+    const g = +x - 1, pick = U.picks[g];
+    const cls = checked ? (pick === gaps[g].a ? "right" : "wrong") : (g === U.active ? "active" : "");
+    return `<button class="gap ${cls}" data-gap="${g}" ${checked ? "disabled" : ""}>${pick ? escH(pick) : "&nbsp;"}<sup>${x}</sup></button>`;
+  }).join("");
+  const why = checked ? `<div class="cz-whys">${gaps.map((g, k) => {
+    const ok = U.picks[k] === g.a;
+    return `<div class="cz-why ${ok ? "ok" : "no"}"><b>${k + 1}. ${escH(g.a)}</b>${ok ? "" : ` <span>${t("czYouPicked", escH(U.picks[k] || "—"))}</span>`}${g.why ? `<p>${TR(g.why)}</p>` : ""}</div>`;
+  }).join("")}</div>` : "";
+  $("#match-card").innerHTML = `
+    <div class="q-counter"><span>${t("qCounter", i + 1, items.length)}</span><button class="fix-btn" id="match-ask">${t("askBtn")}</button></div>
+    <div class="eyebrow" style="margin:6px 0 4px">${M.ask ? L(M.ask) : t("czAsk")}</div>
+    <p class="cz-text">${text}</p>
+    ${checked ? "" : `<div class="cz-opts">${clozeRotate(gaps[U.active].options, i + U.active).map(o => `<button class="chip" data-opt="${escH(o)}" aria-pressed="${U.picks[U.active] === o}">${escH(o)}</button>`).join("")}</div>
+      <div class="nav-row"><button class="primary-btn" id="cz-check" ${filled ? "" : "disabled"}>${t("czCheck")}</button></div>`}
+    ${why}
+    ${checked ? `<div class="nav-row"><button class="primary-btn" id="m-next">${i === items.length - 1 ? t("resultsBtn") : t("nextBtn")}</button></div>` : ""}`;
+  $$("#match-card [data-gap]").forEach(b => b.addEventListener("click", () => { U.active = +b.dataset.gap; renderCloze(M, items, p); }));
+  $$("#match-card [data-opt]").forEach(b => b.addEventListener("click", () => {
+    U.picks[U.active] = b.dataset.opt;
+    const nextGap = gaps.findIndex((_, g) => !U.picks[g]);
+    if (nextGap >= 0) U.active = nextGap;
+    renderCloze(M, items, p);
+  }));
+  $("#cz-check")?.addEventListener("click", () => {
+    p.chosen[i] = U.picks.slice();
+    p.answered[i] = gaps.every((g, k) => U.picks[k] === g.a);
+    save(); renderMatch(); updateProgress();
+  });
+  $("#m-next")?.addEventListener("click", () => { p.i = i + 1; save(); renderMatch(); updateProgress(); });
+  $("#match-ask")?.addEventListener("click", () => {
+    const mine = U.picks.filter(Boolean).length === gaps.length ? clozeText(q, U.picks) : "";
+    askTeacher(`Lesson: "${lesson().title}". A mini-story where the learner chooses the right verb form for each gap: "${clozeText(q, [])}".
+Correct choices in order: ${gaps.map((g, k) => `${k + 1}) ${g.a} (other option: ${g.options.filter(o => o !== g.a).join(", ")})`).join("; ")}.${mine ? ` The learner's version: "${mine}".` : ""}`, "");
+  });
+}
 function renderMatch() {
   const l = lesson(), M = l.match, items = matchItems(l), p = prog().match;
   const vals = Object.values(p.answered);
@@ -3819,6 +3922,7 @@ function renderMatch() {
     return;
   }
 
+  if (M.kind === "cloze") return renderCloze(M, items, p);
   const i = p.i, q = items[i], done = i in p.answered, chosen = p.chosen?.[i];
   const opts = optionsFor(M, i);
   $("#match-card").innerHTML = `
@@ -4214,6 +4318,11 @@ function reportRows() {
   });
   (hide.match ? [] : matchItems(l) || []).forEach((q, i) => {
     const done = i in p.match.answered;
+    if (l.match.kind === "cloze") {   // мини-история: в отчёте — текст с выбором ученика и верные формы
+      const picks = p.match.chosen?.[i] || [];
+      rows.match.push({ n: i + 1, sentence: stripTags(clozeText(q, picks, true)), given: done ? picks.join(" / ") : null, correct: q.gaps.map(g => g.a).join(" / "), ok: p.match.answered[i] === true });
+      return;
+    }
     const chosen = p.match.chosen?.[i];
     const label = k => {
       if (l.match.kind === "vocab") return k;
