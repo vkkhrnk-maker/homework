@@ -327,6 +327,17 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .sp-fixes b{color:var(--accent);font-weight:500}
 .sp-fixes small{font-size:13px;color:var(--fg-2)}
 .sp-note{margin:0;font-size:14px;color:var(--fg-2)}
+.sp-verdict{border-radius:var(--r-m);padding:16px 18px;margin-bottom:8px;display:grid;gap:6px}
+.sp-verdict.ok{background:var(--accent-soft);color:var(--fg)}
+.sp-verdict.no{background:var(--warn-soft);color:var(--fg)}
+.sp-verdict-head{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.sp-verdict.ok .sp-verdict-head{color:var(--accent)}
+.sp-verdict.no .sp-verdict-head{color:var(--warn)}
+.sp-verdict p{margin:0}
+.sp-verdict-main{font-size:19px;font-weight:600;line-height:1.4;letter-spacing:-.005em}
+.sp-verdict-sub{font-size:15px;line-height:1.55;color:var(--fg-2)}
+.sp-verdict-tip{font-size:15px;line-height:1.55;padding-top:8px;margin-top:2px;border-top:1px solid color-mix(in srgb,currentColor 12%,transparent)}
+.sp-verdict-tip b{color:var(--fg)}
 .sp-rep{display:grid;gap:4px;background:var(--bg);border-radius:var(--r-m);padding:12px 14px;margin-bottom:8px}
 .sp-rep b{font-size:14px}
 .sp-rep p{margin:0;font-family:var(--read-font);font-size:15px;line-height:1.55}
@@ -804,6 +815,8 @@ const UI = {
   speakCheckingText:{ ru: "Проверяю ответ…", en: "Checking the answer…" },
   speakCheck:   { ru: "Проверить", en: "Check" },
   speakTextPh:  { ru: "Напишите ответ по-английски", en: "Type your answer in English" },
+  speakVerdict: { ru: "Вывод", en: "Verdict" },
+  speakNext:    { ru: "Дальше:", en: "Next:" },
   speakSaid:    { ru: "Вы сказали", en: "You said" },
   speakWrote:   { ru: "Вы написали", en: "You wrote" },
   speakFixes:   { ru: "Исправления", en: "Corrections" },
@@ -3769,16 +3782,22 @@ function renderSpeak() {
 function speakResultHTML(a) {
   const c = a.check || {};
   const fixes = (c.mistakes || []).filter(m => m && m.said);
+  /* вывод — первым и крупно: что получилось, как это связано с темой урока и что делать дальше */
+  const main = c.praise || c.target?.note, sub = c.praise ? c.target?.note : "";
+  const verdict = main || c.tip ? `<div class="sp-verdict ${c.target && c.target.ok === false ? "no" : "ok"}">
+      <div class="sp-verdict-head">${c.target && c.target.ok === false ? "!" : "✓"} ${t("speakVerdict")}</div>
+      ${main ? `<p class="sp-verdict-main">${escT(main)}</p>` : ""}
+      ${sub ? `<p class="sp-verdict-sub">${escT(sub)}</p>` : ""}
+      ${c.tip ? `<p class="sp-verdict-tip"><b>${t("speakNext")}</b> ${escT(c.tip)}</p>` : ""}
+    </div>` : "";
   return `<div class="sp-result">
+    ${verdict}
     <div class="sp-label">${t(a.mode === "voice" ? "speakSaid" : "speakWrote")}</div>
     <p class="sp-said">${escT(c.transcript) || "—"}</p>
-    ${c.target?.note ? `<div class="sp-target ${c.target.ok ? "ok" : "no"}">${c.target.ok ? "✓" : "!"} ${escT(c.target.note)}</div>` : ""}
     <div class="sp-label">${t("speakFixes")}</div>
     ${fixes.length ? `<ul class="sp-fixes">${fixes.map(m => `<li><span class="sp-fix"><s>${escT(m.said)}</s> → <b>${escT(m.better)}</b></span>${m.why ? `<small>${escT(m.why)}</small>` : ""}</li>`).join("")}</ul>`
                    : `<p class="sp-note">${t("speakNoFixes")}</p>`}
     ${c.better ? `<div class="sp-label">${t("speakBetter")}</div><p class="sp-better">${escT(c.better)}</p>` : ""}
-    ${c.praise ? `<p class="sp-note">${escT(c.praise)}</p>` : ""}
-    ${c.tip ? `<p class="sp-note">${escT(c.tip)}</p>` : ""}
   </div>`;
 }
 
@@ -3857,7 +3876,7 @@ Reply with ONLY one JSON object:
  "mistakes": [{"said": "the student's exact words", "better": "the corrected words", "why": "short reason in Russian"}],
  "better": "the student's answer rewritten as a natural, correct answer at the same level, keeping their ideas, 1–4 sentences",
  "praise": "one specific thing done well, in Russian", "tip": "one concrete next step, in Russian"}
-Rules: list only real mistakes in grammar, word choice or word order, at most 6, most important first; ignore fillers, hesitations and small slips of the tongue. If the answer is empty, unclear or not in English, give what you understood as transcript (or "") and explain in "tip". Address the student with «вы». Plain text only, no Markdown.`;
+Rules: write "note", "praise" and "tip" in Russian, addressing the student directly as «вы» (never "студент" or "ученик"); "praise" is the verdict shown first, so make it one specific short sentence about what worked and what to fix; list only real mistakes in grammar, word choice or word order, at most 6, most important first; ignore fillers, hesitations and small slips of the tongue. If the answer is empty, unclear or not in English, give what you understood as transcript (or "") and explain in "tip". Address the student with «вы». Plain text only, no Markdown.`;
 }
 
 /* убирает слова-паузы (uh, um, er, hmm, mm) вместе с запятой после них; настоящие слова вроде «umbrella» не трогает */
