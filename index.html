@@ -176,12 +176,20 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .fix-btn{flex:none;font-size:12px;font-weight:600;color:var(--fg-2);background:var(--bg);border-radius:999px;padding:5px 12px}
 .fix-btn:hover{background:var(--surface-2);color:var(--fg)}
 .table-scroll{overflow-x:auto;margin-top:6px;-webkit-overflow-scrolling:touch}
-.prob-table,.sum-table{width:100%;border-collapse:collapse;font-size:14px}
-.prob-table td,.sum-table td{padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.prob-table,.sum-table{width:100%;border-collapse:collapse;font-size:15px;table-layout:fixed}
+.prob-table td,.sum-table td{padding:11px 18px 11px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.prob-table td:last-child,.sum-table td:last-child{padding-right:0}
 .prob-table tr:last-child td,.sum-table tr:last-child td{border-bottom:0}
-.prob-table td:first-child,.sum-table td:first-child{font-weight:600;color:var(--accent);white-space:nowrap}
-.sum-table td:nth-child(2){color:var(--fg-2);font-size:13px}
-.sum-table .alt-tr{font-family:var(--read-font);font-style:italic;font-size:13.5px;margin-top:3px}
+.prob-table td:first-child,.sum-table td:first-child{font-weight:600;color:var(--accent);overflow-wrap:anywhere}
+.prob-table td:first-child{width:26%}
+.sum-table td:first-child{width:24%}
+.sum-table td:nth-child(2){width:38%;color:var(--fg-2);font-size:14px}
+.sum-table .alt-tr{font-family:var(--read-font);font-style:italic;font-size:14.5px;margin-top:3px}
+@media (min-width:700px){
+  .prob-table,.sum-table{font-size:16.5px}
+  .sum-table td:nth-child(2){font-size:15.5px}
+  .sum-table .alt-tr{font-size:16px}
+}
 .sum-table td:last-child{font-family:var(--read-font)}
 
 /* ---------- practice ---------- */
