@@ -393,6 +393,12 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .ex-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .ex-chips button{font-size:13px;color:var(--fg-2);background:var(--surface);border-radius:999px;padding:6px 12px;text-align:left}
 .ex-chips button:hover{background:var(--surface-2);color:var(--fg)}
+.aq-thread{display:grid;gap:8px;max-height:42vh;overflow:auto;margin:8px 0}
+.aq-me{justify-self:end;max-width:85%;background:var(--accent-soft);color:var(--fg);padding:8px 12px;border-radius:14px;font-size:15px}
+.aq-ans{background:var(--bg);padding:10px 14px;border-radius:14px;font-size:15px;line-height:1.6;color:var(--fg)}
+.aq-ans i{font-family:var(--read-font);font-size:16px}
+.aq-wait{color:var(--muted)}
+.trap-why b{color:var(--fg)}
 .ex-change{margin-top:12px;border-radius:var(--r-m);background:var(--surface);padding:12px 14px}
 .ex-change b{display:block;font-size:15px;margin-bottom:6px}
 .ex-change ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55;color:var(--fg-2)}
@@ -699,6 +705,11 @@ const UI = {
                   en: { s: "Sentence", verb: "Verb cue", a: "Answer", also: "Other answers", why: "Explanation", hint: "Hint", name: "Heading", note: "Note", forms: "Formulas", ex: "Examples", wrong: "Mistakes", summary: "Table", callout: "Callout", q: "Question", starter: "Sentence opener" } },
   extendBtn:    { ru: "Дополнить урок", en: "Extend the lesson" },
   trBtn:        { ru: m => `Перевод теории: ${m === "show" ? "сразу" : "по тапу"}`, en: m => `Theory translation: ${m === "show" ? "always shown" : "on tap"}` },
+  reportWarn:   { ru: (list, hides) => `Вы ещё не закончили: ${list}. ${hides ? "Разделы, где нет ни одного ответа, в отчёт учителю не попадут. " : ""}Перейти к отчёту?`,
+                  en: (list, hides) => `Not finished yet: ${list}. ${hides ? "Sections with no answers at all will be left out of the report. " : ""}Go to the report?` },
+  reportWarnYes:{ ru: "Да, к отчёту", en: "Yes, go to report" },
+  gapNone:      { ru: "не начато", en: "not started" },
+  gapPart:      { ru: (d, n) => `${d} из ${n}`, en: (d, n) => `${d} of ${n}` },
   ruleBtn:      { ru: "Правило", en: "Rule" },
   ruleAll:      { ru: "Все формы урока", en: "All forms from the lesson" },
   ruleLoading:  { ru: "Подбираю правило…", en: "Finding the rule…" },
@@ -863,6 +874,16 @@ const UI = {
   resultsBtn:   { ru: "Итоги →", en: "Results →" },
   verdictGood:  { ru: "Верно", en: "Correct" },
   verdictAlso:  { ru: "Тоже подходит", en: "Also works" },
+  trapLead:     { ru: w => `Частая путаница — «${w}»:`, en: w => `Easy to mix up — "${w}":` },
+  askBtn:       { ru: "Спросить", en: "Ask" },
+  askTitle:     { ru: "Вопрос по заданию", en: "Ask about this exercise" },
+  askPh:        { ru: "Например: почему не так-то?", en: "For example: why not …?" },
+  askSend:      { ru: "Спросить", en: "Ask" },
+  askThinking:  { ru: "Думаю…", en: "Thinking…" },
+  askFail:      { ru: "Не получилось ответить. Попробуйте ещё раз.", en: "Couldn't answer. Please try again." },
+  askChipWhy:   { ru: w => `Почему не «${w}»?`, en: w => `Why not "${w}"?` },
+  askChipSimple:{ ru: "Объясни проще", en: "Explain it more simply" },
+  askChipMore:  { ru: "Приведи ещё примеры", en: "Give me more examples" },
   wrongWhy:     { ru: w => `Почему не «${w}»:`, en: w => `Why not "${w}":` },
   wrongWhyLoading: { ru: "Разбираю ваш ответ…", en: "Looking at your answer…" },
   verdictTypo:  { ru: "Опечатка — засчитано", en: "Typo — counted" },
@@ -1876,7 +1897,8 @@ function buildLesson({ id, createdAt, lesson: x }) {
         part: parts > 1 ? Number(q.part) || undefined : undefined,
         s: q.s.map(safe), verb: q.verb ? safe(q.verb) : undefined,
         a: arr(q.a).map(safe), also: arr(q.also).length ? arr(q.also).map(safe) : undefined,
-        why: bi(q.why || ""), hint: bi(q.hint || "")
+        why: bi(q.why || ""), hint: bi(q.hint || ""),
+        trap: q.trap?.word ? { word: safe(q.trap.word), why: bi(q.trap.why || "") } : undefined
       })),
       chips: arr(D.chips).length ? arr(D.chips).map(safe) : undefined,
       cheatsheet: arr(D.cheatsheet).length ? arr(D.cheatsheet).filter(Array.isArray).map(c => [safe(c[0]), bi(c[1] || "")]) : undefined,
@@ -2034,7 +2056,8 @@ rule = {"name": "short heading: an English term, or {"ru","en"}", "gloss": {"ru"
             "ex"?: ["example with the key form in <b>bold</b>"], "wrong"?: ["a typical wrong sentence"],
             "summary"?: [["term", {"ru","en"}, "short example"]], "callout"?: {"ru","en"}}]}
 drill = {"items": [{"part"?: 1, "s": ["text before the gap", "text after the gap"], "verb"?: "base-form cue shown next to the gap",
-                    "a": ["best answer"], "also"?: ["other acceptable answers"], "why": {"ru","en"}, "hint": {"ru","en"}}],
+                    "a": ["best answer"], "also"?: ["other acceptable answers"], "why": {"ru","en"}, "hint": {"ru","en"},
+                    "trap"?: {"word": "the most tempting wrong answer", "why": {"ru","en"} one sentence: why it does not fit}}],
          "chips"?: ["answer choices to tap, only when answers come from a small fixed set such as modal verbs"],
          "cheatsheet"?: [["form", {"ru","en"} meaning in 2–4 words]], "cheatsheetLabel"?: {"ru","en"}}
 match = {"kind": "choice" (pick the category a sentence shows) or "vocab" (definition → word),
@@ -2044,6 +2067,7 @@ match = {"kind": "choice" (pick the category a sentence shows) or "vocab" (defin
 speak = {"groups": [{"group": {"ru","en"}, "items": [{"q": "question or task in English", "starter"?: "sentence opener"}]}],
          "howTo": {"ru","en"} how to answer, "tips"?: ["useful phrases"], "tipsLabel"?: {"ru","en"}, "seconds": 60–180}`;
 const LESSON_RULES = `- drill: gap-fill items on the lesson's grammar or vocabulary. Exactly one gap per item: "s" holds the text before and after it and never contains the answer. Each answer must follow unambiguously from the context; put real alternatives in "also". Answers are 1–4 words, lowercase unless a proper noun. Use "part" only to group items into 2–3 sections.
+- drill "trap": only where a learner could confidently pick a similar but wrong answer (e.g. "comparing" instead of "compared"); name that answer and explain in one short sentence why it does not fit. Skip it when no such confusion is likely.
 - match: "a" must exactly equal one of "options" (choice) or be one of the lesson's words (vocab).
 - Russian: natural and short, addressing the student with «вы». English: plain.
 - Questions for the student to discuss or answer (e.g. "Question: …") are not theory: put them in "speak", never in a rule's "callout" or "note". A "callout" is only a short tip or reminder.
@@ -2330,7 +2354,7 @@ const FIX_KINDS = {
   },
   drill: {
     label: "a fill-in-the-gap practice question",
-    fields: `"s": [text before the gap, text after the gap]; the student types the missing part, so the answer must never appear inside "s". "verb": base-form cue shown next to the gap. "a": array of correct answers, the first one is shown as THE right answer. "also": other accepted answers. "why": explanation shown after answering. "hint": hint the student can open before answering. "part": exercise part number.`
+    fields: `"s": [text before the gap, text after the gap]; the student types the missing part, so the answer must never appear inside "s". "verb": base-form cue shown next to the gap. "a": array of correct answers, the first one is shown as THE right answer. "also": other accepted answers. "why": explanation shown after answering. "hint": hint the student can open before answering. "part": exercise part number. "trap": optional {"word": the most tempting wrong answer, "why": {"ru","en"} why it does not fit}.`
   },
   match: {
     label: "a multiple-choice or vocabulary-matching question",
@@ -3305,6 +3329,14 @@ function renderRuleBox(i, q) {
     (st.all ? "" : `<button class="link-btn" id="rule-all" style="margin-top:6px">${t("ruleAll")}</button>`);
   $("#rule-all")?.addEventListener("click", () => { ruleState.all = true; renderRuleBox(i, q); });
 }
+/* следующий/предыдущий вопрос; при повторе ошибок — только из списка p.redo */
+function drillStep(p, items, i, dir) {
+  if (Array.isArray(p.redo) && p.redo.length) {
+    if (dir > 0) return p.redo.find(x => x > i) ?? items.length;
+    return [...p.redo].reverse().find(x => x < i) ?? i;
+  }
+  return dir > 0 ? Math.min(i + 1, items.length) : Math.max(i - 1, 0);
+}
 function drillStats() {
   const vals = Object.values(prog().drill.answered);
   return { done: vals.length, ok: vals.filter(v => v === "good" || v === "also").length };
@@ -3329,6 +3361,7 @@ function renderDrill() {
     <div class="q-counter">
       <span>${t("qCounter", i+1, items.length)}</span>
       ${q.part ? `<span class="part-badge">${t("partBadge", q.part)}</span>` : ""}
+      <button class="fix-btn" id="drill-ask">${t("askBtn")}</button>
       <button class="fix-btn" id="drill-fix">${t("fixBtn")}</button>
     </div>
     <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? q.a[0] : "___") + stripTags(q.s[1]))}">${q.s[0]}<span class="blank ${state ? (state === "bad" ? "miss" : "") : "empty"}">${state ? (state === "bad" ? (escH(p.lastInput?.[i] || "") || "…") : q.a[0]) : "&nbsp;&nbsp;&nbsp;&nbsp;"}</span>${cue}${q.s[1]}</p>
@@ -3340,8 +3373,8 @@ function renderDrill() {
       </div>`}
     <div id="drill-feedback"></div>
     <div class="nav-row">
-      ${i > 0 ? `<button class="link-btn" id="prev-btn">${t("backBtn")}</button>` : ""}
-      ${state ? `<button class="primary-btn" id="next-btn">${i === items.length-1 ? t("resultsBtn") : t("nextBtn")}</button>` : `<button class="link-btn" id="skip-btn">${t("skipBtn")}</button>`}
+      ${drillStep(p, items, i, -1) !== i ? `<button class="link-btn" id="prev-btn">${t("backBtn")}</button>` : ""}
+      ${state ? `<button class="primary-btn" id="next-btn">${drillStep(p, items, i, 1) >= items.length ? t("resultsBtn") : t("nextBtn")}</button>` : `<button class="link-btn" id="skip-btn">${t("skipBtn")}</button>`}
     </div>`;
 
   if (state) showFeedback(i, p.lastInput?.[i] || "");
@@ -3360,12 +3393,19 @@ function wireDrill(i) {
     inp.focus();
   }
   $("#check-btn")?.addEventListener("click", () => check(i));
-  $("#next-btn")?.addEventListener("click", () => { p.i = i+1; save(); renderDrill(); });
-  $("#prev-btn")?.addEventListener("click", () => { p.i = i-1; save(); renderDrill(); });
+  $("#next-btn")?.addEventListener("click", () => { p.i = drillStep(p, items, i, 1); if (p.i >= items.length) delete p.redo; save(); renderDrill(); });
+  $("#prev-btn")?.addEventListener("click", () => { p.i = drillStep(p, items, i, -1); save(); renderDrill(); });
+  $("#drill-ask")?.addEventListener("click", () => {
+    const l = lesson(), q = items[i], state = p.answered[i];
+    const mine = state ? (p.lastInput?.[i] || "") : "";
+    askTeacher(`Lesson: "${l.title}". Gap-fill sentence: "${stripTags(q.s[0])}___${stripTags(q.s[1])}"${q.verb ? ` (cue: ${q.verb})` : ""}.
+Correct answer: "${q.a[0]}"${q.also?.length ? `; also accepted: ${q.also.join(", ")}` : ""}.${mine ? ` The learner wrote: "${mine}".` : ""}
+Official explanation: ${stripTags(plainEn(q.why))}`, mine && mine !== q.a[0] ? mine : "");
+  });
   $("#drill-fix")?.addEventListener("click", () => {
     fixSheet("drill", `drill.items.${i}`, renderDrill);
   });
-  $("#skip-btn")?.addEventListener("click", () => { p.i = Math.min(i+1, items.length); save(); renderDrill(); });
+  $("#skip-btn")?.addEventListener("click", () => { p.i = drillStep(p, items, i, 1); if (p.i >= items.length) delete p.redo; save(); renderDrill(); });
 }
 /* опечатка: в слове от 7 букв пропущена, добавлена лишняя или переставлена соседняя буква — не в конце слова.
    Правки на конце и замены букв не считаем: так «arrive» и «arrived» или «studied» и «studies» остаются разными ответами. */
@@ -3403,6 +3443,7 @@ function showFeedback(i, raw) {
       <p class="full">${state === "bad" ? `<small class="correct-lbl">${t("correctIs")}</small> ` : ""}${full}</p>
       ${lead ? `<p class="why">${lead}</p>` : ""}
       ${state === "bad" ? `<p class="why wrong-why" id="why-wrong" hidden></p>` : ""}
+      ${q.trap && norm(raw || "") !== norm(q.trap.word) ? `<p class="why trap-why"><b>${t("trapLead", escH(q.trap.word))}</b> ${TR(q.trap.why)}</p>` : ""}
       <p class="why">${TR(q.why)}</p>
       ${alsoLine ? `<p class="also">${alsoLine}</p>` : ""}
     </div>`;
@@ -3416,6 +3457,43 @@ function showFeedback(i, raw) {
       el.innerHTML = `<b>${t("wrongWhy", escH(raw))}</b> ${TR(ex)}`;
     });
   }
+}
+/* «Спросить»: свободный вопрос по заданию; ИИ видит предложение, правильный ответ и то, что написали вы */
+function askTeacher(context, ownAnswer) {
+  const thread = [];
+  const chips = [ownAnswer ? t("askChipWhy", ownAnswer) : "", t("askChipSimple"), t("askChipMore")].filter(Boolean);
+  openSheet(`<h3>${t("askTitle")}</h3>
+    <div class="aq-thread" id="aq-thread"></div>
+    <textarea class="sp-text" id="aq-text" style="min-height:70px;margin-top:6px" placeholder="${t("askPh")}"></textarea>
+    <div class="ex-chips">${chips.map(c => `<button type="button">${escH(c)}</button>`).join("")}</div>
+    <div class="acts"><button class="ghost-btn" data-a="close">${t("wdClose")}</button><button class="primary-btn" data-a="send">${t("askSend")}</button></div>`, el => {
+    const box = el.querySelector("#aq-thread"), field = el.querySelector("#aq-text"), send = el.querySelector("[data-a=send]");
+    el.querySelector("[data-a=close]").onclick = closeSheet;
+    el.querySelectorAll(".ex-chips button").forEach(b => b.onclick = () => { field.value = b.textContent; field.focus(); });
+    const add = (cls, html) => { const d = document.createElement("div"); d.className = cls; d.innerHTML = html; box.appendChild(d); box.scrollTop = box.scrollHeight; return d; };
+    send.onclick = async () => {
+      const q = field.value.trim();
+      if (!q) return;
+      const ai = await lessonAI();
+      if (!ai) { closeSheet(); return keySheet(); }
+      field.value = ""; send.disabled = true;
+      add("aq-me", escH(q));
+      const wait = add("aq-ans aq-wait", t("askThinking"));
+      try {
+        const history = thread.map(m => `Learner: ${m.q}\nTeacher: ${m.a}`).join("\n");
+        const r = await ai.json(`You are a friendly English teacher for a Russian-speaking learner (level B1–B2). The learner is doing this exercise:
+${context}
+${history ? `\nConversation so far:\n${history}\n` : ""}
+Learner's question: "${q}"
+Answer concisely (at most 5 short sentences), concretely, in the language of the question (Russian unless the learner writes in English). Put English examples in <i></i>. Use only <b>, <i> and <br> tags. Reply with ONLY one JSON object: {"answer": "your answer"}`, {});
+        const a = safe(r?.answer || "");
+        if (!a) throw new Error("empty");
+        thread.push({ q, a: stripTags(a) });
+        wait.className = "aq-ans"; wait.innerHTML = a;
+      } catch(e) { wait.className = "aq-ans"; wait.textContent = t("askFail"); }
+      send.disabled = false; box.scrollTop = box.scrollHeight;
+    };
+  });
 }
 /* почему именно ваше слово не подходит: ИИ объясняет по-английски и по-русски (русский — по клику), ответ запоминается */
 async function explainWrong(q, raw, i) {
@@ -3480,9 +3558,10 @@ function renderDrillDone() {
     </div>`;
   $("#redo-wrong")?.addEventListener("click", () => {
     wrong.forEach(i => { delete p.answered[i]; delete p.lastInput[i]; });
+    p.redo = open.slice();   // повтор идёт только по тому, что не получилось, а не по всем вопросам подряд
     p.i = open[0]; save(); renderDrill(); updateProgress();
   });
-  $("#done-report")?.addEventListener("click", () => { S.returnTo = "drill"; show("report"); });
+  $("#done-report")?.addEventListener("click", () => openReport("drill"));
   $("#restart-drill")?.addEventListener("click", async () => {
     if (!(await ask(t("confirmRestartDrill")))) return;
     prog().drill = { i: 0, answered: {}, lastInput: {} };
@@ -3543,7 +3622,7 @@ function renderMatch() {
   const i = p.i, q = items[i], done = i in p.answered, chosen = p.chosen?.[i];
   const opts = optionsFor(M, i);
   $("#match-card").innerHTML = `
-    <div class="q-counter"><span>${t("qCounter", i+1, items.length)}</span><button class="fix-btn" id="match-fix">${t("fixBtn")}</button></div>
+    <div class="q-counter"><span>${t("qCounter", i+1, items.length)}</span><button class="fix-btn" id="match-ask">${t("askBtn")}</button><button class="fix-btn" id="match-fix">${t("fixBtn")}</button></div>
     <p class="q-sentence" style="max-width:28ch">${TR(q.s)}</p>
     <div class="eyebrow" style="margin-bottom:8px">${M.ask ? L(M.ask) : t("matchAsk")}</div>
     <div class="match-options">
@@ -3565,6 +3644,13 @@ function renderMatch() {
     save(); renderMatch(); updateProgress();
   }));
   $("#m-next")?.addEventListener("click", () => { p.i = i+1; save(); renderMatch(); updateProgress(); });
+  $("#match-ask")?.addEventListener("click", () => {
+    const label = key => stripTags(L(opts.find(m => m.key === key)?.label) || key);
+    const mine = done && chosen ? label(chosen) : "";
+    askTeacher(`Lesson: "${lesson().title}". Question: "${stripTags(L(q.s))}"
+Options: ${opts.map(m => label(m.key)).join(" / ")}. Correct: "${label(q.a)}".${mine ? ` The learner chose: "${mine}".` : ""}
+${q.why ? `Official explanation: ${stripTags(plainEn(q.why))}` : ""}`, mine && chosen !== q.a ? mine : "");
+  });
   $("#match-fix")?.addEventListener("click", () => {
     fixSheet("match", Array.isArray(lesson().match) ? `match.${i}` : `match.items.${i}`, renderMatch);
   });
@@ -3799,7 +3885,7 @@ function renderLessonDone() {
         <button class="ghost-btn" data-goto="home">${t("toLessons")}</button>
       </div>
     </div>`;
-  $("#lesson-done-report").addEventListener("click", () => { S.returnTo = "speak"; show("report"); });
+  $("#lesson-done-report").addEventListener("click", () => openReport("speak"));
   $("#restart-lesson").addEventListener("click", async () => {
     if (!(await ask(t("confirmReset")))) return;
     delete S.progress[S.lessonId];
@@ -3824,9 +3910,33 @@ function stopTimer() { if (timerId) clearInterval(timerId); timerId = null; $("#
 function plainSentence(q, filler) {
   return (q.s[0] + filler + (q.verb ? ` (${q.verb})` : "") + q.s[1]).replace(/\s+/g, " ").trim();
 }
+/* перед отчётом: если что-то не закончено, спрашиваем; «да» скрывает из отчёта разделы, где нет ни одного ответа */
+const reportHidden = () => prog().reportHide || {};
+function reportGaps() {
+  const l = lesson(), p = prog(), out = [];
+  const add = (key, label, done, total) => { if (total && done < total) out.push({ key, label, done, total }); };
+  if (l.drill) add("drill", t("tileDrill"), Object.keys(p.drill.answered).length, l.drill.items.length);
+  if (l.match) add("match", matchLabels(l).tile, Object.keys(p.match.answered).length, matchItems(l).length);
+  if (l.speak) add("speak", t("tileSpeak"), Object.keys(p.speak.answers || {}).filter(k => p.speak.answers[k]?.check).length, speakItems(l).length);
+  return out;
+}
+async function openReport(from) {
+  if (S.view !== "report") S.returnTo = from || S.view;
+  const gaps = reportGaps(), pr = prog();
+  delete pr.reportHide;
+  if (gaps.length) {
+    const list = gaps.map(g => `${g.label}: ${g.done ? t("gapPart", g.done, g.total) : t("gapNone")}`).join(" · ");
+    const empty = gaps.filter(g => !g.done);
+    const total = [lesson().drill, lesson().match, lesson().speak].filter(Boolean).length;
+    if (!(await ask(t("reportWarn", list, empty.length > 0 && empty.length < total), "reportWarnYes"))) return;
+    if (empty.length && empty.length < total) pr.reportHide = Object.fromEntries(empty.map(g => [g.key, true]));
+    save();
+  }
+  show("report");
+}
 function reportRows() {
-  const l = lesson(), p = prog(), rows = { drill: [], match: [], speak: [] };
-  (l.drill?.items || []).forEach((q, i) => {
+  const l = lesson(), p = prog(), rows = { drill: [], match: [], speak: [] }, hide = reportHidden();
+  if (!hide.drill) (l.drill?.items || []).forEach((q, i) => {
     const state = p.drill.answered[i];
     rows.drill.push({
       n: i + 1,
@@ -3837,7 +3947,7 @@ function reportRows() {
       state
     });
   });
-  (matchItems(l) || []).forEach((q, i) => {
+  (hide.match ? [] : matchItems(l) || []).forEach((q, i) => {
     const done = i in p.match.answered;
     const chosen = p.match.chosen?.[i];
     const label = k => {
@@ -3853,7 +3963,7 @@ function reportRows() {
       ok: p.match.answered[i] === true
     });
   });
-  (speakItems(l) || []).forEach((q, i) => {
+  (hide.speak ? [] : speakItems(l) || []).forEach((q, i) => {
     const c = p.speak.answers?.[i]?.check;
     if (!c) return;
     rows.speak.push({
@@ -3867,10 +3977,11 @@ function reportStats() {
   const l = lesson(), p = prog();
   const dVals = Object.values(p.drill.answered);
   const mVals = Object.values(p.match.answered);
+  const hide = reportHidden();
   return {
-    drill: l.drill ? { ok: dVals.filter(v => v === "good" || v === "also").length, done: dVals.length, total: l.drill.items.length } : null,
-    match: l.match ? { ok: mVals.filter(v => v === true).length, done: mVals.length, total: matchItems(l).length, vocab: l.match.kind === "vocab" } : null,
-    speak: l.speak ? { done: Object.keys(p.speak.seen).length, total: speakItems(l).length } : null
+    drill: l.drill && !hide.drill ? { ok: dVals.filter(v => v === "good" || v === "also").length, done: dVals.length, total: l.drill.items.length } : null,
+    match: l.match && !hide.match ? { ok: mVals.filter(v => v === true).length, done: mVals.length, total: matchItems(l).length, vocab: l.match.kind === "vocab" } : null,
+    speak: l.speak && !hide.speak ? { done: Object.keys(p.speak.seen).length, total: speakItems(l).length } : null
   };
 }
 function renderReport() {
@@ -3989,10 +4100,7 @@ ${rows.match.length ? tbl(matchLabels(l).group, rows.match) : ""}
 ${rows.speak.length ? `<h2>${esc(t("reportSpeak"))}</h2>` + rows.speak.map(r => `<div class="sp"><b>${r.n}. ${esc(r.q)}</b><p>${esc(r.answer)}</p>${r.fixes.length ? `<p class="m">${esc(t("reportFixes"))}: ${esc(r.fixes.join("; "))}</p>` : ""}${r.better ? `<p class="m">${esc(t("reportBetter"))}: ${esc(r.better)}</p>` : ""}</div>`).join("") : ""}
 </div></body></html>`;
 }
-$("#report-btn").addEventListener("click", () => {
-  if (S.view !== "report") S.returnTo = S.view;
-  show("report");
-});
+$("#report-btn").addEventListener("click", () => openReport());
 $("#report-back").addEventListener("click", () => {
   const back = S.returnTo && lessonSteps(lesson()).includes(S.returnTo) ? S.returnTo : "theory";
   show(back);
