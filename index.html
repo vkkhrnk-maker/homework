@@ -3860,6 +3860,13 @@ Reply with ONLY one JSON object:
 Rules: list only real mistakes in grammar, word choice or word order, at most 6, most important first; ignore fillers, hesitations and small slips of the tongue. If the answer is empty, unclear or not in English, give what you understood as transcript (or "") and explain in "tip". Address the student with «вы». Plain text only, no Markdown.`;
 }
 
+/* убирает слова-паузы (uh, um, er, hmm, mm) вместе с запятой после них; настоящие слова вроде «umbrella» не трогает */
+function stripFillers(s) {
+  return String(s ?? "")
+    .replace(/\b(?:u+h+|u+m+|e+r+m*|h+m+|m+h*m+)\b[,.…]*\s*/gi, "")
+    .replace(/\s{2,}/g, " ").replace(/\s+([,.!?])/g, "$1").replace(/^[,.\s]+/, "").trim()
+    .replace(/^[a-z]/, c => c.toUpperCase());
+}
 async function checkAnswer(i, { audio, text }) {
   const p = prog().speak, q = speakItems(lesson())[i];
   speakCtl = new AbortController();
@@ -3876,7 +3883,7 @@ async function checkAnswer(i, { audio, text }) {
     if (audio) {
       let wav = audio;
       try { wav = await withTimeout(toWav(audio), 5000); } catch(e) {}
-      check = await geminiJSON(speakPrompt(q, "The attached audio is the student's spoken answer. In \"transcript\" write down exactly what they said, keeping their mistakes: never correct the transcript."),
+      check = await geminiJSON(speakPrompt(q, "The attached audio is the student's spoken answer. In \"transcript\" write down exactly what they said, keeping their mistakes: never correct the transcript. Leave out filler sounds and hesitations such as uh, um, er, hmm; keep every real word."),
         { signal: speakCtl.signal, audio: { mime: wav.type || "audio/mp4", data: await toBase64(wav) } });
     } else {
       const ai = await lessonAI();
@@ -3885,6 +3892,7 @@ async function checkAnswer(i, { audio, text }) {
         + `\n\n<answer>\n${text.slice(0, 4000)}\n</answer>`, { signal: speakCtl.signal, quick: true });
     }
     if (!check || typeof check !== "object") throw { code: "invalid_json" };
+    if (audio) check.transcript = stripFillers(check.transcript);   // «uh», «um» в расшифровке не нужны, даже если модель их оставила
     if (!String(check.transcript || "").trim()) { speakUI.mode = "idle"; speakUI.err = t("speakEmpty"); renderSpeak(); return; }
     p.answers[i] = { mode: audio ? "voice" : "text", at: Date.now(), check };
     p.seen[i] = true;
