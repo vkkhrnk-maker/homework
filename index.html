@@ -172,6 +172,14 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .examples li.wrong::before{background:var(--danger)}
 .callout{background:var(--accent-soft);border-radius:var(--r-s);padding:12px 14px;margin-top:12px;font-size:14px}
 .callout b{color:var(--accent)}
+.tr{text-decoration:underline dotted;text-decoration-thickness:1px;text-decoration-color:var(--muted);text-underline-offset:4px;cursor:pointer;border-radius:3px}
+.tr:hover{text-decoration-color:var(--accent)}
+.tr.tr-on{text-decoration-style:solid;text-decoration-color:var(--accent);background:var(--accent-soft)}
+.tr-alt{display:block;font-style:italic;color:var(--muted);font-size:.92em;margin-top:2px}
+#tr-pop{position:fixed;z-index:40;max-width:min(420px,calc(100vw - 24px));background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:var(--r-s);box-shadow:0 8px 28px rgba(0,0,0,.14);padding:10px 14px;font-size:15px;line-height:1.45}
+#tr-pop[hidden]{display:none}
+.tr-en{font-family:var(--read-font);font-size:17px;margin:0 0 10px}
+.tr-ru{color:var(--fg-2);margin:0}
 .use-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .fix-btn{flex:none;font-size:12px;font-weight:600;color:var(--fg-2);background:var(--bg);border-radius:999px;padding:5px 12px}
 .fix-btn:hover{background:var(--surface-2);color:var(--fg)}
@@ -400,6 +408,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
       <button class="opt" id="report-btn" hidden></button>
       <button class="opt" id="extend-btn" hidden></button>
       <button class="opt" id="moveq-btn" hidden></button>
+      <button class="opt" id="tr-btn" hidden></button>
       <button class="opt" id="reset-btn" hidden></button>
       <button class="opt dz" id="delete-btn" hidden></button>
       <button class="opt" id="ai-btn"></button>
@@ -651,6 +660,7 @@ const UI = {
   fixKeys:      { ru: { s: "Предложение", verb: "Глагол-подсказка", a: "Ответ", also: "Другие ответы", why: "Разбор", hint: "Подсказка", name: "Заголовок", note: "Пояснение", forms: "Формулы", ex: "Примеры", wrong: "Ошибки", summary: "Таблица", callout: "Заметка", q: "Вопрос", starter: "Начало фразы" },
                   en: { s: "Sentence", verb: "Verb cue", a: "Answer", also: "Other answers", why: "Explanation", hint: "Hint", name: "Heading", note: "Note", forms: "Formulas", ex: "Examples", wrong: "Mistakes", summary: "Table", callout: "Callout", q: "Question", starter: "Sentence opener" } },
   extendBtn:    { ru: "Дополнить урок", en: "Extend the lesson" },
+  trBtn:        { ru: m => `Перевод теории: ${m === "show" ? "сразу" : "по тапу"}`, en: m => `Theory translation: ${m === "show" ? "always shown" : "on tap"}` },
   moveqBtn:     { ru: "Вопросы из теории — в говорение", en: "Move questions to speaking" },
   moveqAsk:     { ru: n => `Перенести вопросы из теории в говорение: ${n}? Из теории они пропадут.`, en: n => `Move ${n} question(s) from theory to speaking? They will be removed from theory.` },
   moveqDone:    { ru: "Готово, вопросы теперь в говорении.", en: "Done, the questions are now in speaking." },
@@ -2745,6 +2755,8 @@ function show(view, keepScroll) {
   $("#extend-btn").hidden = atHome || view === "report";
   $("#moveq-btn").hidden = atHome || view === "report" || !questionCallouts(l).length;
   $("#moveq-btn").textContent = t("moveqBtn");
+  $("#tr-btn").hidden = atHome || view === "report";
+  $("#tr-btn").textContent = t("trBtn", trMode());
   $("#brand-home").disabled = atHome;
   $("#brand-home").title = atHome ? "" : t("navHome");
   $$("#tabs .tab").forEach(x => x.setAttribute("aria-selected", String(x.dataset.view === view)));
@@ -2790,26 +2802,70 @@ function updateProgress() {
 }
 
 /* ============ теория ============ */
+/* теория читается по-английски; перевод — по тапу (поповер на десктопе, шторка на телефоне)
+   или сразу под текстом, если так выбрано в меню ⋯ */
+let TRS = [];
+const trMode = () => lsGet("et-tr") === "show" ? "show" : "click";
+const SPLIT_RE = /^([\s\S]*?)\s*<br\s*\/?>\s*<i>([\s\S]*)<\/i>\s*$/i;
+function biParts(v) {
+  if (v && typeof v === "object" && !Array.isArray(v)) return { en: v.en ?? v.ru, ru: v.ru ?? v.en };
+  const m = typeof v === "string" && SPLIT_RE.exec(v);
+  return m ? { en: m[1], ru: m[2] } : null;
+}
+function TR(v) {
+  const p = biParts(v);
+  if (!p) return v ?? "";
+  if (S.lang === "en" || !p.en || p.en === p.ru) return p.en ?? "";
+  if (trMode() === "show") return `${p.en}<span class="tr-alt">${p.ru}</span>`;
+  TRS.push(p);
+  return `<span class="tr" tabindex="0" role="button" data-tr="${TRS.length - 1}">${p.en}</span>`;
+}
+const EN = o => (o && typeof o === "object" && !Array.isArray(o)) ? (o.en ?? o.ru) : o;
+const trPop = document.createElement("div");
+trPop.id = "tr-pop"; trPop.hidden = true; document.body.appendChild(trPop);
+let trActive = null;
+function closeTr() { trPop.hidden = true; trActive?.classList.remove("tr-on"); trActive = null; }
+function openTr(el) {
+  const same = trActive === el;
+  closeTr();
+  const p = TRS[+el.dataset.tr];
+  if (same || !p) return;
+  el.classList.add("tr-on"); trActive = el;
+  if (matchMedia("(max-width:699px)").matches) { openSheet(`<p class="tr-en">${p.en}</p><p class="tr-ru">${p.ru}</p>`); return; }
+  trPop.innerHTML = p.ru; trPop.hidden = false;
+  const r = el.getBoundingClientRect(), w = trPop.offsetWidth, h = trPop.offsetHeight;
+  trPop.style.left = Math.max(12, Math.min(r.left, innerWidth - w - 12)) + "px";
+  trPop.style.top = (r.bottom + 8 + h > innerHeight - 8 ? Math.max(8, r.top - h - 8) : r.bottom + 8) + "px";
+}
+$("#theory-body").addEventListener("click", e => { const el = e.target.closest(".tr"); if (el) openTr(el); });
+$("#theory-body").addEventListener("keydown", e => { const el = e.target.closest?.(".tr"); if (el && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openTr(el); } });
+document.addEventListener("click", e => { if (trActive && !e.target.closest(".tr, #tr-pop")) closeTr(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeTr(); });
+document.addEventListener("scroll", () => { if (!trPop.hidden) closeTr(); }, { passive: true, capture: true });
+new MutationObserver(() => { if ($("#sheet").hidden && trPop.hidden && trActive) closeTr(); }).observe($("#sheet"), { attributes: true, attributeFilter: ["hidden"] });
+$("#tr-btn").addEventListener("click", () => { lsSet("et-tr", trMode() === "show" ? "click" : "show"); renderTheory(); });
+
 function renderTheory() {
   const T = lesson().theory;
+  TRS = []; closeTr();
   $("#theory-toc").innerHTML = `<div class="toc-label">${t("tocLabel")}</div>` +
-    T.map((r, i) => `<a href="#rule-${i}" data-rule="${i}">${L(r.modal)}</a>`).join("");
+    T.map((r, i) => `<a href="#rule-${i}" data-rule="${i}">${EN(r.modal)}</a>`).join("");
 
   $("#theory-body").innerHTML = T.map((r, i) => `
     <section class="rule" id="rule-${i}">
-      <div class="rule-head"><span class="modal-name">${L(r.modal)}</span><span class="gloss">${L(r.gloss)}</span></div>
+      <div class="rule-head"><span class="modal-name">${EN(r.modal)}</span><span class="gloss">${TR(r.gloss)}</span></div>
       ${r.uses.map((u, j) => `
         <div class="use">
-          <div class="use-head"><div class="use-name">${L(u.name)}</div><button class="fix-btn" data-fix-path="theory.${i}.uses.${j}">${t("fixBtn")}</button></div>
-          ${u.note ? `<p class="use-note">${L(u.note)}</p>` : ""}
-          ${u.forms ? u.forms.map(f => `<div class="formula">${L(f[0]) ? `<span class="formula-label">${L(f[0])}</span>` : ""}${f[1]}</div>`).join("") : ""}
+          <div class="use-head"><div class="use-name">${EN(u.name)}</div><button class="fix-btn" data-fix-path="theory.${i}.uses.${j}">${t("fixBtn")}</button></div>
+          ${u.note ? `<p class="use-note">${TR(u.note)}</p>` : ""}
+          ${u.forms ? u.forms.map(f => `<div class="formula">${EN(f[0]) ? `<span class="formula-label">${EN(f[0])}</span>` : ""}${f[1]}</div>`).join("") : ""}
           ${u.table ? `<div class="table-scroll"><table class="prob-table">${u.table.map(row =>
-            `<tr><td>${row[0]}</td><td>${L(row[1])}<div style="color:var(--muted);font-family:var(--serif);font-size:13.5px;margin-top:2px">${row[2]}</div></td></tr>`).join("")}</table></div>` : ""}
+            `<tr><td>${row[0]}</td><td>${TR(row[1])}<div style="color:var(--muted);font-family:var(--serif);font-size:13.5px;margin-top:2px">${TR(row[2])}</div></td></tr>`).join("")}</table></div>` : ""}
           ${u.summary ? `<div class="table-scroll"><table class="sum-table">${u.summary.map(row =>
-            `<tr><td>${row[0]}</td><td>${L(row[1])}${Lalt(row[1])}</td><td>${row[2]}</td></tr>`).join("")}</table></div>` : ""}
-          ${u.ex ? `<ul class="examples">${u.ex.map(e => `<li>${L(e)}</li>`).join("")}
+            `<tr><td>${row[0]}</td><td>${TR(row[1])}</td><td>${TR(row[2])}</td></tr>`).join("")}</table></div>` : ""}
+          ${u.ex ? `<ul class="examples">${u.ex.map(e => `<li>${TR(e)}</li>`).join("")}
             ${(u.wrong||[]).map(e => `<li class="wrong">${e}</li>`).join("")}</ul>` : ""}
-          ${u.callout ? `<div class="callout">${L(u.callout)}</div>` : ""}
+          ${u.callout ? `<div class="callout">${TR(u.callout)}</div>` : ""}
         </div>`).join("")}
     </section>`).join("");
 
