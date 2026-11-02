@@ -200,6 +200,16 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .wd:hover{background:var(--accent-soft);color:var(--accent)}
 .tr-words{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-family:var(--read-font);font-size:16px;line-height:1.6}
 .tr-hint{font-size:13px;color:var(--muted);margin-top:6px}
+.sug-box{text-align:left;background:var(--bg);border-radius:var(--r-l);padding:18px 18px 16px;margin:20px auto 18px;max-width:560px}
+.sug-box h3{margin:0 0 4px;font-size:18px}
+.sug-lead{margin:0 0 12px;color:var(--fg-2);font-size:15px;line-height:1.55}
+.sug-list{display:grid;gap:6px;margin-bottom:14px;max-height:340px;overflow:auto}
+.sug-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border-radius:var(--r-m);padding:10px 14px}
+.sug-row b{font-family:var(--read-font);font-size:17px;font-weight:600}
+.sug-row small{color:var(--muted);font-size:12px}
+.sug-tr{color:var(--fg-2);font-size:15px;line-height:1.4}
+.sug-row button{color:var(--fg-3);font-size:20px;line-height:1;padding:4px 8px}
+.sug-row button:hover{color:var(--danger)}
 .vocab-box{margin-top:32px}
 .vb-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
 .vb-head h2{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:0}
@@ -325,6 +335,9 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .sp-fix{font-family:var(--read-font);font-size:16px}
 .sp-fixes s{color:var(--danger);text-decoration-color:color-mix(in srgb,var(--danger) 60%,transparent)}
 .sp-fixes b{color:var(--accent);font-weight:500}
+.sp-mark{background:color-mix(in srgb,var(--danger) 13%,transparent);color:inherit;border-bottom:2px solid var(--danger);border-radius:3px;padding:0 2px}
+.sp-n{font-family:var(--font);font-size:.62em;font-weight:700;color:var(--danger);margin-left:2px}
+.sp-badge{display:inline-grid;place-items:center;min-width:19px;height:19px;border-radius:50%;background:var(--danger);color:#fff;font-family:var(--font);font-size:11px;font-weight:700;margin-right:8px;vertical-align:2px}
 .sp-fixes small{font-size:13px;color:var(--fg-2)}
 .sp-note{margin:0;font-size:14px;color:var(--fg-2)}
 .sp-verdict{border-radius:var(--r-m);padding:16px 18px;margin-bottom:8px;display:grid;gap:6px}
@@ -744,6 +757,12 @@ const UI = {
   syncDone:     { ru: (w, l) => `Готово: слов ${w}, уроков ${l}.`, en: (w, l) => `Done: ${w} words, ${l} lessons.` },
   syncFail:     { ru: "Не получилось связаться с сервером. Проверьте адрес и интернет и попробуйте ещё раз.", en: "Couldn't reach the server. Check the address and your connection and try again." },
   syncBadCode:  { ru: "Сервер не принял код. Проверьте, что он введён без ошибок.", en: "The server rejected the code. Check it for typos." },
+  sugTitle:     { ru: "Слова и фразы из урока", en: "Words and phrases from the lesson" },
+  sugLead:      { ru: "Советуем добавить их в словарь для повторения. Лишнее уберите крестиком.", en: "We suggest adding these to your vocabulary. Remove any you don't need." },
+  sugLoading:   { ru: "Подбираю, что стоит выучить…", en: "Picking what is worth learning…" },
+  sugRemove:    { ru: "Убрать из списка", en: "Remove from the list" },
+  sugAdd:       { ru: n => `Добавить все (${n})`, en: n => `Add all (${n})` },
+  sugDone:      { ru: n => `Добавлено в словарь: ${n}`, en: n => `Added to vocabulary: ${n}` },
   vbTitle:      { ru: "Словарь", en: "Vocabulary" },
   vbCount:      { ru: n => `${n} ${plural(n, "слово", "слова", "слов")}`, en: n => `${n} ${n === 1 ? "word" : "words"}` },
   vbEmpty:      { ru: "Нажмите на предложение в теории, затем на слово в нём — и сохраните его сюда. Из слов получатся карточки для повторения.", en: "Tap a sentence in the theory, then a word in it, and save it here. Saved words become review cards." },
@@ -3151,6 +3170,81 @@ function gradeWord(v, g) {
   drawCard();
 }
 
+/* ============ слова урока: что посоветовать добавить в словарь ============
+   в конце урока показываем список; часть можно убрать, остальное добавить одной кнопкой.
+   Кандидаты: термины из таблиц теории, правильные формы из ошибок, исправления в говорении;
+   если подключён ИИ, он выбирает лучшие 8–12 и переводит их */
+const SUG_KEY = "et-suggest-v1";
+function localWordCandidates(l) {
+  const out = [], seen = new Set(getVocab().map(v => v.key));
+  const add = (word, ru, en, ex) => {
+    word = stripTags(word).trim();
+    const k = wordKey(word);
+    if (!word || word.length > 45 || seen.has(k)) return;
+    seen.add(k);
+    out.push({ word, pos: "", translation_ru: stripTags(ru || ""), meaning_en: stripTags(en || ""), example: stripTags(ex || "") });
+  };
+  if (l.match?.kind === "vocab") (l.match.items || []).forEach(q => { const m = biParts(q.s); add(q.a, m?.ru && m.ru !== m.en ? m.ru : "", m?.en || "", ""); });
+  (l.theory || []).forEach(r => (r.uses || []).forEach(u => (u.summary || []).forEach(row => {
+    const m = biParts(row[1]);
+    add(row[0], m?.ru && m.ru !== m.en ? m.ru : "", m?.en || "", row[2]);
+  })));
+  const pr = prog();
+  (l.drill?.items || []).forEach((q, i) => { if (pr.drill.answered[i] === "bad") add(q.a[0], "", "", stripTags(q.s[0]) + q.a[0] + stripTags(q.s[1])); });
+  Object.values(pr.speak?.answers || {}).forEach(a => realFixes(a.check).forEach(m => { if (m.better && m.better.trim().split(/\s+/).length <= 4) add(m.better, "", "", ""); }));
+  return out.slice(0, 14);
+}
+async function suggestWords(l) {
+  const local = localWordCandidates(l);
+  const pr = prog(), wrong = Object.values(pr.drill.answered).filter(v => v === "bad").length;
+  const key = `${S.lessonId}|${wrong}|${Object.keys(pr.speak?.answers || {}).length}`, cache = readJSON(SUG_KEY, {});
+  const known = new Set(getVocab().map(v => v.key));
+  const fresh = list => list.filter(x => x.word && !known.has(wordKey(x.word)));
+  if (cache[key]) return fresh(cache[key]);
+  const ai = await lessonAI();
+  if (!ai) return local;
+  try {
+    const mistakes = Object.values(pr.speak?.answers || {}).flatMap(a => realFixes(a.check).map(m => `${m.said} → ${m.better}`)).slice(0, 12);
+    const r = await ai.json(`A Russian-speaking learner (B1–B2) just finished the lesson "${plain(l.title)}".
+Candidate words and phrases from the lesson: ${local.map(x => x.word).join("; ") || "(none)"}.
+Mistakes the learner made when speaking: ${mistakes.join("; ") || "(none)"}.
+Choose 8–12 words or short phrases (1–4 words) that are most worth learning: key terms of the lesson, useful collocations, and the correct forms behind the learner's mistakes. Skip very basic words.
+Reply with ONLY one JSON object: {"items": [{"word": "...", "pos": "part of speech, short", "translation_ru": "1–3 Russian translations", "meaning_en": "simple definition, max 12 words", "example": "one short example sentence"}]}`, { quick: true });
+    const items = arr(r?.items).filter(x => x && x.word).map(x => ({ word: stripTags(safe(x.word)).trim(), pos: safe(x.pos || ""), translation_ru: safe(x.translation_ru || ""), meaning_en: safe(x.meaning_en || ""), example: safe(x.example || "") })).slice(0, 14);
+    if (!items.length) return local;
+    cache[key] = items;
+    const keys = Object.keys(cache); if (keys.length > 60) delete cache[keys[0]];
+    lsSet(SUG_KEY, JSON.stringify(cache));
+    return fresh(items);
+  } catch(e) { return local; }
+}
+async function renderSuggestBox(el) {
+  if (!el) return;
+  const l = lesson(), lessonId = S.lessonId;
+  el.innerHTML = `<div class="sug-box"><h3>${t("sugTitle")}</h3><p class="sug-lead">${t("sugLoading")}</p></div>`;
+  let items = await suggestWords(l);
+  if (!document.contains(el) || S.lessonId !== lessonId) return;
+  if (!items.length) { el.innerHTML = ""; return; }
+  const draw = () => {
+    if (!items.length) { el.innerHTML = ""; return; }
+    el.innerHTML = `<div class="sug-box"><h3>${t("sugTitle")}</h3><p class="sug-lead">${t("sugLead")}</p>
+      <div class="sug-list">${items.map((x, i) => `<div class="sug-row"><div><b>${escH(x.word)}</b>${x.pos ? ` <small>${escH(x.pos)}</small>` : ""}<div class="sug-tr">${escH(x.translation_ru || x.meaning_en || "")}</div></div><button data-rm="${i}" aria-label="${t("sugRemove")}">×</button></div>`).join("")}</div>
+      <div class="acts" style="justify-content:center"><button class="primary-btn" id="sug-add">${t("sugAdd", items.length)}</button></div></div>`;
+    el.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { items.splice(+b.dataset.rm, 1); draw(); });
+    el.querySelector("#sug-add").onclick = () => {
+      const now = Date.now(), have = new Set(getVocab().map(v => v.key));
+      const added = items.filter(x => !have.has(wordKey(x.word))).map((x, n) => ({
+        id: "w-" + (now + n).toString(36), key: wordKey(x.word), word: x.word, form: x.word, pos: x.pos || "", translation_ru: x.translation_ru || "", meaning_en: x.meaning_en || "",
+        example: x.example || "", sentence: x.example || "", lessonId, createdAt: now, updatedAt: now, box: 0, reps: 0, due: now
+      }));
+      setVocab([...added, ...getVocab()]);
+      renderVocabBox();
+      el.innerHTML = `<div class="sug-box"><p class="sug-lead">✓ ${t("sugDone", added.length)}</p></div>`;
+    };
+  };
+  draw();
+}
+
 /* ============ синхронизация между устройствами: свой маленький сервер ============
    на сервер уходят словарь, прогресс, свои уроки и правки; побеждает то, что менялось позже.
    Что изменилось на этом устройстве, замечаем по «отпечатку» (SYNC_META) и ставим время правки. */
@@ -3591,11 +3685,13 @@ function renderDrillDone() {
           </div>`;
         }).join("")}
       </div>
+      ${hasNext ? "" : `<div id="sug-slot"></div>`}
       ${open.length ? `<button class="ghost-btn" id="redo-wrong">${skipped.length && !wrong.length ? t("doSkipped") : t("redoOpen")}</button> ` : ""}
       <button class="ghost-btn" id="restart-drill">${t("restartDrill")}</button>
       <button class="ghost-btn" id="done-report">${t("reportBtn")}</button>
       <button class="primary-btn" data-goto="${next || "home"}">${nextLabel}</button>
     </div>`;
+  if (!hasNext) renderSuggestBox($("#sug-slot"));
   $("#redo-wrong")?.addEventListener("click", () => {
     wrong.forEach(i => { delete p.answered[i]; delete p.lastInput[i]; });
     p.redo = open.slice();   // повтор идёт только по тому, что не получилось, а не по всем вопросам подряд
@@ -3646,11 +3742,13 @@ function renderMatch() {
       <div class="eyebrow">${M.kind === "vocab" ? t("wordsDone") : t("matchDone")}</div>
       <div class="done-score">${ok} / ${items.length}</div>
       <h2>${t("matchDoneH")}</h2><p>${hasSpeak ? t("matchDoneP") : t("perfectSubEnd")}</p>
+      ${hasSpeak ? "" : `<div id="sug-slot"></div>`}
       <div class="nav-row" style="justify-content:center">
         <button class="primary-btn" data-goto="${hasSpeak ? "speak" : "home"}">${hasSpeak ? t("toSpeak") : t("toLessons")}</button>
         <button class="ghost-btn" id="restart-match">${t("restartMatch")}</button>
       </div></div>`;
     $$("#match-card [data-goto]").forEach(b => b.addEventListener("click", () => show(b.dataset.goto)));
+    if (!hasSpeak) renderSuggestBox($("#sug-slot"));
     $("#restart-match").addEventListener("click", async () => {
       if (!(await ask(t("confirmRestartMatch")))) return;
       prog().match = { i: 0, answered: {}, chosen: {} };
@@ -3779,9 +3877,34 @@ function renderSpeak() {
   });
 }
 
+/* «поправка» без изменений (said = better) — не поправка: такие ИИ иногда присылает, прячем */
+/* «поправка», где отличаются только дефис, пробел, запятая или регистр, для речи не имеет смысла: этого в аудио не слышно */
+const sameText = (a, b) => { const n = s => String(s ?? "").toLowerCase().replace(/[^a-z0-9]/g, ""); return n(a) === n(b); };
+const realFixes = c => ((c && c.mistakes) || []).filter(m => m && m.said && !sameText(m.said, m.better));
+/* неверные места подсвечиваются прямо в тексте ответа и нумеруются, как и список исправлений ниже */
+function markTranscript(text, fixes) {
+  const src = String(text ?? ""), lower = src.toLowerCase(), spans = [];
+  fixes.forEach((m, n) => {
+    const s = String(m.said).toLowerCase().trim();
+    if (!s) return;
+    let from = 0, idx;
+    while ((idx = lower.indexOf(s, from)) !== -1) {
+      if (!spans.some(x => idx < x.end && idx + s.length > x.start)) { spans.push({ start: idx, end: idx + s.length, n }); break; }
+      from = idx + 1;
+    }
+  });
+  spans.sort((x, y) => x.start - y.start);
+  let html = "", pos = 0;
+  for (const sp of spans) {
+    html += escT(src.slice(pos, sp.start)) + `<mark class="sp-mark" title="${escT(fixes[sp.n].better)}">${escT(src.slice(sp.start, sp.end))}<sup class="sp-n">${sp.n + 1}</sup></mark>`;
+    pos = sp.end;
+  }
+  return { html: html + escT(src.slice(pos)), found: new Set(spans.map(x => x.n)) };
+}
 function speakResultHTML(a) {
   const c = a.check || {};
-  const fixes = (c.mistakes || []).filter(m => m && m.said);
+  const where = m => { const i = String(c.transcript ?? "").toLowerCase().indexOf(String(m.said).toLowerCase().trim()); return i < 0 ? 1e9 : i; };
+  const fixes = realFixes(c).sort((x, y) => where(x) - where(y)), marked = markTranscript(c.transcript, fixes);   // номера идут в порядке чтения текста
   /* вывод — первым и крупно: что получилось, как это связано с темой урока и что делать дальше */
   const bad = c.meaning?.ok === false || (!c.meaning && c.target?.ok === false);
   const main = c.meaning?.note || c.praise || c.target?.note;
@@ -3795,9 +3918,9 @@ function speakResultHTML(a) {
   return `<div class="sp-result">
     ${verdict}
     <div class="sp-label">${t(a.mode === "voice" ? "speakSaid" : "speakWrote")}</div>
-    <p class="sp-said">${escT(c.transcript) || "—"}</p>
+    <p class="sp-said">${marked.html || "—"}</p>
     <div class="sp-label">${t("speakFixes")}</div>
-    ${fixes.length ? `<ul class="sp-fixes">${fixes.map(m => `<li><span class="sp-fix"><s>${escT(m.said)}</s> → <b>${escT(m.better)}</b></span>${m.why ? `<small>${escT(m.why)}</small>` : ""}</li>`).join("")}</ul>`
+    ${fixes.length ? `<ul class="sp-fixes">${fixes.map((m, n) => `<li><span class="sp-fix">${marked.found.has(n) ? `<span class="sp-badge">${n + 1}</span>` : ""}<s>${escT(m.said)}</s> → <b>${escT(m.better)}</b></span>${m.why ? `<small>${escT(m.why)}</small>` : ""}</li>`).join("")}</ul>`
                    : `<p class="sp-note">${t("speakNoFixes")}</p>`}
     ${c.better ? `<div class="sp-label">${t("speakBetter")}</div><p class="sp-better">${escT(c.better)}</p>` : ""}
   </div>`;
@@ -3879,7 +4002,7 @@ Reply with ONLY one JSON object:
  "mistakes": [{"said": "the student's exact words", "better": "the corrected words", "why": "short reason in Russian"}],
  "better": "a model answer to the question: complete, natural and correct, at the same level, 2–4 sentences; keep the student's ideas where they make sense, and where the answer is unclear or off-topic write what a good answer would say",
  "praise": "one specific thing done well, in Russian (empty string if there is nothing real to praise)", "tip": "one concrete next step, in Russian"}
-Rules: judge the MEANING first: set meaning.ok to false when the answer is nonsense, incomplete, off-topic or does not answer the question, and never flatter in that case; write "note", "praise" and "tip" in Russian, addressing the student directly as «вы» (never "студент" or "ученик"); keep each of them to one specific short sentence; list only real mistakes in grammar, word choice or word order, at most 6, most important first; ignore fillers, hesitations and small slips of the tongue. If the answer is empty, unclear or not in English, give what you understood as transcript (or "") and explain in "tip". Address the student with «вы». Plain text only, no Markdown.`;
+Rules: judge the MEANING first: set meaning.ok to false when the answer is nonsense, incomplete, off-topic or does not answer the question, and never flatter in that case; write "note", "praise" and "tip" in Russian, addressing the student directly as «вы» (never "студент" or "ученик"); keep each of them to one specific short sentence; list only real mistakes in grammar, word choice, word order, articles or prepositions; never list spelling, hyphens, capital letters or punctuation (they cannot be heard in speech) and never "correct" a phrase into itself; at most 6, most important first; ignore fillers, hesitations and small slips of the tongue. If the answer is empty, unclear or not in English, give what you understood as transcript (or "") and explain in "tip". Address the student with «вы». Plain text only, no Markdown.`;
 }
 
 /* убирает слова-паузы (uh, um, er, hmm, mm) вместе с запятой после них; настоящие слова вроде «umbrella» не трогает */
@@ -3942,12 +4065,14 @@ function renderLessonDone() {
       <div class="eyebrow">${allDone ? t("lessonDoneEyebrow") : t("lessonSummaryEyebrow")}</div>
       <h2 style="margin-top:10px">${l.title}</h2>
       <p>${tiles.join(" · ")}</p>
+      <div id="sug-slot"></div>
       <div class="nav-row" style="justify-content:center">
         <button class="primary-btn" id="lesson-done-report">${t("reportBtn")}</button>
         <button class="ghost-btn" id="restart-lesson">${t("restartLesson")}</button>
         <button class="ghost-btn" data-goto="home">${t("toLessons")}</button>
       </div>
     </div>`;
+  renderSuggestBox($("#sug-slot"));
   $("#lesson-done-report").addEventListener("click", () => openReport("speak"));
   $("#restart-lesson").addEventListener("click", async () => {
     if (!(await ask(t("confirmReset")))) return;
@@ -4031,7 +4156,7 @@ function reportRows() {
     if (!c) return;
     rows.speak.push({
       n: i + 1, q: plain(q.q), answer: String(c.transcript || ""), better: String(c.better || ""),
-      fixes: (c.mistakes || []).filter(m => m && m.said).map(m => `${m.said} → ${m.better}`)
+      fixes: realFixes(c).map(m => `${m.said} → ${m.better}`)
     });
   });
   return rows;
