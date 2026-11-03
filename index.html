@@ -25,7 +25,7 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 /* Layout: lesson list → lesson with step tabs (theory, practice, choice, speaking); one task per card, hints below on phone.
    Plasma-like, as in Аудиополка and English Tutor: pill controls, 16–24px radii, bottom sheets, blue accent. */
 :root{
-  --bg:#FFFFFF; --surface:#F2F3F5; --surface-2:#E6E8EB; --fg:#0B0C0E; --fg-2:rgba(11,12,14,.58); --fg-3:rgba(11,12,14,.36);
+  --bg:#FFFFFF; --surface:#EFF5FE; --surface-2:#E0EBFB;   /* поверхности с голубым оттенком, как карточки на главной */ --fg:#0B0C0E; --fg-2:rgba(11,12,14,.58); --fg-3:rgba(11,12,14,.36);
   --line:rgba(11,12,14,.08); --accent:#007AFF; --accent-hover:#0066D6; --accent-fg:#FFFFFF; --accent-soft:rgba(0,122,255,.12);
   --danger:#E0352B; --danger-soft:rgba(224,53,43,.10); --warn:#A86F00; --warn-soft:rgba(200,138,0,.14);
   --scrim:rgba(0,0,0,.36); --shadow:0 8px 32px rgba(0,0,0,.10);
@@ -38,13 +38,13 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
   --muted:var(--fg-2); --serif:var(--read-font);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#080808; --surface:#161616; --surface-2:#242424; --fg:#FFFFFF; --fg-2:rgba(255,255,255,.58); --fg-3:rgba(255,255,255,.34);
+  --bg:#080808; --surface:#121722; --surface-2:#1C2331; --fg:#FFFFFF; --fg-2:rgba(255,255,255,.58); --fg-3:rgba(255,255,255,.34);
   --line:rgba(255,255,255,.08); --accent:#6B9BFF; --accent-hover:#8DB2FF; --accent-fg:#05122E; --accent-soft:rgba(107,155,255,.18);
   --danger:#FF5247; --danger-soft:rgba(255,82,71,.16); --warn:#F2B94A; --warn-soft:rgba(242,185,74,.16);
   --scrim:rgba(0,0,0,.6); --shadow:0 8px 32px rgba(0,0,0,.5); color-scheme:dark;
 }}
 :root[data-theme="dark"]{
-  --bg:#080808; --surface:#161616; --surface-2:#242424; --fg:#FFFFFF; --fg-2:rgba(255,255,255,.58); --fg-3:rgba(255,255,255,.34);
+  --bg:#080808; --surface:#121722; --surface-2:#1C2331; --fg:#FFFFFF; --fg-2:rgba(255,255,255,.58); --fg-3:rgba(255,255,255,.34);
   --line:rgba(255,255,255,.08); --accent:#6B9BFF; --accent-hover:#8DB2FF; --accent-fg:#05122E; --accent-soft:rgba(107,155,255,.18);
   --danger:#FF5247; --danger-soft:rgba(255,82,71,.16); --warn:#F2B94A; --warn-soft:rgba(242,185,74,.16);
   --scrim:rgba(0,0,0,.6); --shadow:0 8px 32px rgba(0,0,0,.5); color-scheme:dark;
@@ -68,7 +68,12 @@ p,li{text-wrap:pretty}
 /* ---------- header ---------- */
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg)}
-header.top .bar{display:flex;align-items:center;gap:12px;padding-block:12px}
+header.top .bar{display:flex;align-items:center;gap:12px;padding-block:12px;position:relative}
+/* навигация по центру шапки, как у walt.io: подсветка-пилюля при наведении */
+.top-nav{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:4px}
+.top-nav button{height:40px;padding:0 16px;border-radius:999px;font-size:16px;font-weight:500;color:inherit;opacity:.9}
+.top-nav button:hover{opacity:1;background:color-mix(in srgb,currentColor 12%,transparent)}
+@media (max-width:759px){.top-nav{display:none}}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;letter-spacing:-.01em;margin-right:auto;min-width:0}
 .brand i{width:32px;height:32px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:var(--accent-fg);font-style:normal;font-size:15px;font-weight:700;flex:none}
 .brand[disabled]{cursor:default}
@@ -135,14 +140,14 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 }
 .intake-copy{text-align:center;display:grid;justify-items:center;color:#fff}
 .intake-copy .eyebrow{display:inline-flex;align-items:center;gap:6px;color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 14px;margin:0;letter-spacing:.04em}
-.intake-copy h1{font-size:clamp(36px,4.6vw,64px);line-height:1.1;font-weight:600;letter-spacing:-.02em;margin:20px 0 16px;max-width:18ch;text-wrap:balance;color:#fff}
+.intake-copy h1{font-size:clamp(36px,4.6vw,64px);line-height:1.0;font-weight:600;letter-spacing:-.02em;margin:20px 0 16px;max-width:18ch;text-wrap:balance;color:#fff}
 .intake-copy .lede{color:rgba(255,255,255,.88);margin:0;max-width:31.5rem;font-size:clamp(16px,1.3vw,18px);font-weight:500;letter-spacing:-.01em;line-height:1.35;text-wrap:balance}
 /* блок загрузки — «стекло», как в интерфейсе walt.io: полупрозрачная подложка с размытием и тонкой светлой обводкой,
    внутри светлый переключатель, сплошное поле ввода для читаемости и белая кнопка-пилюля с тёмным текстом */
-/* всё на главной — блок загрузки, шаги, «Мои уроки», словарь — во всю ширину общего контейнера 1200px, как и экраны уроков */
-.intake .how-list,#lesson-list,#vocab-box{max-width:1200px;width:100%;margin-left:auto;margin-right:auto;justify-self:center}
+/* всё на главной — блок загрузки, шаги, «Мои уроки», словарь — по одной колонке шириной 880px (уроки внутри — в 1200) */
+.intake .how-list,#lesson-list,#vocab-box{max-width:880px;width:100%;margin-left:auto;margin-right:auto;justify-self:center}
 /* без отдельной плашки: переключатель, поле и кнопка лежат прямо на градиенте; стеклом стало само поле ввода */
-.intake .drop-card{max-width:1200px;width:100%;justify-self:center;padding:0;border-radius:0;background:none;border:0;box-shadow:none}
+.intake .drop-card{max-width:880px;width:100%;justify-self:center;padding:0;border-radius:0;background:none;border:0;box-shadow:none}
 /* один цвет стекла для всего на обложке: переключатели, поле ввода, подсказки тем */
 .intake{--glass:rgba(0,58,160,.34)}
 .intake .drop-card .seg{background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
@@ -196,8 +201,23 @@ body.home main{padding-top:0}
 .ai-cta b{font-size:15px}
 .ai-cta span{font-size:13px;color:var(--fg-2)}
 .ai-cta .primary-btn{height:38px;padding:0 16px;font-size:14px;margin-top:4px}
-.lesson-list{display:grid;gap:8px;margin-top:28px}
-.lesson-list::before{content:attr(data-label);font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+.lesson-list{display:grid;gap:16px;margin-top:28px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.lesson-list::before{content:attr(data-label);font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:-4px;grid-column:1/-1}
+/* карточка урока как у walt.io: мягкий голубоватый фон, крупный заголовок, внизу столбик пилюль-шагов с прогрессом */
+.lesson-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;width:100%;min-height:300px;padding:28px;border-radius:28px;
+  background:var(--surface);transition:transform .15s,box-shadow .15s}
+.lesson-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,60,140,.10)}
+.lc-eyebrow{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.lesson-card h3{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.lc-sub{margin:0;color:var(--fg-2);font-size:15px;line-height:1.4}
+.lc-steps{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.lc-step{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;font-size:15px;font-weight:500;line-height:1.2;
+  background:color-mix(in srgb,var(--bg) 70%,transparent);color:var(--fg);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fg) 6%,transparent)}
+.lc-step b{color:var(--accent);font-weight:600}
+.lc-step i{color:var(--accent);font-style:normal;font-weight:700}
+.lc-step.cur{background:var(--bg);font-weight:600;box-shadow:0 6px 18px rgba(0,60,140,.12)}
+.lc-step.todo{opacity:.45}
+.lc-step.part{opacity:.85}
 .lesson-row{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--surface);border-radius:var(--r-l);padding:14px 16px;text-align:left;width:100%}
 .lesson-row:hover{background:var(--surface-2)}
 .lesson-row > div:first-child{min-width:0}
@@ -568,6 +588,7 @@ body.home main{padding-top:0}
 <header class="top">
   <div class="wrap bar">
     <button class="brand" id="brand-home"><i id="brand-dot" aria-hidden="true">Д</i><span id="brand-name">Домашка</span></button>
+    <nav class="top-nav" aria-label="Разделы"><button data-nav="lesson-list" data-ui="navLessons"></button><button data-nav="vocab-box" data-ui="navVocab"></button></nav>
     <div class="progress-wrap" id="progress-wrap" hidden><span id="progress-label" class="num">0%</span><div class="pbar"><i id="progress-fill"></i></div></div>
     <button class="ibtn" id="menu-btn" aria-label="Меню"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
   </div>
@@ -858,6 +879,8 @@ const UI = {
   outStrong:    { ru: "Получается", en: "Going well" },
   outWeak:      { ru: "Над чем поработать", en: "Work on" },
   outLocalNext: { ru: "Повторите поправки из говорения — они в «Исправлениях» каждого ответа.", en: "Review the corrections from your speaking answers." },
+  navLessons:   { ru: "Уроки", en: "Lessons" },
+  navVocab:     { ru: "Словарь", en: "Vocabulary" },
   sugTitle:     { ru: "Слова и фразы из урока", en: "Words and phrases from the lesson" },
   sugLead:      { ru: "Советуем добавить их в словарь для повторения. Лишнее уберите крестиком.", en: "We suggest adding these to your vocabulary. Remove any you don't need." },
   sugLoading:   { ru: "Подбираю, что стоит выучить…", en: "Picking what is worth learning…" },
@@ -2552,9 +2575,9 @@ async function parseLesson() {
     parseCtl = null;
   }
 }
-function openLesson(id) {
+function openLesson(id, step = "theory") {
   S.lessonId = id; save();
-  renderTabs(); renderTheory(); show("theory");
+  renderTabs(); renderTheory(); show(step);
 }
 
 /* ---- нижние листы, тост, меню, тема ---- */
@@ -3095,28 +3118,32 @@ function applyLang() {
 $$(".lang-switch button").forEach(b => b.addEventListener("click", () => { S.lang = b.dataset.lang; save(); applyLang(); }));
 
 /* ============ список уроков ============ */
+/* прогресс по шагам урока: теория — открывали или нет; остальное — сколько из скольких */
+function stepProgress(l) {
+  const p = S.progress[l.id] || {}, names = { theory: "navTheory", drill: "navDrill", match: "navMatch", speak: "navSpeak" };
+  return lessonSteps(l).map(key => {
+    const label = key === "match" && l.match?.navLabel ? L(l.match.navLabel) : t(names[key]);
+    if (key === "theory") return { key, label, total: 0, n: p.theorySeen ? 1 : 0, done: !!p.theorySeen };
+    const total = key === "drill" ? l.drill.items.length : key === "match" ? matchItems(l).length : speakItems(l).length;
+    const n = Object.keys(key === "drill" ? p.drill?.answered || {} : key === "match" ? p.match?.answered || {} : p.speak?.seen || {}).length;
+    return { key, label, total, n: Math.min(n, total), done: total > 0 && n >= total };
+  });
+}
 function renderLessonList() {
   $("#lesson-list").dataset.label = t("lessonsLabel");
+  /* карточки как в референсе: подпись, крупный заголовок, о чём урок, внизу столбик шагов с прогрессом;
+     шаг, на котором остановились, — белая пилюля, пройденные с галочкой, не начатые бледные */
   $("#lesson-list").innerHTML = LESSONS.map(l => {
-    const total = lessonTotal(l), done = lessonDone(l), pct = total ? Math.round(done / total * 100) : 0;
-    const bits = [t(l.drill ? "countRules" : "countTopics", l.theory.length)];
-    if (l.drill) bits.push(t("countDrill", l.drill.items.length));
-    if (l.match) bits.push(t(l.match.kind === "vocab" ? "countWords" : l.match.kind === "cloze" ? "countStories" : l.match.kind === "choice" ? "countChoice" : "countMatch", matchItems(l).length));
-    if (l.speak) bits.push(t("countSpeak", speakItems(l).length));
-    return `<button class="lesson-row" data-lesson="${l.id}">
-      <div>
-        <div class="eyebrow" style="margin-bottom:4px">${L(l.date)}</div>
-        <h3>${l.title}</h3>
-        <div class="meta">${bits.join(" · ")}</div>
-      </div>
-      <div class="right">
-        ${pct > 0 ? `<div class="mini-progress"><span class="pct">${pct}%</span><div class="mini-track"><div class="mini-fill" style="width:${pct}%"></div></div></div>` : ""}
-        <span class="go" aria-hidden="true">›</span>
-      </div>
+    const steps = stepProgress(l), cur = steps.find(s => !s.done);
+    return `<button class="lesson-card" data-lesson="${l.id}" data-step="${cur ? cur.key : "theory"}">
+      <div class="lc-eyebrow">${L(l.date)}</div>
+      <h3>${l.title}</h3>
+      ${l.theoryTitle ? `<p class="lc-sub">${EN(l.theoryTitle)}</p>` : ""}
+      <div class="lc-steps">${steps.map(s => `<span class="lc-step ${s.done ? "done" : s === cur ? "cur" : s.n ? "part" : "todo"}">${s.label}${s.total ? ` <b>${s.n}/${s.total}</b>` : ""}${s.done ? ' <i aria-hidden="true">✓</i>' : ""}</span>`).join("")}</div>
     </button>`;
   }).join("");
   $$("#lesson-list [data-lesson]").forEach(b => b.addEventListener("click", () => {
-    openLesson(b.dataset.lesson);
+    openLesson(b.dataset.lesson, b.dataset.step);
   }));
   renderVocabBox();
 }
@@ -3139,6 +3166,7 @@ function show(view, keepScroll) {
   if (view !== "home" && !LESSONS.some(x => x.id === S.lessonId)) view = "home";
   const l = lesson();
   if (view !== "home" && view !== "report" && !lessonSteps(l).includes(view)) view = "theory";
+  if (view === "theory" && S.lessonId) prog().theorySeen = true;   // для карточки урока: теорию открывали
   S.view = view; save();
   if (view !== "speak") leaveSpeak();
 
@@ -3178,6 +3206,14 @@ function syncHeaderGlass() {
   document.body.classList.toggle("scrolled", edge <= 0);
 }
 addEventListener("scroll", syncHeaderGlass, { passive: true });
+/* «Уроки» и «Словарь» в шапке: с любого экрана — на главную и прокрутка к разделу под шапку */
+$$(".top-nav [data-nav]").forEach(b => b.addEventListener("click", () => {
+  if (S.view !== "home") show("home");
+  requestAnimationFrame(() => {
+    const el = document.getElementById(b.dataset.nav);
+    if (el) scrollTo({ top: el.getBoundingClientRect().top + scrollY - 80, behavior: "smooth" });
+  });
+}));
 $("#parse-btn").addEventListener("click", parseLesson);
 $("#parse-stop").addEventListener("click", () => parseCtl?.abort());
 $("#delete-btn").addEventListener("click", async () => {
