@@ -89,16 +89,21 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .timer.run{background:var(--accent-soft);color:var(--accent)}
 
 /* ---------- home ---------- */
-.intake{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:32px;align-items:start;padding-top:8px}
-.intake-copy h1{font-size:32px;line-height:1.1;font-weight:700;letter-spacing:-.02em;margin:6px 0 12px;max-width:16ch}
-.intake-copy .lede{color:var(--fg-2);margin:0;max-width:44ch}
-.how-list{display:grid;gap:12px;margin-top:20px}
+/* главная как лендинг: крупный заголовок, подзаголовок, под ними поле во всю ширину, ниже три шага */
+.intake{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(28px,4vw,48px);padding:clamp(28px,6vw,80px) 0 8px;
+  background:radial-gradient(ellipse 70% 55% at 50% 0%,var(--accent-soft),transparent 75%)}
+.intake-copy{text-align:center;display:grid;justify-items:center}
+.intake-copy .eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--surface);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:999px;padding:6px 14px;margin:0}
+.intake-copy h1{font-size:clamp(36px,5.4vw,76px);line-height:1.04;font-weight:800;letter-spacing:-.035em;margin:18px 0 18px;max-width:17ch;text-wrap:balance}
+.intake-copy .lede{color:var(--fg-2);margin:0;max-width:46ch;font-size:clamp(16px,1.5vw,20px);line-height:1.55;text-wrap:balance}
+.how-list{display:grid;gap:12px 28px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .how-item{display:flex;gap:12px;align-items:flex-start}
 .how-item .n{flex:none;width:28px;height:28px;border-radius:9px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:13px;font-weight:700}
 .how-item strong{display:block;font-size:15px;font-weight:600}
 .how-item p{margin:2px 0 0;font-size:13px;color:var(--fg-2);max-width:46ch}
-.drop-card{background:var(--surface);border-radius:var(--r-l);padding:16px}
-.drop-card textarea{width:100%;min-height:200px;resize:vertical;border:1.5px dashed var(--fg-3);border-radius:var(--r-m);padding:14px;background:var(--bg);font-size:15px;line-height:1.55}
+.drop-card{background:var(--surface);border-radius:var(--r-l);padding:clamp(16px,2vw,24px)}
+.drop-card .primary-btn{height:52px;padding:0 28px;font-size:16px}
+.drop-card textarea{width:100%;min-height:180px;resize:vertical;border:1.5px dashed var(--fg-3);border-radius:var(--r-m);padding:14px;background:var(--bg);font-size:15px;line-height:1.55}
 .drop-card textarea::placeholder{color:var(--fg-3)}
 .mode-seg{margin-bottom:12px}
 .topic-box .sh-sub{margin-top:12px}
@@ -106,7 +111,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .topic-ideas{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .topic-ideas button{height:32px;padding:0 12px;border-radius:999px;background:var(--bg);font-size:13px;font-weight:500;color:var(--fg-2)}
 .topic-ideas button:hover{color:var(--accent);background:var(--accent-soft)}
-.drop-actions{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.drop-actions{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:16px;text-align:center}
 .parse-status{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums}
 .spinner{width:14px;height:14px;flex:none;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -462,7 +467,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 }
 @media (max-width:560px){
   .progress-wrap .pbar{width:56px}
-  .intake-copy h1{font-size:28px}
+  .intake-copy h1{font-size:34px}
   .how-list{display:none}
   .card{padding:20px 16px}
   .q-sentence{font-size:21px}
@@ -526,7 +531,6 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
         <div class="eyebrow" data-ui="homeEyebrow"></div>
         <h1 data-ui="homeTitle"></h1>
         <p class="lede" data-ui="homeLede"></p>
-        <div class="how-list" id="how-list"></div>
       </div>
       <div class="drop-card">
         <div class="seg mode-seg" id="mode-seg" role="group">
@@ -549,6 +553,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
           <span class="hint" id="parse-hint" aria-live="polite"></span>
         </div>
       </div>
+      <div class="how-list" id="how-list"></div>
     </div>
     <div class="lesson-list" id="lesson-list"></div>
     <div class="vocab-box" id="vocab-box"></div>
@@ -685,8 +690,8 @@ const UI = {
 
   homeEyebrow:  { ru: "Английский", en: "English" },
   homeTitle:    { ru: "Урок из домашки или по любой теме", en: "A lesson from your homework or any topic" },
-  homeLede:     { ru: "Вставьте текст от учителя — он разложится на шаги. Или назовите тему, которая непонятна, — урок соберётся с нуля: теория, тренажёр, выбор ответа и говорение. Прогресс сохраняется по каждому уроку.",
-                  en: "Everything that arrived as one long wall of text becomes steps: theory, practice and — when the lesson has them — meanings and speaking. Progress is saved per lesson." },
+  homeLede:     { ru: "Вставьте текст от учителя или назовите тему — урок соберётся сам: теория, тренажёр и говорение.",
+                  en: "Paste your teacher's text or name a topic, and the lesson builds itself: theory, practice and speaking." },
   how1t:        { ru: "Теория — как справочник", en: "Theory works like a reference" },
   how1p:        { ru: "Всё открыто и читается подряд, а оглавление слева возвращает к нужному правилу.",
                   en: "Everything is open and reads top to bottom, while the contents on the left take you back to any rule." },
