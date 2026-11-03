@@ -1971,7 +1971,18 @@ function buildLesson({ id, createdAt, lesson: x }) {
   if (!l.theory.length) throw new Error("no theory");
 
   const D = x.drill;
-  const drill = arr(D?.items).filter(q => Array.isArray(q.s) && q.s.length === 2 && arr(q.a).length);
+  /* отсев брака: ответ уже стоит рядом с пропуском (подсказан самим предложением), пустой ответ, повтор того же предложения */
+  const seenS = new Set();
+  const drill = arr(D?.items).filter(q => {
+    if (!Array.isArray(q?.s) || q.s.length !== 2 || !arr(q.a).length || !String(q.a[0] ?? "").trim()) return false;
+    const low = v => stripTags(String(v ?? "")).toLowerCase().replace(/\s+/g, " ").trim();
+    const a0 = low(q.a[0]), before = low(q.s[0]), after = low(q.s[1]);
+    if (a0 && (after.startsWith(a0 + " ") || after === a0 || before.endsWith(" " + a0) || before === a0)) return false;
+    const key = before + "|" + after;
+    if (seenS.has(key)) return false;
+    seenS.add(key);
+    return true;
+  });
   if (drill.length) {
     const n = drill.length, parts = new Set(drill.map(q => q.part).filter(Boolean)).size;
     l.drill = {
@@ -1993,7 +2004,13 @@ function buildLesson({ id, createdAt, lesson: x }) {
 
   const M = x.match;
   const match = arr(M?.items).filter(q => q && q.s && q.a);
-  const stories = M?.kind === "cloze" ? arr(M.items).filter(q => q && typeof q.s === "string" && arr(q.gaps).length && arr(q.gaps).every(g => g && arr(g.options).length >= 2 && arr(g.options).includes(g.a))) : [];
+  /* история годится, только если метки {1}, {2}… в тексте совпадают с выборами один к одному и у каждого выбора верный вариант есть среди вариантов */
+  const stories = M?.kind === "cloze" ? arr(M.items).filter(q => {
+    if (!q || typeof q.s !== "string" || !arr(q.gaps).length) return false;
+    const marks = (q.s.match(/\{(\d+)\}/g) || []).map(m => +m.slice(1, -1));
+    return marks.length === q.gaps.length && marks.every((n, k) => n === k + 1)
+      && q.gaps.every(g => g && arr(g.options).length >= 2 && arr(g.options).includes(g.a) && new Set(g.options).size === g.options.length);
+  }) : [];
   if (stories.length) {
     const label = bi(M.title || { ru: "Мини-истории", en: "Mini-stories" });
     l.match = {
@@ -2021,7 +2038,7 @@ function buildLesson({ id, createdAt, lesson: x }) {
   const groups = arr(SP?.groups).map(g => ({
     group: bi(g.group || ""),
     items: arr(g.items).filter(q => typeof q === "string" ? q : q && q.q)
-      .map(q => typeof q === "string" ? { q: safe(q) } : { q: safe(q.q), starter: q.starter ? safe(q.starter) : undefined })
+      .map(q => typeof q === "string" ? { q: safe(q) } : { q: safe(q.q), starter: q.starter ? safe(q.starter) : undefined, mode: q.mode === "write" ? "write" : undefined })
   })).filter(g => g.items.length);
   if (groups.length) {
     const items = flattenSpeak(groups), n = items.length;
@@ -2152,17 +2169,18 @@ drill = {"items": [{"part"?: 1, "s": ["text before the gap", "text after the gap
                     "trap"?: {"word": "the most tempting wrong answer", "why": {"ru","en"} one sentence: why it does not fit}}],
          "chips"?: ["answer choices to tap, only when answers come from a small fixed set such as modal verbs"],
          "cheatsheet"?: [["form", {"ru","en"} meaning in 2–4 words]], "cheatsheetLabel"?: {"ru","en"}}
-match = {"kind": "choice" (pick the category a sentence shows) or "vocab" (definition → word),
+match = {"kind": "cloze" (mini-stories, see below), "vocab" (definition → word) or "choice" (only when the material itself has such an exercise),
          "title": {"ru","en"} 1–3 words, "ask": {"ru","en"} the question above the options,
          "options": ["2–6 category names"] (choice only),
          "items": [{"s": "sentence with the key part in <b>bold</b>" (vocab: {"ru","en"} definition), "a": "the correct option or word", "why"?: {"ru","en"}}]}
 match (kind "cloze", for grammar lessons about choosing between forms or tenses) = {"kind": "cloze", "title": {"ru","en"}, "ask"?: {"ru","en"},
          "items": [{"s": "a short story paragraph of 3–4 sentences with 3 gaps written as {1}, {2}, {3}", "gaps": [{"options": ["right form", "tempting wrong form"], "a": "the right form, exactly one of options", "why": {"ru","en"} one sentence: why this form fits the meaning}]}]}
-speak = {"groups": [{"group": {"ru","en"}, "items": [{"q": "question or task in English", "starter"?: "sentence opener"}]}],
+speak = {"groups": [{"group": {"ru","en"}, "items": [{"q": "question or task in English", "starter"?: "sentence opener", "mode"?: "write" (only for writing tasks: essays, emails, "write N words")}]}],
          "howTo": {"ru","en"} how to answer, "tips"?: ["useful phrases"], "tipsLabel"?: {"ru","en"}, "seconds": 60–180}`;
 const LESSON_RULES = `- drill: gap-fill items on the lesson's grammar or vocabulary. Exactly one gap per item: "s" holds the text before and after it and never contains the answer. Each answer must follow unambiguously from the context; put real alternatives in "also". Answers are 1–4 words, lowercase unless a proper noun. Use "part" only to group items into 2–3 sections.
 - drill "trap": only where a learner could confidently pick a similar but wrong answer (e.g. "comparing" instead of "compared"); name that answer and explain in one short sentence why it does not fit. Skip it when no such confusion is likely.
-- match: "a" must exactly equal one of "options" (choice) or be one of the lesson's words (vocab).
+- match: never make items that only ask the student to NAME a tense, form or category ("Which tense is this?") — that tests labels, not use. For grammar where forms are chosen by meaning use "cloze": 3–4 mini-stories or short dialogues, 3 gaps each, two options per gap, exactly one of them right in context; the {n} markers in "s" must match "gaps" one to one. For a word list use "vocab". "a" must exactly equal one of the options (choice, cloze) or be one of the lesson's words (vocab).
+- speak: writing tasks (essays, emails, "write 150 words…") go here too, with "mode": "write".
 - Russian: natural and short, addressing the student with «вы». English: plain.
 - Questions for the student to discuss or answer (e.g. "Question: …") are not theory: put them in "speak", never in a rule's "callout" or "note". A "callout" is only a short tip or reminder.
 - Inside strings only <b>, <i> and <br> are allowed. No Markdown.`;
@@ -2178,7 +2196,8 @@ ${LESSON_FORMAT}
 Rules:
 - theory: 3–9 rules. Keep all of the material's explanations, structures, examples and tables, compactly. Always include theory.
 - Use the material's own exercises, examples, vocabulary and questions first. Add your own items only where a block would otherwise be thin, at the same level.
-- drill: 10–25 items. match: 8–12 items. speak: up to 15 tasks; put the material's speaking and writing tasks here.
+- If the material contains an answer key or the teacher's answers, use them as "a" exactly and do not replace them with your own; put other acceptable answers in "also".
+- drill: 10–25 items. match: 8–12 items (cloze: 3–4 stories). speak: up to 15 tasks; put the material's speaking and writing tasks here.
 - Use null for a block the material gives no basis for.
 ${LESSON_RULES}
 
@@ -2198,7 +2217,7 @@ Rules:
 - theory: 4–9 rules that explain the topic from zero: the form, when to use it, how it differs from what a Russian speaker would expect, signal words, and one or two typical mistakes in "wrong". When the lesson compares several forms, end with a summary rule that puts them side by side in "summary".
 - Examples: natural everyday English at ${level}, short, with the key form in <b>bold</b>.
 - drill: 15–25 items, from easy to harder, mixing the forms the theory covers.
-- match: 8–12 "choice" items where the student identifies which form or meaning a sentence shows ("options" are the forms the lesson compares); use "vocab" only for a vocabulary topic.
+- match: for a grammar topic, "cloze" with 3–4 mini-stories or dialogues (3 gaps each) where the student picks the form that fits the meaning; for a vocabulary topic, "vocab" with 8–12 words.
 - speak: 8–12 questions that make the student use the topic about their own life, each with a "starter"; "howTo" says which form to aim for.
 - Always fill all four blocks.
 ${LESSON_RULES}
@@ -2268,20 +2287,24 @@ async function claudeJSON(prompt, { signal, onText, quick } = {}) {
     throw { code: "upstream_error", message: String(e.status) };
   } finally { clearTimeout(timer); signal?.removeEventListener("abort", onAbort); }
 }
-async function geminiJSON(prompt, { signal, audio }) {
+async function geminiJSON(prompt, { signal, audio, quick } = {}) {
+  const light = !!(audio || quick);   // голос и короткие задачи — быстрая модель; разбор и создание урока — полная
   const body = JSON.stringify({ contents: [{ role: "user", parts: [...(audio ? [{ inline_data: { mime_type: audio.mime, data: audio.data } }] : []), { text: prompt }] }], generationConfig: { responseMimeType: "application/json", maxOutputTokens: 32768 } });
   const RETRYABLE = new Set([404, 429, 500, 502, 503, 504]);   // перегрузка модели или сеть — есть смысл повторить
   let lastErr;
   /* если «последняя» модель тормозит или недоступна, следующая попытка идёт на запасной — запасные живут дольше */
-  /* gemini-2.5-* закрыт для новых ключей (404), поэтому первой идёт быстрая lite-модель 3.5, дальше «последняя» и обычная 3.5 */
-  const MODELS = ["gemini-3.5-flash-lite", "gemini-flash-latest", "gemini-3.5-flash"];
+  /* gemini-2.5-* закрыт для новых ключей (404). Голос и короткие задачи: сначала быстрая lite-модель;
+     разбор, создание и дополнение урока: сначала полная 3.5 — облегчённая собирает уроки заметно хуже */
+  const MODELS = light ? ["gemini-3.5-flash-lite", "gemini-flash-latest", "gemini-3.5-flash"]
+                       : ["gemini-3.5-flash", "gemini-flash-latest", "gemini-3.5-flash-lite"];
   for (let attempt = 0; attempt < 3; attempt++) {
     if (signal?.aborted) throw { code: "cancelled" };
     if (attempt > 0) await new Promise(res => setTimeout(res, 1500 * attempt));
     const ctl = new AbortController();
     const onAbort = () => ctl.abort();
     signal?.addEventListener("abort", onAbort);
-    const timer = setTimeout(() => ctl.abort(), audio ? 20000 : 60000);   // голос короткий — ждать дольше смысла нет; разбор целого урока может идти долго
+    const waitMs = audio ? 20000 : quick ? 30000 : 150000;   // целый урок полная модель может писать пару минут
+    const timer = setTimeout(() => ctl.abort(), waitMs);   // голос короткий — ждать дольше смысла нет; разбор целого урока может идти долго
     let r;
     try {
       r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODELS[attempt]}:generateContent`, {
@@ -2291,7 +2314,7 @@ async function geminiJSON(prompt, { signal, audio }) {
       clearTimeout(timer); signal?.removeEventListener("abort", onAbort);
       if (signal?.aborted) throw { code: "cancelled" };
       lastErr = e?.name === "AbortError"
-        ? { code: "upstream_error", message: `${MODELS[attempt]}: не ответила за ${audio ? 20 : 60} с` }
+        ? { code: "upstream_error", message: `${MODELS[attempt]}: не ответила за ${waitMs / 1000} с` }
         : { code: "offline", message: `${e?.name || "Error"}: ${e?.message || e}` };
       continue;
     }
