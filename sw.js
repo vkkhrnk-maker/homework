@@ -1,7 +1,7 @@
 // Офлайн-кэш оболочки приложения. Уроки и прогресс лежат в браузере и через этот файл не проходят.
-const VERSION = 'e4e96e4ae6';
+const VERSION = '727eef1b71';
 const CACHE = `homework-${VERSION}`;
-const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
+const SHELL = ['./', 'index.html', 'soft.html', 'manifest.webmanifest', 'icons/homework-mark-v1.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -22,10 +22,11 @@ self.addEventListener('fetch', e => {
 
   // страница: сначала сеть, чтобы обновления приходили сразу; без сети — из кэша
   if (req.mode === 'navigate') {
+    const page = url.pathname.endsWith('/soft.html') ? 'soft.html' : 'index.html';
     e.respondWith(
       fetch(req, { cache: 'no-cache' })   // мимо HTTP-кэша: GitHub Pages разрешает держать страницу 10 минут
-        .then(res => { const copy = res.clone(); caches.open(CACHE).then(c => c.put('index.html', copy)); return res; })
-        .catch(() => caches.match('index.html'))
+        .then(res => { if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(page, copy)); } return res; })
+        .catch(() => caches.match(page))
     );
     return;
   }
