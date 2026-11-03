@@ -17,7 +17,7 @@ split = src.find("<header")
 head_part, body_part = (src[:split], src[split:]) if split > 0 else ("", src)
 
 HEAD = """<!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
