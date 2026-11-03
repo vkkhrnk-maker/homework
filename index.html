@@ -20,7 +20,7 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:opsz,wght@7..72,400;7..72,500&display=swap">
+<link rel="stylesheet" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Literata:opsz,wght@7..72,400;7..72,500&display=swap">
 <style>
 /* Layout: lesson list → lesson with step tabs (theory, practice, choice, speaking); one task per card, hints below on phone.
    Plasma-like, as in Аудиополка and English Tutor: pill controls, 16–24px radii, bottom sheets, blue accent. */
@@ -29,9 +29,9 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
   --line:rgba(11,12,14,.08); --accent:#007AFF; --accent-hover:#0066D6; --accent-fg:#FFFFFF; --accent-soft:rgba(0,122,255,.12);
   --danger:#E0352B; --danger-soft:rgba(224,53,43,.10); --warn:#A86F00; --warn-soft:rgba(200,138,0,.14);
   --scrim:rgba(0,0,0,.36); --shadow:0 8px 32px rgba(0,0,0,.10);
-  /* стиль как у walt.io: Inter, синий #007AFF, градиент обложки от #0295FE к фону */
+  /* стиль как у walt.io: синий #007AFF, градиент обложки от #0295FE к фону; шрифт свой — Golos Text */
   --hero-top:#0295FE;
-  --font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --font:"Golos Text",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --read-font:"Literata",Georgia,"Times New Roman",serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
   --r-l:24px; --r-m:16px; --r-s:12px;
@@ -114,21 +114,20 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 /* обложка на всю ширину экрана с градиентом как у walt.io: насыщенный синий сверху, светлые пятна, к низу уходит в фон */
 .intake{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(28px,4vw,48px);
   width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
-  padding:clamp(28px,6vw,72px) max(16px,calc((100vw - 1200px) / 2)) clamp(40px,6vw,80px);
+  padding:clamp(28px,6vw,72px) max(16px,calc((100vw - 1200px) / 2)) clamp(72px,9vw,128px);
   background:
     radial-gradient(30% 26% at 10% 60%, rgba(255,255,255,.22), transparent 70%),
     radial-gradient(28% 24% at 92% 46%, rgba(190,226,255,.32), transparent 70%),
-    linear-gradient(to bottom, var(--hero-top) 0%, #1E9BFF 55%, #5DB4FF 80%, #B9DEFF 92%, var(--bg) 100%)}
+    linear-gradient(to bottom, var(--hero-top) 0%, #1E9BFF 55%, #2FA2FF 84%, var(--bg) 100%)}   /* синий держится до шагов, в фон уходит ниже них */
+.intake .how-item strong{color:#fff}
+.intake .how-item p{color:rgba(255,255,255,.88)}
+.intake .how-item .n{background:rgba(255,255,255,.2);color:#fff}
 @media (min-width:700px) and (max-width:1279px){.intake{padding-left:40px;padding-right:40px}}
 /* в тёмной теме обложка уходит не в светлый, а в тёмно-синий и затем в чёрный фон — без светлой полосы и с читаемым текстом шагов */
 :root[data-theme="dark"]{--hero-top:#0A74E6}
-/* в тёмной теме поле ввода — белое матовое стекло, а не чёрный провал */
-:root[data-theme="dark"] .intake .drop-card textarea{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
-:root[data-theme="dark"] .intake .drop-card textarea::placeholder{color:rgba(255,255,255,.55)}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]) .intake .drop-card textarea{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
-  :root:not([data-theme="light"]) .intake .drop-card textarea::placeholder{color:rgba(255,255,255,.55)}
-}
+/* в тёмной теме всё стекло на обложке (поле, переключатели, подсказки) — белое матовое, одного цвета */
+:root[data-theme="dark"] .intake{--glass:rgba(255,255,255,.12)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .intake{--glass:rgba(255,255,255,.12)}}
 :root[data-theme="dark"] .intake{background:radial-gradient(30% 26% at 10% 60%, rgba(120,190,255,.16), transparent 70%),linear-gradient(to bottom,#0A74E6 0%,#0A5DC8 50%,#0A3576 80%,var(--bg) 100%)}
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){--hero-top:#0A74E6}
@@ -142,16 +141,21 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
    внутри светлый переключатель, сплошное поле ввода для читаемости и белая кнопка-пилюля с тёмным текстом */
 /* всё на главной — блок загрузки, шаги, «Мои уроки», словарь — по одной колонке шириной 880px */
 .intake .how-list,#lesson-list,#vocab-box{max-width:880px;width:100%;margin-left:auto;margin-right:auto;justify-self:center}
-.intake .drop-card{max-width:880px;width:100%;justify-self:center;padding:clamp(14px,1.6vw,20px);border-radius:28px;
-  background:rgba(0,58,160,.34);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);   /* тёмное синее стекло: белый текст внутри читается (контраст ≥ 4.5:1) */
-  border:1px solid rgba(255,255,255,.34);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 24px 60px rgba(0,60,140,.22)}
-.intake .drop-card .seg{background:rgba(0,30,90,.28)}
+/* без отдельной плашки: переключатель, поле и кнопка лежат прямо на градиенте; стеклом стало само поле ввода */
+.intake .drop-card{max-width:880px;width:100%;justify-self:center;padding:0;border-radius:0;background:none;border:0;box-shadow:none}
+/* один цвет стекла для всего на обложке: переключатели, поле ввода, подсказки тем */
+.intake{--glass:rgba(0,58,160,.34)}
+.intake .drop-card .seg{background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
 .intake .drop-card .seg button{color:#fff}
 .intake .drop-card .seg button[aria-pressed="true"]{background:#fff;color:#0B0C0E;box-shadow:0 2px 8px rgba(0,40,100,.18)}
-.intake .drop-card textarea{border:0;border-radius:20px;background:var(--bg);padding:18px 20px;min-height:200px;font-size:16px;box-shadow:0 1px 2px rgba(0,30,80,.08)}
+.intake .drop-card textarea{border:1px solid rgba(255,255,255,.3);border-radius:24px;padding:20px 22px;min-height:200px;font-size:16px;color:#fff;
+  background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);   /* тёмное синее стекло: белый текст читается */
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 24px 60px rgba(0,60,140,.22)}
+.intake .drop-card textarea::placeholder{color:rgba(255,255,255,.7)}
+.intake .drop-card textarea:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .intake .drop-card #topic-area{min-height:110px}
 .intake .drop-card .sh-sub{color:#fff}
-.intake .drop-card .topic-ideas button{background:rgba(0,30,90,.28);color:#fff;border:1px solid rgba(255,255,255,.22)}
+.intake .drop-card .topic-ideas button{background:var(--glass);color:#fff;border:1px solid rgba(255,255,255,.22)}
 .intake .drop-card .topic-ideas button:hover{background:rgba(255,255,255,.3);color:#fff}
 .intake .drop-card .primary-btn{background:#fff;color:#0B0C0E;box-shadow:0 8px 24px rgba(0,40,100,.22)}
 .intake .drop-card .primary-btn:hover{background:#f1f5ff}
@@ -163,7 +167,9 @@ body.home.scrolled header.top,body.home.scrolled::before{background:color-mix(in
 body.home.scrolled header.top .brand i{background:var(--accent);color:var(--accent-fg)}
 body.home.scrolled header.top .ibtn{color:var(--fg);background:var(--surface)}
 /* шапка на главной сливается с обложкой */
-body.home header.top,body.home::before{background:var(--hero-top);color:#fff}
+/* шапка без заливки: обложка заходит под неё, а матовое стекло появляется, только когда обложка уехала вверх */
+body.home header.top,body.home::before{background:transparent;color:#fff}
+body.home .intake{margin-top:-64px;padding-top:calc(64px + clamp(28px,6vw,72px))}
 body.home header.top .brand i{background:#fff;color:var(--hero-top)}
 body.home header.top .ibtn{color:#fff;background:rgba(255,255,255,.18)}
 body.home main{padding-top:0}
@@ -2068,6 +2074,7 @@ const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const LS_KEY = "homework-english-v3";
 try { Object.assign(S, JSON.parse(localStorage.getItem(LS_KEY) || "{}")); } catch(e) {}
+S.newMode = "material";   // при каждом открытии главная начинается с «Текст от учителя», а не с последнего выбора
 function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch(e) {} queueStateSync(); try { queueHttpSync(); } catch(e) {} }
 
 /* ============ свои уроки: Claude разбирает текст, база страницы их хранит ============ */
@@ -3149,7 +3156,7 @@ function show(view, keepScroll) {
   $("#tr-btn").textContent = t("trBtn", trMode());
   $("#sync-btn").innerHTML = `<span>${t("syncBtn")}<small>${syncCfg().code ? t("syncOn") : t("syncOff")}</small></span><span aria-hidden="true">›</span>`;
   document.body.classList.toggle("home", atHome);
-  document.body.classList.toggle("scrolled", scrollY > 24);
+  syncHeaderGlass();
   $("#brand-home").disabled = atHome;
   $("#brand-home").title = atHome ? "" : t("navHome");
   $$("#tabs .tab").forEach(x => x.setAttribute("aria-selected", String(x.dataset.view === view)));
@@ -3164,7 +3171,13 @@ function show(view, keepScroll) {
   if (!keepScroll) window.scrollTo({ top: 0, behavior: "instant" });
 }
 $("#brand-home").addEventListener("click", () => { if (S.view !== "home") show("home"); });
-addEventListener("scroll", () => document.body.classList.toggle("scrolled", scrollY > 24), { passive: true });
+/* на главной стекло у шапки включается, когда синяя обложка ушла под шапку; на других экранах — сразу при прокрутке */
+function syncHeaderGlass() {
+  const hero = document.body.classList.contains("home") ? document.querySelector(".intake") : null;
+  const edge = hero ? hero.getBoundingClientRect().bottom - 64 : (24 - scrollY);
+  document.body.classList.toggle("scrolled", edge <= 0);
+}
+addEventListener("scroll", syncHeaderGlass, { passive: true });
 $("#parse-btn").addEventListener("click", parseLesson);
 $("#parse-stop").addEventListener("click", () => parseCtl?.abort());
 $("#delete-btn").addEventListener("click", async () => {
