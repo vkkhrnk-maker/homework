@@ -101,14 +101,24 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 /* обложка на всю ширину экрана с градиентом как у walt.io: насыщенный синий сверху, светлые пятна, к низу уходит в фон */
 .intake{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(28px,4vw,48px);
   width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
-  padding:clamp(28px,6vw,72px) max(16px,calc((100vw - 1200px) / 2)) clamp(72px,9vw,128px);
+  padding:clamp(28px,6vw,72px) max(16px,calc((100vw - 1200px) / 2)) 54px;
   background:
     radial-gradient(30% 26% at 10% 60%, rgba(255,255,255,.22), transparent 70%),
     radial-gradient(28% 24% at 92% 46%, rgba(190,226,255,.32), transparent 70%),
     linear-gradient(to bottom, var(--hero-top) 0%, #1E9BFF 55%, #2FA2FF 84%, var(--bg) 100%)}   /* синий держится до шагов, в фон уходит ниже них */
-.intake .how-item strong{color:#fff}
-.intake .how-item p{color:rgba(255,255,255,.88)}
-.intake .how-item .n{background:rgba(255,255,255,.2);color:#fff}
+/* «как пользоваться» — пастельные карточки на верёвочке, как на preplab.ru: булавка сверху, лёгкий наклон, тёмный заголовок и цветной текст */
+.intake .how-list{position:relative;display:block;overflow:hidden;margin-top:56px;width:100vw;max-width:none;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:6px 0 28px}
+/* плитки как на slush.app: квадраты сочных цветов без наклона, крупная иконка, подпись внизу; лента плывёт по кругу, при наведении стоит */
+.how-track{display:flex;width:max-content;animation:how-marquee 120s linear infinite}
+.intake .how-list:hover .how-track,.intake .how-list:focus-within .how-track{animation-play-state:paused}
+@keyframes how-marquee{to{transform:translateX(-50%)}}
+.intake .how-item{position:relative;flex:0 0 268px;height:268px;margin-right:20px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;text-align:left;gap:4px;
+  padding:24px;border-radius:26px;color:#0B0C0E;--ink:rgba(11,12,14,.6)}
+.intake .how-item{background:#fff;color:#0B0C0E}   /* белые плитки: тёмный текст, иконка в акцентном синем */
+.intake .how-item .ico{position:absolute;top:26px;left:24px;width:56px;height:56px;color:#007AFF}
+.intake .how-item strong{color:inherit;font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.intake .how-item p{color:var(--ink);font-size:15px;line-height:1.35;margin:0}
+@media (prefers-reduced-motion:reduce){.how-track{animation:none}.intake .how-list{overflow-x:auto}}
 @media (min-width:700px) and (max-width:1279px){.intake{padding-left:40px;padding-right:40px}}
 /* в тёмной теме обложка уходит не в светлый, а в тёмно-синий и затем в чёрный фон — без светлой полосы и с читаемым текстом шагов */
 :root[data-theme="dark"]{--hero-top:#0A74E6}
@@ -127,7 +137,7 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 /* блок загрузки — «стекло», как в интерфейсе walt.io: полупрозрачная подложка с размытием и тонкой светлой обводкой,
    внутри светлый переключатель, сплошное поле ввода для читаемости и белая кнопка-пилюля с тёмным текстом */
 /* всё на главной — блок загрузки, шаги, «Мои уроки», словарь — по одной колонке шириной 880px (уроки внутри — в 1200) */
-.intake .how-list,#lesson-list,#vocab-box{max-width:880px;width:100%;margin-left:auto;margin-right:auto;justify-self:center}
+#lesson-list,#vocab-box{max-width:880px;width:100%;margin-left:auto;margin-right:auto;justify-self:center}
 /* без отдельной плашки: переключатель, поле и кнопка лежат прямо на градиенте; стеклом стало само поле ввода */
 .intake .drop-card{max-width:880px;width:100%;justify-self:center;padding:0;border-radius:0;background:none;border:0;box-shadow:none}
 /* один цвет стекла для всего на обложке: переключатели, поле ввода, подсказки тем */
@@ -775,14 +785,19 @@ const UI = {
   homeTitle:    { ru: "Урок из домашки или по любой теме", en: "A lesson from your homework or any topic" },
   homeLede:     { ru: "Вставьте текст от учителя или назовите тему — урок соберётся сам: теория, тренажёр и говорение.",
                   en: "Paste your teacher's text or name a topic, and the lesson builds itself: theory, practice and speaking." },
-  how1t:        { ru: "Теория — как справочник", en: "Theory works like a reference" },
-  how1p:        { ru: "Всё открыто и читается подряд, а оглавление слева возвращает к нужному правилу.",
-                  en: "Everything is open and reads top to bottom, while the contents on the left take you back to any rule." },
-  how2t:        { ru: "Упражнения — по одному", en: "One exercise at a time" },
-  how2p:        { ru: "Не список из сорока строк, а один вопрос на экране. Ответ проверяется по смыслу, а не по строке.",
-                  en: "Not a list of forty lines, but a single question on screen. Answers are checked by meaning, not by string match." },
-  how3t:        { ru: "Ошибки возвращаются", en: "Mistakes come back" },
-  how3p:        { ru: "В конце — только то, где ошиблись, с разбором почему.", en: "At the end you get only what went wrong, with an explanation of why." },
+  /* шаги «как это работает» — путь по уроку: что человек делает и что получает на каждом шаге */
+  how1t:        { ru: "Вставьте домашку", en: "Paste your homework" },
+  how1p:        { ru: "Текст от учителя или любая тема — урок соберётся за пару минут.", en: "Your teacher's text or any topic — the lesson is ready in a couple of minutes." },
+  how2t:        { ru: "Читайте теорию", en: "Read the theory" },
+  how2p:        { ru: "Тап по фразе — перевод, по слову — разбор и словарь.", en: "Tap a phrase for a translation, a word to look it up and save it." },
+  how3t:        { ru: "Тренируйтесь", en: "Practise" },
+  how3p:        { ru: "Ответ проверяется по смыслу, опечатки засчитываются, а ошибка объясняется.", en: "Answers are checked by meaning, typos count, and every mistake is explained." },
+  how4t:        { ru: "Выбирайте по смыслу", en: "Choose by meaning" },
+  how4p:        { ru: "Мини-истории: форма выбирается по всему рассказу, а не по названию.", en: "Mini-stories: you pick the form from the whole story, not by its name." },
+  how5t:        { ru: "Говорите", en: "Speak" },
+  how5p:        { ru: "Запишите голос — ИИ найдёт ошибки и покажет, как сказать лучше.", en: "Record your voice — AI finds the mistakes and shows a better way to say it." },
+  how6t:        { ru: "Закрепляйте", en: "Lock it in" },
+  how6p:        { ru: "Итог урока, слова в карточки и отчёт учителю.", en: "A lesson summary, words into flashcards and a report for your teacher." },
   pastePh:      { ru: "Вставьте текст урока сюда…\n\nAll the Future Tenses in English\n1. Future Simple (WILL)\n…",
                   en: "Paste the lesson text here…\n\nAll the Future Tenses in English\n1. Future Simple (WILL)\n…" },
   parseBtn:     { ru: "Разобрать урок", en: "Break down the lesson" },
@@ -3089,8 +3104,20 @@ function applyLang() {
   $("#paste-area").placeholder = t("pastePh");
   renderMode();
   $$(".lang-switch button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === S.lang)));
-  $("#how-list").innerHTML = [1,2,3].map(n =>
-    `<div class="how-item"><span class="n">${n}</span><div><strong>${t("how"+n+"t")}</strong><p>${t("how"+n+"p")}</p></div></div>`).join("");
+  /* иконки шагов: крупно в углу плитки */
+  const HOW_ICONS = [   // залитые иконки: буфер обмена, книга, мишень, история-пузырь, микрофон, стопка карточек
+    '<path fill-rule="evenodd" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm2 10a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm0 4a1 1 0 1 0 0 2h5a1 1 0 1 0 0-2z"/>',
+    '<path d="M3 5a2 2 0 0 1 2-2h4.5A2.5 2.5 0 0 1 12 5.5V21a2.5 2.5 0 0 0-2.5-2.5H3zM21 5a2 2 0 0 0-2-2h-4.5A2.5 2.5 0 0 0 12 5.5V21a2.5 2.5 0 0 1 2.5-2.5H21z"/>',
+    '<path fill-rule="evenodd" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>',
+    '<path d="M4 3h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-9l-5 4v-4H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>',
+    '<rect x="8" y="1.5" width="8" height="13" rx="4"/><path d="M5 11a1 1 0 0 1 2 0 5 5 0 0 0 10 0 1 1 0 1 1 2 0 7 7 0 0 1-6 6.93V21h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-3.07A7 7 0 0 1 5 11z"/>',
+    '<rect x="2" y="7" width="15" height="15" rx="3"/><path d="M7 2h12a3 3 0 0 1 3 3v12a1 1 0 1 1-2 0V5a1 1 0 0 0-1-1H7a1 1 0 0 1 0-2z"/>'
+  ];
+  const howCard = (n, dup) => `<div class="how-item" data-c="${n}"${dup ? ' aria-hidden="true"' : ""}><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${HOW_ICONS[n - 1]}</svg>
+    <strong>${t("how"+n+"t")}</strong><p>${t("how"+n+"p")}</p></div>`;
+  /* четыре копии набора: половина ленты (две копии, ~2900px) шире любого экрана — круг бесшовный без пустого места справа */
+  const howSet = dup => [2,3,4,5,6].map(n => howCard(n, dup)).join("");   // без «Вставьте домашку»: поле ввода прямо над лентой
+  $("#how-list").innerHTML = `<div class="how-track">${howSet(false)}${howSet(true)}${howSet(true)}${howSet(true)}</div>`;
   renderLessonList();
   renderTabs();
   if (S.lessonId) renderTheory();
