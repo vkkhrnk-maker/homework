@@ -11,8 +11,10 @@
   --line:rgba(11,12,14,.08); --accent:#007AFF; --accent-hover:#0066D6; --accent-fg:#FFFFFF; --accent-soft:rgba(0,122,255,.12);
   --danger:#E0352B; --danger-soft:rgba(224,53,43,.10); --warn:#A86F00; --warn-soft:rgba(200,138,0,.14);
   --scrim:rgba(0,0,0,.36); --shadow:0 8px 32px rgba(0,0,0,.10);
-  /* стиль как у walt.io: синий #007AFF, градиент обложки от #0295FE к фону; шрифт свой — Golos Text */
-  --hero-top:#0295FE;
+  /* Васильковая обложка с плавным переходом в фон. */
+  --hero-top:#3B82E6;
+  --warm-ink:#163D7A;
+  --lesson-ink:var(--warm-ink); --lesson-ink-muted:rgba(22,61,122,.76);
   --font:"Golos Text",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --read-font:"Literata",Georgia,"Times New Roman",serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -24,12 +26,14 @@
   --line:rgba(255,255,255,.08); --accent:#6B9BFF; --accent-hover:#8DB2FF; --accent-fg:#05122E; --accent-soft:rgba(107,155,255,.18);
   --danger:#FF5247; --danger-soft:rgba(255,82,71,.16); --warn:#F2B94A; --warn-soft:rgba(242,185,74,.16);
   --scrim:rgba(0,0,0,.6); --shadow:0 8px 32px rgba(0,0,0,.5); color-scheme:dark;
+  --lesson-ink:#C7DBFF; --lesson-ink-muted:rgba(199,219,255,.76);
 }}
 :root[data-theme="dark"]{
   --bg:#080808; --surface:#121722; --surface-2:#1C2331; --fg:#FFFFFF; --fg-2:rgba(255,255,255,.58); --fg-3:rgba(255,255,255,.34);
   --line:rgba(255,255,255,.08); --accent:#6B9BFF; --accent-hover:#8DB2FF; --accent-fg:#05122E; --accent-soft:rgba(107,155,255,.18);
   --danger:#FF5247; --danger-soft:rgba(255,82,71,.16); --warn:#F2B94A; --warn-soft:rgba(242,185,74,.16);
   --scrim:rgba(0,0,0,.6); --shadow:0 8px 32px rgba(0,0,0,.5); color-scheme:dark;
+  --lesson-ink:#C7DBFF; --lesson-ink-muted:rgba(199,219,255,.76);
 }
 *{box-sizing:border-box}
 html,body{min-height:100%}
@@ -98,42 +102,42 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 
 /* ---------- home ---------- */
 /* главная как лендинг: крупный заголовок, подзаголовок, под ними поле во всю ширину, ниже три шага */
-/* обложка на всю ширину экрана с градиентом как у walt.io: насыщенный синий сверху, светлые пятна, к низу уходит в фон */
+/* Голубая обложка плавно уходит в белый фон; тёплые акценты остаются на карточках. */
 .intake{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(28px,4vw,48px);
   width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
   padding:clamp(28px,6vw,72px) max(16px,calc((100vw - 1200px) / 2)) 54px;
   background:
     radial-gradient(30% 26% at 10% 60%, rgba(255,255,255,.22), transparent 70%),
     radial-gradient(28% 24% at 92% 46%, rgba(190,226,255,.32), transparent 70%),
-    linear-gradient(to bottom, var(--hero-top) 0%, #1E9BFF 55%, #2FA2FF 84%, var(--bg) 100%)}   /* синий держится до шагов, в фон уходит ниже них */
+    linear-gradient(to bottom,var(--hero-top) 0%,#438AE8 52%,#5596EC 66%,#78ADEE 74%,#A1C6F4 82%,#D0E2FA 90%,#F0F6FE 96%,var(--bg) 100%)}
 /* «как пользоваться» — пастельные карточки на верёвочке, как на preplab.ru: булавка сверху, лёгкий наклон, тёмный заголовок и цветной текст */
-.intake .how-list{position:relative;display:block;overflow:hidden;margin-top:56px;width:100vw;max-width:none;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:6px 0 28px}
+.intake .how-list{position:relative;display:block;overflow:hidden;margin-top:0;width:100vw;max-width:none;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:6px 0 28px}
 /* плитки как на slush.app: квадраты сочных цветов без наклона, крупная иконка, подпись внизу; лента плывёт по кругу, при наведении стоит */
 .how-track{display:flex;width:max-content;animation:how-marquee 120s linear infinite}
 .intake .how-list:hover .how-track,.intake .how-list:focus-within .how-track{animation-play-state:paused}
 @keyframes how-marquee{to{transform:translateX(-50%)}}
 .intake .how-item{position:relative;flex:0 0 268px;height:268px;margin-right:20px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;text-align:left;gap:4px;
-  padding:24px;border-radius:26px;color:#0B0C0E;--ink:rgba(11,12,14,.6)}
-.intake .how-item{background:#fff;color:#0B0C0E}   /* белые плитки: тёмный текст, иконка в акцентном синем */
-.intake .how-item[data-c="3"],.intake .how-item[data-c="5"]{background:#FFE15A}
-.intake .how-item .ico{position:absolute;top:26px;left:24px;width:56px;height:56px;color:#007AFF}
+  padding:24px;border-radius:26px;color:var(--warm-ink);--ink:rgba(22,61,122,.76)}
+.intake .how-item{background:radial-gradient(ellipse at 100% 0%,rgba(255,224,198,.26),transparent 72%),linear-gradient(145deg,#FFFDFA,#FFF7EF)}
+.intake .how-item[data-c="3"],.intake .how-item[data-c="5"]{background:radial-gradient(ellipse at 0% 0%,rgba(255,244,229,.3),transparent 76%),linear-gradient(135deg,#FFDFC0 15%,#FFD1A6 64%,#FFC38D)}
+.intake .how-item .ico{position:absolute;top:26px;left:24px;width:56px;height:56px;color:var(--warm-ink)}
 .intake .how-item strong{color:inherit;font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.15}
 .intake .how-item p{color:var(--ink);font-size:15px;line-height:1.35;margin:0}
 @media (prefers-reduced-motion:reduce){.how-track{animation:none}.intake .how-list{overflow-x:auto}}
 @media (min-width:700px) and (max-width:1279px){.intake{padding-left:40px;padding-right:40px}}
-/* в тёмной теме обложка уходит не в светлый, а в тёмно-синий и затем в чёрный фон — без светлой полосы и с читаемым текстом шагов */
-:root[data-theme="dark"]{--hero-top:#0A74E6}
+/* В тёмной теме голубая обложка затухает в тёмный фон. */
+:root[data-theme="dark"]{--hero-top:#3269C3}
 /* в тёмной теме всё стекло на обложке (поле, переключатели, подсказки) — белое матовое, одного цвета */
 :root[data-theme="dark"] .intake{--glass:rgba(255,255,255,.12)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .intake{--glass:rgba(255,255,255,.12)}}
-:root[data-theme="dark"] .intake{background:radial-gradient(30% 26% at 10% 60%, rgba(120,190,255,.16), transparent 70%),linear-gradient(to bottom,#0A74E6 0%,#0A5DC8 50%,#0A3576 80%,var(--bg) 100%)}
+:root[data-theme="dark"] .intake{background:radial-gradient(30% 26% at 10% 60%,rgba(148,187,255,.16),transparent 70%),linear-gradient(to bottom,var(--hero-top) 0%,#2858A7 50%,#1B3565 80%,var(--bg) 100%)}
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--hero-top:#0A74E6}
-  :root:not([data-theme="light"]) .intake{background:radial-gradient(30% 26% at 10% 60%, rgba(120,190,255,.16), transparent 70%),linear-gradient(to bottom,#0A74E6 0%,#0A5DC8 50%,#0A3576 80%,var(--bg) 100%)}
+  :root:not([data-theme="light"]){--hero-top:#3269C3}
+  :root:not([data-theme="light"]) .intake{background:radial-gradient(30% 26% at 10% 60%,rgba(148,187,255,.16),transparent 70%),linear-gradient(to bottom,var(--hero-top) 0%,#2858A7 50%,#1B3565 80%,var(--bg) 100%)}
 }
 .intake-copy{text-align:center;display:grid;justify-items:center;color:#fff}
 .intake-copy .eyebrow{display:inline-flex;align-items:center;gap:6px;color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 14px;margin:0;letter-spacing:.04em}
-.intake-copy h1{font-size:clamp(36px,4.6vw,64px);line-height:1.0;font-weight:600;letter-spacing:-.02em;margin:20px 0 16px;max-width:18ch;text-wrap:balance;color:#fff}
+.intake-copy h1{font-size:clamp(36px,4.6vw,64px);line-height:1.0;font-weight:600;letter-spacing:-.02em;margin:20px 0 16px;max-width:24ch;text-wrap:balance;color:#fff}
 .intake-copy .lede{color:rgba(255,255,255,.88);margin:0;max-width:31.5rem;font-size:clamp(16px,1.3vw,18px);font-weight:500;letter-spacing:-.01em;line-height:1.35;text-wrap:balance}
 /* блок загрузки — «стекло», как в интерфейсе walt.io: полупрозрачная подложка с размытием и тонкой светлой обводкой,
    внутри светлый переключатель, сплошное поле ввода для читаемости и белая кнопка-пилюля с тёмным текстом */
@@ -155,8 +159,8 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .intake .drop-card .sh-sub{color:#fff}
 .intake .drop-card .topic-ideas button{background:var(--glass);color:#fff;border:1px solid rgba(255,255,255,.22)}
 .intake .drop-card .topic-ideas button:hover{background:rgba(255,255,255,.3);color:#fff}
-.intake .drop-card .primary-btn{background:#FFE15A;color:#005BC4;box-shadow:0 8px 24px rgba(0,40,100,.22)}
-.intake .drop-card .primary-btn:hover{background:#FFD52E}
+.intake .drop-card .primary-btn{background:radial-gradient(ellipse at 5% 0%,#FFF0C7 0%,#FFD393 42%,#FF9C31 100%);color:var(--warm-ink);box-shadow:0 8px 24px rgba(0,40,100,.22);transition:filter .18s}
+.intake .drop-card .primary-btn:hover{filter:brightness(1.04)}
 .intake .drop-card .hint,.intake .drop-card .parse-status,.intake .drop-card .link-btn{color:#fff}
 .intake .drop-card .hint{line-height:1.35;max-width:52ch}
 .intake .drop-card .hint.err{color:#fff;background:rgba(224,53,43,.75);padding:4px 10px;border-radius:999px}
@@ -198,20 +202,20 @@ body.home main{padding-top:0}
 .lesson-list::before{content:attr(data-label);font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:-4px;grid-column:1/-1}
 /* карточка урока как у walt.io: мягкий голубоватый фон, крупный заголовок, внизу столбик пилюль-шагов с прогрессом */
 .lesson-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;width:100%;min-height:300px;padding:28px;border-radius:28px;
-  background:var(--surface);transition:transform .15s,box-shadow .15s}
+  background:var(--surface);color:var(--lesson-ink);transition:transform .15s,box-shadow .15s}
 .lesson-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,60,140,.10)}
-.lc-eyebrow{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.lc-eyebrow{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--lesson-ink)}
 .lesson-card h3{font-size:clamp(26px,2.4vw,32px);font-weight:600;letter-spacing:-.02em;line-height:1.1}
-.lc-sub{margin:0;color:var(--fg-2);font-size:15px;line-height:1.4}
+.lc-sub{margin:0;color:var(--lesson-ink-muted);font-size:15px;line-height:1.4}
 .lc-steps{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
 .lc-step{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;font-size:15px;font-weight:500;line-height:1.2;
-  background:color-mix(in srgb,var(--bg) 70%,transparent);color:var(--fg);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fg) 6%,transparent)}
-.lc-step b{color:var(--accent);font-weight:600}
-.lc-step i{color:var(--accent);font-style:normal;font-weight:700}
+  background:color-mix(in srgb,var(--bg) 70%,transparent);color:var(--lesson-ink);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--lesson-ink) 6%,transparent)}
+.lc-step b{color:inherit;font-weight:600}
+.lc-step i{color:inherit;font-style:normal;font-weight:700}
 .lc-step.cur{background:var(--bg);font-weight:600;box-shadow:0 6px 18px rgba(0,60,140,.12)}
-/* пройденный шаг — жёлтая пилюля, как главная кнопка на обложке */
-.lc-step.done{background:#FFE15A;color:#1A1A1A;box-shadow:none}
-.lc-step.done b,.lc-step.done i{color:#1A1A1A}
+/* Пройденный шаг поддерживает тёплый акцент обложки. */
+.lc-step.done{background:linear-gradient(120deg,#FFE6CC,#FFD8B0);color:var(--warm-ink);box-shadow:none}
+.lc-step.done b,.lc-step.done i{color:inherit}
 .lc-step.todo{opacity:.45}
 .lc-step.part{opacity:.85}
 .lesson-row{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--surface);border-radius:var(--r-l);padding:14px 16px;text-align:left;width:100%}
@@ -563,7 +567,9 @@ body.home main{padding-top:0}
 }
 @media (max-width:560px){
   .progress-wrap .pbar{width:56px}
-  .intake-copy h1{font-size:34px}
+  .intake-copy h1{font-size:40px;line-height:1.04}
+  .intake-copy .lede{font-size:14px;line-height:1.4}
+  .intake .how-item p,.lc-sub{font-size:14px}
   .how-list{display:none}
   .card{padding:20px 16px}
   .q-sentence{font-size:21px}
@@ -786,9 +792,9 @@ const UI = {
   navSpeak:     { ru: "Говорение", en: "Speaking" },
 
   homeEyebrow:  { ru: "Английский", en: "English" },
-  homeTitle:    { ru: "Урок из домашки или по любой теме", en: "A lesson from your homework or any topic" },
-  homeLede:     { ru: "Вставьте текст от учителя или назовите тему — урок соберётся сам: теория, тренажёр и говорение.",
-                  en: "Paste your teacher's text or name a topic, and the lesson builds itself: theory, practice and speaking." },
+  homeTitle:    { ru: "Превратите домашку по английскому в практику по шагам", en: "Turn your English homework into guided practice" },
+  homeLede:     { ru: "Вставьте материал от учителя или выберите тему. Разбирайте правила, практикуйтесь шаг за шагом и получайте обратную связь по ответам.",
+                  en: "Paste your teacher's notes or pick a topic. Get clear explanations, practise step by step and receive feedback on your answers." },
   /* шаги «как это работает» — путь по уроку: что человек делает и что получает на каждом шаге */
   how1t:        { ru: "Вставьте домашку", en: "Paste your homework" },
   how1p:        { ru: "Текст от учителя или любая тема — урок соберётся за пару минут.", en: "Your teacher's text or any topic — the lesson is ready in a couple of minutes." },
@@ -3056,7 +3062,7 @@ const Lalt = o => {
 function uiText(value) {
   if (Array.isArray(value)) return value.map(uiText);
   if (typeof value !== "string") return value;
-  const shortWords = /(^|[\s([{«„“"'])(в|во|к|ко|с|со|у|о|об|обо|на|по|из|от|до|за|для|без|под|над|при|про|и|а|но|не|ни|a|an|the|in|on|at|to|of|by|for|from|with|as|and|or)[ \t]+(?=\S)/gi;
+  const shortWords = /(^|[\s([{«„“"'])(в|во|к|ко|с|со|у|о|об|обо|на|по|из|от|до|за|для|без|под|над|при|про|и|а|но|не|ни|a|an|the|in|into|on|at|to|of|by|for|from|with|as|and|or)[ \t]+(?=\S)/gi;
   return value.replace(/([^.])\.$/, "$1").split(/(<[^>]+>)/g).map((part, i) => {
     if (i % 2) return part;
     for (let pass = 0; pass < 2; pass++) part = part.replace(shortWords, "$1$2\u00a0");
@@ -3224,10 +3230,11 @@ function show(view, keepScroll) {
   if (!keepScroll) window.scrollTo({ top: 0, behavior: "instant" });
 }
 $("#brand-home").addEventListener("click", () => { if (S.view !== "home") show("home"); });
-/* на главной стекло у шапки включается, когда синяя обложка ушла под шапку; на других экранах — сразу при прокрутке */
+/* На главной стекло включается перед светлыми карточками; в уроке — при прокрутке. */
 function syncHeaderGlass() {
   const hero = document.body.classList.contains("home") ? document.querySelector(".intake") : null;
-  const edge = hero ? hero.getBoundingClientRect().bottom - 64 : (24 - scrollY);
+  const cards = hero?.querySelector(".how-list");
+  const edge = hero ? (cards?.getClientRects().length ? cards.getBoundingClientRect().top : hero.getBoundingClientRect().bottom) - 64 : (24 - scrollY);
   document.body.classList.toggle("scrolled", edge <= 0);
 }
 addEventListener("scroll", syncHeaderGlass, { passive: true });
