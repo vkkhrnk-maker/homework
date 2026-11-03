@@ -1052,6 +1052,7 @@ const UI = {
   countDrill:   { ru: n => `${n} ${plural(n, "упражнение", "упражнения", "упражнений")}`, en: n => `${n} ${n === 1 ? "exercise" : "exercises"}` },
   countMatch:   { ru: n => `${n} на значения`, en: n => `${n} on meanings` },
   countChoice:  { ru: n => `${n} на выбор`, en: n => `${n} to choose` },
+  countStories: { ru: n => `${n} ${plural(n, "мини-история", "мини-истории", "мини-историй")}`, en: n => `${n} mini-stories` },
   countSpeak:   { ru: n => `${n} на говорение`, en: n => `${n} for speaking` }
 };
 
@@ -1234,19 +1235,6 @@ const MEANINGS = [
   { key: "F", label: { ru: "Вывод / уверенность", en: "Deduction / certainty" } },
   { key: "G", label: { ru: "Просьба", en: "Request" } },
   { key: "H", label: { ru: "Гипотетическая ситуация", en: "Hypothetical situation" } }
-];
-
-const MODALS_MATCH = [
-  { s: "You <b>should</b> talk to your manager.", a: "D", why: { ru: "should = совет.", en: "should = advice." } },
-  { s: "<b>Could</b> you send me the report?", a: "G", why: { ru: "Вопрос-просьба к собеседнику.", en: "A question asking someone to do something." } },
-  { s: "She <b>must</b> be very tired after that journey.", a: "F", why: { ru: "Не обязанность, а уверенный вывод из ситуации.", en: "Not obligation — a confident conclusion from the situation." } },
-  { s: "I <b>can</b> speak Spanish.", a: "A", why: { ru: "can про навык.", en: "can is about a skill." } },
-  { s: "You <b>must</b> wear a helmet here.", a: "C", why: { ru: "Здесь must — правило, которое надо выполнять.", en: "Here must is a rule you have to follow." } },
-  { s: "<b>May</b> I leave early today?", a: "E", why: { ru: "Спрашиваете разрешения.", en: "You're asking for permission." } },
-  { s: "It <b>might</b> snow tonight.", a: "B", why: { ru: "might про вероятность.", en: "might is about likelihood." } },
-  { s: "I <b>would</b> buy a new car if I had enough money.", a: "H", why: { ru: "Условие «если бы» — воображаемая ситуация.", en: "An \"if\" condition — an imaginary situation." } },
-  { s: "You <b>don't have to</b> attend the meeting.", a: "C", why: { ru: "Тоже про необходимость — только про её отсутствие.", en: "Also about necessity — the absence of it." } },
-  { s: "When I was younger, I <b>could</b> run much faster.", a: "A", why: { ru: "Умение, только в прошлом.", en: "Ability, just in the past." } }
 ];
 
 const MODALS_SPEAK = [
@@ -1751,7 +1739,6 @@ const PAST_DRILL = [
     why: { ru: "Финальное событие истории. Past simple.", en: "The final event of the story. Past simple." }, hint: { ru: "Чем всё кончилось.", en: "How it ended." } }
 ];
 
-const PAST_TENSES = ["Past simple", "Past continuous", "Past perfect", "Past perfect continuous"];
 /* мини-истории: время выбирается по смыслу всего абзаца, а не по названию; в тексте {1}, {2}, {3} — места выбора */
 const PAST_STORIES = [
   { s: "It was a rainy evening. I {1} through the old town when I {2} a strange noise behind me. I {3} what it was, so I turned around.",
@@ -1779,33 +1766,6 @@ const PAST_STORIES = [
       { options: ["hadn't brought", "weren't bringing"], a: "hadn't brought", why: { ru: "Мы поняли это позже, а не взяли зонт раньше: «Past perfect».", en: "We realised it later; not bringing the umbrella came earlier: Past perfect." } }
     ] }
 ];
-const PAST_MATCH = [
-  { s: "I <b>walked</b> into the hotel.", a: "Past simple",
-    why: { ru: "Законченное событие, которое двигает историю.", en: "A completed event that moves the story." } },
-  { s: "It <b>was getting</b> dark.", a: "Past continuous",
-    why: { ru: "Сцена и атмосфера.", en: "The scene and atmosphere." } },
-  { s: "She was nervous because she <b>had never flown</b> before.", a: "Past perfect",
-    why: { ru: "Объясняет то, что было до момента в истории.", en: "Explains what came before that moment in the story." } },
-  { s: "She <b>had been working</b> all day, so she was exhausted.", a: "Past perfect continuous",
-    why: { ru: "Долгое занятие, которое стало причиной.", en: "A long activity that caused the situation." } },
-  { s: "While we <b>were eating</b> dinner, the lights went out.", a: "Past continuous",
-    why: { ru: "Действие в процессе, которое прервали.", en: "An action in progress that was interrupted." } },
-  { s: "While we were eating dinner, the lights <b>went out</b>.", a: "Past simple",
-    why: { ru: "Короткое событие, которое прерывает процесс.", en: "The short event that interrupts the action." } },
-  { s: "When we reached the restaurant, our friends <b>had</b> already <b>ordered</b>.", a: "Past perfect",
-    why: { ru: "Это случилось раньше, чем мы пришли.", en: "It happened before we arrived." } },
-  { s: "I <b>had been walking</b> in the wrong direction for over an hour.", a: "Past perfect continuous",
-    why: { ru: "Как долго длилось до события.", en: "How long it had been going on before the event." } },
-  { s: "Suddenly, I <b>heard</b> somebody screaming.", a: "Past simple",
-    why: { ru: "Внезапное главное событие.", en: "A sudden main event." } },
-  { s: "Somebody <b>was shouting</b> in the background.", a: "Past continuous",
-    why: { ru: "Что происходило вокруг в этот момент.", en: "What was going on around at that moment." } },
-  { s: "I realised that the screaming <b>had come</b> from a fox.", a: "Past perfect",
-    why: { ru: "Раскрывает то, что случилось раньше.", en: "Reveals something that happened earlier." } },
-  { s: "We <b>had been walking</b> for hours when we found a village.", a: "Past perfect continuous",
-    why: { ru: "«for hours» до того, как нашли деревню.", en: "\"for hours\" before we found the village." } }
-];
-
 const PAST_SPEAK = [
   { group: { ru: "Своя история · шаг за шагом", en: "Your story · step by step" }, items: [
     { q: "Set the scene. Where were you? What were you doing? What was happening around you?", starter: "It was getting dark, and I was…" },
@@ -1838,11 +1798,84 @@ function vocabItems(words) {
 /* ============================================================
    УРОКИ
    ============================================================ */
+/* Future: мини-истории — какую форму будущего выбрать по смыслу (решение сейчас, план, договорённость, расписание, процесс, срок) */
+const FUTURE_STORIES = [
+  { s: "A: The phone's ringing! B: Don't worry, I {1} it. By the way, I {2} lunch with Anna tomorrow — we booked a table last week. A: Nice. Take an umbrella, though: look at those clouds, it {3} rain.",
+    gaps: [
+      { options: ["will get", "am going to get"], a: "will get", why: { ru: "Решение принято прямо сейчас, в момент речи: will.", en: "A decision made right now, at the moment of speaking: will." } },
+      { options: ["am having", "will have"], a: "am having", why: { ru: "Договорённость с другим человеком, столик уже заказан: Present Continuous.", en: "An arrangement with another person, the table is booked: Present Continuous." } },
+      { options: ["is going to", "will"], a: "is going to", why: { ru: "Прогноз по видимым признакам (тучи): be going to.", en: "A prediction based on what we can see (the clouds): be going to." } }
+    ] },
+  { s: "Our train {1} at 7:15 tomorrow morning, so please don't call me then — at that time I {2} on the train with my laptop. Text me instead, and I {3} you back as soon as I arrive.",
+    gaps: [
+      { options: ["leaves", "is going to leave"], a: "leaves", why: { ru: "Расписание транспорта: Present Simple.", en: "A transport timetable: Present Simple." } },
+      { options: ["will be sitting", "will sit"], a: "will be sitting", why: { ru: "Действие будет идти в определённый момент будущего: Future Continuous.", en: "An action in progress at a particular future moment: Future Continuous." } },
+      { options: ["will call", "am calling"], a: "will call", why: { ru: "Обещание: will.", en: "A promise: will." } }
+    ] },
+  { s: "Don't worry about the report: by Friday I {1} it, I promise. And next month I {2} at this company for exactly five years! I hope that by then they {3} me a bigger desk.",
+    gaps: [
+      { options: ["will have finished", "will be finishing"], a: "will have finished", why: { ru: "«К пятнице» — будет закончено к сроку: Future Perfect.", en: "\"By Friday\" — finished before a future point: Future Perfect." } },
+      { options: ["will have been working", "will be working"], a: "will have been working", why: { ru: "Важно, сколько это будет длиться к моменту («пять лет»): Future Perfect Continuous.", en: "What matters is how long it will have lasted by then (\"five years\"): Future Perfect Continuous." } },
+      { options: ["will have given", "will give"], a: "will have given", why: { ru: "«К тому времени» — результат к сроку: Future Perfect.", en: "\"By then\" — a result before that point: Future Perfect." } }
+    ] },
+  { s: "Hurry up! The film {1} start — the lights are already going down. Oh, and big news: I've decided that next year I {2} study design abroad. On Monday I {3} the director of my school to talk about it; it's already in my calendar.",
+    gaps: [
+      { options: ["is about to", "is due to"], a: "is about to", why: { ru: "Вот-вот, в любую секунду (свет уже гаснет): be about to. «Be due to» — про официальное расписание.", en: "Any second now (the lights are going down): be about to. \"Be due to\" is about an official schedule." } },
+      { options: ["am going to", "will"], a: "am going to", why: { ru: "Решение принято заранее, это план: be going to.", en: "The decision was made earlier, it's a plan: be going to." } },
+      { options: ["am meeting", "will meet"], a: "am meeting", why: { ru: "Встреча назначена и стоит в календаре: Present Continuous.", en: "The meeting is fixed and in the calendar: Present Continuous." } }
+    ] }
+];
+const FUTURE_SPEAK = [
+  { q: "What are your plans for this weekend?", starter: "This weekend I'm going to…" },
+  { q: "Have you arranged to meet anyone this week? Who, and when?", starter: "On Thursday I'm meeting…" },
+  { q: "What time does your working or school day start tomorrow?", starter: "Tomorrow my day starts at…" },
+  { q: "What do you think your city will be like in twenty years?", starter: "I think in twenty years it will…" },
+  { q: "Look outside right now. What's going to happen with the weather?", starter: "Judging by the sky, it's going to…" },
+  { q: "Your friend says: \"I'm so thirsty.\" Offer to help.", starter: "Wait, I'll…" },
+  { q: "What will you be doing at this time tomorrow?", starter: "This time tomorrow I'll be…" },
+  { q: "What will you have done by the end of this year?", starter: "By the end of the year I'll have…" },
+  { q: "How long will you have been learning English by next summer?", starter: "By next summer I'll have been learning English for…" },
+  { q: "What are you about to do right after this lesson?", starter: "I'm about to…" },
+  { q: "Make one promise to yourself about your English.", starter: "I promise I will…" }
+];
+const FUTURE_TIPS = ["I'm going to… — план", "I'm meeting… — договорённость", "The train leaves at… — расписание", "I think … will… — мнение, прогноз",
+  "I'll… — решение сейчас, обещание", "This time tomorrow I'll be…", "By … I'll have…", "I'm about to…"];
+
+/* Modals: мини-диалоги — модальный глагол выбирается по ситуации, а не по названию значения */
+const MODALS_STORIES = [
+  { s: "A: Do I {1} wear a suit to the interview? B: No, you {2} — it's a very casual company. But you {3} be late: they're extremely strict about time.",
+    gaps: [
+      { options: ["have to", "must"], a: "have to", why: { ru: "В вопросе нужен «Do I have to…?»: «Do I must» не бывает.", en: "Questions use \"Do I have to…?\"; \"Do I must\" is not possible." } },
+      { options: ["don't have to", "mustn't"], a: "don't have to", why: { ru: "Костюм не обязателен, можно и без него: don't have to.", en: "A suit isn't necessary, you can choose: don't have to." } },
+      { options: ["mustn't", "don't have to"], a: "mustn't", why: { ru: "Опаздывать нельзя, это запрет: mustn't.", en: "Being late is not allowed, it's a prohibition: mustn't." } }
+    ] },
+  { s: "A: Where's Tom? B: I'm not sure. He {1} be in the meeting room, or he {2} have gone home early. A: He {3} have gone home — his bag is still on his desk!",
+    gaps: [
+      { options: ["might", "must"], a: "might", why: { ru: "Говорящий не уверен: might = возможно.", en: "The speaker isn't sure: might = possibly." } },
+      { options: ["could", "can"], a: "could", why: { ru: "Предположение о прошлом: could have gone. «Can have gone» так не говорят.", en: "A guess about the past: could have gone. \"Can have gone\" isn't used." } },
+      { options: ["can't", "mustn't"], a: "can't", why: { ru: "Уверенный вывод «точно нет» по признаку (сумка на месте): can't have. Mustn't — это запрет.", en: "A confident \"definitely not\" from evidence (the bag): can't have. Mustn't is a prohibition." } }
+    ] },
+  { s: "A: {1} you help me with this box? It's really heavy. B: Sure, but you {2} lift heavy things after your back operation, you know. A: I know. I {3} start doing my exercises again.",
+    gaps: [
+      { options: ["Could", "Should"], a: "Could", why: { ru: "Вежливая просьба: Could you…?", en: "A polite request: Could you…?" } },
+      { options: ["shouldn't", "don't have to"], a: "shouldn't", why: { ru: "Совет «лучше не надо»: shouldn't. Don't have to значило бы «не обязательно».", en: "Advice \"better not\": shouldn't. Don't have to would mean \"it's not necessary\"." } },
+      { options: ["should", "would"], a: "should", why: { ru: "Совет самому себе: should.", en: "Advice to yourself: should." } }
+    ] },
+  { s: "When I was seven, I {1} swim at all, but now I {2} swim two kilometres without stopping. If I had more free time, I {3} train for a triathlon.",
+    gaps: [
+      { options: ["couldn't", "can't"], a: "couldn't", why: { ru: "Умение в прошлом: could / couldn't.", en: "Ability in the past: could / couldn't." } },
+      { options: ["can", "could"], a: "can", why: { ru: "Умение сейчас: can.", en: "Ability now: can." } },
+      { options: ["would", "will"], a: "would", why: { ru: "Воображаемая ситуация «если бы»: would.", en: "An imaginary \"if\" situation: would." } }
+    ] }
+];
+const MODALS_TIPS = ["I can… / I couldn't… — умение", "You should… / shouldn't… — совет", "You must… / mustn't… — правило, запрет",
+  "I have to… / don't have to… — нужно / не обязательно", "It might… / could… — возможно", "He must be… / can't be… — уверенный вывод", "I would… if… — если бы"];
+
 const BUILTIN_LESSONS = [
   {
     id: "past-stories",
     title: "Creating Stories Using Different Past Tenses",
-    date: { ru: "Новый урок · B1–B2", en: "New lesson · B1–B2" },
+    date: { ru: "Грамматика · B1–B2", en: "Grammar · B1–B2" },
     theoryTitle: { ru: "Прошедшие времена в рассказе", en: "Past tenses in storytelling" },
     theory: PAST_THEORY,
     drill: { mode: "form", items: PAST_DRILL, cheatsheet: PAST_FORMS_CHEATSHEET, cheatsheetLabel: { ru: "Прошедшие времена", en: "Past tenses" },
@@ -1868,20 +1901,50 @@ const BUILTIN_LESSONS = [
   {
     id: "modals",
     title: "Modal Verbs — Uses, Rules & Examples",
-    date: { ru: "17 августа · B1–B2", en: "17 August · B1–B2" },
+    date: { ru: "Грамматика · B1–B2", en: "Grammar · B1–B2" },
     theoryTitle: { ru: "Модальные глаголы", en: "Modal verbs" },
     theory: MODALS_THEORY,
     drill: { mode: "modal", items: MODALS_DRILL, chips: MODAL_CHIPS, eyebrow: { ru: "40 предложений", en: "40 sentences" } },
-    match: MODALS_MATCH,
-    speak: MODALS_SPEAK
+    match: {
+      kind: "cloze",
+      navLabel: { ru: "Мини-диалоги", en: "Mini-dialogues" },
+      title: { ru: "Мини-диалоги", en: "Mini-dialogues" },
+      eyebrow: { ru: "4 диалога · 12 выборов", en: "4 dialogues · 12 choices" },
+      ask: { ru: "Выберите модальный глагол, который подходит по ситуации", en: "Pick the modal that fits the situation" },
+      items: MODALS_STORIES
+    },
+    speak: {
+      items: MODALS_SPEAK,
+      eyebrow: { ru: "15 вопросов о вашей жизни", en: "15 questions about your life" },
+      howTo: { ru: "Отвечайте двумя-тремя предложениями и используйте модальный глагол из начала фразы. Добавьте пример или причину.",
+               en: "Answer in two or three sentences using the modal from the opener. Add an example or a reason." },
+      tips: MODALS_TIPS,
+      tipsLabel: { ru: "Что означает каждый", en: "What each one means" }
+    }
   },
   {
     id: "future",
     title: "All the Future Tenses in English",
-    date: { ru: "Новый урок · B1–B2", en: "New lesson · B1–B2" },
+    date: { ru: "Грамматика · B1–B2", en: "Grammar · B1–B2" },
     theoryTitle: { ru: "Формы будущего времени", en: "Future forms" },
     theory: FUTURE_THEORY,
-    drill: { mode: "form", items: FUTURE_DRILL, cheatsheet: FUTURE_FORMS_CHEATSHEET, eyebrow: { ru: "30 предложений в трёх частях", en: "30 sentences in three parts" } }
+    drill: { mode: "form", items: FUTURE_DRILL, cheatsheet: FUTURE_FORMS_CHEATSHEET, eyebrow: { ru: "30 предложений в трёх частях", en: "30 sentences in three parts" } },
+    match: {
+      kind: "cloze",
+      navLabel: { ru: "Мини-истории", en: "Mini-stories" },
+      title: { ru: "Мини-истории", en: "Mini-stories" },
+      eyebrow: { ru: "4 истории · 12 выборов", en: "4 stories · 12 choices" },
+      ask: { ru: "Выберите форму будущего, которая подходит по смыслу", en: "Pick the future form that fits the meaning" },
+      items: FUTURE_STORIES
+    },
+    speak: {
+      items: FUTURE_SPEAK,
+      eyebrow: { ru: "11 вопросов о ваших планах", en: "11 questions about your plans" },
+      howTo: { ru: "Начало фразы подсказывает, какую форму будущего взять. Отвечайте двумя-тремя предложениями и добавьте деталь: когда, с кем, почему.",
+               en: "The opener tells you which future form to use. Answer in two or three sentences and add a detail: when, with whom, why." },
+      tips: FUTURE_TIPS,
+      tipsLabel: { ru: "Формы будущего", en: "Future forms" }
+    }
   },
   {
     id: "culture-b1",
@@ -2970,7 +3033,7 @@ function renderLessonList() {
     const total = lessonTotal(l), done = lessonDone(l), pct = total ? Math.round(done / total * 100) : 0;
     const bits = [t(l.drill ? "countRules" : "countTopics", l.theory.length)];
     if (l.drill) bits.push(t("countDrill", l.drill.items.length));
-    if (l.match) bits.push(t(l.match.kind === "vocab" ? "countWords" : l.match.kind === "choice" ? "countChoice" : "countMatch", matchItems(l).length));
+    if (l.match) bits.push(t(l.match.kind === "vocab" ? "countWords" : l.match.kind === "cloze" ? "countStories" : l.match.kind === "choice" ? "countChoice" : "countMatch", matchItems(l).length));
     if (l.speak) bits.push(t("countSpeak", speakItems(l).length));
     return `<button class="lesson-row" data-lesson="${l.id}">
       <div>
@@ -3896,7 +3959,7 @@ function renderCloze(M, items, p) {
   if (clozeUI.i !== i) clozeUI = { i, picks: checked ? (p.chosen?.[i] || []).slice() : [], active: 0 };
   const U = clozeUI, filled = gaps.every((_, g) => U.picks[g]);
   const text = String(q.s).split(/\{(\d+)\}/).map((x, k) => {
-    if (k % 2 === 0) return x;
+    if (k % 2 === 0) return x.replace(/\s+(?=[A-Z]: )/g, "<br>");   // диалог «A: … B: …» — каждая реплика с новой строки
     const g = +x - 1, pick = U.picks[g];
     const cls = checked ? (pick === gaps[g].a ? "right" : "wrong") : (g === U.active ? "active" : "");
     return `<button class="gap ${cls}" data-gap="${g}" ${checked ? "disabled" : ""}>${pick ? escH(pick) : "&nbsp;"}<sup>${x}</sup></button>`;
