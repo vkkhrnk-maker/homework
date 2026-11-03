@@ -121,10 +121,10 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 .intake-copy .lede{color:rgba(255,255,255,.88);margin:0;max-width:31.5rem;font-size:clamp(16px,1.3vw,18px);font-weight:500;letter-spacing:-.01em;line-height:1.35;text-wrap:balance}
 /* блок загрузки — «стекло», как в интерфейсе walt.io: полупрозрачная подложка с размытием и тонкой светлой обводкой,
    внутри светлый переключатель, сплошное поле ввода для читаемости и белая кнопка-пилюля с тёмным текстом */
-/* всё на главной — блок загрузки, шаги, «Мои уроки», словарь — по одной колонке шириной 880px */
-.intake .how-list,#lesson-list,#vocab-box{max-width:880px;width:100%;margin-left:auto;margin-right:auto;justify-self:center}
+/* всё на главной — блок загрузки, шаги, «Мои уроки», словарь — во всю ширину общего контейнера 1200px, как и экраны уроков */
+.intake .how-list,#lesson-list,#vocab-box{max-width:1200px;width:100%;margin-left:auto;margin-right:auto;justify-self:center}
 /* без отдельной плашки: переключатель, поле и кнопка лежат прямо на градиенте; стеклом стало само поле ввода */
-.intake .drop-card{max-width:880px;width:100%;justify-self:center;padding:0;border-radius:0;background:none;border:0;box-shadow:none}
+.intake .drop-card{max-width:1200px;width:100%;justify-self:center;padding:0;border-radius:0;background:none;border:0;box-shadow:none}
 /* один цвет стекла для всего на обложке: переключатели, поле ввода, подсказки тем */
 .intake{--glass:rgba(0,58,160,.34)}
 .intake .drop-card .seg{background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
