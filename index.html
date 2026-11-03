@@ -163,14 +163,14 @@ main{padding-block:8px calc(48px + env(safe-area-inset-bottom,0px))}
 #lesson-list,#vocab-box{max-width:880px;width:100%;margin-left:auto;margin-right:auto;justify-self:center}
 /* без отдельной плашки: переключатель, поле и кнопка лежат прямо на градиенте; стеклом стало само поле ввода */
 .intake .drop-card{max-width:880px;width:100%;justify-self:center;padding:0;border-radius:0;background:none;border:0;box-shadow:none}
-/* один цвет стекла для всего на обложке: переключатели, поле ввода, подсказки тем */
-.intake{--glass:rgba(0,58,160,.34)}
-.intake .drop-card .seg{background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+/* Нейтральное прозрачное стекло сохраняет приглушённый оттенок обложки. */
+.intake{--glass:rgba(27,51,92,.16)}
+.intake .drop-card .seg{background:var(--glass);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
 .intake .drop-card .seg button{color:#fff}
 .intake .drop-card .seg button[aria-pressed="true"]{background:#fff;color:#0B0C0E;box-shadow:0 2px 8px rgba(0,40,100,.18)}
-.intake .drop-card textarea{border:1px solid rgba(255,255,255,.3);border-radius:24px;padding:20px 22px;min-height:200px;font-size:16px;color:#fff;
-  background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);   /* тёмное синее стекло: белый текст читается */
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 24px 60px rgba(0,60,140,.22)}
+.intake .drop-card textarea{border:1px solid rgba(255,255,255,.22);border-radius:24px;padding:20px 22px;min-height:200px;font-size:16px;color:#fff;
+  background:var(--glass);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 16px 40px rgba(15,40,80,.12)}
 .intake .drop-card textarea::placeholder{color:rgba(255,255,255,.7)}
 .intake .drop-card textarea:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .intake .drop-card #topic-area{min-height:110px}
