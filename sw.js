@@ -1,5 +1,5 @@
 // Офлайн-кэш оболочки приложения. Уроки и прогресс лежат в браузере и через этот файл не проходят.
-const VERSION = '6dc659d1ac';
+const VERSION = '16e36f1e7a';
 const CACHE = `homework-${VERSION}`;
 const SHELL = ['./', 'index.html', 'soft.html', 'blue.html', 'fromt.html', 'manifest.webmanifest', 'icons/homework-mark-v1.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'illustrations/past-stories-blue-v4.png', 'illustrations/modals-blue-v4.png', 'illustrations/future-blue-v4.png', 'illustrations/culture-b1-blue-v4.png', 'illustrations/culture-c1-blue-v4.png'];

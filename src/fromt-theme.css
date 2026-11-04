@@ -10,8 +10,6 @@
   --fromt-selected:rgba(255,255,255,.94);--fromt-edge:rgba(255,255,255,.64);
   --sky-base:#DCE8F4;--sky-cyan:#C8E4F4;--sky-blue:#9EC4EF;--sky-violet:#B8BFF0;--sky-haze:#F5F9FC;
   --lesson-art-filter:none;--illustration-fill:#BDD0EC;
-  --practice-ok:#23674E;--practice-ok-soft:#EAF5EF;
-  --practice-error:#A9403A;--practice-error-soft:#FBEFEE;
 }
 
 .primary-btn,.ghost-btn{border-radius:10px}
@@ -101,8 +99,7 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 .intake .how-item .ico path[opacity]{fill:var(--illustration-fill);opacity:1}
 .lesson-card{background:var(--fromt-solid);border-radius:18px;box-shadow:none}
 .lesson-card:hover{box-shadow:0 8px 24px rgba(27,49,74,.06)}
-.intake .drop-card,#lesson-list,#vocab-box{max-width:none}
-.lesson-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+.lesson-list{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
 .lesson-card{padding:24px;gap:10px;min-height:280px}
 .lc-overview{display:flex;align-items:center;gap:18px}
 .lc-overview.has-art{min-height:132px}
@@ -127,78 +124,7 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 .lc-step.done b,.lc-step.done i{color:inherit}
 .lc-step.todo{background:color-mix(in srgb,var(--surface) 55%,transparent);color:var(--fg-3);opacity:1}
 
-/* Тренажёр: белое задание, спокойные подсказки, результат отдельным блоком. */
-#view-drill{padding-top:24px}
-#view-drill .section-heading{align-items:center;margin:0 0 28px}
-#view-drill .section-heading h1{font-size:32px;line-height:1.2;margin-top:8px}
-#view-drill .eyebrow{font-size:13px;font-weight:500;letter-spacing:0;text-transform:none}
-#view-drill .drill-layout{grid-template-columns:minmax(0,1fr) 252px;gap:36px}
-.drill-workspace{min-width:0}
-#drill-card{background:var(--fromt-solid);padding:32px;border-radius:22px}
-#drill-card .q-counter{gap:8px;font-weight:500}
-#drill-card .part-badge{border-radius:6px;background:var(--surface);font-weight:500}
-#drill-card .fix-btn{min-height:40px;padding:0 10px;border-radius:8px;background:transparent;font-weight:500}
-#drill-card .fix-btn:hover{background:var(--surface)}
-#drill-card .q-sentence{font-size:clamp(26px,2.5vw,32px);line-height:1.55;max-width:38ch;margin:28px 0 20px;letter-spacing:-.015em;overflow-wrap:break-word}
-#drill-card .blank{min-width:3.8ch;padding:0 .12em}
-#drill-card .drill-cue{margin-bottom:22px}
-#drill-card .verb-cue{margin:0;padding:2px 8px;border-radius:6px;background:var(--surface);font-size:14px;font-weight:500}
-#drill-card .answer-row{flex-wrap:nowrap;gap:10px}
-#drill-card .answer-row input{height:52px;background:var(--bg);border-color:var(--line);transition:border-color .15s,box-shadow .15s}
-#drill-card .answer-row input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-#drill-card .answer-row .primary-btn{width:auto;height:52px;flex:none;padding:0 24px}
-#drill-card .primary-btn{transition:background .15s,transform .15s}
-#drill-card .primary-btn:active{transform:scale(.96)}
-#drill-card .nav-row{margin-top:22px;justify-content:space-between}
-#drill-card #skip-btn,#drill-card #next-btn{margin-left:auto}
-#drill-card .link-btn{font-weight:500}
-#view-drill .aside{padding-top:12px}
-#view-drill .aside-card{background:transparent;padding:16px 0;border-radius:0;color:var(--fg-2)}
-#view-drill .aside-card h4{font-size:14px;letter-spacing:0;text-transform:none;color:var(--fg);margin-bottom:10px}
-#view-drill .aside-card p{font-size:15px;line-height:1.6}
-#view-drill #rule-btn{min-height:40px;background:var(--surface);border-radius:8px;font-weight:500}
-#view-drill .q-strip{display:block;background:transparent;border-radius:0;padding:20px 0 0;margin:0}
-#view-drill .q-strip>span{display:block;font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;margin-bottom:8px}
-#view-drill .dots{flex-wrap:nowrap;overflow-x:auto;gap:4px;padding:3px 2px 8px;scrollbar-width:thin}
-#view-drill .dot-q{width:40px;height:40px;flex:none;background:transparent;font-weight:500;border-radius:10px}
-#view-drill .dot-q:hover{background:var(--surface)}
-#view-drill .dot-q.done-good{color:var(--practice-ok);background:var(--practice-ok-soft)}
-#view-drill .dot-q.done-bad{color:var(--practice-error);background:var(--practice-error-soft)}
-#view-drill .dot-q.current{outline:none;background:var(--accent);color:var(--accent-fg)}
-#drill-card .feedback{margin-top:28px;padding:22px 24px;border-radius:16px}
-#drill-card .feedback.good{background:var(--practice-ok-soft)}
-#drill-card .feedback.bad{background:var(--practice-error-soft)}
-#drill-card .feedback.good .verdict{color:var(--practice-ok)}
-#drill-card .feedback.bad .verdict,#drill-card .feedback-attempt s{color:var(--practice-error)}
-#drill-card .feedback .verdict{font-size:17px;font-weight:600;gap:9px;margin-bottom:18px}
-#drill-card .feedback-attempt{margin-bottom:16px;font-size:15px}
-#drill-card .feedback-label{margin-bottom:6px}
-#drill-card .feedback .full{font-size:21px;line-height:1.55;overflow-wrap:anywhere}
-#drill-card .feedback .full b{color:inherit;font-weight:600}
-#drill-card .feedback .why{font-size:15px;line-height:1.65;color:var(--fg-2)}
-#drill-card .feedback .why + .why{margin-top:8px}
-#drill-card .feedback .why b{color:var(--fg);font-weight:600}
-#drill-card .feedback-explanation{margin-top:20px;padding-top:16px}
-#drill-card .feedback-explanation h4{font-size:13px;font-weight:600;margin-bottom:8px}
-
-@media(max-width:980px){
-  #view-drill .drill-layout{grid-template-columns:minmax(0,1fr);gap:4px}
-  #view-drill .aside{padding-top:0}
-}
-@media(max-width:799px){.lesson-list{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:560px){
-  #view-drill{padding-top:18px}
-  #view-drill .section-heading{margin-bottom:20px;gap:8px}
-  #view-drill .section-heading h1{font-size:28px}
-  #drill-card{padding:20px;border-radius:20px}
-  #drill-card .q-counter{gap:6px;font-size:12px}
-  #drill-card .question-tools{gap:0}
-  #drill-card .fix-btn{padding:0 8px;font-size:12px}
-  #drill-card .q-sentence{font-size:24px;margin-top:22px}
-  #drill-card .answer-row{gap:8px}
-  #drill-card .answer-row .primary-btn{padding:0 18px}
-  #drill-card .feedback{padding:18px 16px;margin-top:22px;border-radius:14px}
-  #drill-card .feedback .full{font-size:19px}
   .intake .topic-footer{flex-wrap:wrap;gap:8px;padding:12px 14px}
   .intake .drop-card .topic-footer .seg{flex:1;min-width:210px}
   .lc-overview{gap:14px}
@@ -220,8 +146,6 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
   --fromt-selected:#30343B;--fromt-edge:rgba(237,244,250,.10);
   --sky-base:#1A283C;--sky-cyan:#244465;--sky-blue:#284F78;--sky-violet:#444A75;--sky-haze:#182739;
   --lesson-art-filter:drop-shadow(0 0 1px rgba(237,244,250,.7));--illustration-fill:#365277;
-  --practice-ok:#A3D8BA;--practice-ok-soft:#1B3026;
-  --practice-error:#F3ADA8;--practice-error-soft:#352324;
 }
 @media(prefers-color-scheme:dark){
   :root[data-variant="fromt"]:not([data-theme="light"]){
@@ -232,8 +156,6 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
     --fromt-selected:#30343B;--fromt-edge:rgba(237,244,250,.10);
     --sky-base:#1A283C;--sky-cyan:#244465;--sky-blue:#284F78;--sky-violet:#444A75;--sky-haze:#182739;
     --lesson-art-filter:drop-shadow(0 0 1px rgba(237,244,250,.7));--illustration-fill:#365277;
-    --practice-ok:#A3D8BA;--practice-ok-soft:#1B3026;
-    --practice-error:#F3ADA8;--practice-error-soft:#352324;
   }
 }
 :root[data-variant="fromt"][data-theme="dark"] .intake::before,:root[data-variant="fromt"][data-theme="dark"] .intake::after{display:none}
