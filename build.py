@@ -15,6 +15,8 @@ src = (ROOT / "src" / "homework.html").read_text(encoding="utf-8")
 # всё до первого <header — title, meta, шрифты, стили — уходит в <head>
 split = src.find("<header")
 head_part, body_part = (src[:split], src[split:]) if split > 0 else ("", src)
+# В собранной странице кодировка уже указана в HEAD.
+head_part = re.sub(r'^<meta charset="utf-8">\s*', "", head_part, count=1)
 
 HEAD = """<!doctype html>
 <html lang="en">

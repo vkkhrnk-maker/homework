@@ -17,6 +17,12 @@
 body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 </style>
 <title>English homework</title>
+<script>
+// Исходник не является страницей для просмотра: открываем готовую сборку рядом с ним.
+if (location.pathname.endsWith("/src/homework.html")) {
+  location.replace(new URL("../index.html", location.href).href);
+}
+</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,6 +61,7 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
   --lesson-ink:#C7DBFF; --lesson-ink-muted:rgba(199,219,255,.76); --brand-mark-filter:brightness(0) invert(1);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{min-height:100%}
 html{overflow-x:hidden}
 body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
