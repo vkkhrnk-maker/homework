@@ -790,27 +790,29 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 }
 
 :root[data-variant="fromt"][data-theme="dark"]{
-  --bg:#111922;--surface:#1A2635;--surface-2:#293B50;
+  --bg:#0D0E10;--surface:#191B1F;--surface-2:#24272C;
   --fg:#EDF4FA;--fg-2:rgba(237,244,250,.70);--fg-3:rgba(237,244,250,.44);
   --line:rgba(237,244,250,.10);--accent:#E2ECF5;--accent-hover:#FFFFFF;--accent-fg:#132132;--accent-soft:rgba(226,236,245,.10);
-  --fromt-panel:rgba(27,39,54,.9);--fromt-solid:#1B2736;--fromt-controls:rgba(28,44,62,.7);
-  --fromt-selected:#354A64;--fromt-edge:rgba(237,244,250,.10);
+  --fromt-panel:#17191D;--fromt-solid:#191B1F;--fromt-controls:#22252A;
+  --fromt-selected:#30343B;--fromt-edge:rgba(237,244,250,.10);
   --sky-base:#1A283C;--sky-cyan:#244465;--sky-blue:#284F78;--sky-violet:#444A75;--sky-haze:#182739;
   --lesson-art-filter:invert(1) hue-rotate(180deg);--illustration-fill:#365277;
 }
 @media(prefers-color-scheme:dark){
   :root[data-variant="fromt"]:not([data-theme="light"]){
-    --bg:#111922;--surface:#1A2635;--surface-2:#293B50;
+    --bg:#0D0E10;--surface:#191B1F;--surface-2:#24272C;
     --fg:#EDF4FA;--fg-2:rgba(237,244,250,.70);--fg-3:rgba(237,244,250,.44);
     --line:rgba(237,244,250,.10);--accent:#E2ECF5;--accent-hover:#FFFFFF;--accent-fg:#132132;--accent-soft:rgba(226,236,245,.10);
-    --fromt-panel:rgba(27,39,54,.9);--fromt-solid:#1B2736;--fromt-controls:rgba(28,44,62,.7);
-    --fromt-selected:#354A64;--fromt-edge:rgba(237,244,250,.10);
+    --fromt-panel:#17191D;--fromt-solid:#191B1F;--fromt-controls:#22252A;
+    --fromt-selected:#30343B;--fromt-edge:rgba(237,244,250,.10);
     --sky-base:#1A283C;--sky-cyan:#244465;--sky-blue:#284F78;--sky-violet:#444A75;--sky-haze:#182739;
     --lesson-art-filter:invert(1) hue-rotate(180deg);--illustration-fill:#365277;
   }
 }
+:root[data-variant="fromt"][data-theme="dark"] .intake::before,:root[data-variant="fromt"][data-theme="dark"] .intake::after{display:none}
 :root[data-theme="dark"] .intake{background:var(--bg)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .intake{background:var(--bg)}}
+@media(prefers-color-scheme:dark){:root[data-variant="fromt"]:not([data-theme="light"]) .intake::before,:root[data-variant="fromt"]:not([data-theme="light"]) .intake::after{display:none}
+:root:not([data-theme="light"]) .intake{background:var(--bg)}}
 
 </style>
 </head>
