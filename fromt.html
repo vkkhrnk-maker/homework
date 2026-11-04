@@ -146,10 +146,12 @@ body:not(.home) .app-footer{display:none}
 /* «как пользоваться» — пастельные карточки на верёвочке, как на preplab.ru: булавка сверху, лёгкий наклон, тёмный заголовок и цветной текст */
 .intake .how-list{position:relative;display:block;overflow:hidden;margin-top:0;width:100vw;max-width:none;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:6px 0 28px}
 /* плитки как на slush.app: квадраты сочных цветов без наклона, крупная иконка, подпись внизу; лента плывёт по кругу, при наведении стоит */
-.how-track{display:flex;width:max-content;animation:how-marquee 120s linear infinite}
-.intake .how-list:hover .how-track,.intake .how-list:focus-within .how-track{animation-play-state:paused}
-@keyframes how-marquee{to{transform:translateX(-50%)}}
-.intake .how-item{position:relative;flex:0 0 268px;height:268px;margin-right:20px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;text-align:left;gap:4px;
+.how-track{--how-cycle-width:1440px;display:flex;width:calc(var(--how-cycle-width) * 2);animation:how-marquee var(--how-duration,60s) linear infinite}
+.how-group{display:flex;flex:0 0 var(--how-cycle-width);width:var(--how-cycle-width)}
+@media (hover:hover) and (pointer:fine){.intake .how-list:hover .how-track{animation-play-state:paused}}
+.intake .how-list:focus-within .how-track{animation-play-state:paused}
+@keyframes how-marquee{to{transform:translateX(calc(-1 * var(--how-cycle-width)))}}
+.intake .how-item{position:relative;flex:0 0 268px;width:268px;min-width:268px;max-width:268px;height:268px;margin-right:20px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;text-align:left;gap:4px;
   padding:24px;border-radius:26px;color:var(--warm-ink);--ink:rgba(22,61,122,.76)}
 .intake .how-item{background:radial-gradient(ellipse at 100% 0%,rgba(255,224,198,.26),transparent 72%),linear-gradient(145deg,#FFFDFA,#FFF7EF)}
 .intake .how-item[data-c="3"],.intake .how-item[data-c="5"]{background:radial-gradient(ellipse at 0% 0%,rgba(255,244,229,.3),transparent 76%),linear-gradient(135deg,#FFDFC0 15%,#FFD1A6 64%,#FFC38D)}
@@ -431,6 +433,9 @@ body.home main{padding-top:0}
 .drill-layout,.report-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
 .card{background:var(--surface);border-radius:var(--r-l);padding:24px 22px;min-width:0}
 .q-counter{font-size:13px;font-weight:600;color:var(--fg-2);display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.question-tools{display:inline-flex;gap:4px;margin-left:auto}
+.drill-instruction{margin:6px 0 0;color:var(--fg-2);font-size:15px}
+.drill-cue{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px;color:var(--fg-2)}
 .part-badge{background:var(--bg);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;color:var(--fg-2)}
 .q-sentence{font-family:var(--read-font);font-size:23px;line-height:1.55;margin:14px 0 20px;max-width:min(100%,44ch)}
 .blank{display:inline-block;min-width:4.5ch;border-bottom:2px solid var(--accent);text-align:center;color:var(--accent);padding:0 .15em}
@@ -448,7 +453,14 @@ body.home main{padding-top:0}
 .feedback{margin-top:16px;border-radius:var(--r-m);padding:14px 16px;font-size:15px;line-height:1.6}
 .feedback.good{background:var(--accent-soft)}
 .feedback.bad{background:var(--danger-soft)}
-.feedback .verdict{display:block;font-weight:700;margin-bottom:4px}
+.feedback .verdict{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:12px}
+.feedback .verdict svg{flex:none}
+.feedback-attempt{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+.feedback-attempt span,.feedback-label{display:block;font-family:var(--font);font-size:12px;font-weight:600;color:var(--fg-2)}
+.feedback-attempt s{color:var(--danger);overflow-wrap:anywhere}
+.feedback-explanation{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.feedback-explanation h4{font-size:13px;font-weight:600;margin:0 0 6px}
+#drill-feedback:focus{outline:none}
 .feedback.good .verdict{color:var(--accent)}
 .feedback.bad .verdict{color:var(--danger)}
 .feedback .full{font-family:var(--read-font);font-size:17px;margin:0 0 6px}
@@ -661,6 +673,8 @@ body.home main{padding-top:0}
   --fromt-selected:rgba(255,255,255,.94);--fromt-edge:rgba(255,255,255,.64);
   --sky-base:#DCE8F4;--sky-cyan:#C8E4F4;--sky-blue:#9EC4EF;--sky-violet:#B8BFF0;--sky-haze:#F5F9FC;
   --lesson-art-filter:none;--illustration-fill:#BDD0EC;
+  --practice-ok:#23674E;--practice-ok-soft:#EAF5EF;
+  --practice-error:#A9403A;--practice-error-soft:#FBEFEE;
 }
 
 .primary-btn,.ghost-btn{border-radius:10px}
@@ -750,7 +764,8 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 .intake .how-item .ico path[opacity]{fill:var(--illustration-fill);opacity:1}
 .lesson-card{background:var(--fromt-solid);border-radius:18px;box-shadow:none}
 .lesson-card:hover{box-shadow:0 8px 24px rgba(27,49,74,.06)}
-.lesson-list{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.intake .drop-card,#lesson-list,#vocab-box{max-width:none}
+.lesson-list{grid-template-columns:repeat(2,minmax(0,1fr))}
 .lesson-card{padding:24px;gap:10px;min-height:280px}
 .lc-overview{display:flex;align-items:center;gap:18px}
 .lc-overview.has-art{min-height:132px}
@@ -775,7 +790,78 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 .lc-step.done b,.lc-step.done i{color:inherit}
 .lc-step.todo{background:color-mix(in srgb,var(--surface) 55%,transparent);color:var(--fg-3);opacity:1}
 
+/* Тренажёр: белое задание, спокойные подсказки, результат отдельным блоком. */
+#view-drill{padding-top:24px}
+#view-drill .section-heading{align-items:center;margin:0 0 28px}
+#view-drill .section-heading h1{font-size:32px;line-height:1.2;margin-top:8px}
+#view-drill .eyebrow{font-size:13px;font-weight:500;letter-spacing:0;text-transform:none}
+#view-drill .drill-layout{grid-template-columns:minmax(0,1fr) 252px;gap:36px}
+.drill-workspace{min-width:0}
+#drill-card{background:var(--fromt-solid);padding:32px;border-radius:22px}
+#drill-card .q-counter{gap:8px;font-weight:500}
+#drill-card .part-badge{border-radius:6px;background:var(--surface);font-weight:500}
+#drill-card .fix-btn{min-height:40px;padding:0 10px;border-radius:8px;background:transparent;font-weight:500}
+#drill-card .fix-btn:hover{background:var(--surface)}
+#drill-card .q-sentence{font-size:clamp(26px,2.5vw,32px);line-height:1.55;max-width:38ch;margin:28px 0 20px;letter-spacing:-.015em;overflow-wrap:break-word}
+#drill-card .blank{min-width:3.8ch;padding:0 .12em}
+#drill-card .drill-cue{margin-bottom:22px}
+#drill-card .verb-cue{margin:0;padding:2px 8px;border-radius:6px;background:var(--surface);font-size:14px;font-weight:500}
+#drill-card .answer-row{flex-wrap:nowrap;gap:10px}
+#drill-card .answer-row input{height:52px;background:var(--bg);border-color:var(--line);transition:border-color .15s,box-shadow .15s}
+#drill-card .answer-row input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+#drill-card .answer-row .primary-btn{width:auto;height:52px;flex:none;padding:0 24px}
+#drill-card .primary-btn{transition:background .15s,transform .15s}
+#drill-card .primary-btn:active{transform:scale(.96)}
+#drill-card .nav-row{margin-top:22px;justify-content:space-between}
+#drill-card #skip-btn,#drill-card #next-btn{margin-left:auto}
+#drill-card .link-btn{font-weight:500}
+#view-drill .aside{padding-top:12px}
+#view-drill .aside-card{background:transparent;padding:20px;border:1px solid var(--line);border-radius:16px;color:var(--fg-2)}
+#view-drill .aside-card h4{font-size:14px;letter-spacing:0;text-transform:none;color:var(--fg);margin-bottom:10px}
+#view-drill .aside-card p{font-size:15px;line-height:1.6}
+#view-drill #rule-btn{min-height:40px;background:var(--surface);border-radius:8px;font-weight:500}
+#view-drill .q-strip{display:block;background:transparent;border-radius:0;padding:20px 0 0;margin:0}
+#view-drill .q-strip>span{display:block;font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;margin-bottom:8px}
+#view-drill .dots{flex-wrap:nowrap;overflow-x:auto;gap:4px;padding:3px 2px 8px;scrollbar-width:thin}
+#view-drill .dot-q{width:40px;height:40px;flex:none;background:transparent;font-weight:500;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line)}
+#view-drill .dot-q:hover{background:var(--surface)}
+#view-drill .dot-q.done-good{color:var(--practice-ok);background:var(--practice-ok-soft)}
+#view-drill .dot-q.done-bad{color:var(--practice-error);background:var(--practice-error-soft)}
+#view-drill .dot-q.current{outline:none;background:var(--accent);color:var(--accent-fg);box-shadow:none}
+#drill-card .feedback{margin-top:28px;padding:22px 24px;border-radius:16px}
+#drill-card .feedback.good{background:var(--practice-ok-soft)}
+#drill-card .feedback.bad{background:var(--practice-error-soft)}
+#drill-card .feedback.good .verdict{color:var(--practice-ok)}
+#drill-card .feedback.bad .verdict,#drill-card .feedback-attempt s{color:var(--practice-error)}
+#drill-card .feedback .verdict{font-size:17px;font-weight:600;gap:9px;margin-bottom:18px}
+#drill-card .feedback-attempt{margin-bottom:16px;font-size:15px}
+#drill-card .feedback-label{margin-bottom:6px}
+#drill-card .feedback .full{font-size:21px;line-height:1.55;overflow-wrap:anywhere}
+#drill-card .feedback .full b{color:inherit;font-weight:600}
+#drill-card .feedback .why{font-size:15px;line-height:1.65;color:var(--fg-2)}
+#drill-card .feedback .why + .why{margin-top:8px}
+#drill-card .feedback .why b{color:var(--fg);font-weight:600}
+#drill-card .feedback-explanation{margin-top:20px;padding-top:16px}
+#drill-card .feedback-explanation h4{font-size:13px;font-weight:600;margin-bottom:8px}
+
+@media(max-width:980px){
+  #view-drill .drill-layout{grid-template-columns:minmax(0,1fr);gap:4px}
+  #view-drill .aside{padding-top:0}
+}
+@media(max-width:799px){.lesson-list{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:560px){
+  #view-drill{padding-top:18px}
+  #view-drill .section-heading{margin-bottom:20px;gap:8px}
+  #view-drill .section-heading h1{font-size:28px}
+  #drill-card{padding:20px;border-radius:20px}
+  #drill-card .q-counter{gap:6px;font-size:12px}
+  #drill-card .question-tools{gap:0}
+  #drill-card .fix-btn{padding:0 8px;font-size:12px}
+  #drill-card .q-sentence{font-size:24px;margin-top:22px}
+  #drill-card .answer-row{gap:8px}
+  #drill-card .answer-row .primary-btn{padding:0 18px}
+  #drill-card .feedback{padding:18px 16px;margin-top:22px;border-radius:14px}
+  #drill-card .feedback .full{font-size:19px}
   .intake .topic-footer{flex-wrap:wrap;gap:8px;padding:12px 14px}
   .intake .drop-card .topic-footer .seg{flex:1;min-width:210px}
   .lc-overview{gap:14px}
@@ -797,6 +883,8 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
   --fromt-selected:#30343B;--fromt-edge:rgba(237,244,250,.10);
   --sky-base:#1A283C;--sky-cyan:#244465;--sky-blue:#284F78;--sky-violet:#444A75;--sky-haze:#182739;
   --lesson-art-filter:drop-shadow(0 0 1px rgba(237,244,250,.7));--illustration-fill:#365277;
+  --practice-ok:#A3D8BA;--practice-ok-soft:#1B3026;
+  --practice-error:#F3ADA8;--practice-error-soft:#352324;
 }
 @media(prefers-color-scheme:dark){
   :root[data-variant="fromt"]:not([data-theme="light"]){
@@ -807,6 +895,8 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
     --fromt-selected:#30343B;--fromt-edge:rgba(237,244,250,.10);
     --sky-base:#1A283C;--sky-cyan:#244465;--sky-blue:#284F78;--sky-violet:#444A75;--sky-haze:#182739;
     --lesson-art-filter:drop-shadow(0 0 1px rgba(237,244,250,.7));--illustration-fill:#365277;
+    --practice-ok:#A3D8BA;--practice-ok-soft:#1B3026;
+    --practice-error:#F3ADA8;--practice-error-soft:#352324;
   }
 }
 :root[data-variant="fromt"][data-theme="dark"] .intake::before,:root[data-variant="fromt"][data-theme="dark"] .intake::after{display:none}
@@ -923,12 +1013,14 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
   <!-- ===== DRILL ===== -->
   <section id="view-drill" hidden>
     <div class="section-heading">
-      <div><div class="eyebrow" id="drill-eyebrow"></div><h1 data-ui="drillTitle"></h1></div>
+      <div><div class="eyebrow" id="drill-eyebrow"></div><h1 data-ui="drillTitle"></h1><p class="drill-instruction" data-ui="drillInstruction"></p></div>
       <span class="score-pill" id="drill-score">0 / 0</span>
     </div>
-    <div class="q-strip"><span data-ui="questionsLabel"></span><div class="dots" id="drill-dots"></div></div>
     <div class="drill-layout">
-      <div><div class="card" id="drill-card"></div></div>
+      <div class="drill-workspace">
+        <div class="card" id="drill-card"></div>
+        <div class="q-strip"><span data-ui="questionsLabel"></span><div class="dots" id="drill-dots"></div></div>
+      </div>
       <aside class="aside">
         <div class="aside-card">
           <h4 data-ui="hintLabel"></h4>
@@ -1318,6 +1410,12 @@ const UI = {
   toDrill:      { ru: "Перейти к тренажёру →", en: "Go to practice →" },
 
   drillTitle:   { ru: "Тренажёр", en: "Practice" },
+  drillInstruction: { ru: "Заполните пропуск подходящим словом или формой", en: "Fill the gap with the right word or form" },
+  drillScore:   { ru: (ok, done) => `Верно: ${ok} из ${done}`, en: (ok, done) => `${ok} of ${done} correct` },
+  answerLabel:  { ru: "Ваш ответ", en: "Your answer" },
+  verbLabel:    { ru: "Глагол", en: "Verb" },
+  correctSentence: { ru: "Правильное предложение", en: "Correct sentence" },
+  explanationLabel: { ru: "Почему так", en: "Why this works" },
   hintLabel:    { ru: "Подсказка", en: "Hint" },
   formsLabel:   { ru: "Формы будущего", en: "Future forms" },
   questionsLabel:{ ru: "Вопросы", en: "Questions" },
@@ -3634,6 +3732,34 @@ function matchLabels(l) {
   return { tile: t("tileMatch"), group: t("groupMatch") };
 }
 /* ============ язык ============ */
+let howResizeObserver;
+function renderHowMarquee(howSet) {
+  howResizeObserver?.disconnect();
+  const list = $("#how-list");
+  list.innerHTML = `<div class="how-track"><div class="how-group">${howSet(false)}</div><div class="how-group" aria-hidden="true">${howSet(true)}</div></div>`;
+  const track = list.firstElementChild, group = track.firstElementChild, copy = track.lastElementChild;
+  let lastWidth = 0;
+  const fit = () => {
+    const width = list.clientWidth;
+    if (!width || width === lastWidth) return;
+    lastWidth = width;
+    group.innerHTML = howSet(false);
+    // WebKit может растянуть max-content flex-группу шире её карточек.
+    // Считаем период по самим карточкам, без размеров анимированного контейнера.
+    const cards = [...group.children];
+    const setWidth = cards.reduce((sum, card) => sum + card.offsetWidth + (parseFloat(getComputedStyle(card).marginRight) || 0), 0);
+    if (!setWidth) { lastWidth = 0; return; }
+    const repeats = Math.max(1, Math.ceil((width + cards[0].offsetWidth) / setWidth));
+    group.innerHTML += howSet(true).repeat(repeats - 1);
+    copy.innerHTML = group.innerHTML;
+    const cycleWidth = setWidth * repeats;
+    track.style.setProperty("--how-cycle-width", `${cycleWidth}px`);
+    track.style.setProperty("--how-duration", `${cycleWidth / 24}s`);
+  };
+  howResizeObserver = new ResizeObserver(fit);
+  howResizeObserver.observe(list);
+  fit();
+}
 function applyLang() {
   document.documentElement.lang = S.lang;
   document.title = S.lang === "en" ? "English homework" : "Домашка по английскому";
@@ -3662,9 +3788,8 @@ function applyLang() {
   ];
   const howCard = (n, dup) => `<div class="how-item" data-c="${n}"${dup ? ' aria-hidden="true"' : ""}><svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">${HOW_ICONS[n - 1]}</svg>
     <strong>${t("how"+n+"t")}</strong><p>${t("how"+n+"p")}</p></div>`;
-  /* четыре копии набора: половина ленты (две копии, ~2900px) шире любого экрана — круг бесшовный без пустого места справа */
   const howSet = dup => [2,3,4,5,6].map(n => howCard(n, dup)).join("");   // без «Вставьте домашку»: поле ввода прямо над лентой
-  $("#how-list").innerHTML = `<div class="how-track">${howSet(false)}${howSet(true)}${howSet(true)}${howSet(true)}</div>`;
+  renderHowMarquee(howSet);
   renderLessonList();
   renderTabs();
   if (S.lessonId) renderTheory();
@@ -4408,8 +4533,9 @@ function drillStats() {
 function renderDrill() {
   const l = lesson(), D = l.drill, items = D.items, p = prog().drill;
   const st = drillStats();
-  $("#drill-eyebrow").textContent = `${t("stepN", lessonSteps(l).indexOf("drill") + 1)} · ${L(D.eyebrow)}`;
-  $("#drill-score").textContent = `${st.ok} / ${st.done}`;
+  $("#drill-eyebrow").textContent = l.title;
+  $("#drill-score").textContent = t("drillScore", st.ok, st.done);
+  $("#drill-score").hidden = st.done === 0;
   renderDots("#drill-dots", items.length, p.i, p.answered, i => { p.i = i; save(); renderDrill(); });
 
   $("#forms-card").hidden = true;   // шпаргалка больше не висит постоянно: правило открывается кнопкой под подсказкой
@@ -4420,22 +4546,23 @@ function renderDrill() {
   $("#hint-text").innerHTML = TR(q.hint);
   renderRuleBox(i, q);
 
-  const cue = q.verb ? `<span class="verb-cue">${q.verb}</span>` : "";
+  const cue = q.verb ? `<div class="drill-cue">${t("verbLabel")} <span class="verb-cue">${q.verb}</span></div>` : "";
   $("#drill-card").innerHTML = `
     <div class="q-counter">
       <span>${t("qCounter", i+1, items.length)}</span>
       ${q.part ? `<span class="part-badge">${t("partBadge", q.part)}</span>` : ""}
-      <button class="fix-btn" id="drill-ask">${t("askBtn")}</button>
-      <button class="fix-btn" id="drill-fix">${t("fixBtn")}</button>
+      <span class="question-tools"><button class="fix-btn" id="drill-ask">${t("askBtn")}</button>
+      <button class="fix-btn" id="drill-fix">${t("fixBtn")}</button></span>
     </div>
-    <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? q.a[0] : "___") + stripTags(q.s[1]))}">${q.s[0]}<span class="blank ${state ? (state === "bad" ? "miss" : "") : "empty"}">${state ? (state === "bad" ? (escH(p.lastInput?.[i] || "") || "…") : q.a[0]) : "&nbsp;&nbsp;&nbsp;&nbsp;"}</span>${cue}${q.s[1]}</p>
+    <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? q.a[0] : "___") + stripTags(q.s[1]))}">${q.s[0]}<span class="blank empty">&nbsp;&nbsp;&nbsp;&nbsp;</span>${q.s[1]}</p>
+    ${cue}
     ${state ? "" : `
       ${D.chips ? `<div class="chips">${D.chips.map(c => `<button class="chip" data-chip="${c}" aria-pressed="false">${c}</button>`).join("")}</div>` : ""}
       <div class="answer-row">
-        <input id="drill-input" placeholder="${D.chips ? t("inputPh") : t("inputPhForm")}" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <input id="drill-input" aria-label="${t("answerLabel")}" placeholder="${D.chips ? t("inputPh") : t("inputPhForm")}" autocomplete="off" autocapitalize="off" spellcheck="false">
         <button class="primary-btn" id="check-btn">${t("checkBtn")}</button>
       </div>`}
-    <div id="drill-feedback"></div>
+    <div id="drill-feedback" role="status" aria-live="polite" tabindex="-1"></div>
     <div class="nav-row">
       ${drillStep(p, items, i, -1) !== i ? `<button class="link-btn" id="prev-btn">${t("backBtn")}</button>` : ""}
       ${state ? `<button class="primary-btn" id="next-btn">${drillStep(p, items, i, 1) >= items.length ? t("resultsBtn") : t("nextBtn")}</button>` : `<button class="link-btn" id="skip-btn">${t("skipBtn")}</button>`}
@@ -4493,23 +4620,28 @@ function check(i) {
   p.answered[i] = best.includes(v) ? "good" : also.includes(v) || isTypo(v, best) ? "also" : "bad";
   p.lastInput[i] = raw;
   save(); renderDrill(); updateProgress();
+  $("#drill-feedback")?.focus({ preventScroll: true });
 }
 function showFeedback(i, raw) {
   const q = lesson().drill.items[i], state = prog().drill.answered[i];
   const full = `${q.s[0]}<b>${q.a[0]}</b>${q.s[1]}`;
   const typo = state === "also" && !(q.also || []).map(norm).includes(norm(raw));
   const verdict = state === "good" ? t("verdictGood") : typo ? t("verdictTypo") : state === "also" ? t("verdictAlso") : t("verdictBad");
-  const lead = typo ? t("typoLead", raw, q.a[0]) : state === "also" ? t("alsoLead", raw, q.a[0]) : state === "bad" ? t("badLead", raw) : "";
+  const lead = typo ? t("typoLead", escH(raw), q.a[0]) : state === "also" ? t("alsoLead", escH(raw), q.a[0]) : "";
   const alsoLine = q.also ? t("alsoLine", q.also.join(", ")) : "";
   $("#drill-feedback").innerHTML = `
     <div class="feedback ${state === "bad" ? "bad" : "good"}">
-      <span class="verdict">${verdict}</span>
-      <p class="full">${state === "bad" ? `<small class="correct-lbl">${t("correctIs")}</small> ` : ""}${full}</p>
+      <span class="verdict"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/>${state === "bad" ? '<path d="M12 7v6m0 3v1"/>' : '<path d="m8 12 2.5 2.5L16 9"/>'}</svg>${verdict}</span>
+      ${state === "bad" ? `<p class="feedback-attempt"><span>${t("answerLabel")}</span><s>${escH(raw)}</s></p>` : ""}
+      <span class="feedback-label">${t("correctSentence")}</span>
+      <p class="full">${full}</p>
+      <div class="feedback-explanation"><h4>${t("explanationLabel")}</h4>
       ${lead ? `<p class="why">${lead}</p>` : ""}
       ${state === "bad" ? `<p class="why wrong-why" id="why-wrong" hidden></p>` : ""}
       ${q.trap && norm(raw || "") !== norm(q.trap.word) ? `<p class="why trap-why"><b>${t("trapLead", escH(q.trap.word))}</b> ${TR(q.trap.why)}</p>` : ""}
       <p class="why">${TR(q.why)}</p>
       ${alsoLine ? `<p class="also">${alsoLine}</p>` : ""}
+      </div>
     </div>`;
   if (state === "bad") {
     const el = $("#why-wrong");
@@ -5331,9 +5463,18 @@ function renderDots(sel, n, cur, answered, onClick) {
   host.innerHTML = Array.from({length: n}, (_, i) => {
     const st = answered[i];
     const cls = st === "good" || st === "also" || st === true ? "done-good" : st === "bad" || st === false ? "done-bad" : "";
-    return `<button class="dot-q ${cls} ${i === cur ? "current" : ""}" data-i="${i}">${i+1}</button>`;
+    return `<button class="dot-q ${cls} ${i === cur ? "current" : ""}" data-i="${i}" aria-current="${i === cur ? "step" : "false"}" aria-label="${t("qCounter", i + 1, n)}${cls ? `, ${t(cls === "done-good" ? "verdictGood" : "verdictBad")}` : ""}">${i+1}</button>`;
   }).join("");
   host.querySelectorAll(".dot-q").forEach(b => b.addEventListener("click", () => onClick(+b.dataset.i)));
+  if (sel === "#drill-dots") requestAnimationFrame(() => {
+    const current = host.querySelector(".current");
+    if (!current) return;
+    const area = host.getBoundingClientRect(), item = current.getBoundingClientRect();
+    if (item.left < area.left || item.right > area.right) {
+      // Прокручиваем только номера: само задание остаётся на месте по вертикали.
+      host.scrollTo({ left: host.scrollLeft + item.left - area.left - (host.clientWidth - item.width) / 2, behavior: "instant" });
+    }
+  });
 }
 
 /* ============ старт ============ */
