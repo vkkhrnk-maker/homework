@@ -78,19 +78,24 @@ html = HEAD + head_part.strip() + "\n</head>\n<body>\n" + body_part.strip() + "\
 soft_css = (ROOT / "src" / "soft-theme.css").read_text(encoding="utf-8")
 soft_html = html.replace('<html lang="en">', '<html lang="en" data-variant="soft">', 1)
 soft_html = soft_html.replace("</head>", '<style id="soft-theme">\n' + soft_css + "\n</style>\n</head>", 1)
-(ROOT / "soft.html").write_text(soft_html, encoding="utf-8")
-(ROOT / "index.html").write_text(soft_html, encoding="utf-8")
 # Голубой вариант остаётся доступен для сравнения по отдельной ссылке.
 blue_html = html.replace('<html lang="en">', '<html lang="en" data-variant="blue">', 1)
-(ROOT / "blue.html").write_text(blue_html, encoding="utf-8")
 # Холодный градиент и компактные контролы, вдохновлённые fromt.app.
 fromt_css = (ROOT / "src" / "fromt-theme.css").read_text(encoding="utf-8")
 fromt_html = html.replace('<html lang="en">', '<html lang="en" data-variant="fromt">', 1)
 fromt_html = fromt_html.replace("</head>", '<style id="fromt-theme">\n' + fromt_css + "\n</style>\n</head>", 1)
-(ROOT / "fromt.html").write_text(fromt_html, encoding="utf-8")
+pages = {
+    "index.html": fromt_html,
+    "soft.html": soft_html,
+    "blue.html": blue_html,
+    "fromt.html": fromt_html,
+}
+for filename, document in pages.items():
+    (ROOT / filename).write_text(document, encoding="utf-8")
 
 sw_path = ROOT / "sw.js"
 sw = sw_path.read_text(encoding="utf-8")
-version = hashlib.sha1((blue_html + soft_html + fromt_html).encode()).hexdigest()[:10]
+# Учитываем основную страницу: выбор другого варианта тоже обновляет офлайн-кэш.
+version = hashlib.sha1("".join(filename + "\n" + document for filename, document in pages.items()).encode()).hexdigest()[:10]
 sw_path.write_text(re.sub(r"const VERSION = '[^']*';", f"const VERSION = '{version}';", sw), encoding="utf-8")
-print(f"Светлая главная, soft.html, blue.html и fromt.html собраны, версия кэша {version}")
+print(f"Главная Fromt, soft.html, blue.html и fromt.html собраны, версия кэша {version}")
