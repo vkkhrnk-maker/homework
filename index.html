@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-variant="soft">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -604,6 +604,136 @@ body.home main{padding-top:0}
   .prob-table td,.sum-table td{display:block;padding:2px 0;border-bottom:0;white-space:normal}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<style id="soft-theme">
+/* Отдельный вариант: жемчужные поверхности, чёрные акценты, цветное свечение. */
+:root[data-variant="soft"]{
+  --bg:#F2F2F5; --surface:#E9EAF0; --surface-2:#E0E2EA;
+  --fg:#202127; --fg-2:rgba(32,33,39,.64); --fg-3:rgba(32,33,39,.44);
+  --line:rgba(32,33,39,.08); --accent:#202127; --accent-hover:#40414C;
+  --accent-fg:#FFFFFF; --accent-soft:rgba(32,33,39,.07);
+  --lesson-ink:var(--fg); --lesson-ink-muted:var(--fg-2); --warm-ink:var(--fg);
+  --shadow:0 12px 36px rgba(32,33,39,.08);
+  --soft-panel:rgba(255,255,255,.7); --soft-solid:#FCFCFE;
+  --soft-control:rgba(228,229,236,.68); --soft-edge:rgba(255,255,255,.86);
+  --soft-lavender:rgba(177,130,236,.34); --soft-peach:rgba(248,151,117,.34);
+  --soft-sky:rgba(83,176,241,.30); --soft-mint:rgba(119,215,174,.28);
+}
+
+body.home header.top,body.home::before{color:var(--fg)}
+body.home header.top .brand i img{filter:var(--brand-mark-filter)}
+body.home header.top .ibtn{background:var(--soft-panel);color:var(--fg);box-shadow:0 3px 12px rgba(32,33,39,.05)}
+
+.intake{
+  --glass:var(--soft-panel);
+  position:relative;isolation:isolate;overflow:clip;background:var(--bg);
+}
+.intake::before{
+  content:"";position:absolute;z-index:-1;pointer-events:none;inset:-8% -10% 0;
+  opacity:.6;filter:blur(88px);
+  -webkit-mask-image:linear-gradient(to bottom,#000 65%,transparent 100%);mask-image:linear-gradient(to bottom,#000 65%,transparent 100%);
+  background:
+    radial-gradient(ellipse 100% 80% at 16% 34%,var(--soft-lavender),transparent 80%),
+    radial-gradient(ellipse 90% 74% at 78% 40%,var(--soft-peach),transparent 82%),
+    radial-gradient(ellipse 110% 90% at 54% 60%,var(--soft-sky),transparent 82%);
+}
+.intake-copy,.intake-copy h1{color:var(--fg)}
+.intake-copy .eyebrow{color:var(--fg-2);background:var(--soft-panel);border-color:var(--soft-edge)}
+.intake-copy .lede{color:var(--fg-2)}
+.intake .drop-card .seg{
+  background:var(--soft-control);border:1px solid var(--soft-edge);
+  box-shadow:inset 0 1px 0 var(--soft-edge),0 5px 18px rgba(32,33,39,.035);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+}
+.intake .drop-card .seg button{color:var(--fg-2)}
+.intake .drop-card .seg button[aria-pressed="true"]{
+  background:var(--fg);color:var(--bg);box-shadow:0 3px 10px rgba(32,33,39,.16);
+}
+.intake .drop-card textarea{
+  background:var(--soft-panel);color:var(--fg);border-color:var(--soft-edge);
+  box-shadow:inset 0 1px 0 var(--soft-edge),0 16px 40px rgba(42,37,67,.045);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+}
+.intake .drop-card textarea::placeholder{color:var(--fg-2)}
+.intake .drop-card textarea:focus-visible{outline-color:var(--fg)}
+.intake .topic-composer{
+  overflow:hidden;border:1px solid var(--soft-edge);border-radius:24px;background:var(--soft-panel);
+  box-shadow:inset 0 1px 0 var(--soft-edge),0 16px 40px rgba(42,37,67,.045);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+}
+.intake .topic-composer:focus-within{outline:2px solid var(--fg);outline-offset:2px}
+.intake .drop-card .topic-composer textarea{
+  display:block;background:transparent;border:0;border-radius:0;box-shadow:none;
+  -webkit-backdrop-filter:none;backdrop-filter:none;resize:vertical;
+}
+.intake .drop-card .topic-composer textarea:focus-visible{outline:none}
+.intake .topic-footer{display:flex;align-items:center;gap:16px;padding:12px 18px;border-top:1px solid var(--line)}
+.intake .topic-footer .sh-sub{margin:0;white-space:nowrap}
+.intake .drop-card .topic-footer .seg{width:240px;max-width:100%;margin-left:auto;background:var(--accent-soft);border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.intake .topic-box .topic-ideas{margin-top:8px}
+@media(max-width:560px){
+  .intake .topic-footer{flex-wrap:wrap;gap:8px;padding:12px 14px}
+  .intake .drop-card .topic-footer .seg{flex:1;min-width:210px}
+}
+.intake .drop-card .sh-sub,.intake .drop-card .hint,.intake .drop-card .parse-status,.intake .drop-card .link-btn{color:var(--fg-2)}
+.intake .drop-card .hint.err{color:var(--danger);background:var(--danger-soft)}
+.intake .drop-card .topic-ideas button{background:var(--soft-panel);color:var(--fg-2);border-color:var(--soft-edge)}
+.intake .drop-card .topic-ideas button:hover{background:var(--soft-solid);color:var(--fg)}
+.intake .drop-card .primary-btn{background:var(--fg);color:var(--bg);box-shadow:0 8px 20px rgba(32,33,39,.13)}
+.intake .drop-card .primary-btn:hover{filter:brightness(1.18)}
+
+.intake .how-item{--ink:rgba(255,255,255,.72);color:#F6F6FA}
+.intake .how-item,.intake .how-item[data-c="3"],.intake .how-item[data-c="5"]{
+  background:#202127;box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+}
+.intake .how-item .ico{
+  width:48px;height:48px;color:#F6F6FA;padding:0;border-radius:0;background:none;box-shadow:none;
+}
+
+.lesson-card{
+  background:var(--soft-solid);
+  box-shadow:inset 0 1px 0 var(--soft-edge),0 8px 28px rgba(32,33,39,.035);
+}
+.lesson-card:hover{box-shadow:inset 0 1px 0 var(--soft-edge),0 12px 30px rgba(32,33,39,.08)}
+.lc-eyebrow{color:var(--fg-2)}
+.lc-step{background:var(--soft-panel);box-shadow:inset 0 1px 0 var(--soft-edge)}
+.lc-step.cur{background:var(--soft-solid);color:var(--fg);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fg) 28%,transparent)}
+.lc-step.todo{opacity:.72}
+.lc-step.done{background:var(--fg);color:var(--bg);box-shadow:none}
+.lc-step.done b,.lc-step.done i{color:inherit}
+
+:root[data-variant="soft"][data-theme="dark"]{
+  --bg:#191A20; --surface:#252630; --surface-2:#30313D;
+  --fg:#F6F6FA; --fg-2:rgba(246,246,250,.7); --fg-3:rgba(246,246,250,.46);
+  --accent:#F6F6FA; --accent-hover:#D9D9E2; --accent-fg:#191A20; --accent-soft:rgba(246,246,250,.10);
+  --line:rgba(246,246,250,.09); --soft-panel:rgba(43,44,54,.76); --soft-solid:#252630;
+  --soft-control:rgba(29,30,39,.66); --soft-edge:rgba(255,255,255,.09);
+  --soft-lavender:rgba(169,119,228,.2); --soft-peach:rgba(240,139,106,.18);
+  --soft-sky:rgba(73,163,226,.19); --soft-mint:rgba(106,206,166,.16);
+}
+@media (prefers-color-scheme:dark){
+  :root[data-variant="soft"]:not([data-theme="light"]){
+    --bg:#191A20; --surface:#252630; --surface-2:#30313D;
+    --fg:#F6F6FA; --fg-2:rgba(246,246,250,.7); --fg-3:rgba(246,246,250,.46);
+    --accent:#F6F6FA; --accent-hover:#D9D9E2; --accent-fg:#191A20; --accent-soft:rgba(246,246,250,.10);
+    --line:rgba(246,246,250,.09); --soft-panel:rgba(43,44,54,.76); --soft-solid:#252630;
+    --soft-control:rgba(29,30,39,.66); --soft-edge:rgba(255,255,255,.09);
+    --soft-lavender:rgba(169,119,228,.2); --soft-peach:rgba(240,139,106,.18);
+    --soft-sky:rgba(73,163,226,.19); --soft-mint:rgba(106,206,166,.16);
+  }
+}
+/* Перекрывает обе исходные тёмные обложки, сохраняя переменные текущей темы. */
+:root[data-theme="dark"] .intake{
+  --glass:var(--soft-panel);
+  background:var(--bg);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .intake{
+    --glass:var(--soft-panel);
+    background:var(--bg);
+  }
+}
+
 </style>
 </head>
 <body>

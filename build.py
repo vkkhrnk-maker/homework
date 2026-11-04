@@ -71,16 +71,19 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
 """
 
 html = HEAD + head_part.strip() + "\n</head>\n<body>\n" + body_part.strip() + "\n" + TAIL
-(ROOT / "index.html").write_text(html, encoding="utf-8")
 
 # Отдельная версия оформления на той же логике и тех же данных.
 soft_css = (ROOT / "src" / "soft-theme.css").read_text(encoding="utf-8")
 soft_html = html.replace('<html lang="en">', '<html lang="en" data-variant="soft">', 1)
 soft_html = soft_html.replace("</head>", '<style id="soft-theme">\n' + soft_css + "\n</style>\n</head>", 1)
 (ROOT / "soft.html").write_text(soft_html, encoding="utf-8")
+(ROOT / "index.html").write_text(soft_html, encoding="utf-8")
+# Голубой вариант остаётся доступен для сравнения по отдельной ссылке.
+blue_html = html.replace('<html lang="en">', '<html lang="en" data-variant="blue">', 1)
+(ROOT / "blue.html").write_text(blue_html, encoding="utf-8")
 
 sw_path = ROOT / "sw.js"
 sw = sw_path.read_text(encoding="utf-8")
-version = hashlib.sha1((html + soft_html).encode()).hexdigest()[:10]
+version = hashlib.sha1((blue_html + soft_html).encode()).hexdigest()[:10]
 sw_path.write_text(re.sub(r"const VERSION = '[^']*';", f"const VERSION = '{version}';", sw), encoding="utf-8")
-print(f"index.html и soft.html собраны, версия кэша {version}")
+print(f"Светлая главная, soft.html и blue.html собраны, версия кэша {version}")
