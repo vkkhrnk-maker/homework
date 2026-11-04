@@ -61,6 +61,11 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 }
 .intake .drop-card textarea::placeholder{color:var(--fg-2)}
 .intake .drop-card textarea:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.intake .drop-card .material-composer{border-color:var(--fromt-edge);border-radius:16px;background:var(--fromt-panel);box-shadow:0 1px 3px rgba(27,49,74,.035);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.intake .drop-card .material-composer:focus-within{outline:2px solid var(--accent);outline-offset:3px}
+.intake .attach-btn,.intake .material-file{background:var(--fromt-panel);color:var(--fg);box-shadow:0 1px 3px rgba(27,49,74,.035)}
+.intake .attach-btn:hover{background:var(--fromt-selected)}
+.intake .material-help,.intake .material-review,.intake .material-file-meta,.intake .material-remove{color:var(--fg-2)}
 .intake .drop-card .sh-sub,.intake .drop-card .hint,.intake .drop-card .parse-status,.intake .drop-card .link-btn{color:var(--fg-2)}
 .intake .drop-card .hint.err{color:var(--danger);background:var(--danger-soft);border-radius:8px}
 .intake .drop-card .primary-btn{
