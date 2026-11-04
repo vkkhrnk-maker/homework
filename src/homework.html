@@ -215,6 +215,9 @@ body.home main{padding-top:0}
   background:var(--surface);color:var(--lesson-ink);transition:transform .15s,box-shadow .15s}
 .lesson-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,60,140,.10)}
 .lc-eyebrow{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--lesson-ink)}
+.lc-overview{width:100%}
+.lc-copy{display:flex;flex-direction:column;gap:8px;min-width:0}
+.lc-art{display:none}
 .lesson-card h3{font-size:clamp(26px,2.4vw,32px);font-weight:600;letter-spacing:-.02em;line-height:1.1}
 .lc-sub{margin:0;color:var(--lesson-ink-muted);font-size:15px;line-height:1.4}
 .lc-steps{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
@@ -3162,6 +3165,13 @@ function applyLang() {
 $$(".lang-switch button").forEach(b => b.addEventListener("click", () => { S.lang = b.dataset.lang; save(); applyLang(); }));
 
 /* ============ список уроков ============ */
+const LESSON_ILLUSTRATIONS = {
+  "past-stories": "illustrations/past-stories-v1.png",
+  "modals": "illustrations/modals-v1.png",
+  "future": "illustrations/future-v1.png",
+  "culture-b1": "illustrations/culture-b1-v1.png",
+  "culture-c1": "illustrations/culture-c1-v1.png"
+};
 /* прогресс по шагам урока: теория — открывали или нет; остальное — сколько из скольких */
 function stepProgress(l) {
   const p = S.progress[l.id] || {}, names = { theory: "navTheory", drill: "navDrill", match: "navMatch", speak: "navSpeak" };
@@ -3175,14 +3185,19 @@ function stepProgress(l) {
 }
 function renderLessonList() {
   $("#lesson-list").dataset.label = t("lessonsLabel");
-  /* карточки как в референсе: подпись, крупный заголовок, о чём урок, внизу столбик шагов с прогрессом;
-     шаг, на котором остановились, — белая пилюля, пройденные с галочкой, не начатые бледные */
+  /* Компактный рисунок рядом с уровнем, заголовок на полную ширину и этапы с прогрессом.
+     Текущий этап выделен обводкой, пройденные с галочкой, ещё не начатые приглушены. */
   $("#lesson-list").innerHTML = LESSONS.map(l => {
-    const steps = stepProgress(l), cur = steps.find(s => !s.done);
+    const steps = stepProgress(l), cur = steps.find(s => !s.done), art = LESSON_ILLUSTRATIONS[l.id];
     return `<button class="lesson-card" data-lesson="${l.id}" data-step="${cur ? cur.key : "theory"}">
-      <div class="lc-eyebrow">${L(l.date)}</div>
-      <h3>${l.title}</h3>
-      ${l.theoryTitle ? `<p class="lc-sub">${EN(l.theoryTitle)}</p>` : ""}
+      <div class="lc-overview${art ? " has-art" : ""}">
+        ${art ? `<img class="lc-art" src="${art}" alt="" width="132" height="132" loading="lazy" decoding="async">` : ""}
+        <div class="lc-copy">
+          <div class="lc-eyebrow">${L(l.date)}</div>
+          <h3>${l.title}</h3>
+          ${l.theoryTitle ? `<p class="lc-sub">${EN(l.theoryTitle)}</p>` : ""}
+        </div>
+      </div>
       <div class="lc-steps">${steps.map(s => `<span class="lc-step ${s.done ? "done" : s === cur ? "cur" : s.n ? "part" : "todo"}">${s.label}${s.total ? ` <b>${s.n}/${s.total}</b>` : ""}${s.done ? ' <i aria-hidden="true">✓</i>' : ""}</span>`).join("")}</div>
     </button>`;
   }).join("");

@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "mode": "built-in image_gen",
+  "transparent_background": true,
+  "references": [
+    {
+      "name": "Notion classic black-and-white editorial illustrations",
+      "url": "https://www.notion.com/en-gb/about"
+    },
+    {
+      "name": "Notion illustration and storytelling process",
+      "url": "https://www.notion.com/blog/the-thinking-behind-our-latest-brand-campaign"
+    },
+    {
+      "name": "Uxcel compact learning-card composition",
+      "url": "https://mobbin.com/screens/54c0aa01-9380-4e13-bc41-01e46dba6812?utm_source=codex&utm_medium=ai-assistant&utm_source_platform=mcp"
+    }
+  ],
+  "composition": "Illustration on the left, 132x132 CSS pixels on desktop, 112x112 on mobile and 88x88 below 360px. Course level and title form a text column on the right. No redundant subtitle. Step chips wrap below into two rows.",
+  "images": [
+    {
+      "lesson_id": "past-stories",
+      "file": "past-stories-v1.png",
+      "prompt": "Use case: illustration-story. Asset type: a compact spot illustration for a lesson card in an English learning app. Create original black-and-white editorial line art with the clarity and wit of minimalist productivity-app illustrations. Confident slightly irregular hand-inked outlines, simple expressive adult characters, a few solid near-black shapes for hair or clothing, white interior fills, generous negative space. Near-black ink #1B2633 and white only. No colour, no grey shading, no gradients, no paper texture, no soft shadows. Friendly and quietly playful, not childish. A single very simple scene, readable when displayed at only 120 by 90 pixels. Compact horizontal composition within a square canvas, subject fills about 85 percent of width and 70 percent of height, even padding and all limbs fully inside the frame. Genuinely transparent background outside the character and props. No text, letters, numbers, logos, frames, badges or decorative sparkles. No busy setting or small background objects. Strong readable contour and clean transparent edges.\nSubject: One curious adult with short curly black hair and a loose striped top, seen from the waist up at a small open photo album, holding one oversized printed snapshot and looking at it with a warm remembering expression. Two simple large snapshot shapes in total. The photograph has only a minimal mountain outline, no fine details. Clear head, hands and album silhouette; a scene about remembering and telling a past story."
+    },
+    {
+      "lesson_id": "modals",
+      "file": "modals-v1.png",
+      "prompt": "Use case: illustration-story. Asset type: a compact spot illustration for a lesson card in an English learning app. Create original black-and-white editorial line art with the clarity and wit of minimalist productivity-app illustrations. Confident slightly irregular hand-inked outlines, simple expressive adult characters, a few solid near-black shapes for hair or clothing, white interior fills, generous negative space. Near-black ink #1B2633 and white only. No colour, no grey shading, no gradients, no paper texture, no soft shadows. Friendly and quietly playful, not childish. A single very simple scene, readable when displayed at only 120 by 90 pixels. Compact horizontal composition within a square canvas, subject fills about 85 percent of width and 70 percent of height, even padding and all limbs fully inside the frame. Genuinely transparent background outside the character and props. No text, letters, numbers, logos, frames, badges or decorative sparkles. No busy setting or small background objects. Strong readable contour and clean transparent edges.\nInput image role: style reference only. Match its confident contour weight, simplified adult character design, black-and-white balance and compact visual density. Create a NEW scene with the subject below, not the photo-album scene from the reference.\nSubject: One thoughtful adult, seen from the waist up, beside a very simple two-arrow signpost with blank signs pointing in different directions. The person has one open palm and a gently questioning raised eyebrow, deciding what they can, should or must do. Compact head, torso, hand and signpost only; signs contain absolutely no writing or symbols.",
+      "style_reference": "past-stories-v1.png"
+    },
+    {
+      "lesson_id": "future",
+      "file": "future-v1.png",
+      "prompt": "Use case: illustration-story. Asset type: a compact spot illustration for a lesson card in an English learning app. Create original black-and-white editorial line art with the clarity and wit of minimalist productivity-app illustrations. Confident slightly irregular hand-inked outlines, simple expressive adult characters, a few solid near-black shapes for hair or clothing, white interior fills, generous negative space. Near-black ink #1B2633 and white only. No colour, no grey shading, no gradients, no paper texture, no soft shadows. Friendly and quietly playful, not childish. A single very simple scene, readable when displayed at only 120 by 90 pixels. Compact horizontal composition within a square canvas, subject fills about 85 percent of width and 70 percent of height, even padding and all limbs fully inside the frame. Genuinely transparent background outside the character and props. No text, letters, numbers, logos, frames, badges or decorative sparkles. No busy setting or small background objects. Strong readable contour and clean transparent edges.\nInput image role: style reference only. Match its confident contour weight, simplified adult character design, black-and-white balance and compact visual density. Create a NEW scene with the subject below, not the photo-album scene from the reference.\nSubject: One optimistic adult with short curly black hair and a loose striped top, seen from the waist up, planning a future trip with a large unfolded map and a small suitcase beside them. One finger traces a simple curved route on the map. No labels or letters on the map. Compact scene about planning what comes next; the map and suitcase must remain clearly identifiable at a small size.",
+      "style_reference": "past-stories-v1.png"
+    },
+    {
+      "lesson_id": "culture-b1",
+      "file": "culture-b1-v1.png",
+      "prompt": "Use case: illustration-story. Asset type: a compact spot illustration for a lesson card in an English learning app. Create original black-and-white editorial line art with the clarity and wit of minimalist productivity-app illustrations. Confident slightly irregular hand-inked outlines, simple expressive adult characters, a few solid near-black shapes for hair or clothing, white interior fills, generous negative space. Near-black ink #1B2633 and white only. No colour, no grey shading, no gradients, no paper texture, no soft shadows. Friendly and quietly playful, not childish. A single very simple scene, readable when displayed at only 120 by 90 pixels. Compact horizontal composition within a square canvas, subject fills about 85 percent of width and 70 percent of height, even padding and all limbs fully inside the frame. Genuinely transparent background outside the character and props. No text, letters, numbers, logos, frames, badges or decorative sparkles. No busy setting or small background objects. Strong readable contour and clean transparent edges.\nInput image role: style reference only. Match its confident contour weight, simplified adult character design, black-and-white balance and compact visual density. Create a NEW scene with the subject below, not the photo-album scene from the reference.\nSubject: Two friendly adults with distinct simple hairstyles sharing bread and tea at a tiny round table, shown as a compact half-body scene. One person offers a small piece of bread to the other. Just two people, one simple teapot and bread on the table. A welcoming everyday scene about community and cultural traditions, with contemporary everyday clothing and no national flags or costumes.",
+      "style_reference": "past-stories-v1.png"
+    },
+    {
+      "lesson_id": "culture-c1",
+      "file": "culture-c1-v1.png",
+      "prompt": "Use case: illustration-story. Asset type: a compact spot illustration for a lesson card in an English learning app. Create original black-and-white editorial line art with the clarity and wit of minimalist productivity-app illustrations. Confident slightly irregular hand-inked outlines, simple expressive adult characters, a few solid near-black shapes for hair or clothing, white interior fills, generous negative space. Near-black ink #1B2633 and white only. No colour, no grey shading, no gradients, no paper texture, no soft shadows. Friendly and quietly playful, not childish. A single very simple scene, readable when displayed at only 120 by 90 pixels. Compact horizontal composition within a square canvas, subject fills about 85 percent of width and 70 percent of height, even padding and all limbs fully inside the frame. Genuinely transparent background outside the character and props. No text, letters, numbers, logos, frames, badges or decorative sparkles. No busy setting or small background objects. Strong readable contour and clean transparent edges.\nInput image role: style reference only. Match its confident contour weight, simplified adult character design, black-and-white balance and compact visual density. Create a NEW scene with the subject below, not the photo-album scene from the reference.\nSubject: Two adults from different generations in an animated, friendly conversation about a small patterned ceramic bowl between them. One holds the bowl, the other listens with an open hand gesture. Compact half-body scene about explaining heritage, identity and a family tradition. The bowl has one large simple geometric band, no tiny decoration. Everyday clothing, no national flags or stereotyped costumes.",
+      "style_reference": "past-stories-v1.png"
+    }
+  ]
+}
