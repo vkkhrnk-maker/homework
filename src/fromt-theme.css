@@ -94,14 +94,22 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 .lesson-card{background:var(--fromt-solid);border-radius:18px;box-shadow:none}
 .lesson-card:hover{box-shadow:0 8px 24px rgba(27,49,74,.06)}
 .lesson-list{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
-.lesson-card{padding:24px;gap:10px}
+.lesson-card{padding:24px;gap:10px;min-height:280px}
 .lc-overview{display:flex;align-items:center;gap:18px}
 .lc-overview.has-art{min-height:132px}
 .lc-copy{flex:1;gap:10px}
 .lc-art{display:block;width:132px;height:132px;flex:none;object-fit:contain;filter:var(--lesson-art-filter)}
 .lesson-card h3{font-size:clamp(24px,2.15vw,28px);line-height:1.13}
 .lesson-card .lc-sub{display:none}
-.lc-steps{width:100%;flex-direction:row;flex-wrap:wrap;gap:8px;padding-top:16px}
+.lc-steps{display:none}
+.lc-progress-summary{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:auto;padding-top:16px}
+.lc-progress-line{display:flex;align-items:center;gap:10px;width:100%}
+.lc-meter{display:block;flex:1;height:6px;overflow:hidden;border-radius:999px;background:var(--surface)}
+.lc-meter i{display:block;height:100%;border-radius:inherit;background:var(--accent)}
+.lc-pct{min-width:3.5ch;text-align:right;color:var(--fg-2);font-size:12px;font-weight:500;line-height:1.2;font-variant-numeric:tabular-nums}
+.lc-resume{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--fg-2);font-size:14px;font-weight:500;line-height:1.4}
+.lc-resume > span:first-child{min-width:0;overflow-wrap:break-word}
+.lc-resume-arrow{flex:none;color:var(--fg-3);font-size:18px;line-height:1}
 .lc-step{white-space:nowrap}
 .lc-eyebrow{color:var(--fg-2)}
 .lc-step{padding:8px 10px;border-radius:8px;font-size:14px;background:var(--surface);color:var(--fg);box-shadow:none}

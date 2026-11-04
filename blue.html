@@ -235,6 +235,7 @@ body.home main{padding-top:0}
 .lc-overview{width:100%}
 .lc-copy{display:flex;flex-direction:column;gap:8px;min-width:0}
 .lc-art{display:none}
+.lc-progress-summary{display:none}
 .lesson-card h3{font-size:clamp(26px,2.4vw,32px);font-weight:600;letter-spacing:-.02em;line-height:1.1}
 .lc-sub{margin:0;color:var(--lesson-ink-muted);font-size:15px;line-height:1.4}
 .lc-steps{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
@@ -825,6 +826,12 @@ const UI = {
   navDrill:     { ru: "Тренажёр", en: "Practice" },
   navMatch:     { ru: "Значения", en: "Meanings" },
   navSpeak:     { ru: "Говорение", en: "Speaking" },
+  cardProgress: { ru: "Прогресс урока", en: "Lesson progress" },
+  cardTheoryStart: { ru: "Начать с теории", en: "Start with theory" },
+  cardTheoryReview: { ru: "Повторить теорию", en: "Review theory" },
+  cardOpen:     { ru: "Открыть урок", en: "Open lesson" },
+  cardCompleted:{ ru: "Все задания выполнены", en: "All tasks completed" },
+  cardStageProgress: { ru: (label, n, total) => `${label} · ${n} из ${total}`, en: (label, n, total) => `${label} · ${n}/${total}` },
 
   homeEyebrow:  { ru: "Английский", en: "English" },
   homeTitle:    { ru: "Превратите домашку по английскому в практику по шагам", en: "Turn your English homework into guided practice" },
@@ -2616,9 +2623,9 @@ async function parseLesson() {
     parseCtl = null;
   }
 }
-function openLesson(id, step = "theory") {
+function openLesson(id) {
   S.lessonId = id; save();
-  renderTabs(); renderTheory(); show(step);
+  renderTabs(); renderTheory(); show("theory");
 }
 
 /* ---- нижние листы, тост, меню, тема ---- */
@@ -3135,15 +3142,6 @@ function matchLabels(l) {
   if (M.title) return { tile: L(M.title), group: L(M.title) };
   return { tile: t("tileMatch"), group: t("groupMatch") };
 }
-function lessonTotal(l) {
-  return (l.drill?.items.length || 0) + (matchItems(l)?.length || 0) + (speakItems(l)?.length || 0);
-}
-function lessonDone(l) {
-  const p = S.progress[l.id];
-  if (!p) return 0;
-  return Object.keys(p.drill?.answered || {}).length + Object.keys(p.match?.answered || {}).length + Object.keys(p.speak?.seen || {}).length;
-}
-
 /* ============ язык ============ */
 function applyLang() {
   document.documentElement.lang = S.lang;
@@ -3184,11 +3182,11 @@ $$(".lang-switch button").forEach(b => b.addEventListener("click", () => { S.lan
 
 /* ============ список уроков ============ */
 const LESSON_ILLUSTRATIONS = {
-  "past-stories": "illustrations/past-stories-v1.png",
-  "modals": "illustrations/modals-v1.png",
-  "future": "illustrations/future-v1.png",
-  "culture-b1": "illustrations/culture-b1-v1.png",
-  "culture-c1": "illustrations/culture-c1-v1.png"
+  "past-stories": "illustrations/past-stories-v2.png",
+  "modals": "illustrations/modals-v2.png",
+  "future": "illustrations/future-v2.png",
+  "culture-b1": "illustrations/culture-b1-v2.png",
+  "culture-c1": "illustrations/culture-c1-v2.png"
 };
 /* прогресс по шагам урока: теория — открывали или нет; остальное — сколько из скольких */
 function stepProgress(l) {
@@ -3201,13 +3199,30 @@ function stepProgress(l) {
     return { key, label, total, n: Math.min(n, total), done: total > 0 && n >= total };
   });
 }
+/* Общий прогресс — выполненные задания. Открытие теории не считается её прочтением. */
+function lessonCompletion(steps) {
+  const tasks = steps.filter(s => s.total > 0);
+  const total = tasks.reduce((sum, s) => sum + s.total, 0);
+  const done = tasks.reduce((sum, s) => sum + Math.max(0, Math.min(s.n, s.total)), 0);
+  const complete = total > 0 && done === total;
+  const percent = total ? Math.min(complete ? 100 : 99, Math.round(done / total * 100)) : 0;
+  return { total, done, complete, percent };
+}
+function lessonResumeText(steps, completion) {
+  if (completion.complete) return t("cardCompleted");
+  const current = steps.find(s => !s.done);
+  if (current?.key === "theory") return t("cardTheoryStart");
+  if (current) return current.total ? t("cardStageProgress", current.label, current.n, current.total) : current.label;
+  return t(steps.some(s => s.key === "theory") ? "cardTheoryReview" : "cardOpen");
+}
 function renderLessonList() {
   $("#lesson-list").dataset.label = t("lessonsLabel");
-  /* Компактный рисунок рядом с уровнем, заголовок на полную ширину и этапы с прогрессом.
-     Текущий этап выделен обводкой, пройденные с галочкой, ещё не начатые приглушены. */
+  /* Рисунок и название, общий прогресс и один следующий этап.
+     Старые варианты оформления сохраняют подробные плашки этапов. */
   $("#lesson-list").innerHTML = LESSONS.map(l => {
     const steps = stepProgress(l), cur = steps.find(s => !s.done), art = LESSON_ILLUSTRATIONS[l.id];
-    return `<button class="lesson-card" data-lesson="${l.id}" data-step="${cur ? cur.key : "theory"}">
+    const completion = lessonCompletion(steps), resume = lessonResumeText(steps, completion);
+    return `<button class="lesson-card" data-lesson="${l.id}">
       <div class="lc-overview${art ? " has-art" : ""}">
         ${art ? `<img class="lc-art" src="${art}" alt="" width="132" height="132" loading="lazy" decoding="async">` : ""}
         <div class="lc-copy">
@@ -3217,10 +3232,17 @@ function renderLessonList() {
         </div>
       </div>
       <div class="lc-steps">${steps.map(s => `<span class="lc-step ${s.done ? "done" : s === cur ? "cur" : s.n ? "part" : "todo"}">${s.label}${s.total ? ` <b>${s.n}/${s.total}</b>` : ""}${s.done ? ' <i aria-hidden="true">✓</i>' : ""}</span>`).join("")}</div>
+      <div class="lc-progress-summary">
+        ${completion.total ? `<div class="lc-progress-line">
+          <span class="lc-meter" role="progressbar" aria-label="${t("cardProgress")}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${completion.percent}"><i style="width:${completion.percent}%" aria-hidden="true"></i></span>
+          <span class="lc-pct">${completion.percent}%</span>
+        </div>` : ""}
+        <div class="lc-resume"><span>${resume}</span><span class="lc-resume-arrow" aria-hidden="true">${completion.complete ? "✓" : "→"}</span></div>
+      </div>
     </button>`;
   }).join("");
   $$("#lesson-list [data-lesson]").forEach(b => b.addEventListener("click", () => {
-    openLesson(b.dataset.lesson, b.dataset.step);
+    openLesson(b.dataset.lesson);
   }));
   renderVocabBox();
 }
@@ -3314,8 +3336,7 @@ $("#reset-btn").addEventListener("click", async () => {
 
 function updateProgress() {
   if (!S.lessonId) return;
-  const l = lesson(), total = lessonTotal(l), done = lessonDone(l);
-  const pct = total ? Math.round(done / total * 100) : 0;
+  const l = lesson(), { percent: pct } = lessonCompletion(stepProgress(l));
   $("#progress-fill").style.width = pct + "%";
   $("#progress-label").textContent = pct + "%";
   const p = prog();

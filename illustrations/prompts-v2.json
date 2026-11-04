@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "mode": "built-in image_gen",
+  "transparent_background": true,
+  "edit_target_version": 1,
+  "style_reference": "past-stories-v2.png",
+  "composition": "Illustration on the left: 132px desktop, 112px mobile, 88px below 360px. Level and title on the right. Overall progress bar and current-stage line below. Card opens theory.",
+  "palette": {
+    "ink": "#1B2633",
+    "grey": "#D6DADF",
+    "light_grey": "#E5E8EC",
+    "white": "#FFFFFF"
+  },
+  "assets": [
+    {
+      "lesson_id": "past-stories",
+      "file": "past-stories-v2.png",
+      "edit_target": "past-stories-v1.png",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent spot illustration for an English lesson card. Input image 1 is the EDIT TARGET. Edit this exact illustration, preserving the same smiling curly-haired person, face, pose, hands, photo album, held photograph, composition, proportions, near-black contour colour #1B2633, contour weight and transparent outer background. Change only the interior fills to introduce a few flat very light cool-grey areas like a duotone UI icon: use approximately #D6DADF for the sky area inside the held photograph, #E5E8EC on the left album page and selected light clothing areas. Keep face and hands white, keep hair and dark shirt stripes near-black, keep the overall drawing mostly white and near-black. Grey fills should soften the white areas and tie the illustration to grey-filled UI icons. Flat uniform fills only: no gradients, no lighting, no shadows, no texture, no new objects, no text, no extra decorative marks. The background outside the person and props must stay genuinely transparent. Keep the whole subject inside a square canvas with the same padding, readable at 132 CSS pixels."
+    },
+    {
+      "lesson_id": "modals",
+      "file": "modals-v2.png",
+      "edit_target": "modals-v1.png",
+      "prompt": "Use case: precise-object-edit. Asset type: a transparent spot illustration for a lesson card. Image 1 is the EDIT TARGET, image 2 is the approved STYLE REFERENCE for flat cool-grey interior fills. Preserve the edit target's original character identity, facial expressions, pose, composition, principal objects, square canvas, padding, near-black #1B2633 contour and dark hair. Add a few light cool-grey flat interior fills approximately #D6DADF and #E5E8EC, matching image 2. Keep faces and hands white and most of the image white and near-black. Make the drawing just slightly cleaner for 132px display by removing small secondary lines and reducing shirt stripes to a few broad dark bands. Do not redesign the scene. No grey background, gradients, shadows, hatching, new objects, labels, text, badges or sparkles. Preserve genuinely transparent background outside the people and objects.\nPreserve the thoughtful person with two blank directional arrows. Add grey to the lower arrow face and selected light shirt bands. Keep both arrow shapes clear and entirely blank."
+    },
+    {
+      "lesson_id": "future",
+      "file": "future-v2.png",
+      "edit_target": "future-v1.png",
+      "prompt": "Use case: precise-object-edit. Asset type: a transparent spot illustration for a lesson card. Image 1 is the EDIT TARGET, image 2 is the approved STYLE REFERENCE for flat cool-grey interior fills. Preserve the edit target's original character identity, facial expressions, pose, composition, principal objects, square canvas, padding, near-black #1B2633 contour and dark hair. Add a few light cool-grey flat interior fills approximately #D6DADF and #E5E8EC, matching image 2. Keep faces and hands white and most of the image white and near-black. Make the drawing just slightly cleaner for 132px display by removing small secondary lines and reducing shirt stripes to a few broad dark bands. Do not redesign the scene. No grey background, gradients, shadows, hatching, new objects, labels, text, badges or sparkles. Preserve genuinely transparent background outside the people and objects.\nPreserve the person tracing a route on an unfolded map with one suitcase beside them. Grey fill on selected map panels, suitcase and light shirt bands. Keep the route bold and simple; remove tiny map details, keeping only route and minimal panel boundaries."
+    },
+    {
+      "lesson_id": "culture-b1",
+      "file": "culture-b1-v2.png",
+      "edit_target": "culture-b1-v1.png",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent spot illustration for an English lesson card. Image 1 is the EDIT TARGET, image 2 is the approved STYLE REFERENCE for grey interior fills. Preserve the original characters, facial expressions, poses, composition, key objects, square canvas, generous padding, near-black #1B2633 contour and hair. Introduce a few flat light cool-grey interior fills around #D6DADF and #E5E8EC, matching image 2. Keep faces and hands white. Simplify small secondary details for clear display at 132 CSS pixels, while maintaining the same scene and visual weight. A few broad shirt stripes rather than many narrow stripes. No new objects, text, badges, gradients, shadows, hatching, texture or background. Background outside people and props must remain genuinely transparent.\nKeep the two adults sharing bread and tea at a small table. Light-grey fill on the teapot, selected shirt bands and tabletop. Remove tiny dots on bread and most small decorative lines on the dark sweater cuffs and neckline. Retain two people, cups, teapot, bread and the single simple tabletop; don't add details."
+    },
+    {
+      "lesson_id": "culture-c1",
+      "file": "culture-c1-v2.png",
+      "edit_target": "culture-c1-v1.png",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent spot illustration for an English lesson card. Image 1 is the EDIT TARGET, image 2 is the approved STYLE REFERENCE for grey interior fills. Preserve the original characters, facial expressions, poses, composition, key objects, square canvas, generous padding, near-black #1B2633 contour and hair. Introduce a few flat light cool-grey interior fills around #D6DADF and #E5E8EC, matching image 2. Keep faces and hands white. Simplify small secondary details for clear display at 132 CSS pixels, while maintaining the same scene and visual weight. A few broad shirt stripes rather than many narrow stripes. No new objects, text, badges, gradients, shadows, hatching, texture or background. Background outside people and props must remain genuinely transparent.\nKeep the two adults from different generations talking about a ceramic bowl. Light-grey fill on the older person's hair, the bowl and selected light shirt bands. Reduce the hair to a few large curved shapes and simplify small clothing creases. Keep the bowl's single bold zigzag band; no other patterns. Preserve warmth of their expressions."
+    }
+  ]
+}
