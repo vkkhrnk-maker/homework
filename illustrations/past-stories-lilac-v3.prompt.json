@@ -1,0 +1,12 @@
+{
+  "mode": "built-in image_gen",
+  "status": "single-illustration colour study",
+  "file": "past-stories-lilac-v3.png",
+  "edit_target": "past-stories-v2.png",
+  "transparent_background": true,
+  "palette": {
+    "lavender": "#C7C6E7",
+    "light_lavender": "#E0DEF2"
+  },
+  "prompt": "Use case: precise-object-edit. Asset type: transparent spot illustration for an English-learning lesson card. Input image 1 is the EDIT TARGET. Preserve this exact illustration: the smiling curly-haired person, pose, face, hands, photo album, held photograph, near-black contour #1B2633, dark hair, shirt stripes, square composition, padding and genuinely transparent background. Change ONLY the existing light-grey interior fills to pale muted lavender/lilac fills. Use approximately #C7C6E7 for the grey sky inside the held photo and the larger grey clothing areas, and #E0DEF2 for the lighter grey album page. It should feel quietly connected to a pale blue-lavender app background, soft, low saturation, not bright purple. All currently white areas, especially face, hands and photo mountains, remain white; all near-black outlines and dark fills remain near-black. Do not add any new filled areas or objects. Flat interior colours only; no gradients, shadows, glow, texture, text or extra details. Keep outer background truly transparent. Only replace the existing grey fills with muted lilac while preserving everything else."
+}

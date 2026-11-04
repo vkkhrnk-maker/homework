@@ -1,0 +1,45 @@
+{
+  "version": 4,
+  "mode": "built-in image_gen",
+  "transparent_background": true,
+  "style_reference": "past-stories-blue-v4.png",
+  "palette": {
+    "ink": "#1B2633",
+    "blue": "#BDD0EC",
+    "light_blue": "#DFE7F3",
+    "white": "#FFFFFF"
+  },
+  "composition": "Same compact lesson scenes as v2, with powder-blue interior fills matching the Fromt background and duotone UI icon fills. Past-stories shirt simplified to fewer broad stripes.",
+  "assets": [
+    {
+      "lesson_id": "past-stories",
+      "file": "past-stories-blue-v4.png",
+      "edit_target": "past-stories-lilac-v3.png",
+      "prompt": "Use case: precise-object-edit. Asset type: a transparent spot illustration for an English-learning lesson card. Image 1 is the EDIT TARGET. Change only its existing pale lavender interior fills to muted pale powder-blue, approximately #BDD0EC for the main fills and #DFE7F3 for the lighter photo-album page. Blue must be visibly cooler and closer to sky blue than lavender, with low saturation, matching a light blue app background. Preserve the exact curly-haired character, facial expression, pose, photo album, held photo, composition, padding, all white areas, and near-black #1B2633 contours and dark hair. Simplify the shirt slightly to 3 broad near-black horizontal torso stripes with broad pale-blue areas between them, and similarly fewer broad sleeve stripes, so it reads more calmly at 132 CSS pixels. Do not change any other shapes or details. No new objects, text, gradients, shadows, glow, texture, borders or decorations. Preserve a genuinely transparent background outside the subject. White faces, hands and mountain shapes stay white."
+    },
+    {
+      "lesson_id": "modals",
+      "file": "modals-blue-v4.png",
+      "edit_target": "modals-v2.png",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent lesson-card illustration. Image 1 is the EDIT TARGET. Image 2 is the approved COLOUR REFERENCE: muted pale powder-blue fills. Replace ONLY the existing light-grey fills in image 1 with the same muted pale blue as image 2, approximately #BDD0EC, with very light #DFE7F3 for the lighter regions. It must be cooler sky blue, not lavender. Preserve image 1 exactly: its characters, pose, facial expression, proportions, objects, composition, near-black #1B2633 outlines and dark areas, all white faces/hands and white areas, and transparent outer background. Keep the existing simplified drawing and broad stripes. Flat colour fills only, no gradients, shadows, textures, extra objects, text, borders or decorative marks. Genuinely transparent background.\nBlue fill on the lower sign arrow and existing grey shirt areas; keep the upper sign white and both signs blank."
+    },
+    {
+      "lesson_id": "future",
+      "file": "future-blue-v4.png",
+      "edit_target": "future-v2.png",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent lesson-card illustration. Image 1 is the EDIT TARGET. Image 2 is the approved COLOUR REFERENCE: muted pale powder-blue fills. Replace ONLY the existing light-grey fills in image 1 with the same muted pale blue as image 2, approximately #BDD0EC, with very light #DFE7F3 for the lighter regions. It must be cooler sky blue, not lavender. Preserve image 1 exactly: its characters, pose, facial expression, proportions, objects, composition, near-black #1B2633 outlines and dark areas, all white faces/hands and white areas, and transparent outer background. Keep the existing simplified drawing and broad stripes. Flat colour fills only, no gradients, shadows, textures, extra objects, text, borders or decorative marks. Genuinely transparent background.\nBlue fill on the suitcase and existing grey map panels and clothing areas. Keep the route bold, the map white in its current white areas and the face and hands white."
+    },
+    {
+      "lesson_id": "culture-b1",
+      "file": "culture-b1-blue-v4.png",
+      "edit_target": "culture-b1-v2.png",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent lesson-card illustration. Image 1 is the EDIT TARGET. Image 2 is the approved COLOUR REFERENCE: muted pale powder-blue fills. Replace ONLY the existing light-grey fills in image 1 with the same muted pale blue as image 2, approximately #BDD0EC, with very light #DFE7F3 for the lighter regions. It must be cooler sky blue, not lavender. Preserve image 1 exactly: characters, poses, facial expressions, proportions, objects, composition, near-black #1B2633 outlines and dark areas, white faces and hands, all currently white areas, and transparent outer background. Keep the existing simplified drawing, broad shirt stripes and large shapes. Flat colour fills only: no gradients, shadows, textures, new objects, text, borders or decorative marks. Genuinely transparent background.\nBlue fill only on the existing grey teapot, tabletop and shirt bands. Keep both people, white faces, white hands, cups and bread unchanged."
+    },
+    {
+      "lesson_id": "culture-c1",
+      "file": "culture-c1-blue-v4.png",
+      "edit_target": "culture-c1-v2.png",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent lesson-card illustration. Image 1 is the EDIT TARGET. Image 2 is the approved COLOUR REFERENCE: muted pale powder-blue fills. Replace ONLY the existing light-grey fills in image 1 with the same muted pale blue as image 2, approximately #BDD0EC, with very light #DFE7F3 for the lighter regions. It must be cooler sky blue, not lavender. Preserve image 1 exactly: characters, poses, facial expressions, proportions, objects, composition, near-black #1B2633 outlines and dark areas, white faces and hands, all currently white areas, and transparent outer background. Keep the existing simplified drawing, broad shirt stripes and large shapes. Flat colour fills only: no gradients, shadows, textures, new objects, text, borders or decorative marks. Genuinely transparent background.\nBlue fill only on the existing grey hair, ceramic bowl and shirt bands. Keep both people, white faces, white hands and the bowl's bold zigzag band unchanged."
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 // Офлайн-кэш оболочки приложения. Уроки и прогресс лежат в браузере и через этот файл не проходят.
-const VERSION = 'c9bd5dc0dd';
+const VERSION = 'edd48ba634';
 const CACHE = `homework-${VERSION}`;
 const SHELL = ['./', 'index.html', 'soft.html', 'blue.html', 'fromt.html', 'manifest.webmanifest', 'icons/homework-mark-v1.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
-  'illustrations/past-stories-v2.png', 'illustrations/modals-v2.png', 'illustrations/future-v2.png', 'illustrations/culture-b1-v2.png', 'illustrations/culture-c1-v2.png'];
+  'illustrations/past-stories-blue-v4.png', 'illustrations/modals-blue-v4.png', 'illustrations/future-blue-v4.png', 'illustrations/culture-b1-blue-v4.png', 'illustrations/culture-c1-blue-v4.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

@@ -87,7 +87,7 @@ header.top .bar{display:flex;align-items:center;gap:12px;padding-block:12px;posi
 .top-nav button:hover{opacity:1;background:color-mix(in srgb,currentColor 12%,transparent)}
 @media (max-width:759px){.top-nav{display:none}}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;letter-spacing:-.01em;margin-right:auto;min-width:0}
-.brand i{width:40px;height:32px;display:grid;place-items:center;flex:none}
+.brand i{width:40px;height:40px;display:grid;place-items:center;flex:none}
 .brand i img{width:40px;height:40px;max-width:none;object-fit:contain;filter:var(--brand-mark-filter)}
 .brand[disabled]{cursor:default}
 .progress-wrap{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--fg-2)}
@@ -634,7 +634,7 @@ body.home main{padding-top:0}
   --fromt-panel:rgba(255,255,255,.88);--fromt-solid:#FFFFFF;--fromt-controls:rgba(255,255,255,.52);
   --fromt-selected:rgba(255,255,255,.94);--fromt-edge:rgba(255,255,255,.64);
   --sky-base:#DCE8F4;--sky-cyan:#C8E4F4;--sky-blue:#9EC4EF;--sky-violet:#B8BFF0;--sky-haze:#F5F9FC;
-  --lesson-art-filter:none;
+  --lesson-art-filter:none;--illustration-fill:#BDD0EC;
 }
 
 .primary-btn,.ghost-btn{border-radius:10px}
@@ -716,6 +716,7 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
   background:var(--fromt-solid);box-shadow:none;
 }
 .intake .how-item .ico{width:48px;height:48px;color:var(--fg);padding:0;border-radius:0;background:none;box-shadow:none}
+.intake .how-item .ico path[opacity]{fill:var(--illustration-fill);opacity:1}
 .lesson-card{background:var(--fromt-solid);border-radius:18px;box-shadow:none}
 .lesson-card:hover{box-shadow:0 8px 24px rgba(27,49,74,.06)}
 .lesson-list{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
@@ -764,7 +765,7 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
   --fromt-panel:rgba(27,39,54,.9);--fromt-solid:#1B2736;--fromt-controls:rgba(28,44,62,.7);
   --fromt-selected:#354A64;--fromt-edge:rgba(237,244,250,.10);
   --sky-base:#1A283C;--sky-cyan:#244465;--sky-blue:#284F78;--sky-violet:#444A75;--sky-haze:#182739;
-  --lesson-art-filter:invert(1);
+  --lesson-art-filter:invert(1) hue-rotate(180deg);--illustration-fill:#365277;
 }
 @media(prefers-color-scheme:dark){
   :root[data-variant="fromt"]:not([data-theme="light"]){
@@ -774,7 +775,7 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
     --fromt-panel:rgba(27,39,54,.9);--fromt-solid:#1B2736;--fromt-controls:rgba(28,44,62,.7);
     --fromt-selected:#354A64;--fromt-edge:rgba(237,244,250,.10);
     --sky-base:#1A283C;--sky-cyan:#244465;--sky-blue:#284F78;--sky-violet:#444A75;--sky-haze:#182739;
-    --lesson-art-filter:invert(1);
+    --lesson-art-filter:invert(1) hue-rotate(180deg);--illustration-fill:#365277;
   }
 }
 :root[data-theme="dark"] .intake{background:var(--bg)}
@@ -3353,11 +3354,11 @@ $$(".lang-switch button").forEach(b => b.addEventListener("click", () => { S.lan
 
 /* ============ список уроков ============ */
 const LESSON_ILLUSTRATIONS = {
-  "past-stories": "illustrations/past-stories-v2.png",
-  "modals": "illustrations/modals-v2.png",
-  "future": "illustrations/future-v2.png",
-  "culture-b1": "illustrations/culture-b1-v2.png",
-  "culture-c1": "illustrations/culture-c1-v2.png"
+  "past-stories": "illustrations/past-stories-blue-v4.png",
+  "modals": "illustrations/modals-blue-v4.png",
+  "future": "illustrations/future-blue-v4.png",
+  "culture-b1": "illustrations/culture-b1-blue-v4.png",
+  "culture-c1": "illustrations/culture-c1-blue-v4.png"
 };
 /* прогресс по шагам урока: теория — открывали или нет; остальное — сколько из скольких */
 function stepProgress(l) {
