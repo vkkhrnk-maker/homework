@@ -3388,7 +3388,8 @@ $("#brand-home").addEventListener("click", () => { if (S.view !== "home") show("
 function syncHeaderGlass() {
   const hero = document.body.classList.contains("home") ? document.querySelector(".intake") : null;
   const cards = hero?.querySelector(".how-list");
-  const edge = hero && document.documentElement.dataset.variant !== "soft" ? (cards?.getClientRects().length ? cards.getBoundingClientRect().top : hero.getBoundingClientRect().bottom) - 64 : (24 - scrollY);
+  const lightCover = ["soft", "fromt"].includes(document.documentElement.dataset.variant);
+  const edge = hero && !lightCover ? (cards?.getClientRects().length ? cards.getBoundingClientRect().top : hero.getBoundingClientRect().bottom) - 64 : (24 - scrollY);
   document.body.classList.toggle("scrolled", edge <= 0);
 }
 addEventListener("scroll", syncHeaderGlass, { passive: true });

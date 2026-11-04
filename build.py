@@ -81,9 +81,14 @@ soft_html = soft_html.replace("</head>", '<style id="soft-theme">\n' + soft_css 
 # Голубой вариант остаётся доступен для сравнения по отдельной ссылке.
 blue_html = html.replace('<html lang="en">', '<html lang="en" data-variant="blue">', 1)
 (ROOT / "blue.html").write_text(blue_html, encoding="utf-8")
+# Холодный градиент и компактные контролы, вдохновлённые fromt.app.
+fromt_css = (ROOT / "src" / "fromt-theme.css").read_text(encoding="utf-8")
+fromt_html = html.replace('<html lang="en">', '<html lang="en" data-variant="fromt">', 1)
+fromt_html = fromt_html.replace("</head>", '<style id="fromt-theme">\n' + fromt_css + "\n</style>\n</head>", 1)
+(ROOT / "fromt.html").write_text(fromt_html, encoding="utf-8")
 
 sw_path = ROOT / "sw.js"
 sw = sw_path.read_text(encoding="utf-8")
-version = hashlib.sha1((blue_html + soft_html).encode()).hexdigest()[:10]
+version = hashlib.sha1((blue_html + soft_html + fromt_html).encode()).hexdigest()[:10]
 sw_path.write_text(re.sub(r"const VERSION = '[^']*';", f"const VERSION = '{version}';", sw), encoding="utf-8")
-print(f"Светлая главная, soft.html и blue.html собраны, версия кэша {version}")
+print(f"Светлая главная, soft.html, blue.html и fromt.html собраны, версия кэша {version}")

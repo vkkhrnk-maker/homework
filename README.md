@@ -17,7 +17,7 @@
 ## Обновление
 
 1. Правки в `src/homework.html` (этот же файл публикуется на claude.ai).
-2. `python3 build.py`: соберёт `index.html`, `soft.html`, `blue.html` и обновит версию кэша в `sw.js`.
+2. `python3 build.py`: соберёт `index.html`, `soft.html`, `blue.html`, `fromt.html` и обновит версию кэша в `sw.js`.
 3. Закоммитить и запушить: GitHub Pages обновится сам.
 
 ## Варианты оформления
@@ -25,5 +25,6 @@
 - `index.html` — основная светлая версия с чёрными акцентами и пастельным фоном
 - `soft.html` — та же светлая версия по прежней ссылке
 - `blue.html` — голубая обложка и персиковые акценты для сравнения
+- `fromt.html` — холодный голубовато-сиреневый градиент, белые карточки и компактные контролы по мотивам [fromt.app](https://fromt.app/)
 
-Все варианты используют `src/homework.html`. Светлое оформление находится в `src/soft-theme.css`.
+Все варианты используют `src/homework.html`. Светлое оформление находится в `src/soft-theme.css`, вариант Fromt — в `src/fromt-theme.css`.
