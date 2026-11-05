@@ -1,8 +1,9 @@
 // Офлайн-кэш оболочки приложения. Уроки и прогресс лежат в браузере и через этот файл не проходят.
-const VERSION = '53ddbcfb0e';
+const VERSION = 'e23d191d07';
 const CACHE = `homework-${VERSION}`;
-const SHELL = ['./', 'index.html', 'soft.html', 'blue.html', 'fromt.html', 'playful.html', 'playful-green.html', 'playful-bright.html', 'playful-yellow.html', 'manifest.webmanifest', 'icons/homework-mark-v1.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
+const SHELL = ['./', 'index.html', 'soft.html', 'blue.html', 'fromt.html', 'playful.html', 'playful-green.html', 'playful-bright.html', 'playful-yellow.html', 'learny.html', 'manifest.webmanifest', 'icons/homework-mark-v1.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'icons/learny-wordmark-v1.png', 'icons/playful/book.svg', 'icons/playful/bubble.svg', 'icons/playful/calendar.svg', 'icons/playful/cup.svg', 'icons/playful/globe.svg', 'icons/playful/pencil.svg', 'icons/playful/microphone.svg', 'icons/playful/star.svg', 'icons/playful/cursor.svg', 'icons/playful/cursor-green.svg',
+  'icons/learny-home/attach.svg', 'icons/learny-home/menu.svg', 'icons/learny-home/lesson-arrow.svg',
   'illustrations/past-stories-blue-v4.png', 'illustrations/modals-blue-v4.png', 'illustrations/future-blue-v4.png', 'illustrations/culture-b1-blue-v4.png', 'illustrations/culture-c1-blue-v4.png'];
 
 self.addEventListener('install', e => {
@@ -24,7 +25,7 @@ self.addEventListener('fetch', e => {
 
   // страница: сначала сеть, чтобы обновления приходили сразу; без сети — из кэша
   if (req.mode === 'navigate') {
-    const page = ['soft.html', 'blue.html', 'fromt.html', 'playful.html', 'playful-green.html', 'playful-bright.html', 'playful-yellow.html'].find(page => url.pathname.endsWith('/' + page)) || 'index.html';
+    const page = ['soft.html', 'blue.html', 'fromt.html', 'playful.html', 'playful-green.html', 'playful-bright.html', 'playful-yellow.html', 'learny.html'].find(page => url.pathname.endsWith('/' + page)) || 'index.html';
     e.respondWith(
       fetch(req, { cache: 'no-cache' })   // мимо HTTP-кэша: GitHub Pages разрешает держать страницу 10 минут
         .then(res => { if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(page, copy)); } return res; })

@@ -88,6 +88,8 @@ fromt_html = fromt_html.replace("</head>", '<style id="fromt-theme">\n' + fromt_
 # Отдельная игровая проба на том же интерфейсе и данных.
 playful_css = (ROOT / "src" / "playful-theme.css").read_text(encoding="utf-8")
 playful_js = (ROOT / "src" / "playful.js").read_text(encoding="utf-8")
+pointer_css = (ROOT / "src" / "learny-pointer.css").read_text(encoding="utf-8")
+pointer_js = (ROOT / "src" / "learny-pointer.js").read_text(encoding="utf-8")
 playful_assets = {
     p.stem: p.read_text(encoding="utf-8")
     for p in sorted((ROOT / "icons" / "playful").glob("*.svg"))
@@ -95,14 +97,31 @@ playful_assets = {
 }
 playful_js = playful_js.replace("const svgAssets = {}; // ASSETS_INLINE", "const svgAssets = " + json.dumps(playful_assets, ensure_ascii=False) + ";")
 playful_html = fromt_html.replace('data-variant="fromt"', 'data-variant="fromt" data-style="playful"', 1)
-playful_html = playful_html.replace("</head>", '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800;900&display=swap">\n<style id="playful-theme">\n' + playful_css + "\n</style>\n</head>", 1)
+playful_html = playful_html.replace("</head>", '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800;900&display=swap">\n<style id="playful-theme">\n' + pointer_css + playful_css + "\n</style>\n</head>", 1)
 playful_body, playful_end = playful_html.rsplit("</body>", 1)
-playful_html = playful_body + '<script id="playful-enhancements">\n' + playful_js + "\n</script>\n</body>" + playful_end
+playful_html = playful_body + '<script id="playful-enhancements">\n' + pointer_js + playful_js + "\n</script>\n</body>" + playful_end
 green_html = playful_html.replace('data-style="playful"', 'data-style="playful" data-palette="green"', 1)
 bright_html = playful_html.replace('data-style="playful"', 'data-style="playful" data-palette="bright"', 1)
 yellow_html = playful_html.replace('data-style="playful"', 'data-style="playful" data-palette="yellow"', 1)
+learny_css = (ROOT / "src" / "learny-home.css").read_text(encoding="utf-8")
+learny_js = (ROOT / "src" / "learny-home.js").read_text(encoding="utf-8")
+learny_mascots = {
+    path.stem: path.read_text(encoding="utf-8")
+    for path in sorted((ROOT / "icons" / "learny-home").glob("*.svg"))
+    if path.stem not in ("attach", "menu", "lesson-arrow")
+}
+learny_mascots["cursor"] = playful_assets["cursor"]
+learny_js = learny_js.replace("const mascotAssets = {}; // MASCOTS_INLINE", "const mascotAssets = " + json.dumps(learny_mascots, ensure_ascii=False) + ";")
+learny_html = fromt_html.replace(
+    'data-variant="fromt"',
+    'data-variant="fromt" data-style="learny" data-theme="light" data-theme-mode="light"',
+    1,
+)
+learny_html = learny_html.replace("</head>", '<style id="learny-home">\n' + pointer_css + learny_css + "\n</style>\n</head>", 1)
+learny_body, learny_end = learny_html.rsplit("</body>", 1)
+learny_html = learny_body + '<script id="learny-home-script">\n' + pointer_js + learny_js + "\n</script>\n</body>" + learny_end
 pages = {
-    "index.html": fromt_html,
+    "index.html": learny_html,
     "soft.html": soft_html,
     "blue.html": blue_html,
     "fromt.html": fromt_html,
@@ -110,6 +129,7 @@ pages = {
     "playful-green.html": green_html,
     "playful-bright.html": bright_html,
     "playful-yellow.html": yellow_html,
+    "learny.html": learny_html,
 }
 for filename, document in pages.items():
     (ROOT / filename).write_text(document, encoding="utf-8")

@@ -934,6 +934,22 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800;900&display=swap">
 <style id="playful-theme">
+/* Настоящий указатель остаётся запасным вариантом, пока декоративный слой не активен. */
+@media (hover:hover) and (pointer:fine) and (min-width:760px){
+  :is([data-style="playful"],[data-style="learny"]) body.home,:is([data-style="playful"],[data-style="learny"]) body.home button,:is([data-style="playful"],[data-style="learny"]) body.home a{cursor:var(--playful-native-cursor),auto}
+  :is([data-style="playful"],[data-style="learny"]) body.home input,:is([data-style="playful"],[data-style="learny"]) body.home textarea{cursor:text}
+  :is([data-style="playful"],[data-style="learny"]) body.has-playful-pointer,:is([data-style="playful"],[data-style="learny"]) body.has-playful-pointer button,:is([data-style="playful"],[data-style="learny"]) body.has-playful-pointer a{cursor:none}
+}
+.playful-pointer{position:fixed;left:0;top:0;width:56px;height:56px;z-index:45;pointer-events:none;user-select:none;opacity:0;visibility:hidden;contain:layout style}
+.playful-pointer.visible{opacity:1;visibility:visible}
+.playful-pointer-art{display:block;position:absolute;left:-7px;top:-4px;width:56px;height:56px;max-width:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.18));transform-origin:14px 10px;transition:transform .16s cubic-bezier(.2,0,0,1)}
+.playful-pointer.is-action .playful-pointer-art{transform:rotate(-9deg)}
+.playful-pointer.pressed .playful-pointer-art{transform:scale(.96) rotate(-9deg)}
+.playful-pointer span{position:absolute;left:22px;top:48px;white-space:nowrap;font:700 13px/1.2 var(--font);letter-spacing:-.02em;color:#FFF;-webkit-text-stroke:3px var(--playful-primary);paint-order:stroke fill}
+.playful-pointer.flip-label span{left:auto;right:56px}
+.playful-pointer.lift-label span{top:auto;bottom:62px}
+
+@keyframes playful-blink{0%,43%,47%,100%{transform:scaleY(1)}44%,46%{transform:scaleY(.08)}}
 /* Игровой вариант: плоские цвета, свои персонажи, выразительная типографика. */
 :root[data-style="playful"]{
   --bg:#F6F6F2;--surface:#EDEDE8;--surface-2:#DFE0D8;
@@ -1049,7 +1065,6 @@ body:not(.home) .playful-language-bubble{display:none}
 [data-mascot="microphone"]{--blink-time:7.3s;--blink-delay:-1.1s}
 [data-mascot="star"]{--blink-time:8.2s;--blink-delay:-4.9s}
 [data-mascot="cursor"]{--blink-time:6.7s;--blink-delay:-2.1s}
-@keyframes playful-blink{0%,43%,47%,100%{transform:scaleY(1)}44%,46%{transform:scaleY(.08)}}
 [data-style="playful"] .intake .how-item{transition:transform .18s cubic-bezier(.2,0,0,1)}
 [data-style="playful"] .intake .how-item::before{content:"";position:absolute;inset:0 0 -10px;pointer-events:auto}
 [data-style="playful"] .ico,[data-style="playful"] .lc-art{transition:transform .2s cubic-bezier(.2,0,0,1)}
@@ -1059,21 +1074,6 @@ body:not(.home) .playful-language-bubble{display:none}
   [data-style="playful"] .intake .how-item:hover .ico{transform:rotate(-6deg)}
   [data-style="playful"] .lesson-card:hover .lc-art{transform:rotate(-5deg) translateY(-3px)}
 }
-
-/* Настоящий указатель остаётся запасным вариантом, пока декоративный слой не активен. */
-@media (hover:hover) and (pointer:fine) and (min-width:760px){
-  [data-style="playful"] body.home,[data-style="playful"] body.home button,[data-style="playful"] body.home a{cursor:var(--playful-native-cursor),auto}
-  [data-style="playful"] body.home input,[data-style="playful"] body.home textarea{cursor:text}
-  [data-style="playful"] body.has-playful-pointer,[data-style="playful"] body.has-playful-pointer button,[data-style="playful"] body.has-playful-pointer a{cursor:none}
-}
-.playful-pointer{position:fixed;left:0;top:0;width:56px;height:56px;z-index:45;pointer-events:none;user-select:none;opacity:0;visibility:hidden;contain:layout style}
-.playful-pointer.visible{opacity:1;visibility:visible}
-.playful-pointer-art{display:block;position:absolute;left:-7px;top:-4px;width:56px;height:56px;max-width:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.18));transform-origin:14px 10px;transition:transform .16s cubic-bezier(.2,0,0,1)}
-.playful-pointer.is-action .playful-pointer-art{transform:rotate(-9deg)}
-.playful-pointer.pressed .playful-pointer-art{transform:scale(.96) rotate(-9deg)}
-.playful-pointer span{position:absolute;left:22px;top:48px;white-space:nowrap;font:700 13px/1.2 var(--font);letter-spacing:-.02em;color:#FFF;-webkit-text-stroke:3px var(--playful-primary);paint-order:stroke fill}
-.playful-pointer.flip-label span{left:auto;right:56px}
-.playful-pointer.lift-label span{top:auto;bottom:62px}
 
 :root[data-style="playful"][data-theme="dark"]{--bg:#101114;--surface:#202127;--surface-2:#30313A;--fg:#F6F6F2;--fg-2:#B1B1B7;--fg-3:#85858D;--line:rgba(246,246,242,.16);--fromt-solid:#1A1B20;--brand-mark-filter:brightness(0) invert(1)}
 @media(prefers-color-scheme:dark){:root[data-style="playful"]:not([data-theme="light"]){--bg:#101114;--surface:#202127;--surface-2:#30313A;--fg:#F6F6F2;--fg-2:#B1B1B7;--fg-3:#85858D;--line:rgba(246,246,242,.16);--fromt-solid:#1A1B20;--brand-mark-filter:brightness(0) invert(1)}}
@@ -3072,6 +3072,7 @@ function setParsing(on) {
 }
 function parseHint(key, isError) {
   const h = $("#parse-hint");
+  h.dataset.message = key;
   h.textContent = t((unifiedIntake && intakeCopy[key]) || key);
   h.classList.toggle("err", !!isError);
 }
@@ -3532,9 +3533,11 @@ $("#menu").addEventListener("click", e => { if (e.target === $("#menu") || e.tar
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeMenu(); closeSheet(); } });
 $("#ai-btn").addEventListener("click", () => keySheet());
 
-function getTheme() { return lsGet("hw-theme") || "auto"; }
+const lightThemeOnly = document.documentElement.dataset.themeMode === "light";
+function getTheme() { return lightThemeOnly ? "light" : lsGet("hw-theme") || "auto"; }
 function setTheme(th) {
-  lsSet("hw-theme", th);
+  if (lightThemeOnly) th = "light";
+  else lsSet("hw-theme", th);
   if (th === "auto") document.documentElement.removeAttribute("data-theme");
   else document.documentElement.setAttribute("data-theme", th);
   $$("#theme-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.th === th)));
@@ -3543,7 +3546,9 @@ $$("#theme-seg button").forEach(b => b.addEventListener("click", () => setTheme(
 setTheme(getTheme());
 /* «Авто» — тема устройства: снимаем тему, которую навязывает внешняя оболочка */
 new MutationObserver(() => {
-  if (getTheme() === "auto" && document.documentElement.hasAttribute("data-theme")) document.documentElement.removeAttribute("data-theme");
+  const root = document.documentElement;
+  if (lightThemeOnly && root.dataset.theme !== "light") root.dataset.theme = "light";
+  else if (getTheme() === "auto" && root.hasAttribute("data-theme")) root.removeAttribute("data-theme");
 }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
 /* ключ проверяем бесплатным запросом списка моделей, а не по первым буквам: форматы ключей меняются.
@@ -5833,6 +5838,56 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
 });
 </script>
 <script id="playful-enhancements">
+function enableLearnyPointer(cursor) {
+  const finePointer = matchMedia("(hover: hover) and (pointer: fine) and (min-width: 760px)");
+  const pointer = document.createElement("div");
+  pointer.id = "playful-pointer"; pointer.className = "playful-pointer";
+  pointer.setAttribute("aria-hidden", "true");
+  pointer.append(cursor, document.createElement("span"));
+  document.body.append(pointer);
+  const label = pointer.querySelector("span");
+  const labels = {
+    learn: { ru:"{Учимся} вместе", en:"{Let's} learn" },
+    open: { ru:"{Открыть} урок", en:"{Open} lesson" },
+    build: { ru:"{Создать} урок", en:"{Build} lesson" },
+    look: { ru:"{Посмотрим}", en:"{Take} a look" }
+  };
+  let frame = 0, x = 0, y = 0;
+  const hide = () => {
+    pointer.classList.remove("visible", "pressed");
+    if (document.body.classList.contains("has-playful-pointer")) document.body.classList.remove("has-playful-pointer");
+    if (frame) { cancelAnimationFrame(frame); frame = 0; }
+  };
+  const draw = () => { frame = 0; pointer.style.transform = `translate(${x}px,${y}px)`; };
+  document.addEventListener("pointermove", event => {
+    if (!finePointer.matches || event.pointerType === "touch" || !document.body.classList.contains("home")) return hide();
+    const target = event.target;
+    if (!(target instanceof Element) || target.closest('input,textarea,select,[contenteditable="true"],.sheet-wrap,.ask-overlay')) return hide();
+    const control = target.closest("button,a");
+    const key = control?.dataset.lesson ? "open" : control?.id === "parse-btn" ? "build" : control ? "look" : "learn";
+    label.textContent = labels[key][document.documentElement.lang === "ru" ? "ru" : "en"];
+    pointer.classList.toggle("is-action", !!control);
+    x = event.clientX; y = event.clientY;
+    pointer.classList.toggle("flip-label", x > innerWidth - 150);
+    pointer.classList.toggle("lift-label", y > innerHeight - 84);
+    pointer.classList.add("visible");
+    if (!document.body.classList.contains("has-playful-pointer")) document.body.classList.add("has-playful-pointer");
+    if (!frame) frame = requestAnimationFrame(draw);
+  }, { passive:true });
+  document.addEventListener("pointerdown", () => pointer.classList.add("pressed"), { passive:true });
+  document.addEventListener("pointerup", () => pointer.classList.remove("pressed"), { passive:true });
+  document.addEventListener("click", event => {
+    if (event.target instanceof Element && event.target.closest("#menu-btn,#parse-btn,#material-attach")) hide();
+  });
+  document.addEventListener("pointerout", event => { if (!event.relatedTarget) hide(); }, { passive:true });
+  document.addEventListener("keydown", hide);
+  window.addEventListener("blur", hide);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) hide(); });
+  finePointer.addEventListener("change", hide);
+  new MutationObserver(() => { if (!document.body.classList.contains("home")) hide(); }).observe(document.body, { attributes:true, attributeFilter:["class"] });
+
+  return finePointer;
+}
 /* Оформление пробного варианта. Логика уроков остаётся в общем приложении. */
 (() => {
   if (document.documentElement.dataset.style !== "playful") return;
@@ -5894,52 +5949,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     sync();
   });
 
-  const finePointer = matchMedia("(hover: hover) and (pointer: fine) and (min-width: 760px)");
-  const pointer = document.createElement("div");
-  pointer.id = "playful-pointer"; pointer.className = "playful-pointer";
-  pointer.setAttribute("aria-hidden", "true");
-  pointer.append(makeArt("cursor", "playful-pointer-art", 56, 56), document.createElement("span"));
-  document.body.append(pointer);
-  const label = pointer.querySelector("span");
-  const labels = {
-    learn: { ru:"{Учимся} вместе", en:"{Let's} learn" },
-    open: { ru:"{Открыть} урок", en:"{Open} lesson" },
-    build: { ru:"{Создать} урок", en:"{Build} lesson" },
-    look: { ru:"{Посмотрим}", en:"{Take} a look" }
-  };
-  let frame = 0, x = 0, y = 0;
-  const hide = () => {
-    pointer.classList.remove("visible", "pressed");
-    if (document.body.classList.contains("has-playful-pointer")) document.body.classList.remove("has-playful-pointer");
-    if (frame) { cancelAnimationFrame(frame); frame = 0; }
-  };
-  const draw = () => { frame = 0; pointer.style.transform = `translate(${x}px,${y}px)`; };
-  document.addEventListener("pointermove", event => {
-    if (!finePointer.matches || event.pointerType === "touch" || !document.body.classList.contains("home")) return hide();
-    const target = event.target;
-    if (!(target instanceof Element) || target.closest('input,textarea,select,[contenteditable="true"],.sheet-wrap,.ask-overlay')) return hide();
-    const control = target.closest("button,a");
-    const key = control?.dataset.lesson ? "open" : control?.id === "parse-btn" ? "build" : control ? "look" : "learn";
-    label.textContent = labels[key][document.documentElement.lang === "ru" ? "ru" : "en"];
-    pointer.classList.toggle("is-action", !!control);
-    x = event.clientX; y = event.clientY;
-    pointer.classList.toggle("flip-label", x > innerWidth - 150);
-    pointer.classList.toggle("lift-label", y > innerHeight - 84);
-    pointer.classList.add("visible");
-    if (!document.body.classList.contains("has-playful-pointer")) document.body.classList.add("has-playful-pointer");
-    if (!frame) frame = requestAnimationFrame(draw);
-  }, { passive:true });
-  document.addEventListener("pointerdown", () => pointer.classList.add("pressed"), { passive:true });
-  document.addEventListener("pointerup", () => pointer.classList.remove("pressed"), { passive:true });
-  document.addEventListener("click", event => {
-    if (event.target instanceof Element && event.target.closest("#menu-btn,#parse-btn,#material-attach")) hide();
-  });
-  document.addEventListener("pointerout", event => { if (!event.relatedTarget) hide(); }, { passive:true });
-  document.addEventListener("keydown", hide);
-  window.addEventListener("blur", hide);
-  document.addEventListener("visibilitychange", () => { if (document.hidden) hide(); });
-  finePointer.addEventListener("change", hide);
-  new MutationObserver(() => { if (!document.body.classList.contains("home")) hide(); }).observe(document.body, { attributes:true, attributeFilter:["class"] });
+  const finePointer = enableLearnyPointer(makeArt("cursor", "playful-pointer-art", 56, 56));
 
   // Пауза хранит текущее время анимации: строка не возвращается к началу при наведении.
   let hoveredCard = null, pausedTrack = null;

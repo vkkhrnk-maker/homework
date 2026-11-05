@@ -1,0 +1,16 @@
+/* Настоящий указатель остаётся запасным вариантом, пока декоративный слой не активен. */
+@media (hover:hover) and (pointer:fine) and (min-width:760px){
+  :is([data-style="playful"],[data-style="learny"]) body.home,:is([data-style="playful"],[data-style="learny"]) body.home button,:is([data-style="playful"],[data-style="learny"]) body.home a{cursor:var(--playful-native-cursor),auto}
+  :is([data-style="playful"],[data-style="learny"]) body.home input,:is([data-style="playful"],[data-style="learny"]) body.home textarea{cursor:text}
+  :is([data-style="playful"],[data-style="learny"]) body.has-playful-pointer,:is([data-style="playful"],[data-style="learny"]) body.has-playful-pointer button,:is([data-style="playful"],[data-style="learny"]) body.has-playful-pointer a{cursor:none}
+}
+.playful-pointer{position:fixed;left:0;top:0;width:56px;height:56px;z-index:45;pointer-events:none;user-select:none;opacity:0;visibility:hidden;contain:layout style}
+.playful-pointer.visible{opacity:1;visibility:visible}
+.playful-pointer-art{display:block;position:absolute;left:-7px;top:-4px;width:56px;height:56px;max-width:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.18));transform-origin:14px 10px;transition:transform .16s cubic-bezier(.2,0,0,1)}
+.playful-pointer.is-action .playful-pointer-art{transform:rotate(-9deg)}
+.playful-pointer.pressed .playful-pointer-art{transform:scale(.96) rotate(-9deg)}
+.playful-pointer span{position:absolute;left:22px;top:48px;white-space:nowrap;font:700 13px/1.2 var(--font);letter-spacing:-.02em;color:#FFF;-webkit-text-stroke:3px var(--playful-primary);paint-order:stroke fill}
+.playful-pointer.flip-label span{left:auto;right:56px}
+.playful-pointer.lift-label span{top:auto;bottom:62px}
+
+@keyframes playful-blink{0%,43%,47%,100%{transform:scaleY(1)}44%,46%{transform:scaleY(.08)}}

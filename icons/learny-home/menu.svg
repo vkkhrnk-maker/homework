@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="72" height="36" viewBox="0 0 72 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Menu &#194;&#183; oval icon button">
+<mask id="stroke0_0_90" fill="white">
+<path d="M72 18C72 27.9411 55.8823 36 36 36C16.1177 36 0 27.9411 0 18C0 8.05887 16.1177 0 36 0C55.8823 0 72 8.05887 72 18Z"/>
+</mask>
+<path id="Oval outline" d="M72 18C72 27.9411 55.8823 36 36 36C16.1177 36 0 27.9411 0 18C0 8.05887 16.1177 0 36 0C55.8823 0 72 8.05887 72 18Z" stroke-width="3" stroke="#17151A" mask="url(#stroke0_0_90)"/>
+<rect id="Menu line" x="25" y="11" width="22" height="2" rx="1" fill="#17151A"/>
+<rect id="Menu line_2" x="25" y="17" width="22" height="2" rx="1" fill="#17151A"/>
+<rect id="Menu line_3" x="25" y="23" width="22" height="2" rx="1" fill="#17151A"/>
+</g>
+</svg>

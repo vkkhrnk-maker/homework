@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-variant="fromt" data-intake="unified">
+<html lang="en" data-variant="fromt" data-style="learny" data-theme="light" data-theme-mode="light" data-intake="unified">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -930,6 +930,238 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 :root[data-theme="dark"] .intake{background:var(--bg)}
 @media(prefers-color-scheme:dark){:root[data-variant="fromt"]:not([data-theme="light"]) .intake::before,:root[data-variant="fromt"]:not([data-theme="light"]) .intake::after{display:none}
 :root:not([data-theme="light"]) .intake{background:var(--bg)}}
+
+</style>
+<style id="learny-home">
+/* Настоящий указатель остаётся запасным вариантом, пока декоративный слой не активен. */
+@media (hover:hover) and (pointer:fine) and (min-width:760px){
+  :is([data-style="playful"],[data-style="learny"]) body.home,:is([data-style="playful"],[data-style="learny"]) body.home button,:is([data-style="playful"],[data-style="learny"]) body.home a{cursor:var(--playful-native-cursor),auto}
+  :is([data-style="playful"],[data-style="learny"]) body.home input,:is([data-style="playful"],[data-style="learny"]) body.home textarea{cursor:text}
+  :is([data-style="playful"],[data-style="learny"]) body.has-playful-pointer,:is([data-style="playful"],[data-style="learny"]) body.has-playful-pointer button,:is([data-style="playful"],[data-style="learny"]) body.has-playful-pointer a{cursor:none}
+}
+.playful-pointer{position:fixed;left:0;top:0;width:56px;height:56px;z-index:45;pointer-events:none;user-select:none;opacity:0;visibility:hidden;contain:layout style}
+.playful-pointer.visible{opacity:1;visibility:visible}
+.playful-pointer-art{display:block;position:absolute;left:-7px;top:-4px;width:56px;height:56px;max-width:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.18));transform-origin:14px 10px;transition:transform .16s cubic-bezier(.2,0,0,1)}
+.playful-pointer.is-action .playful-pointer-art{transform:rotate(-9deg)}
+.playful-pointer.pressed .playful-pointer-art{transform:scale(.96) rotate(-9deg)}
+.playful-pointer span{position:absolute;left:22px;top:48px;white-space:nowrap;font:700 13px/1.2 var(--font);letter-spacing:-.02em;color:#FFF;-webkit-text-stroke:3px var(--playful-primary);paint-order:stroke fill}
+.playful-pointer.flip-label span{left:auto;right:56px}
+.playful-pointer.lift-label span{top:auto;bottom:62px}
+
+@keyframes playful-blink{0%,43%,47%,100%{transform:scaleY(1)}44%,46%{transform:scaleY(.08)}}
+[data-style="learny"] body.home {
+  --bg: #f6f6f2;
+  --fg: #17151a;
+  --fg-2: #56525b;
+  --fromt-solid: #fff;
+  --lesson-ink: var(--fg);
+  --lesson-ink-muted: var(--fg-2);
+  --accent: #6824dd;
+  --accent-hover: #5420b1;
+  --accent-fg: #fff;
+  --learny-mint: #a9e8cd;
+  --learny-purple: #6824dd;
+  --learny-yellow: #ffe46a;
+  --learny-ink: #17151a;
+  --learny-gutter: 24px;
+  --playful-native-cursor: url("icons/playful/cursor.svg") 6 3;
+  --mascot-main: var(--learny-purple);
+}
+[data-style="learny"] .playful-pointer span { color: #17151a; -webkit-text-stroke-color: #f6f6f2; }
+[data-style="learny"] .mascot-eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: playful-blink 6.4s ease-in-out var(--blink-delay, 0s) infinite;
+}
+[data-theme-mode="light"] :is([data-ui="themeLabel"], #theme-seg) { display: none; }
+[data-style="learny"] body.home :is(header.top .bar, main.wrap, .app-footer) {
+  max-width: none;
+  padding-left: max(var(--learny-gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--learny-gutter), env(safe-area-inset-right, 0px));
+}
+[data-style="learny"] body.home header.top {
+  background: var(--bg);
+  border-bottom: 1px solid var(--fg);
+}
+[data-style="learny"] body.home header.top .bar { padding-block: 8px; }
+[data-style="learny"] body.home #brand-home {
+  gap: 8px; font-size: 18px; letter-spacing: 0;
+}
+[data-style="learny"] body.home #brand-home i { width: 47px; height: 47px; }
+.learny-brand-mascot, .learny-menu-icon, .learny-home-link { display: none; }
+[data-style="learny"] body.home :is(.learny-brand-mascot, .learny-menu-icon) { display: block; }
+[data-style="learny"] body.home :is(#brand-home img, #menu-btn svg) { display: none; }
+[data-style="learny"] body.home #menu-btn {
+  position: relative; width: 72px; height: 40px; border: 1px solid var(--fg); border-radius: 50%; box-shadow: none;
+}
+.learny-menu-icon {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  max-width: none; clip-path: inset(10px 24px);
+}
+[data-style="learny"] body.home .header-lang { width: 92px; height: 40px; }
+[data-style="learny"] body.home .header-lang-track {
+  padding: 3px; border: 1px solid var(--fg); box-shadow: none; font-size: 16px;
+}
+[data-style="learny"] body.home .header-lang-track::before {
+  left: 3px; inset-block: 3px; width: calc(50% - 3px);
+}
+.learny-nav-side { display: flex; gap: 4px; align-items: center; }
+@media (min-width: 1050px) {
+  [data-style="learny"] body.home header.top .bar { display: grid; grid-template-columns: 1fr auto 1fr; }
+  [data-style="learny"] body.home #brand-home { grid-area: 1 / 2; justify-self: center; margin: 0; z-index: 1; }
+  [data-style="learny"] body.home .header-actions { grid-area: 1 / 3; justify-self: end; z-index: 1; }
+  [data-style="learny"] body.home .top-nav {
+    display: flex; justify-content: space-between; grid-area: 1 / 1 / 2 / 4; align-self: stretch;
+    position: static; transform: none; padding-right: 196px; pointer-events: none;
+  }
+  [data-style="learny"] body.home .top-nav button {
+    padding-inline: 0; font-size: 18px; font-weight: 700; pointer-events: auto;
+  }
+  [data-style="learny"] body.home .learny-nav-side { gap: 24px; }
+  [data-style="learny"] body.home .learny-home-link { display: block; }
+}
+[data-style="learny"] body.home .intake {
+  margin-top: 0;
+  padding: clamp(36px, 5.2vw, 76px) 0 0;
+  gap: 24px;
+}
+[data-style="learny"] .intake::before { display: none; }
+[data-style="learny"] .intake-copy .eyebrow { display: none; }
+[data-style="learny"] .intake-copy h1 {
+  max-width: 880px;
+  margin: 0 0 20px;
+  font-size: clamp(36px, 6.32vw, 91px);
+  line-height: .98;
+  font-weight: 700;
+  letter-spacing: -.05em;
+}
+[data-style="learny"][lang="ru"] .intake-copy h1 { max-width: 13em; }
+[data-style="learny"] .intake-copy { padding-inline: var(--learny-gutter); }
+[data-style="learny"] .intake-copy .lede { max-width: 502px; font-size: 16px; line-height: 1.5; }
+[data-style="learny"] .intake .drop-card { width: min(880px, calc(100% - 32px)); }
+.learny-editor-frame { position: relative; }
+[data-style="learny"] .intake .drop-card .material-composer {
+  min-height: 304px;
+  border: 1.5px solid var(--learny-ink);
+  border-radius: 0;
+  background: var(--learny-mint);
+  box-shadow: none;
+  color: var(--learny-ink);
+}
+.learny-handle {
+  position: absolute; width: 10px; height: 10px; z-index: 1; pointer-events: none;
+  background: var(--learny-yellow); border: 1.5px solid var(--learny-ink);
+}
+.learny-handle.corner-tl { left: -5px; top: -5px; }
+.learny-handle.corner-tr { right: -5px; top: -5px; }
+.learny-handle.corner-bl { left: -5px; bottom: -5px; }
+.learny-handle.corner-br { right: -5px; bottom: -5px; }
+[data-style="learny"] .intake .drop-card #paste-area {
+  padding: 16px; font-size: 16px; line-height: 1.5; color: var(--learny-ink);
+}
+[data-style="learny"] .intake .drop-card #paste-area::placeholder { color: #46414b; }
+.learny-input-example {
+  display: none; position: absolute; inset: 16px 16px auto; color: var(--learny-ink);
+  pointer-events: none; font-size: 16px; line-height: 1.5;
+}
+.learny-input-example p { margin: 0; }
+.learny-input-example p + p { margin-top: 24px; }
+[data-style="learny"] #paste-area:placeholder-shown:not(:focus)::placeholder { color: transparent; }
+#paste-area:placeholder-shown:not(:focus) + .learny-input-example { display: block; }
+[data-style="learny"] .intake .material-tools { padding: 10px 16px 16px; gap: 12px 16px; }
+[data-style="learny"] .intake .attach-btn {
+  background: #fff; color: var(--learny-purple); font-size: 16px; font-weight: 700; box-shadow: none;
+}
+.learny-attach-icon { flex: none; }
+[data-style="learny"] .intake :is(.material-help, .material-review) { color: var(--learny-ink); }
+[data-style="learny"] .intake .material-help { flex: 1; font-size: 14px; }
+[data-style="learny"] .intake .material-tools #parse-btn {
+  margin-left: auto; padding: 0 28px; height: 52px; border-radius: 8px;
+  background: #7630ee; color: #ffeea0; font-size: 18px; font-weight: 700; box-shadow: none;
+}
+[data-style="learny"] .intake .material-tools #parse-btn:hover { background: var(--learny-purple); }
+[data-style="learny"] .drop-actions { margin-top: 0; }
+[data-style="learny"] .drop-actions:has(> :not([hidden], [data-message="parseHint"])) { margin-top: 16px; }
+[data-style="learny"] #parse-hint[data-message="parseHint"] { display: none; }
+
+[data-style="learny"] .intake .how-list {
+  width: calc(100% - 2 * var(--learny-gutter));
+  margin: clamp(28px, 5vw, 72px) auto 0;
+  padding: 8px 0 16px;
+}
+[data-style="learny"] .intake .how-item {
+  --step-width: clamp(220px, calc((100vw - 144px) / 5), 360px);
+  flex: 0 0 var(--step-width); width: var(--step-width); min-width: 0; max-width: none;
+  height: 296px; margin-right: 24px; padding: 24px; gap: 8px;
+  border-radius: 0; background: var(--learny-mint); color: var(--learny-ink); --ink: var(--learny-ink);
+  transition: transform .18s ease-out;
+}
+[data-style="learny"] .intake .how-item:is([data-c="3"], [data-c="5"]) { background: var(--learny-yellow); }
+[data-style="learny"] .intake .how-item[data-c="4"] { background: #f6bfd7; }
+[data-style="learny"] .intake .how-item::after {
+  content: "";
+  position: absolute;
+  left: 30px; bottom: -16px; width: 26px; height: 27px;
+  border-radius: 0 0 23px 0;
+  background: inherit;
+  pointer-events: none;
+}
+[data-style="learny"] .intake .how-item .learny-step-art {
+  left: 24px; top: 24px; width: 84px; height: 84px; object-fit: contain;
+}
+[data-style="learny"] .intake .how-item[data-c="3"] .learny-step-art { transform: rotate(23deg); }
+[data-style="learny"] .intake .how-item strong { font-size: 24px; line-height: 1.2; }
+[data-style="learny"] .intake .how-item p { font-size: 16px; line-height: 1.5; }
+@media (hover: hover) and (pointer: fine) {
+  [data-style="learny"] .intake .how-item:hover { transform: translateY(-6px); }
+}
+
+#learny-library { margin-top: clamp(48px, 6.9vw, 100px); scroll-margin-top: 84px; }
+.learny-library-title {
+  margin: 0 0 24px; text-align: center; color: var(--fg);
+  font-size: clamp(34px, 4.86vw, 70px); line-height: 1.04; letter-spacing: -.035em;
+}
+.learny-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.learny-filter { min-height: 64px; padding: 8px; background: var(--fromt-solid); color: var(--fg); font-size: 18px; font-weight: 700; }
+.learny-filter[aria-pressed="true"] { border-radius: 999px; background: var(--learny-purple); color: #ffeea0; }
+.learny-empty { text-align: center; color: var(--fg-2); }
+[data-style="learny"] #lesson-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+[data-style="learny"] #lesson-list::before { content: none; }
+[data-style="learny"] .lesson-card { min-height: 264px; padding: 24px; border-radius: 0; justify-content: space-between; }
+[data-style="learny"] .lesson-card h3 { font-size: clamp(20px, 1.65vw, 24px); }
+[data-style="learny"] .lesson-card .lc-art { width: 96px; height: auto; }
+[data-style="learny"] .lesson-card .lc-meter i { background: var(--learny-purple); }
+[data-style="learny"] .lc-resume-arrow { position: relative; isolation: isolate; display: grid; place-items: center; width: 72px; height: 36px; color: var(--fg); }
+.learny-arrow-oval { position: absolute; z-index: -1; inset: 0; width: auto; height: auto; }
+
+[data-style="learny"] body.home .app-footer {
+  width: 100%; max-width: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  gap: 20px; padding-block: 12px; background: var(--learny-purple); border-top: 2px solid #fff; color: #fff;
+}
+[data-style="learny"] .footer-copy, .learny-footer-right { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+[data-style="learny"] .footer-name { color: inherit; font-size: 24px; font-weight: 700; }
+.learny-footer-right { align-items: flex-end; text-align: right; }
+[data-style="learny"] .footer-year { color: inherit; }
+
+@media (max-width: 999px) {
+  [data-style="learny"] #lesson-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 630px) {
+  [data-style="learny"] body.home #menu-btn { width: 56px; }
+  [data-style="learny"] body.home .header-lang { width: 76px; }
+  [data-style="learny"] body.home .header-lang-track { font-size: 14px; }
+  [data-style="learny"] .intake .drop-card .material-composer { min-height: 270px; }
+  [data-style="learny"] .intake .material-tools { gap: 10px; }
+  [data-style="learny"] .intake .material-help { flex-basis: calc(100% - 170px); font-size: 12px; }
+  [data-style="learny"] .intake .material-tools #parse-btn { width: 100%; }
+  [data-style="learny"] #lesson-list { grid-template-columns: minmax(0, 1fr); }
+  .learny-filters { gap: 8px; }
+  .learny-filter { font-size: 14px; min-height: 44px; }
+  [data-style="learny"] body.home .app-footer { grid-template-columns: 1fr auto; }
+  .learny-footer-cup { width: 82px; grid-row: span 2; }
+  .learny-footer-right { align-items: flex-start; text-align: left; }
+}
+}
 
 </style>
 </head>
@@ -2898,6 +3130,7 @@ function setParsing(on) {
 }
 function parseHint(key, isError) {
   const h = $("#parse-hint");
+  h.dataset.message = key;
   h.textContent = t((unifiedIntake && intakeCopy[key]) || key);
   h.classList.toggle("err", !!isError);
 }
@@ -3358,9 +3591,11 @@ $("#menu").addEventListener("click", e => { if (e.target === $("#menu") || e.tar
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeMenu(); closeSheet(); } });
 $("#ai-btn").addEventListener("click", () => keySheet());
 
-function getTheme() { return lsGet("hw-theme") || "auto"; }
+const lightThemeOnly = document.documentElement.dataset.themeMode === "light";
+function getTheme() { return lightThemeOnly ? "light" : lsGet("hw-theme") || "auto"; }
 function setTheme(th) {
-  lsSet("hw-theme", th);
+  if (lightThemeOnly) th = "light";
+  else lsSet("hw-theme", th);
   if (th === "auto") document.documentElement.removeAttribute("data-theme");
   else document.documentElement.setAttribute("data-theme", th);
   $$("#theme-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.th === th)));
@@ -3369,7 +3604,9 @@ $$("#theme-seg button").forEach(b => b.addEventListener("click", () => setTheme(
 setTheme(getTheme());
 /* «Авто» — тема устройства: снимаем тему, которую навязывает внешняя оболочка */
 new MutationObserver(() => {
-  if (getTheme() === "auto" && document.documentElement.hasAttribute("data-theme")) document.documentElement.removeAttribute("data-theme");
+  const root = document.documentElement;
+  if (lightThemeOnly && root.dataset.theme !== "light") root.dataset.theme = "light";
+  else if (getTheme() === "auto" && root.hasAttribute("data-theme")) root.removeAttribute("data-theme");
 }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
 /* ключ проверяем бесплатным запросом списка моделей, а не по первым буквам: форматы ключей меняются.
@@ -5657,6 +5894,266 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   });
   reg.update().catch(() => {});
 });
+</script>
+<script id="learny-home-script">
+function enableLearnyPointer(cursor) {
+  const finePointer = matchMedia("(hover: hover) and (pointer: fine) and (min-width: 760px)");
+  const pointer = document.createElement("div");
+  pointer.id = "playful-pointer"; pointer.className = "playful-pointer";
+  pointer.setAttribute("aria-hidden", "true");
+  pointer.append(cursor, document.createElement("span"));
+  document.body.append(pointer);
+  const label = pointer.querySelector("span");
+  const labels = {
+    learn: { ru:"{Учимся} вместе", en:"{Let's} learn" },
+    open: { ru:"{Открыть} урок", en:"{Open} lesson" },
+    build: { ru:"{Создать} урок", en:"{Build} lesson" },
+    look: { ru:"{Посмотрим}", en:"{Take} a look" }
+  };
+  let frame = 0, x = 0, y = 0;
+  const hide = () => {
+    pointer.classList.remove("visible", "pressed");
+    if (document.body.classList.contains("has-playful-pointer")) document.body.classList.remove("has-playful-pointer");
+    if (frame) { cancelAnimationFrame(frame); frame = 0; }
+  };
+  const draw = () => { frame = 0; pointer.style.transform = `translate(${x}px,${y}px)`; };
+  document.addEventListener("pointermove", event => {
+    if (!finePointer.matches || event.pointerType === "touch" || !document.body.classList.contains("home")) return hide();
+    const target = event.target;
+    if (!(target instanceof Element) || target.closest('input,textarea,select,[contenteditable="true"],.sheet-wrap,.ask-overlay')) return hide();
+    const control = target.closest("button,a");
+    const key = control?.dataset.lesson ? "open" : control?.id === "parse-btn" ? "build" : control ? "look" : "learn";
+    label.textContent = labels[key][document.documentElement.lang === "ru" ? "ru" : "en"];
+    pointer.classList.toggle("is-action", !!control);
+    x = event.clientX; y = event.clientY;
+    pointer.classList.toggle("flip-label", x > innerWidth - 150);
+    pointer.classList.toggle("lift-label", y > innerHeight - 84);
+    pointer.classList.add("visible");
+    if (!document.body.classList.contains("has-playful-pointer")) document.body.classList.add("has-playful-pointer");
+    if (!frame) frame = requestAnimationFrame(draw);
+  }, { passive:true });
+  document.addEventListener("pointerdown", () => pointer.classList.add("pressed"), { passive:true });
+  document.addEventListener("pointerup", () => pointer.classList.remove("pressed"), { passive:true });
+  document.addEventListener("click", event => {
+    if (event.target instanceof Element && event.target.closest("#menu-btn,#parse-btn,#material-attach")) hide();
+  });
+  document.addEventListener("pointerout", event => { if (!event.relatedTarget) hide(); }, { passive:true });
+  document.addEventListener("keydown", hide);
+  window.addEventListener("blur", hide);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) hide(); });
+  finePointer.addEventListener("change", hide);
+  new MutationObserver(() => { if (!document.body.classList.contains("home")) hide(); }).observe(document.body, { attributes:true, attributeFilter:["class"] });
+
+  return finePointer;
+}
+(() => {
+  const mascotAssets = {"brand-book": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"47\" height=\"47\" viewBox=\"0 0 47 47\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Lesson mascot\" clip-path=\"url(#clip0_0_95)\">\n<g id=\"Illustration detail\">\n<use xlink:href=\"#stroke0_0_95\" fill=\"#FFE46A\"/>\n<mask id=\"stroke1_0_95\" fill=\"white\">\n<use xlink:href=\"#stroke0_0_95\"/>\n</mask>\n<path d=\"M0 0V0.47H0.000261111V0V-0.47H0V0ZM9.92222 36.2944V37.2344H34.2056V36.2944V35.3544H9.92222V36.2944ZM34.2056 36.2944V37.2344C37.4052 37.2344 39.5844 34.6524 39.5844 31.5944H38.6444H37.7044C37.7044 33.7587 36.2281 35.3544 34.2056 35.3544V36.2944ZM38.6444 31.5944H39.5844V10.7056H38.6444H37.7044V31.5944H38.6444ZM38.6444 10.7056H39.5844C39.5844 8.09752 37.5969 6.11 34.9889 6.11V7.05V7.99C36.5586 7.99 37.7044 9.13581 37.7044 10.7056H38.6444ZM34.9889 7.05V6.11H12.7944V7.05V7.99H34.9889V7.05ZM12.7944 7.05V6.11C9.40307 6.11 6.89333 8.61974 6.89333 12.0111H7.83333H8.77333C8.77333 9.65804 10.4414 7.99 12.7944 7.99V7.05ZM7.83333 12.0111H6.89333V33.4222H7.83333H8.77333V12.0111H7.83333ZM7.83333 33.4222H6.89333C6.89333 34.4529 7.11176 35.3927 7.63017 36.0996C8.17592 36.8438 8.98671 37.2344 9.92222 37.2344V36.2944V35.3544C9.55218 35.3544 9.31852 35.2228 9.14622 34.9879C8.94657 34.7156 8.77333 34.2193 8.77333 33.4222H7.83333ZM47 47V46.06H46.9997V47V47.94H47V47Z\" fill=\"#151517\" mask=\"url(#stroke1_0_95)\"/>\n</g>\n<g id=\"Illustration detail_2\">\n<use xlink:href=\"#stroke2_0_95\" fill=\"#3038EE\"/>\n<mask id=\"stroke3_0_95\" fill=\"white\">\n<use xlink:href=\"#stroke2_0_95\"/>\n</mask>\n<path d=\"M0 0V0.47H0.000261111V0V-0.47H0V0ZM12.7944 7.05H13.7344V6.11H12.7944V7.05ZM12.7944 36.2944V37.2344H13.7344V36.2944H12.7944ZM12.7944 7.05H11.8544V36.2944H12.7944H13.7344V7.05H12.7944ZM12.7944 36.2944V35.3544H9.92222V36.2944V37.2344H12.7944V36.2944ZM9.92222 36.2944V35.3544C9.55218 35.3544 9.31852 35.2228 9.14622 34.9879C8.94657 34.7156 8.77333 34.2193 8.77333 33.4222H7.83333H6.89333C6.89333 34.4529 7.11176 35.3927 7.63017 36.0996C8.17592 36.8438 8.98671 37.2344 9.92222 37.2344V36.2944ZM7.83333 33.4222H8.77333V12.0111H7.83333H6.89333V33.4222H7.83333ZM7.83333 12.0111H8.77333C8.77333 9.65804 10.4414 7.99 12.7944 7.99V7.05V6.11C9.40307 6.11 6.89333 8.61974 6.89333 12.0111H7.83333ZM47 47V46.06H46.9997V47V47.94H47V47Z\" fill=\"#151517\" mask=\"url(#stroke3_0_95)\"/>\n</g>\n<path id=\"Illustration detail_3\" d=\"M13.0556 33.1611H35.25M15.1444 9.92222H34.7278M22.9778 26.6333C24.5444 28.2 26.1111 28.113 27.6778 26.3722M15.9278 36.5556L13.8389 41.2556H18.5389M30.2889 36.5556L32.3778 41.2556H36.8167M0 0H0.000261111M47 47H46.9997\" stroke-width=\"0.94\" stroke=\"#151517\"/>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke4_0_95\" fill=\"white\"/>\n<mask id=\"stroke5_0_95\" fill=\"white\">\n<use xlink:href=\"#stroke4_0_95\"/>\n</mask>\n<path d=\"M24.2831 19.5833C24.2831 22.1791 22.7637 24.2833 20.8896 24.2833C19.0154 24.2833 17.496 22.1791 17.496 19.5833C17.496 16.9876 19.0154 14.8833 20.8896 14.8833C22.7637 14.8833 24.2831 16.9876 24.2831 19.5833Z\" stroke-width=\"1.88\" stroke=\"#151517\" mask=\"url(#stroke5_0_95)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"21.9362\" cy=\"20.6268\" rx=\"1.30649\" ry=\"2.08982\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke6_0_95\" fill=\"white\"/>\n<mask id=\"stroke7_0_95\" fill=\"white\">\n<use xlink:href=\"#stroke6_0_95\"/>\n</mask>\n<path d=\"M32.6371 19.5833C32.6371 22.1791 31.1178 24.2833 29.2436 24.2833C27.3694 24.2833 25.8501 22.1791 25.8501 19.5833C25.8501 16.9876 27.3694 14.8833 29.2436 14.8833C31.1178 14.8833 32.6371 16.9876 32.6371 19.5833Z\" stroke-width=\"1.88\" stroke=\"#151517\" mask=\"url(#stroke7_0_95)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"30.2897\" cy=\"20.6268\" rx=\"1.30649\" ry=\"2.08982\" fill=\"#151517\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_95\">\n<rect width=\"47\" height=\"47\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke0_0_95\" d=\"M9.92222 36.2944H34.2056C36.8167 36.2944 38.6444 34.2056 38.6444 31.5944V10.7056C38.6444 8.61667 37.0778 7.05 34.9889 7.05H12.7944C9.92222 7.05 7.83333 9.13889 7.83333 12.0111V33.4222C7.83333 35.25 8.61667 36.2944 9.92222 36.2944ZM47 47H46.9997Z\"/>\n<path id=\"stroke2_0_95\" d=\"M12.7944 7.05V36.2944H9.92222C8.61667 36.2944 7.83333 35.25 7.83333 33.4222V12.0111C7.83333 9.13889 9.92222 7.05 12.7944 7.05ZM47 47H46.9997Z\"/>\n<path id=\"stroke4_0_95\" d=\"M24.2831 19.5833C24.2831 22.1791 22.7637 24.2833 20.8896 24.2833C19.0154 24.2833 17.496 22.1791 17.496 19.5833C17.496 16.9876 19.0154 14.8833 20.8896 14.8833C22.7637 14.8833 24.2831 16.9876 24.2831 19.5833Z\"/>\n<path id=\"stroke6_0_95\" d=\"M32.6371 19.5833C32.6371 22.1791 31.1178 24.2833 29.2436 24.2833C27.3694 24.2833 25.8501 22.1791 25.8501 19.5833C25.8501 16.9876 27.3694 14.8833 29.2436 14.8833C31.1178 14.8833 32.6371 16.9876 32.6371 19.5833Z\"/>\n</defs>\n</svg>\n", "footer-cup": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"132\" height=\"132\" viewBox=\"0 0 132 132\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Lesson mascot\" clip-path=\"url(#clip0_0_4)\">\n<g id=\"Illustration detail\">\n<path d=\"M132 132H131.999Z\" fill=\"white\"/>\n<mask id=\"stroke0_0_4\" fill=\"white\">\n<path d=\"M132 132H131.999Z\"/>\n</mask>\n<path d=\"M101.933 84.3333V85.6533H101.973L102.013 85.6509L101.933 84.3333ZM91.6667 48.4V49.72H100.467V48.4V47.08H91.6667V48.4ZM100.467 48.4V49.72C111.389 49.72 117.329 57.6732 117.757 65.8853C117.971 69.9972 116.79 74.1082 114.194 77.261C111.616 80.3926 107.568 82.6694 101.853 83.0158L101.933 84.3333L102.013 85.6509C108.399 85.2639 113.151 82.6824 116.233 78.939C119.297 75.2168 120.637 70.4361 120.393 65.748C119.904 56.3602 113.011 47.08 100.467 47.08V48.4ZM101.933 84.3333V83.0133H91.6667V84.3333V85.6533H101.933V84.3333ZM0 0V1.32H0.000733333V0V-1.32H0V0ZM132 132V129.36H131.999V132V134.64H132V132Z\" fill=\"#151517\" mask=\"url(#stroke0_0_4)\"/>\n</g>\n<g id=\"Illustration detail_2\">\n<path d=\"M26.4 41.8H95.3333V83.6C95.3333 101.2 82.1333 110 61.6 110C41.0667 110 26.4 101.2 26.4 83.6V41.8ZM132 132H131.999Z\" fill=\"#F6BFD7\"/>\n<mask id=\"stroke1_0_4\" fill=\"white\">\n<path d=\"M26.4 41.8H95.3333V83.6C95.3333 101.2 82.1333 110 61.6 110C41.0667 110 26.4 101.2 26.4 83.6V41.8ZM132 132H131.999Z\"/>\n</mask>\n<path d=\"M0 0V1.32H0.000733333V0V-1.32H0V0ZM26.4 41.8V39.16H23.76V41.8H26.4ZM95.3333 41.8H97.9733V39.16H95.3333V41.8ZM26.4 41.8V44.44H95.3333V41.8V39.16H26.4V41.8ZM95.3333 41.8H92.6933V83.6H95.3333H97.9733V41.8H95.3333ZM95.3333 83.6H92.6933C92.6933 91.6594 89.7154 97.4384 84.5827 101.288C79.3377 105.222 71.543 107.36 61.6 107.36V110V112.64C72.1903 112.64 81.2623 110.378 87.7507 105.512C94.3512 100.562 97.9733 93.1406 97.9733 83.6H95.3333ZM61.6 110V107.36C51.6589 107.36 43.4594 105.222 37.8224 101.243C32.3008 97.3456 29.04 91.5556 29.04 83.6H26.4H23.76C23.76 93.2444 27.8326 100.654 34.7776 105.557C41.6072 110.378 51.0078 112.64 61.6 112.64V110ZM26.4 83.6H29.04V41.8H26.4H23.76V83.6H26.4ZM132 132V129.36H131.999V132V134.64H132V132Z\" fill=\"#151517\" mask=\"url(#stroke1_0_4)\"/>\n</g>\n<path id=\"Illustration detail_3\" d=\"M18.3333 115.867H107.8M44.7333 29.3333C39.8444 24.4444 39.8444 19.5556 44.7333 14.6667M68.9333 29.3333C64.0444 24.4444 64.0444 19.5556 68.9333 14.6667M56.4667 90.2C60.8667 94.1111 65.2667 93.8667 69.6667 89.4667M0 0H0.000733333M132 132H131.999\" stroke-width=\"2.64\" stroke=\"#151517\"/>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke2_0_4\" fill=\"white\"/>\n<mask id=\"stroke3_0_4\" fill=\"white\">\n<use xlink:href=\"#stroke2_0_4\"/>\n</mask>\n<path d=\"M57.2 68.935C57.2 75.4161 52.931 80.67 47.665 80.67C42.399 80.67 38.13 75.4161 38.13 68.935C38.13 62.4539 42.399 57.2 47.665 57.2C52.931 57.2 57.2 62.4539 57.2 68.935Z\" stroke-width=\"5.28\" stroke=\"#151517\" mask=\"url(#stroke3_0_4)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"50.595\" cy=\"71.865\" rx=\"3.665\" ry=\"5.135\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke4_0_4\" fill=\"white\"/>\n<mask id=\"stroke5_0_4\" fill=\"white\">\n<use xlink:href=\"#stroke4_0_4\"/>\n</mask>\n<path d=\"M85.07 68.935C85.07 75.4161 80.801 80.67 75.535 80.67C70.269 80.67 66 75.4161 66 68.935C66 62.4539 70.269 57.2 75.535 57.2C80.801 57.2 85.07 62.4539 85.07 68.935Z\" stroke-width=\"5.28\" stroke=\"#151517\" mask=\"url(#stroke5_0_4)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"78.465\" cy=\"71.865\" rx=\"3.665\" ry=\"5.135\" fill=\"#151517\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_4\">\n<rect width=\"132\" height=\"132\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke2_0_4\" d=\"M57.2 68.935C57.2 75.4161 52.931 80.67 47.665 80.67C42.399 80.67 38.13 75.4161 38.13 68.935C38.13 62.4539 42.399 57.2 47.665 57.2C52.931 57.2 57.2 62.4539 57.2 68.935Z\"/>\n<path id=\"stroke4_0_4\" d=\"M85.07 68.935C85.07 75.4161 80.801 80.67 75.535 80.67C70.269 80.67 66 75.4161 66 68.935C66 62.4539 70.269 57.2 75.535 57.2C80.801 57.2 85.07 62.4539 85.07 68.935Z\"/>\n</defs>\n</svg>\n", "lesson-b1": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"96\" height=\"96\" viewBox=\"0 0 96 96\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Lesson mascot\" clip-path=\"url(#clip0_0_19)\">\n<g id=\"Illustration detail\">\n<path d=\"M96 96H95.9995Z\" fill=\"white\"/>\n<mask id=\"stroke0_0_19\" fill=\"white\">\n<path d=\"M96 96H95.9995Z\"/>\n</mask>\n<path d=\"M74.1333 61.3333V62.2933H74.1624L74.1914 62.2916L74.1333 61.3333ZM66.6667 35.2V36.16H73.0667V35.2V34.24H66.6667V35.2ZM73.0667 35.2V36.16C81.0104 36.16 85.3302 41.9441 85.6413 47.9166C85.7971 50.9071 84.9384 53.8969 83.0505 56.1898C81.1753 58.4674 78.2314 60.1232 74.0753 60.3751L74.1333 61.3333L74.1914 62.2916C78.8353 62.0101 82.2913 60.1326 84.5328 57.4102C86.7616 54.7031 87.7363 51.2262 87.5587 47.8167C87.2031 40.9892 82.1896 34.24 73.0667 34.24V35.2ZM74.1333 61.3333V60.3733H66.6667V61.3333V62.2933H74.1333V61.3333ZM0 0V0.96H0.000533333V0V-0.96H0V0ZM96 96V94.08H95.9995V96V97.92H96V96Z\" fill=\"#151517\" mask=\"url(#stroke0_0_19)\"/>\n</g>\n<g id=\"Illustration detail_2\">\n<path d=\"M19.2 30.4H69.3333V60.8C69.3333 73.6 59.7333 80 44.8 80C29.8667 80 19.2 73.6 19.2 60.8V30.4ZM96 96H95.9995Z\" fill=\"#F6BFD7\"/>\n<mask id=\"stroke1_0_19\" fill=\"white\">\n<path d=\"M19.2 30.4H69.3333V60.8C69.3333 73.6 59.7333 80 44.8 80C29.8667 80 19.2 73.6 19.2 60.8V30.4ZM96 96H95.9995Z\"/>\n</mask>\n<path d=\"M0 0V0.96H0.000533333V0V-0.96H0V0ZM19.2 30.4V28.48H17.28V30.4H19.2ZM69.3333 30.4H71.2533V28.48H69.3333V30.4ZM19.2 30.4V32.32H69.3333V30.4V28.48H19.2V30.4ZM69.3333 30.4H67.4133V60.8H69.3333H71.2533V30.4H69.3333ZM69.3333 60.8H67.4133C67.4133 66.6614 65.2476 70.8643 61.5147 73.664C57.7002 76.5249 52.0313 78.08 44.8 78.08V80V81.92C52.5021 81.92 59.0998 80.2751 63.8187 76.736C68.6191 73.1357 71.2533 67.7386 71.2533 60.8H69.3333ZM44.8 80V78.08C37.5701 78.08 31.6069 76.5253 27.5072 73.6314C23.4915 70.7968 21.12 66.5859 21.12 60.8H19.2H17.28C17.28 67.8141 20.2419 73.2032 25.2928 76.7686C30.2598 80.2747 37.0966 81.92 44.8 81.92V80ZM19.2 60.8H21.12V30.4H19.2H17.28V60.8H19.2ZM96 96V94.08H95.9995V96V97.92H96V96Z\" fill=\"#151517\" mask=\"url(#stroke1_0_19)\"/>\n</g>\n<path id=\"Illustration detail_3\" d=\"M13.3333 84.2667H78.4M32.5333 21.3333C28.9778 17.7778 28.9778 14.2222 32.5333 10.6667M50.1333 21.3333C46.5778 17.7778 46.5778 14.2222 50.1333 10.6667M41.0667 65.6C44.2667 68.4445 47.4667 68.2667 50.6667 65.0667M0 0H0.000533333M96 96H95.9995\" stroke-width=\"1.92\" stroke=\"#151517\"/>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke2_0_19\" fill=\"white\"/>\n<mask id=\"stroke3_0_19\" fill=\"white\">\n<use xlink:href=\"#stroke2_0_19\"/>\n</mask>\n<path d=\"M41.6003 50.1335C41.6003 54.8463 38.4962 58.6668 34.667 58.6668C30.8378 58.6668 27.7337 54.8463 27.7337 50.1335C27.7337 45.4206 30.8378 41.6001 34.667 41.6001C38.4962 41.6001 41.6003 45.4206 41.6003 50.1335Z\" stroke-width=\"3.84\" stroke=\"#151517\" mask=\"url(#stroke3_0_19)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"36.8002\" cy=\"52.2667\" rx=\"2.66667\" ry=\"3.73333\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke4_0_19\" fill=\"white\"/>\n<mask id=\"stroke5_0_19\" fill=\"white\">\n<use xlink:href=\"#stroke4_0_19\"/>\n</mask>\n<path d=\"M61.8667 50.1333C61.8667 54.8461 58.7625 58.6666 54.9333 58.6666C51.1042 58.6666 48 54.8461 48 50.1333C48 45.4205 51.1042 41.6 54.9333 41.6C58.7625 41.6 61.8667 45.4205 61.8667 50.1333Z\" stroke-width=\"3.84\" stroke=\"#151517\" mask=\"url(#stroke5_0_19)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"57.0665\" cy=\"52.2667\" rx=\"2.66667\" ry=\"3.73333\" fill=\"#151517\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_19\">\n<rect width=\"96\" height=\"96\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke2_0_19\" d=\"M41.6003 50.1335C41.6003 54.8463 38.4962 58.6668 34.667 58.6668C30.8378 58.6668 27.7337 54.8463 27.7337 50.1335C27.7337 45.4206 30.8378 41.6001 34.667 41.6001C38.4962 41.6001 41.6003 45.4206 41.6003 50.1335Z\"/>\n<path id=\"stroke4_0_19\" d=\"M61.8667 50.1333C61.8667 54.8461 58.7625 58.6666 54.9333 58.6666C51.1042 58.6666 48 54.8461 48 50.1333C48 45.4205 51.1042 41.6 54.9333 41.6C58.7625 41.6 61.8667 45.4205 61.8667 50.1333Z\"/>\n</defs>\n</svg>\n", "lesson-c1": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"96\" height=\"97.92\" viewBox=\"0 0 96 97.92\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Star &#194;&#183; aligned artwork\">\n<g id=\"Illustration detail\">\n<use xlink:href=\"#stroke0_0_34\" fill=\"#FFE46A\"/>\n<mask id=\"stroke1_0_34\" fill=\"white\">\n<use xlink:href=\"#stroke0_0_34\"/>\n</mask>\n<path d=\"M0 0.96V1.92H0.000533333V0.96V0H0V0.96ZM48 10.0267L49.7008 9.13577L48 5.8888L46.2992 9.13577L48 10.0267ZM59.7333 32.4267L58.0325 33.3176L58.4853 34.182L59.4505 34.3257L59.7333 32.4267ZM84.8 36.16L86.1576 37.5176L88.8529 34.8224L85.0828 34.2609L84.8 36.16ZM66.6667 54.2933L65.309 52.9357L64.6104 53.6344L64.7728 54.609L66.6667 54.2933ZM70.9333 79.8933L70.0278 81.5864L73.4687 83.4269L72.8272 79.5777L70.9333 79.8933ZM48 67.6267L48.9056 65.9336L48 65.4493L47.0944 65.9336L48 67.6267ZM25.0667 79.8933L23.1728 79.5777L22.5313 83.4269L25.9722 81.5864L25.0667 79.8933ZM29.3333 54.2933L31.2272 54.609L31.3896 53.6344L30.691 52.9357L29.3333 54.2933ZM11.2 36.16L10.9172 34.2609L7.14715 34.8224L9.84236 37.5176L11.2 36.16ZM36.2667 32.4267L36.5495 34.3257L37.5147 34.182L37.9675 33.3176L36.2667 32.4267ZM48 10.0267L46.2992 10.9176L58.0325 33.3176L59.7333 32.4267L61.4341 31.5358L49.7008 9.13577L48 10.0267ZM59.7333 32.4267L59.4505 34.3257L84.5172 38.0591L84.8 36.16L85.0828 34.2609L60.0162 30.5276L59.7333 32.4267ZM84.8 36.16L83.4424 34.8024L65.309 52.9357L66.6667 54.2933L68.0243 55.651L86.1576 37.5176L84.8 36.16ZM66.6667 54.2933L64.7728 54.609L69.0395 80.209L70.9333 79.8933L72.8272 79.5777L68.5605 53.9777L66.6667 54.2933ZM70.9333 79.8933L71.8389 78.2003L48.9056 65.9336L48 67.6267L47.0944 69.3197L70.0278 81.5864L70.9333 79.8933ZM48 67.6267L47.0944 65.9336L24.1611 78.2003L25.0667 79.8933L25.9722 81.5864L48.9056 69.3197L48 67.6267ZM25.0667 79.8933L26.9605 80.209L31.2272 54.609L29.3333 54.2933L27.4395 53.9777L23.1728 79.5777L25.0667 79.8933ZM29.3333 54.2933L30.691 52.9357L12.5576 34.8024L11.2 36.16L9.84236 37.5176L27.9757 55.651L29.3333 54.2933ZM11.2 36.16L11.4828 38.0591L36.5495 34.3257L36.2667 32.4267L35.9838 30.5276L10.9172 34.2609L11.2 36.16ZM36.2667 32.4267L37.9675 33.3176L49.7008 10.9176L48 10.0267L46.2992 9.13577L34.5659 31.5358L36.2667 32.4267ZM96 96.96V95.04H95.9995V96.96V98.88H96V96.96Z\" fill=\"#151517\" mask=\"url(#stroke1_0_34)\"/>\n</g>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke2_0_34\" fill=\"white\"/>\n<mask id=\"stroke3_0_34\" fill=\"white\">\n<use xlink:href=\"#stroke2_0_34\"/>\n</mask>\n<path d=\"M46.9367 45.7544C46.9367 50.4661 44.0713 54.2858 40.5367 54.2858C37.0021 54.2858 34.1367 50.4661 34.1367 45.7544C34.1367 41.0426 37.0021 37.2229 40.5367 37.2229C44.0713 37.2229 46.9367 41.0426 46.9367 45.7544Z\" stroke-width=\"3.84\" stroke=\"#151517\" mask=\"url(#stroke3_0_34)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"42.6686\" cy=\"47.8914\" rx=\"2.66857\" ry=\"3.73143\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke4_0_34\" fill=\"white\"/>\n<mask id=\"stroke5_0_34\" fill=\"white\">\n<use xlink:href=\"#stroke4_0_34\"/>\n</mask>\n<path d=\"M62.9367 45.7544C62.9367 50.4661 60.0713 54.2858 56.5367 54.2858C53.0021 54.2858 50.1367 50.4661 50.1367 45.7544C50.1367 41.0426 53.0021 37.2229 56.5367 37.2229C60.0713 37.2229 62.9367 41.0426 62.9367 45.7544Z\" stroke-width=\"3.84\" stroke=\"#151517\" mask=\"url(#stroke5_0_34)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"58.6686\" cy=\"47.8914\" rx=\"2.66857\" ry=\"3.73143\" fill=\"#151517\"/>\n<path id=\"Illustration detail_2\" d=\"M43.2 60.6933C46.4 63.1822 49.6 63.0044 52.8 60.16M0 0.96H0.000533333M96 96.96H95.9995\" stroke-width=\"1.92\" stroke=\"#151517\"/>\n</g>\n<defs>\n<path id=\"stroke0_0_34\" d=\"M48 10.0267L59.7333 32.4267L84.8 36.16L66.6667 54.2933L70.9333 79.8933L48 67.6267L25.0667 79.8933L29.3333 54.2933L11.2 36.16L36.2667 32.4267L48 10.0267ZM96 96.96H95.9995Z\"/>\n<path id=\"stroke2_0_34\" d=\"M46.9367 45.7544C46.9367 50.4661 44.0713 54.2858 40.5367 54.2858C37.0021 54.2858 34.1367 50.4661 34.1367 45.7544C34.1367 41.0426 37.0021 37.2229 40.5367 37.2229C44.0713 37.2229 46.9367 41.0426 46.9367 45.7544Z\"/>\n<path id=\"stroke4_0_34\" d=\"M62.9367 45.7544C62.9367 50.4661 60.0713 54.2858 56.5367 54.2858C53.0021 54.2858 50.1367 50.4661 50.1367 45.7544C50.1367 41.0426 53.0021 37.2229 56.5367 37.2229C60.0713 37.2229 62.9367 41.0426 62.9367 45.7544Z\"/>\n</defs>\n</svg>\n", "lesson-future": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"96\" height=\"96\" viewBox=\"0 0 96 96\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Lesson mascot\" clip-path=\"url(#clip0_0_12)\">\n<g id=\"Illustration detail\">\n<use xlink:href=\"#stroke0_0_12\" fill=\"#A9E8CD\"/>\n<mask id=\"stroke1_0_12\" fill=\"white\">\n<use xlink:href=\"#stroke0_0_12\"/>\n</mask>\n<path d=\"M0 0V0.96H0.000533333V0V-0.96H0V0ZM26.1333 18.6667V20.5867H70.4V18.6667V16.7467H26.1333V18.6667ZM70.4 18.6667V20.5867C73.6596 20.5867 75.7516 21.4003 77.0424 22.691C78.3331 23.9817 79.1467 26.0737 79.1467 29.3333H81.0667H82.9867C82.9867 25.4818 82.0225 22.2405 79.7577 19.9757C77.4928 17.7108 74.2515 16.7467 70.4 16.7467V18.6667ZM81.0667 29.3333H79.1467V71.4667H81.0667H82.9867V29.3333H81.0667ZM81.0667 71.4667H79.1467C79.1467 74.7263 78.3331 76.8183 77.0424 78.109C75.7516 79.3997 73.6596 80.2133 70.4 80.2133V82.1333V84.0533C74.2515 84.0533 77.4928 83.0892 79.7577 80.8243C82.0225 78.5595 82.9867 75.3182 82.9867 71.4667H81.0667ZM70.4 82.1333V80.2133H26.1333V82.1333V84.0533H70.4V82.1333ZM26.1333 82.1333V80.2133C22.8737 80.2133 20.7817 79.3997 19.491 78.109C18.2003 76.8183 17.3867 74.7263 17.3867 71.4667H15.4667H13.5467C13.5467 75.3182 14.5108 78.5595 16.7757 80.8243C19.0405 83.0892 22.2818 84.0533 26.1333 84.0533V82.1333ZM15.4667 71.4667H17.3867V29.3333H15.4667H13.5467V71.4667H15.4667ZM15.4667 29.3333H17.3867C17.3867 26.0737 18.2003 23.9817 19.491 22.691C20.7817 21.4003 22.8737 20.5867 26.1333 20.5867V18.6667V16.7467C22.2818 16.7467 19.0405 17.7108 16.7757 19.9757C14.5108 22.2405 13.5467 25.4818 13.5467 29.3333H15.4667ZM96 96V94.08H95.9995V96V97.92H96V96Z\" fill=\"#151517\" mask=\"url(#stroke1_0_12)\"/>\n</g>\n<path id=\"Illustration detail_2\" d=\"M15.4667 34.6667H81.0667M32.5333 12.2667V26.1333M63.4667 12.2667V26.1333M44.2667 70.4C47.4667 72.8889 50.8444 72.7111 54.4 69.8667M0 0H0.000533333M96 96H95.9995\" stroke-width=\"1.92\" stroke=\"#151517\"/>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke2_0_12\" fill=\"white\"/>\n<mask id=\"stroke3_0_12\" fill=\"white\">\n<use xlink:href=\"#stroke2_0_12\"/>\n</mask>\n<path d=\"M45.3335 53.8666C45.3335 59.4631 41.7517 64 37.3335 64C32.9152 64 29.3335 59.4631 29.3335 53.8666C29.3335 48.2702 32.9152 43.7333 37.3335 43.7333C41.7517 43.7333 45.3335 48.2702 45.3335 53.8666Z\" stroke-width=\"3.84\" stroke=\"#151517\" mask=\"url(#stroke3_0_12)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"40.0001\" cy=\"55.4666\" rx=\"2.66667\" ry=\"4.26667\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke4_0_12\" fill=\"white\"/>\n<mask id=\"stroke5_0_12\" fill=\"white\">\n<use xlink:href=\"#stroke4_0_12\"/>\n</mask>\n<path d=\"M67.7333 53.8666C67.7333 59.4631 64.1516 64 59.7333 64C55.315 64 51.7333 59.4631 51.7333 53.8666C51.7333 48.2702 55.315 43.7333 59.7333 43.7333C64.1516 43.7333 67.7333 48.2702 67.7333 53.8666Z\" stroke-width=\"3.84\" stroke=\"#151517\" mask=\"url(#stroke5_0_12)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"62.4\" cy=\"55.4666\" rx=\"2.66667\" ry=\"4.26667\" fill=\"#151517\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_12\">\n<rect width=\"96\" height=\"96\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke0_0_12\" d=\"M26.1333 18.6667H70.4C77.5111 18.6667 81.0667 22.2222 81.0667 29.3333V71.4667C81.0667 78.5778 77.5111 82.1333 70.4 82.1333H26.1333C19.0222 82.1333 15.4667 78.5778 15.4667 71.4667V29.3333C15.4667 22.2222 19.0222 18.6667 26.1333 18.6667ZM96 96H95.9995Z\"/>\n<path id=\"stroke2_0_12\" d=\"M45.3335 53.8666C45.3335 59.4631 41.7517 64 37.3335 64C32.9152 64 29.3335 59.4631 29.3335 53.8666C29.3335 48.2702 32.9152 43.7333 37.3335 43.7333C41.7517 43.7333 45.3335 48.2702 45.3335 53.8666Z\"/>\n<path id=\"stroke4_0_12\" d=\"M67.7333 53.8666C67.7333 59.4631 64.1516 64 59.7333 64C55.315 64 51.7333 59.4631 51.7333 53.8666C51.7333 48.2702 55.315 43.7333 59.7333 43.7333C64.1516 43.7333 67.7333 48.2702 67.7333 53.8666Z\"/>\n</defs>\n</svg>\n", "lesson-modals": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"96\" height=\"96\" viewBox=\"0 0 96 96\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Lesson mascot\" clip-path=\"url(#clip0_0_27)\">\n<g id=\"Illustration detail\">\n<use xlink:href=\"#stroke0_0_27\" fill=\"#7630EE\"/>\n<mask id=\"stroke1_0_27\" fill=\"white\">\n<use xlink:href=\"#stroke0_0_27\"/>\n</mask>\n<path d=\"M0 0V0.96H0.000533333V0V-0.96H0V0ZM58.6667 70.9333V69.0133H57.8714L57.309 69.5757L58.6667 70.9333ZM46.4 83.2H44.48V87.8353L47.7576 84.5576L46.4 83.2ZM46.4 70.9333H48.32V69.0133H46.4V70.9333ZM24.5333 17.6V19.52H71.4667V17.6V15.68H24.5333V17.6ZM71.4667 17.6V19.52C75.8304 19.52 79.3176 20.9662 81.709 23.3576C84.1005 25.7491 85.5467 29.2363 85.5467 33.6H87.4667H89.3867C89.3867 28.3637 87.6329 23.8509 84.4243 20.6424C81.2158 17.4338 76.703 15.68 71.4667 15.68V17.6ZM87.4667 33.6H85.5467V56H87.4667H89.3867V33.6H87.4667ZM87.4667 56H85.5467C85.5467 60.0136 84.0262 63.2229 81.5768 65.4445C79.1094 67.6823 75.5892 69.0133 71.4667 69.0133V70.9333V72.8533C76.4108 72.8533 80.8906 71.251 84.1566 68.2888C87.4405 65.3104 89.3867 61.0531 89.3867 56H87.4667ZM71.4667 70.9333V69.0133H58.6667V70.9333V72.8533H71.4667V70.9333ZM58.6667 70.9333L57.309 69.5757L45.0424 81.8424L46.4 83.2L47.7576 84.5576L60.0243 72.291L58.6667 70.9333ZM46.4 83.2H48.32V70.9333H46.4H44.48V83.2H46.4ZM46.4 70.9333V69.0133H24.5333V70.9333V72.8533H46.4V70.9333ZM24.5333 70.9333V69.0133C20.1675 69.0133 16.66 67.5645 14.2575 65.2763C11.8581 62.9912 10.4533 59.7697 10.4533 56H8.53333H6.61333C6.61333 60.7637 8.40856 65.0088 11.6092 68.057C14.8066 71.1022 19.2992 72.8533 24.5333 72.8533V70.9333ZM8.53333 56H10.4533V33.6H8.53333H6.61333V56H8.53333ZM8.53333 33.6H10.4533C10.4533 29.2363 11.8995 25.7491 14.291 23.3576C16.6824 20.9662 20.1696 19.52 24.5333 19.52V17.6V15.68C19.297 15.68 14.7842 17.4338 11.5757 20.6424C8.36715 23.8509 6.61333 28.3637 6.61333 33.6H8.53333ZM96 96V94.08H95.9995V96V97.92H96V96Z\" fill=\"#151517\" mask=\"url(#stroke1_0_27)\"/>\n</g>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke2_0_27\" fill=\"white\"/>\n<mask id=\"stroke3_0_27\" fill=\"white\">\n<use xlink:href=\"#stroke2_0_27\"/>\n</mask>\n<path d=\"M45.867 41.0666C45.867 45.1904 41.8077 48.5333 36.8003 48.5333C31.793 48.5333 27.7337 45.1904 27.7337 41.0666C27.7337 36.9429 31.793 33.6 36.8003 33.6C41.8077 33.6 45.867 36.9429 45.867 41.0666Z\" stroke-width=\"3.84\" stroke=\"#151517\" mask=\"url(#stroke3_0_27)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"39.4663\" cy=\"42.1333\" rx=\"3.2\" ry=\"4.8\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke4_0_27\" fill=\"white\"/>\n<mask id=\"stroke5_0_27\" fill=\"white\">\n<use xlink:href=\"#stroke4_0_27\"/>\n</mask>\n<path d=\"M68.8002 41.0666C68.8002 45.1904 64.741 48.5333 59.7336 48.5333C54.7262 48.5333 50.6669 45.1904 50.6669 41.0666C50.6669 36.9429 54.7262 33.6 59.7336 33.6C64.741 33.6 68.8002 36.9429 68.8002 41.0666Z\" stroke-width=\"3.84\" stroke=\"#151517\" mask=\"url(#stroke5_0_27)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"62.4003\" cy=\"42.1333\" rx=\"3.2\" ry=\"4.8\" fill=\"#151517\"/>\n<path id=\"Illustration detail_2\" d=\"M43.7333 56C47.2889 58.4889 50.8444 58.3111 54.4 55.4667M0 0H0.000533333M96 96H95.9995\" stroke-width=\"1.92\" stroke=\"white\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_27\">\n<rect width=\"96\" height=\"96\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke0_0_27\" d=\"M24.5333 17.6H71.4667C81.0667 17.6 87.4667 24 87.4667 33.6V56C87.4667 65.0667 80.5333 70.9333 71.4667 70.9333H58.6667L46.4 83.2V70.9333H24.5333C14.9333 70.9333 8.53333 64.5333 8.53333 56V33.6C8.53333 24 14.9333 17.6 24.5333 17.6ZM96 96H95.9995Z\"/>\n<path id=\"stroke2_0_27\" d=\"M45.867 41.0666C45.867 45.1904 41.8077 48.5333 36.8003 48.5333C31.793 48.5333 27.7337 45.1904 27.7337 41.0666C27.7337 36.9429 31.793 33.6 36.8003 33.6C41.8077 33.6 45.867 36.9429 45.867 41.0666Z\"/>\n<path id=\"stroke4_0_27\" d=\"M68.8002 41.0666C68.8002 45.1904 64.741 48.5333 59.7336 48.5333C54.7262 48.5333 50.6669 45.1904 50.6669 41.0666C50.6669 36.9429 54.7262 33.6 59.7336 33.6C64.741 33.6 68.8002 36.9429 68.8002 41.0666Z\"/>\n</defs>\n</svg>\n", "lesson-past": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"96\" height=\"96\" viewBox=\"0 0 96 96\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Lesson mascot\" clip-path=\"url(#clip0_0_41)\">\n<g id=\"Illustration detail\">\n<use xlink:href=\"#stroke0_0_41\" fill=\"#FFE46A\"/>\n<mask id=\"stroke1_0_41\" fill=\"white\">\n<use xlink:href=\"#stroke0_0_41\"/>\n</mask>\n<path d=\"M0 0V0.96H0.000533333V0V-0.96H0V0ZM20.2667 74.1333V76.0533H69.8667V74.1333V72.2133H20.2667V74.1333ZM69.8667 74.1333V76.0533C76.4022 76.0533 80.8533 70.7795 80.8533 64.5333H78.9333H77.0133C77.0133 68.9539 73.9978 72.2133 69.8667 72.2133V74.1333ZM78.9333 64.5333H80.8533V21.8667H78.9333H77.0133V64.5333H78.9333ZM78.9333 21.8667H80.8533C80.8533 16.5396 76.7937 12.48 71.4667 12.48V14.4V16.32C74.673 16.32 77.0133 18.6604 77.0133 21.8667H78.9333ZM71.4667 14.4V12.48H26.1333V14.4V16.32H71.4667V14.4ZM26.1333 14.4V12.48C19.2063 12.48 14.08 17.6063 14.08 24.5333H16H17.92C17.92 19.7271 21.3271 16.32 26.1333 16.32V14.4ZM16 24.5333H14.08V68.2667H16H17.92V24.5333H16ZM16 68.2667H14.08C14.08 70.372 14.5262 72.2915 15.585 73.7354C16.6998 75.2555 18.3558 76.0533 20.2667 76.0533V74.1333V72.2133C19.5108 72.2133 19.0336 71.9445 18.6816 71.4646C18.2738 70.9085 17.92 69.8947 17.92 68.2667H16ZM96 96V94.08H95.9995V96V97.92H96V96Z\" fill=\"#151517\" mask=\"url(#stroke1_0_41)\"/>\n</g>\n<g id=\"Illustration detail_2\">\n<path d=\"M26.1333 14.4V74.1333H20.2667C17.6 74.1333 16 72 16 68.2667V24.5333C16 18.6667 20.2667 14.4 26.1333 14.4ZM96 96H95.9995Z\" fill=\"#3038EE\"/>\n<mask id=\"stroke2_0_41\" fill=\"white\">\n<path d=\"M26.1333 14.4V74.1333H20.2667C17.6 74.1333 16 72 16 68.2667V24.5333C16 18.6667 20.2667 14.4 26.1333 14.4ZM96 96H95.9995Z\"/>\n</mask>\n<path d=\"M0 0V0.96H0.000533333V0V-0.96H0V0ZM26.1333 14.4H28.0533V12.48H26.1333V14.4ZM26.1333 74.1333V76.0533H28.0533V74.1333H26.1333ZM26.1333 14.4H24.2133V74.1333H26.1333H28.0533V14.4H26.1333ZM26.1333 74.1333V72.2133H20.2667V74.1333V76.0533H26.1333V74.1333ZM20.2667 74.1333V72.2133C19.5108 72.2133 19.0336 71.9445 18.6816 71.4646C18.2738 70.9085 17.92 69.8947 17.92 68.2667H16H14.08C14.08 70.372 14.5262 72.2915 15.585 73.7354C16.6998 75.2555 18.3558 76.0533 20.2667 76.0533V74.1333ZM16 68.2667H17.92V24.5333H16H14.08V68.2667H16ZM16 24.5333H17.92C17.92 19.7271 21.3271 16.32 26.1333 16.32V14.4V12.48C19.2063 12.48 14.08 17.6063 14.08 24.5333H16ZM96 96V94.08H95.9995V96V97.92H96V96Z\" fill=\"#151517\" mask=\"url(#stroke2_0_41)\"/>\n</g>\n<path id=\"Illustration detail_3\" d=\"M26.6667 67.7333H72M30.9333 20.2667H70.9333M46.9333 54.4C50.1333 57.6 53.3333 57.4222 56.5333 53.8667M32.5333 74.6667L28.2667 84.2667H37.8667M61.8667 74.6667L66.1333 84.2667H75.2M0 0H0.000533333M96 96H95.9995\" stroke-width=\"1.92\" stroke=\"#151517\"/>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke3_0_41\" fill=\"white\"/>\n<mask id=\"stroke4_0_41\" fill=\"white\">\n<use xlink:href=\"#stroke3_0_41\"/>\n</mask>\n<path d=\"M49.6 40C49.6 45.302 46.4958 49.6 42.6666 49.6C38.8375 49.6 35.7333 45.302 35.7333 40C35.7333 34.6981 38.8375 30.4 42.6666 30.4C46.4958 30.4 49.6 34.6981 49.6 40Z\" stroke-width=\"3.84\" stroke=\"#151517\" mask=\"url(#stroke4_0_41)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"44.7998\" cy=\"42.1333\" rx=\"2.66667\" ry=\"4.26667\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke5_0_41\" fill=\"white\"/>\n<mask id=\"stroke6_0_41\" fill=\"white\">\n<use xlink:href=\"#stroke5_0_41\"/>\n</mask>\n<path d=\"M66.6667 40C66.6667 45.302 63.5626 49.6 59.7334 49.6C55.9042 49.6 52.8001 45.302 52.8001 40C52.8001 34.6981 55.9042 30.4 59.7334 30.4C63.5626 30.4 66.6667 34.6981 66.6667 40Z\" stroke-width=\"3.84\" stroke=\"#151517\" mask=\"url(#stroke6_0_41)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"61.8666\" cy=\"42.1333\" rx=\"2.66667\" ry=\"4.26667\" fill=\"#151517\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_41\">\n<rect width=\"96\" height=\"96\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke0_0_41\" d=\"M20.2667 74.1333H69.8667C75.2 74.1333 78.9333 69.8667 78.9333 64.5333V21.8667C78.9333 17.6 75.7333 14.4 71.4667 14.4H26.1333C20.2667 14.4 16 18.6667 16 24.5333V68.2667C16 72 17.6 74.1333 20.2667 74.1333ZM96 96H95.9995Z\"/>\n<path id=\"stroke3_0_41\" d=\"M49.6 40C49.6 45.302 46.4958 49.6 42.6666 49.6C38.8375 49.6 35.7333 45.302 35.7333 40C35.7333 34.6981 38.8375 30.4 42.6666 30.4C46.4958 30.4 49.6 34.6981 49.6 40Z\"/>\n<path id=\"stroke5_0_41\" d=\"M66.6667 40C66.6667 45.302 63.5626 49.6 59.7334 49.6C55.9042 49.6 52.8001 45.302 52.8001 40C52.8001 34.6981 55.9042 30.4 59.7334 30.4C63.5626 30.4 66.6667 34.6981 66.6667 40Z\"/>\n</defs>\n</svg>\n", "step-book": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"84\" height=\"84\" viewBox=\"0 0 84 84\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Lesson mascot\" clip-path=\"url(#clip0_0_82)\">\n<g id=\"Illustration detail\">\n<use xlink:href=\"#stroke0_0_82\" fill=\"#FFE46A\"/>\n<mask id=\"stroke1_0_82\" fill=\"white\">\n<use xlink:href=\"#stroke0_0_82\"/>\n</mask>\n<path d=\"M0 0V0.84H0.000466667V0V-0.84H0V0ZM17.7333 64.8667V66.5467H61.1333V64.8667V63.1867H17.7333V64.8667ZM61.1333 64.8667V66.5467C66.8519 66.5467 70.7467 61.932 70.7467 56.4667H69.0667H67.3867C67.3867 60.3346 64.7481 63.1867 61.1333 63.1867V64.8667ZM69.0667 56.4667H70.7467V19.1333H69.0667H67.3867V56.4667H69.0667ZM69.0667 19.1333H70.7467C70.7467 14.4722 67.1945 10.92 62.5333 10.92V12.6V14.28C65.3388 14.28 67.3867 16.3278 67.3867 19.1333H69.0667ZM62.5333 12.6V10.92H22.8667V12.6V14.28H62.5333V12.6ZM22.8667 12.6V10.92C16.8055 10.92 12.32 15.4055 12.32 21.4667H14H15.68C15.68 17.2612 18.6612 14.28 22.8667 14.28V12.6ZM14 21.4667H12.32V59.7333H14H15.68V21.4667H14ZM14 59.7333H12.32C12.32 61.5755 12.7104 63.2551 13.6369 64.5185C14.6123 65.8485 16.0613 66.5467 17.7333 66.5467V64.8667V63.1867C17.072 63.1867 16.6544 62.9515 16.3464 62.5315C15.9896 62.0449 15.68 61.1579 15.68 59.7333H14ZM84 84V82.32H83.9995V84V85.68H84V84Z\" fill=\"#151517\" mask=\"url(#stroke1_0_82)\"/>\n</g>\n<g id=\"Illustration detail_2\">\n<path d=\"M22.8667 12.6V64.8667H17.7333C15.4 64.8667 14 63 14 59.7333V21.4667C14 16.3333 17.7333 12.6 22.8667 12.6ZM84 84H83.9995Z\" fill=\"#3038EE\"/>\n<mask id=\"stroke2_0_82\" fill=\"white\">\n<path d=\"M22.8667 12.6V64.8667H17.7333C15.4 64.8667 14 63 14 59.7333V21.4667C14 16.3333 17.7333 12.6 22.8667 12.6ZM84 84H83.9995Z\"/>\n</mask>\n<path d=\"M0 0V0.84H0.000466667V0V-0.84H0V0ZM22.8667 12.6H24.5467V10.92H22.8667V12.6ZM22.8667 64.8667V66.5467H24.5467V64.8667H22.8667ZM22.8667 12.6H21.1867V64.8667H22.8667H24.5467V12.6H22.8667ZM22.8667 64.8667V63.1867H17.7333V64.8667V66.5467H22.8667V64.8667ZM17.7333 64.8667V63.1867C17.072 63.1867 16.6544 62.9515 16.3464 62.5315C15.9896 62.0449 15.68 61.1579 15.68 59.7333H14H12.32C12.32 61.5755 12.7104 63.2551 13.6369 64.5185C14.6123 65.8485 16.0613 66.5467 17.7333 66.5467V64.8667ZM14 59.7333H15.68V21.4667H14H12.32V59.7333H14ZM14 21.4667H15.68C15.68 17.2612 18.6612 14.28 22.8667 14.28V12.6V10.92C16.8055 10.92 12.32 15.4055 12.32 21.4667H14ZM84 84V82.32H83.9995V84V85.68H84V84Z\" fill=\"#151517\" mask=\"url(#stroke2_0_82)\"/>\n</g>\n<path id=\"Illustration detail_3\" d=\"M23.3333 59.2667H63M27.0667 17.7333H62.0667M41.0667 47.6C43.8667 50.4 46.6667 50.2444 49.4667 47.1333M28.4667 65.3333L24.7333 73.7333H33.1333M54.1333 65.3333L57.8667 73.7333H65.8M0 0H0.000466667M84 84H83.9995\" stroke-width=\"1.68\" stroke=\"#151517\"/>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke3_0_82\" fill=\"white\"/>\n<mask id=\"stroke4_0_82\" fill=\"white\">\n<use xlink:href=\"#stroke3_0_82\"/>\n</mask>\n<path d=\"M43.4 35C43.4 39.6392 40.6846 43.4 37.335 43.4C33.9854 43.4 31.27 39.6392 31.27 35C31.27 30.3608 33.9854 26.6 37.335 26.6C40.6846 26.6 43.4 30.3608 43.4 35Z\" stroke-width=\"3.36\" stroke=\"#151517\" mask=\"url(#stroke4_0_82)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"39.205\" cy=\"36.865\" rx=\"2.335\" ry=\"3.735\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke5_0_82\" fill=\"white\"/>\n<mask id=\"stroke6_0_82\" fill=\"white\">\n<use xlink:href=\"#stroke5_0_82\"/>\n</mask>\n<path d=\"M58.33 35C58.33 39.6392 55.6146 43.4 52.265 43.4C48.9154 43.4 46.2 39.6392 46.2 35C46.2 30.3608 48.9154 26.6 52.265 26.6C55.6146 26.6 58.33 30.3608 58.33 35Z\" stroke-width=\"3.36\" stroke=\"#151517\" mask=\"url(#stroke6_0_82)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"54.135\" cy=\"36.865\" rx=\"2.335\" ry=\"3.735\" fill=\"#151517\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_82\">\n<rect width=\"84\" height=\"84\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke0_0_82\" d=\"M17.7333 64.8667H61.1333C65.8 64.8667 69.0667 61.1333 69.0667 56.4667V19.1333C69.0667 15.4 66.2667 12.6 62.5333 12.6H22.8667C17.7333 12.6 14 16.3333 14 21.4667V59.7333C14 63 15.4 64.8667 17.7333 64.8667ZM84 84H83.9995Z\"/>\n<path id=\"stroke3_0_82\" d=\"M43.4 35C43.4 39.6392 40.6846 43.4 37.335 43.4C33.9854 43.4 31.27 39.6392 31.27 35C31.27 30.3608 33.9854 26.6 37.335 26.6C40.6846 26.6 43.4 30.3608 43.4 35Z\"/>\n<path id=\"stroke5_0_82\" d=\"M58.33 35C58.33 39.6392 55.6146 43.4 52.265 43.4C48.9154 43.4 46.2 39.6392 46.2 35C46.2 30.3608 48.9154 26.6 52.265 26.6C55.6146 26.6 58.33 30.3608 58.33 35Z\"/>\n</defs>\n</svg>\n", "step-bubble": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"84\" height=\"84\" viewBox=\"0 0 84 84\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Lesson mascot\" clip-path=\"url(#clip0_0_74)\">\n<g id=\"Illustration detail\">\n<use xlink:href=\"#stroke0_0_74\" fill=\"#3038EE\"/>\n<mask id=\"stroke1_0_74\" fill=\"white\">\n<use xlink:href=\"#stroke0_0_74\"/>\n</mask>\n<path d=\"M0 0V0.84H0.000466667V0V-0.84H0V0ZM51.3333 62.0667V60.3867H50.6375L50.1454 60.8787L51.3333 62.0667ZM40.6 72.8H38.92V76.8559L41.7879 73.9879L40.6 72.8ZM40.6 62.0667H42.28V60.3867H40.6V62.0667ZM21.4667 15.4V17.08H62.5333V15.4V13.72H21.4667V15.4ZM62.5333 15.4V17.08C66.3516 17.08 69.4029 18.3454 71.4954 20.4379C73.5879 22.5305 74.8533 25.5818 74.8533 29.4H76.5333H78.2133C78.2133 24.8182 76.6787 20.8695 73.8713 18.0621C71.0638 15.2546 67.1151 13.72 62.5333 13.72V15.4ZM76.5333 29.4H74.8533V49H76.5333H78.2133V29.4H76.5333ZM76.5333 49H74.8533C74.8533 52.5119 73.5229 55.3201 71.3797 57.2639C69.2207 59.222 66.1406 60.3867 62.5333 60.3867V62.0667V63.7467C66.8594 63.7467 70.7793 62.3446 73.637 59.7527C76.5104 57.1466 78.2133 53.4215 78.2133 49H76.5333ZM62.5333 62.0667V60.3867H51.3333V62.0667V63.7467H62.5333V62.0667ZM51.3333 62.0667L50.1454 60.8787L39.4121 71.6121L40.6 72.8L41.7879 73.9879L52.5213 63.2546L51.3333 62.0667ZM40.6 72.8H42.28V62.0667H40.6H38.92V72.8H40.6ZM40.6 62.0667V60.3867H21.4667V62.0667V63.7467H40.6V62.0667ZM21.4667 62.0667V60.3867C17.6466 60.3867 14.5775 59.1189 12.4753 57.1168C10.3758 55.1173 9.14667 52.2985 9.14667 49H7.46667H5.78667C5.78667 53.1682 7.35749 56.8827 10.158 59.5499C12.9558 62.2144 16.8868 63.7467 21.4667 63.7467V62.0667ZM7.46667 49H9.14667V29.4H7.46667H5.78667V49H7.46667ZM7.46667 29.4H9.14667C9.14667 25.5818 10.4121 22.5305 12.5046 20.4379C14.5971 18.3454 17.6484 17.08 21.4667 17.08V15.4V13.72C16.8849 13.72 12.9362 15.2546 10.1287 18.0621C7.32126 20.8695 5.78667 24.8182 5.78667 29.4H7.46667ZM84 84V82.32H83.9995V84V85.68H84V84Z\" fill=\"#151517\" mask=\"url(#stroke1_0_74)\"/>\n</g>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke2_0_74\" fill=\"white\"/>\n<mask id=\"stroke3_0_74\" fill=\"white\">\n<use xlink:href=\"#stroke2_0_74\"/>\n</mask>\n<path d=\"M40.14 35.935C40.14 39.5442 36.5874 42.47 32.205 42.47C27.8226 42.47 24.27 39.5442 24.27 35.935C24.27 32.3258 27.8226 29.4 32.205 29.4C36.5874 29.4 40.14 32.3258 40.14 35.935Z\" stroke-width=\"3.36\" stroke=\"#151517\" mask=\"url(#stroke3_0_74)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"34.53\" cy=\"36.87\" rx=\"2.8\" ry=\"4.2\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke4_0_74\" fill=\"white\"/>\n<mask id=\"stroke5_0_74\" fill=\"white\">\n<use xlink:href=\"#stroke4_0_74\"/>\n</mask>\n<path d=\"M60.2 35.935C60.2 39.5442 56.6474 42.47 52.265 42.47C47.8826 42.47 44.33 39.5442 44.33 35.935C44.33 32.3258 47.8826 29.4 52.265 29.4C56.6474 29.4 60.2 32.3258 60.2 35.935Z\" stroke-width=\"3.36\" stroke=\"#151517\" mask=\"url(#stroke5_0_74)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"54.6\" cy=\"36.87\" rx=\"2.8\" ry=\"4.2\" fill=\"#151517\"/>\n<path id=\"Illustration detail_2\" d=\"M38.2667 49C41.3778 51.1778 44.4889 51.0222 47.6 48.5333M0 0H0.000466667M84 84H83.9995\" stroke-width=\"1.68\" stroke=\"white\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_74\">\n<rect width=\"84\" height=\"84\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke0_0_74\" d=\"M21.4667 15.4H62.5333C70.9333 15.4 76.5333 21 76.5333 29.4V49C76.5333 56.9333 70.4667 62.0667 62.5333 62.0667H51.3333L40.6 72.8V62.0667H21.4667C13.0667 62.0667 7.46667 56.4667 7.46667 49V29.4C7.46667 21 13.0667 15.4 21.4667 15.4ZM84 84H83.9995Z\"/>\n<path id=\"stroke2_0_74\" d=\"M40.14 35.935C40.14 39.5442 36.5874 42.47 32.205 42.47C27.8226 42.47 24.27 39.5442 24.27 35.935C24.27 32.3258 27.8226 29.4 32.205 29.4C36.5874 29.4 40.14 32.3258 40.14 35.935Z\"/>\n<path id=\"stroke4_0_74\" d=\"M60.2 35.935C60.2 39.5442 56.6474 42.47 52.265 42.47C47.8826 42.47 44.33 39.5442 44.33 35.935C44.33 32.3258 47.8826 29.4 52.265 29.4C56.6474 29.4 60.2 32.3258 60.2 35.935Z\"/>\n</defs>\n</svg>\n", "step-microphone": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"84\" height=\"84\" viewBox=\"0 0 84 84\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Lesson mascot\" clip-path=\"url(#clip0_0_66)\">\n<g id=\"Illustration detail\">\n<use xlink:href=\"#stroke0_0_66\" fill=\"#A9E8CD\"/>\n<mask id=\"stroke1_0_66\" fill=\"white\">\n<use xlink:href=\"#stroke0_0_66\"/>\n</mask>\n<path d=\"M0 0V0.84H0.000466667V0V-0.84H0V0ZM42 8.86667V10.5467C48.3055 10.5467 53.3867 15.6278 53.3867 21.9333H55.0667H56.7467C56.7467 13.7722 50.1612 7.18667 42 7.18667V8.86667ZM55.0667 21.9333H53.3867V42H55.0667H56.7467V21.9333H55.0667ZM55.0667 42H53.3867C53.3867 48.3055 48.3055 53.3867 42 53.3867V55.0667V56.7467C50.1612 56.7467 56.7467 50.1612 56.7467 42H55.0667ZM42 55.0667V53.3867C35.6945 53.3867 30.6133 48.3055 30.6133 42H28.9333H27.2533C27.2533 50.1612 33.8388 56.7467 42 56.7467V55.0667ZM28.9333 42H30.6133V21.9333H28.9333H27.2533V42H28.9333ZM28.9333 21.9333H30.6133C30.6133 15.6278 35.6945 10.5467 42 10.5467V8.86667V7.18667C33.8388 7.18667 27.2533 13.7722 27.2533 21.9333H28.9333ZM84 84V82.32H83.9995V84V85.68H84V84Z\" fill=\"#151517\" mask=\"url(#stroke1_0_66)\"/>\n</g>\n<path id=\"Illustration detail_2\" d=\"M20.0667 38.7333V42.9333C20.0667 56.4667 29.4 63.9333 42 63.9333C54.6 63.9333 63.9333 56.4667 63.9333 42.9333V38.7333M42 64.4V73.2667M36.4 43.8667H47.6M0 0H0.000466667M84 84H83.9995\" stroke-width=\"1.68\" stroke=\"#151517\"/>\n<g id=\"Illustration detail_3\">\n<use xlink:href=\"#stroke2_0_66\" fill=\"#FFE46A\"/>\n<mask id=\"stroke3_0_66\" fill=\"white\">\n<use xlink:href=\"#stroke2_0_66\"/>\n</mask>\n<path d=\"M0 0V0.84H0.000466667V0V-0.84H0V0ZM30.3333 70.9333V72.6133H53.6667V70.9333V69.2533H30.3333V70.9333ZM53.6667 70.9333V72.6133C54.341 72.6133 54.5382 72.7808 54.5787 72.8213C54.6192 72.8618 54.7867 73.059 54.7867 73.7333H56.4667H58.1467C58.1467 72.541 57.8475 71.3382 56.9546 70.4454C56.0618 69.5525 54.859 69.2533 53.6667 69.2533V70.9333ZM56.4667 73.7333H54.7867C54.7867 74.4077 54.6192 74.6049 54.5787 74.6454C54.5382 74.6859 54.341 74.8533 53.6667 74.8533V76.5333V78.2133C54.859 78.2133 56.0618 77.9141 56.9546 77.0213C57.8475 76.1284 58.1467 74.9256 58.1467 73.7333H56.4667ZM53.6667 76.5333V74.8533H30.3333V76.5333V78.2133H53.6667V76.5333ZM30.3333 76.5333V74.8533C29.659 74.8533 29.4618 74.6859 29.4213 74.6454C29.3808 74.6049 29.2133 74.4077 29.2133 73.7333H27.5333H25.8533C25.8533 74.9256 26.1525 76.1284 27.0454 77.0213C27.9382 77.9141 29.141 78.2133 30.3333 78.2133V76.5333ZM27.5333 73.7333H29.2133C29.2133 73.059 29.3808 72.8618 29.4213 72.8213C29.4618 72.7808 29.659 72.6133 30.3333 72.6133V70.9333V69.2533C29.141 69.2533 27.9382 69.5525 27.0454 70.4454C26.1525 71.3382 25.8533 72.541 25.8533 73.7333H27.5333ZM84 84V82.32H83.9995V84V85.68H84V84Z\" fill=\"#151517\" mask=\"url(#stroke3_0_66)\"/>\n</g>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke4_0_66\" fill=\"white\"/>\n<mask id=\"stroke5_0_66\" fill=\"white\">\n<use xlink:href=\"#stroke4_0_66\"/>\n</mask>\n<path d=\"M41.06 30.335C41.06 33.9442 38.9714 36.87 36.395 36.87C33.8186 36.87 31.73 33.9442 31.73 30.335C31.73 26.7258 33.8186 23.8 36.395 23.8C38.9714 23.8 41.06 26.7258 41.06 30.335Z\" stroke-width=\"3.36\" stroke=\"#151517\" mask=\"url(#stroke5_0_66)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"37.795\" cy=\"32.2\" rx=\"1.865\" ry=\"2.8\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke6_0_66\" fill=\"white\"/>\n<mask id=\"stroke7_0_66\" fill=\"white\">\n<use xlink:href=\"#stroke6_0_66\"/>\n</mask>\n<path d=\"M52.26 30.335C52.26 33.9442 50.1714 36.87 47.595 36.87C45.0186 36.87 42.93 33.9442 42.93 30.335C42.93 26.7258 45.0186 23.8 47.595 23.8C50.1714 23.8 52.26 26.7258 52.26 30.335Z\" stroke-width=\"3.36\" stroke=\"#151517\" mask=\"url(#stroke7_0_66)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"48.995\" cy=\"32.2\" rx=\"1.865\" ry=\"2.8\" fill=\"#151517\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_66\">\n<rect width=\"84\" height=\"84\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke0_0_66\" d=\"M42 8.86667C49.2333 8.86667 55.0667 14.7 55.0667 21.9333V42C55.0667 49.2333 49.2333 55.0667 42 55.0667C34.7667 55.0667 28.9333 49.2333 28.9333 42V21.9333C28.9333 14.7 34.7667 8.86667 42 8.86667ZM84 84H83.9995Z\"/>\n<path id=\"stroke2_0_66\" d=\"M30.3333 70.9333H53.6667C55.5333 70.9333 56.4667 71.8667 56.4667 73.7333C56.4667 75.6 55.5333 76.5333 53.6667 76.5333H30.3333C28.4667 76.5333 27.5333 75.6 27.5333 73.7333C27.5333 71.8667 28.4667 70.9333 30.3333 70.9333ZM84 84H83.9995Z\"/>\n<path id=\"stroke4_0_66\" d=\"M41.06 30.335C41.06 33.9442 38.9714 36.87 36.395 36.87C33.8186 36.87 31.73 33.9442 31.73 30.335C31.73 26.7258 33.8186 23.8 36.395 23.8C38.9714 23.8 41.06 26.7258 41.06 30.335Z\"/>\n<path id=\"stroke6_0_66\" d=\"M52.26 30.335C52.26 33.9442 50.1714 36.87 47.595 36.87C45.0186 36.87 42.93 33.9442 42.93 30.335C42.93 26.7258 45.0186 23.8 47.595 23.8C50.1714 23.8 52.26 26.7258 52.26 30.335Z\"/>\n</defs>\n</svg>\n", "step-pencil": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"84\" height=\"84\" viewBox=\"0 0 84 84\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Tilted pencil\" clip-path=\"url(#clip0_0_57)\">\n<g id=\"Illustration detail\">\n<path d=\"M28.4667 22.8667H55.5333V58.8L42 76.0667L28.4667 58.8V22.8667ZM84 84H83.9995Z\" fill=\"#FFE46A\"/>\n<mask id=\"stroke0_0_57\" fill=\"white\">\n<path d=\"M28.4667 22.8667H55.5333V58.8L42 76.0667L28.4667 58.8V22.8667ZM84 84H83.9995Z\"/>\n</mask>\n<path d=\"M0 0V0.84H0.000466667V0V-0.84H0V0ZM28.4667 22.8667V21.1867H26.7867V22.8667H28.4667ZM55.5333 22.8667H57.2133V21.1867H55.5333V22.8667ZM55.5333 58.8L56.8556 59.8364L57.2133 59.3799V58.8H55.5333ZM42 76.0667L40.6777 77.103L42 78.79L43.3223 77.103L42 76.0667ZM28.4667 58.8H26.7867V59.3799L27.1444 59.8364L28.4667 58.8ZM28.4667 22.8667V24.5467H55.5333V22.8667V21.1867H28.4667V22.8667ZM55.5333 22.8667H53.8533V58.8H55.5333H57.2133V22.8667H55.5333ZM55.5333 58.8L54.2111 57.7636L40.6777 75.0303L42 76.0667L43.3223 77.103L56.8556 59.8364L55.5333 58.8ZM42 76.0667L43.3223 75.0303L29.7889 57.7636L28.4667 58.8L27.1444 59.8364L40.6777 77.103L42 76.0667ZM28.4667 58.8H30.1467V22.8667H28.4667H26.7867V58.8H28.4667ZM84 84V82.32H83.9995V84V85.68H84V84Z\" fill=\"#151517\" mask=\"url(#stroke0_0_57)\"/>\n</g>\n<g id=\"Illustration detail_2\">\n<use xlink:href=\"#stroke1_0_57\" fill=\"#F6BFD7\"/>\n<mask id=\"stroke2_0_57\" fill=\"white\">\n<use xlink:href=\"#stroke1_0_57\"/>\n</mask>\n<path d=\"M0 0V0.84H0.000466667V0V-0.84H0V0ZM28.4667 22.8667H26.7867V24.5467H28.4667V22.8667ZM55.5333 22.8667V24.5467H57.2133V22.8667H55.5333ZM28.4667 22.8667H30.1467V13.5333H28.4667H26.7867V22.8667H28.4667ZM28.4667 13.5333H30.1467C30.1467 10.3903 32.9932 7.74667 36.4 7.74667V6.06667V4.38667C31.4068 4.38667 26.7867 8.27636 26.7867 13.5333H28.4667ZM36.4 6.06667V7.74667H47.6V6.06667V4.38667H36.4V6.06667ZM47.6 6.06667V7.74667C51.0068 7.74667 53.8533 10.3903 53.8533 13.5333H55.5333H57.2133C57.2133 8.27636 52.5932 4.38667 47.6 4.38667V6.06667ZM55.5333 13.5333H53.8533V22.8667H55.5333H57.2133V13.5333H55.5333ZM55.5333 22.8667V21.1867H28.4667V22.8667V24.5467H55.5333V22.8667ZM84 84V82.32H83.9995V84V85.68H84V84Z\" fill=\"#151517\" mask=\"url(#stroke2_0_57)\"/>\n</g>\n<g id=\"Illustration detail_3\">\n<path d=\"M36.4 68.6L42 76.0667L47.6 68.6H36.4ZM84 84H83.9995Z\" fill=\"#151517\"/>\n<mask id=\"stroke3_0_57\" fill=\"white\">\n<path d=\"M36.4 68.6L42 76.0667L47.6 68.6H36.4ZM84 84H83.9995Z\"/>\n</mask>\n<path d=\"M0 0V0.84H0.000466667V0V-0.84H0V0ZM36.4 68.6V66.92H33.04L35.056 69.608L36.4 68.6ZM42 76.0667L40.656 77.0747L42 78.8667L43.344 77.0747L42 76.0667ZM47.6 68.6L48.944 69.608L50.96 66.92H47.6V68.6ZM36.4 68.6L35.056 69.608L40.656 77.0747L42 76.0667L43.344 75.0587L37.744 67.592L36.4 68.6ZM42 76.0667L43.344 77.0747L48.944 69.608L47.6 68.6L46.256 67.592L40.656 75.0587L42 76.0667ZM47.6 68.6V66.92H36.4V68.6V70.28H47.6V68.6ZM84 84V82.32H83.9995V84V85.68H84V84Z\" fill=\"#151517\" mask=\"url(#stroke3_0_57)\"/>\n</g>\n<path id=\"Illustration detail_4\" d=\"M28.4667 57.4H55.5333M0 0H0.000466667M84 84H83.9995\" stroke-width=\"1.68\" stroke=\"#151517\"/>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke4_0_57\" fill=\"white\"/>\n<mask id=\"stroke5_0_57\" fill=\"white\">\n<use xlink:href=\"#stroke4_0_57\"/>\n</mask>\n<path d=\"M41.07 36.865C41.07 40.9878 38.771 44.33 35.935 44.33C33.099 44.33 30.8 40.9878 30.8 36.865C30.8 32.7422 33.099 29.4 35.935 29.4C38.771 29.4 41.07 32.7422 41.07 36.865Z\" stroke-width=\"3.36\" stroke=\"#151517\" mask=\"url(#stroke5_0_57)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"37.795\" cy=\"38.735\" rx=\"1.865\" ry=\"3.265\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke6_0_57\" fill=\"white\"/>\n<mask id=\"stroke7_0_57\" fill=\"white\">\n<use xlink:href=\"#stroke6_0_57\"/>\n</mask>\n<path d=\"M53.67 36.865C53.67 40.9878 51.371 44.33 48.535 44.33C45.699 44.33 43.4 40.9878 43.4 36.865C43.4 32.7422 45.699 29.4 48.535 29.4C51.371 29.4 53.67 32.7422 53.67 36.865Z\" stroke-width=\"3.36\" stroke=\"#151517\" mask=\"url(#stroke7_0_57)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"50.395\" cy=\"38.735\" rx=\"1.865\" ry=\"3.265\" fill=\"#151517\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_57\">\n<rect width=\"84\" height=\"84\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke1_0_57\" d=\"M28.4667 22.8667V13.5333C28.4667 9.33333 32.2 6.06667 36.4 6.06667H47.6C51.8 6.06667 55.5333 9.33333 55.5333 13.5333V22.8667H28.4667ZM84 84H83.9995Z\"/>\n<path id=\"stroke4_0_57\" d=\"M41.07 36.865C41.07 40.9878 38.771 44.33 35.935 44.33C33.099 44.33 30.8 40.9878 30.8 36.865C30.8 32.7422 33.099 29.4 35.935 29.4C38.771 29.4 41.07 32.7422 41.07 36.865Z\"/>\n<path id=\"stroke6_0_57\" d=\"M53.67 36.865C53.67 40.9878 51.371 44.33 48.535 44.33C45.699 44.33 43.4 40.9878 43.4 36.865C43.4 32.7422 45.699 29.4 48.535 29.4C51.371 29.4 53.67 32.7422 53.67 36.865Z\"/>\n</defs>\n</svg>\n", "step-star": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"84\" height=\"84\" viewBox=\"0 0 84 84\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"Lesson mascot\" clip-path=\"url(#clip0_0_50)\">\n<g id=\"Illustration detail\">\n<use xlink:href=\"#stroke0_0_50\" fill=\"#FFE46A\"/>\n<mask id=\"stroke1_0_50\" fill=\"white\">\n<use xlink:href=\"#stroke0_0_50\"/>\n</mask>\n<path d=\"M0 0V0.84H0.000466667V0V-0.84H0V0ZM42 7.93333L43.4882 7.1538L42 4.3127L40.5118 7.1538L42 7.93333ZM52.2667 27.5333L50.7785 28.3129L51.1747 29.0692L52.0192 29.195L52.2667 27.5333ZM74.2 30.8L75.3879 31.9879L77.7462 29.6296L74.4475 29.1383L74.2 30.8ZM58.3333 46.6667L57.1454 45.4787L56.5341 46.0901L56.6762 46.9429L58.3333 46.6667ZM62.0667 69.0667L61.2743 70.5481L64.2851 72.1585L63.7238 68.7905L62.0667 69.0667ZM42 58.3333L42.7924 56.8519L42 56.4281L41.2076 56.8519L42 58.3333ZM21.9333 69.0667L20.2762 68.7905L19.7148 72.1585L22.7257 70.5481L21.9333 69.0667ZM25.6667 46.6667L27.3238 46.9429L27.4659 46.0901L26.8546 45.4787L25.6667 46.6667ZM9.8 30.8L9.55252 29.1383L6.25376 29.6296L8.61206 31.9879L9.8 30.8ZM31.7333 27.5333L31.9808 29.195L32.8253 29.0692L33.2215 28.3129L31.7333 27.5333ZM42 7.93333L40.5118 8.71286L50.7785 28.3129L52.2667 27.5333L53.7549 26.7538L43.4882 7.1538L42 7.93333ZM52.2667 27.5333L52.0192 29.195L73.9525 32.4617L74.2 30.8L74.4475 29.1383L52.5141 25.8717L52.2667 27.5333ZM74.2 30.8L73.0121 29.6121L57.1454 45.4787L58.3333 46.6667L59.5213 47.8546L75.3879 31.9879L74.2 30.8ZM58.3333 46.6667L56.6762 46.9429L60.4095 69.3429L62.0667 69.0667L63.7238 68.7905L59.9905 46.3905L58.3333 46.6667ZM62.0667 69.0667L62.859 67.5853L42.7924 56.8519L42 58.3333L41.2076 59.8147L61.2743 70.5481L62.0667 69.0667ZM42 58.3333L41.2076 56.8519L21.141 67.5853L21.9333 69.0667L22.7257 70.5481L42.7924 59.8147L42 58.3333ZM21.9333 69.0667L23.5905 69.3429L27.3238 46.9429L25.6667 46.6667L24.0095 46.3905L20.2762 68.7905L21.9333 69.0667ZM25.6667 46.6667L26.8546 45.4787L10.9879 29.6121L9.8 30.8L8.61206 31.9879L24.4787 47.8546L25.6667 46.6667ZM9.8 30.8L10.0475 32.4617L31.9808 29.195L31.7333 27.5333L31.4859 25.8717L9.55252 29.1383L9.8 30.8ZM31.7333 27.5333L33.2215 28.3129L43.4882 8.71286L42 7.93333L40.5118 7.1538L30.2451 26.7538L31.7333 27.5333ZM84 84V82.32H83.9995V84V85.68H84V84Z\" fill=\"#151517\" mask=\"url(#stroke1_0_50)\"/>\n</g>\n<g id=\"Eye\">\n<use xlink:href=\"#stroke2_0_50\" fill=\"white\"/>\n<mask id=\"stroke3_0_50\" fill=\"white\">\n<use xlink:href=\"#stroke2_0_50\"/>\n</mask>\n<path d=\"M41.07 39.195C41.07 43.3178 38.5628 46.66 35.47 46.66C32.3772 46.66 29.87 43.3178 29.87 39.195C29.87 35.0722 32.3772 31.73 35.47 31.73C38.5628 31.73 41.07 35.0722 41.07 39.195Z\" stroke-width=\"3.36\" stroke=\"#151517\" mask=\"url(#stroke3_0_50)\"/>\n</g>\n<ellipse id=\"Pupil\" cx=\"37.335\" cy=\"41.065\" rx=\"2.335\" ry=\"3.265\" fill=\"#151517\"/>\n<g id=\"Eye_2\">\n<use xlink:href=\"#stroke4_0_50\" fill=\"white\"/>\n<mask id=\"stroke5_0_50\" fill=\"white\">\n<use xlink:href=\"#stroke4_0_50\"/>\n</mask>\n<path d=\"M55.07 39.195C55.07 43.3178 52.5628 46.66 49.47 46.66C46.3772 46.66 43.87 43.3178 43.87 39.195C43.87 35.0722 46.3772 31.73 49.47 31.73C52.5628 31.73 55.07 35.0722 55.07 39.195Z\" stroke-width=\"3.36\" stroke=\"#151517\" mask=\"url(#stroke5_0_50)\"/>\n</g>\n<ellipse id=\"Pupil_2\" cx=\"51.335\" cy=\"41.065\" rx=\"2.335\" ry=\"3.265\" fill=\"#151517\"/>\n<path id=\"Illustration detail_2\" d=\"M37.8 52.2667C40.6 54.4444 43.4 54.2889 46.2 51.8M0 0H0.000466667M84 84H83.9995\" stroke-width=\"1.68\" stroke=\"#151517\"/>\n</g>\n<defs>\n<clipPath id=\"clip0_0_50\">\n<rect width=\"84\" height=\"84\" fill=\"white\"/>\n</clipPath>\n<path id=\"stroke0_0_50\" d=\"M42 7.93333L52.2667 27.5333L74.2 30.8L58.3333 46.6667L62.0667 69.0667L42 58.3333L21.9333 69.0667L25.6667 46.6667L9.8 30.8L31.7333 27.5333L42 7.93333ZM84 84H83.9995Z\"/>\n<path id=\"stroke2_0_50\" d=\"M41.07 39.195C41.07 43.3178 38.5628 46.66 35.47 46.66C32.3772 46.66 29.87 43.3178 29.87 39.195C29.87 35.0722 32.3772 31.73 35.47 31.73C38.5628 31.73 41.07 35.0722 41.07 39.195Z\"/>\n<path id=\"stroke4_0_50\" d=\"M55.07 39.195C55.07 43.3178 52.5628 46.66 49.47 46.66C46.3772 46.66 43.87 43.3178 43.87 39.195C43.87 35.0722 46.3772 31.73 49.47 31.73C52.5628 31.73 55.07 35.0722 55.07 39.195Z\"/>\n</defs>\n</svg>\n", "cursor": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\" viewBox=\"0 0 64 64\"><path d=\"M8 4c-4 1-5 5-3 10l12 31c3 8 8 11 16 11h10c10 0 16-7 14-15-1-7-7-12-14-11l-10 1-7-18c-2-5-5-8-9-6-3 1-4 4-2 9l5 14-8-20c-1-4-2-6-4-6Z\" fill=\"var(--mascot-main,#3038EE)\" stroke=\"white\" stroke-width=\"3\" stroke-linejoin=\"round\" /><g class=\"mascot-eyes\"><ellipse cx=\"29\" cy=\"43\" rx=\"4.7\" ry=\"3.7\" fill=\"white\" /><ellipse cx=\"41\" cy=\"43\" rx=\"4.7\" ry=\"3.7\" fill=\"white\" /><circle cx=\"30\" cy=\"44\" r=\"1.9\" fill=\"#151517\" /><circle cx=\"42\" cy=\"44\" r=\"1.9\" fill=\"#151517\" /></g></svg>\n"};
+  let mascotCount = 0;
+
+  Object.assign(UI, {
+    brandName: { ru: "Learny", en: "Learny" },
+    menuTitle: { ru: "Learny", en: "Learny" },
+    homeTitle: { ru: "Превратите английский текст в практику по шагам", en: "Turn any English text into guided practice" },
+    homeLede: {
+      ru: "Вставьте материал от учителя или напишите тему. Получите урок с объяснениями, упражнениями и разговорной практикой и разберите свои ответы.",
+      en: "Paste your teacher’s notes or enter a topic. Create a lesson with explanations, exercises and speaking practice, then review your answers."
+    },
+    intakeBtn: { ru: "Создать урок", en: "Create my lesson" },
+    learnyHome: { ru: "Главная", en: "Home" },
+    learnyNew: { ru: "Новый урок", en: "New lesson" },
+    lessonsLabel: { ru: "Мои уроки", en: "Your lessons" },
+    learnyAll: { ru: "Все", en: "All" },
+    learnyGrammar: { ru: "Грамматика", en: "Grammar" },
+    learnySpeaking: { ru: "Говорение", en: "Speaking" },
+    learnyNoLessons: { ru: "В этой категории пока нет уроков", en: "No lessons in this category yet" },
+    learnyFooter: { ru: "Практика, урок за уроком", en: "Practice, one lesson at a time." },
+    how2p: { ru: "Разбирайте правила, переводите фразы и сохраняйте новые слова.", en: "Explore explanations, translate phrases and save new words." },
+    how3p: { ru: "Решайте задания, проверяйте ответы и разбирайте ошибки.", en: "Try exercises, check your answers and learn from feedback." },
+    how4t: { ru: "Выбирайте по смыслу", en: "Choose in context" },
+    how4p: { ru: "Читайте мини-истории и выбирайте форму, которая подходит по смыслу.", en: "Read short stories and choose the form that fits the meaning." },
+    how5p: { ru: "Запишите ответ и получите подсказки, как сказать яснее.", en: "Record an answer and review suggestions for clearer English." },
+    how6t: { ru: "Повторяйте и запоминайте", en: "Review & remember" },
+    how6p: { ru: "Повторите урок, вернитесь к сохранённым словам и поделитесь отчётом.", en: "Review your lesson, revisit saved words and share your report." }
+  });
+
+  function image(name, className) {
+    const img = document.createElement("img");
+    img.src = `icons/learny-home/${name}.svg`;
+    img.alt = "";
+    img.className = className;
+    return img;
+  }
+  function mascot(name, className) {
+    // Repeated cards need independent IDs for their masks and clipping paths.
+    const instance = `learny-mascot-${++mascotCount}-`;
+    const template = document.createElement("template");
+    template.innerHTML = mascotAssets[name].replace(/\b(id="|url\(#|href="#)([^")]+)/g, `$1${instance}$2`);
+    const svg = template.content.firstElementChild;
+    svg.setAttribute("class", className);
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+    svg.style.removeProperty("display");
+    svg.style.setProperty("--blink-delay", `${-(mascotCount % 9) * .62}s`);
+    for (const eye of svg.querySelectorAll('g[id$="-Eye"], g[id$="-Eye_2"]')) eye.classList.add("mascot-eyes");
+    return svg;
+  }
+  function translated(tag, key, className) {
+    const el = document.createElement(tag);
+    el.dataset.ui = key;
+    el.className = className;
+    return el;
+  }
+
+  $("#brand-home i").append(mascot("brand-book", "learny-brand-mascot"));
+  $("#menu-btn").append(image("menu", "learny-menu-icon"));
+  const field = $("#paste-area");
+  const composer = $("#material-composer");
+  const nav = $(".top-nav");
+  const left = document.createElement("div");
+  left.className = "learny-nav-side";
+  const right = left.cloneNode();
+  const home = translated("button", "learnyHome", "learny-home-link");
+  const create = translated("button", "learnyNew", "learny-home-link");
+  left.append(home, $('[data-nav="lesson-list"]'));
+  right.append($('[data-nav="vocab-box"]'), create);
+  nav.append(left, right);
+  home.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "instant" }));
+  create.addEventListener("click", () => {
+    composer.scrollIntoView({ block: "center" });
+    field.focus({ preventScroll: true });
+  });
+
+  const frame = document.createElement("div");
+  frame.className = "learny-editor-frame";
+  composer.before(frame);
+  frame.append(composer);
+  for (const corner of ["tl", "tr", "bl", "br"]) {
+    const marker = document.createElement("span");
+    marker.className = `learny-handle corner-${corner}`;
+    marker.setAttribute("aria-hidden", "true");
+    frame.append(marker);
+  }
+  $("#material-attach svg").replaceWith(image("attach", "learny-attach-icon"));
+  $(".material-tools").append($("#parse-btn"));
+
+  const example = document.createElement("div");
+  example.className = "learny-input-example";
+  example.setAttribute("aria-hidden", "true");
+  const instruction = document.createElement("p");
+  const prompt = document.createElement("p");
+  example.append(instruction, prompt);
+  field.after(example);
+  const samples = {
+    en: ["For example, “When do I use the present perfect?”", "“Practise ordering coffee in English.”", "“Help me tell a story using past tenses.”"],
+    ru: ["Например, «Когда употреблять present perfect?»", "«Помогите научиться заказывать кофе по-английски»", "«Как рассказать историю в прошедшем времени?»"]
+  };
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  let exampleTimer, inView = false;
+  function resetExample() {
+    clearTimeout(exampleTimer);
+    const options = samples[document.documentElement.lang] || samples.en;
+    instruction.textContent = t("intakePlaceholder").split("\n")[0];
+    prompt.textContent = options[0];
+    if (!inView || document.hidden || reducedMotion.matches || field.value || field.matches(":focus")) return;
+
+    let index = 0;
+    function nextExample() {
+      index = (index + 1) % options.length;
+      const text = options[index];
+      let length = 0;
+      function typeLetter() {
+        prompt.textContent = text.slice(0, ++length);
+        exampleTimer = length < text.length
+          ? setTimeout(typeLetter, 35)
+          : setTimeout(nextExample, 3800);
+      }
+      typeLetter();
+    }
+    exampleTimer = setTimeout(nextExample, 3800);
+  }
+  for (const event of ["focus", "blur", "input"]) field.addEventListener(event, resetExample);
+  document.addEventListener("visibilitychange", resetExample);
+  reducedMotion.addEventListener("change", resetExample);
+  function updateLanguage() {
+    document.title = document.documentElement.lang === "ru" ? "Learny — практика английского" : "Learny — English practice";
+    resetExample();
+  }
+  new MutationObserver(updateLanguage).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+  new IntersectionObserver(([entry]) => {
+    inView = entry.isIntersecting;
+    resetExample();
+  }).observe(composer);
+
+  const steps = { 2: "step-book", 3: "step-pencil", 4: "step-bubble", 5: "step-microphone", 6: "step-star" };
+  const how = $("#how-list");
+  function decorateSteps() {
+    for (const icon of how.querySelectorAll("svg.ico:not(.learny-step-art)")) {
+      icon.replaceWith(mascot(steps[icon.closest(".how-item").dataset.c], "ico learny-step-art"));
+    }
+  }
+  new MutationObserver(decorateSteps).observe(how, { childList: true, subtree: true });
+
+  const lessons = $("#lesson-list");
+  const library = document.createElement("section");
+  library.id = "learny-library";
+  const title = translated("h2", "lessonsLabel", "learny-library-title");
+  title.id = "learny-library-title";
+  library.setAttribute("aria-labelledby", title.id);
+  const filters = document.createElement("div");
+  filters.className = "learny-filters";
+  const empty = translated("p", "learnyNoLessons", "learny-empty");
+  lessons.before(library);
+  library.append(title, filters, lessons, empty);
+  $('[data-nav="lesson-list"]').dataset.nav = library.id;
+  let filter = "all";
+  const categories = { all: "learnyAll", grammar: "learnyGrammar", speaking: "learnySpeaking" };
+  for (const [name, key] of Object.entries(categories)) {
+    const button = translated("button", key, "learny-filter");
+    button.dataset.filter = name;
+    button.addEventListener("click", () => {
+      filter = name;
+      filterLessons();
+    });
+    filters.append(button);
+  }
+  function filterLessons() {
+    let visible = 0;
+    for (const card of lessons.children) {
+      const data = LESSONS.find(item => item.id === card.dataset.lesson);
+      const category = data?.speak && !data.drill ? "speaking" : "grammar";
+      card.hidden = filter !== "all" && filter !== category;
+      if (!card.hidden) visible++;
+    }
+    for (const button of filters.children) button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
+    empty.hidden = visible > 0;
+  }
+  const lessonArt = {
+    "past-stories": "lesson-past", modals: "lesson-modals", future: "lesson-future",
+    "culture-b1": "lesson-b1", "culture-c1": "lesson-c1"
+  };
+  function decorateLessons() {
+    for (const card of lessons.children) {
+      const art = card.querySelector(".lc-art");
+      if (art && lessonArt[card.dataset.lesson]) art.replaceWith(mascot(lessonArt[card.dataset.lesson], "lc-art"));
+      const arrow = card.querySelector(".lc-resume-arrow");
+      arrow.prepend(image("lesson-arrow", "learny-arrow-oval"));
+    }
+    filterLessons();
+  }
+  new MutationObserver(decorateLessons).observe(lessons, { childList: true });
+
+  const footer = $(".app-footer");
+  const footerRight = document.createElement("div");
+  footerRight.className = "learny-footer-right";
+  footerRight.append(translated("span", "learnyFooter", "learny-footer-note"), $(".footer-year"));
+  footer.append(mascot("footer-cup", "learny-footer-cup"), footerRight);
+  const cursor = mascot("cursor", "playful-pointer-art");
+  enableLearnyPointer(cursor);
+
+  applyLang();
+  updateLanguage();
+})();
+
 </script>
 </body>
 </html>

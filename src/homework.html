@@ -2637,6 +2637,7 @@ function setParsing(on) {
 }
 function parseHint(key, isError) {
   const h = $("#parse-hint");
+  h.dataset.message = key;
   h.textContent = t((unifiedIntake && intakeCopy[key]) || key);
   h.classList.toggle("err", !!isError);
 }
@@ -3097,9 +3098,11 @@ $("#menu").addEventListener("click", e => { if (e.target === $("#menu") || e.tar
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeMenu(); closeSheet(); } });
 $("#ai-btn").addEventListener("click", () => keySheet());
 
-function getTheme() { return lsGet("hw-theme") || "auto"; }
+const lightThemeOnly = document.documentElement.dataset.themeMode === "light";
+function getTheme() { return lightThemeOnly ? "light" : lsGet("hw-theme") || "auto"; }
 function setTheme(th) {
-  lsSet("hw-theme", th);
+  if (lightThemeOnly) th = "light";
+  else lsSet("hw-theme", th);
   if (th === "auto") document.documentElement.removeAttribute("data-theme");
   else document.documentElement.setAttribute("data-theme", th);
   $$("#theme-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.th === th)));
@@ -3108,7 +3111,9 @@ $$("#theme-seg button").forEach(b => b.addEventListener("click", () => setTheme(
 setTheme(getTheme());
 /* «Авто» — тема устройства: снимаем тему, которую навязывает внешняя оболочка */
 new MutationObserver(() => {
-  if (getTheme() === "auto" && document.documentElement.hasAttribute("data-theme")) document.documentElement.removeAttribute("data-theme");
+  const root = document.documentElement;
+  if (lightThemeOnly && root.dataset.theme !== "light") root.dataset.theme = "light";
+  else if (getTheme() === "auto" && root.hasAttribute("data-theme")) root.removeAttribute("data-theme");
 }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
 /* ключ проверяем бесплатным запросом списка моделей, а не по первым буквам: форматы ключей меняются.

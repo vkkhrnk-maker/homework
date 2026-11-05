@@ -113,7 +113,6 @@ body:not(.home) .playful-language-bubble{display:none}
 [data-mascot="microphone"]{--blink-time:7.3s;--blink-delay:-1.1s}
 [data-mascot="star"]{--blink-time:8.2s;--blink-delay:-4.9s}
 [data-mascot="cursor"]{--blink-time:6.7s;--blink-delay:-2.1s}
-@keyframes playful-blink{0%,43%,47%,100%{transform:scaleY(1)}44%,46%{transform:scaleY(.08)}}
 [data-style="playful"] .intake .how-item{transition:transform .18s cubic-bezier(.2,0,0,1)}
 [data-style="playful"] .intake .how-item::before{content:"";position:absolute;inset:0 0 -10px;pointer-events:auto}
 [data-style="playful"] .ico,[data-style="playful"] .lc-art{transition:transform .2s cubic-bezier(.2,0,0,1)}
@@ -123,21 +122,6 @@ body:not(.home) .playful-language-bubble{display:none}
   [data-style="playful"] .intake .how-item:hover .ico{transform:rotate(-6deg)}
   [data-style="playful"] .lesson-card:hover .lc-art{transform:rotate(-5deg) translateY(-3px)}
 }
-
-/* Настоящий указатель остаётся запасным вариантом, пока декоративный слой не активен. */
-@media (hover:hover) and (pointer:fine) and (min-width:760px){
-  [data-style="playful"] body.home,[data-style="playful"] body.home button,[data-style="playful"] body.home a{cursor:var(--playful-native-cursor),auto}
-  [data-style="playful"] body.home input,[data-style="playful"] body.home textarea{cursor:text}
-  [data-style="playful"] body.has-playful-pointer,[data-style="playful"] body.has-playful-pointer button,[data-style="playful"] body.has-playful-pointer a{cursor:none}
-}
-.playful-pointer{position:fixed;left:0;top:0;width:56px;height:56px;z-index:45;pointer-events:none;user-select:none;opacity:0;visibility:hidden;contain:layout style}
-.playful-pointer.visible{opacity:1;visibility:visible}
-.playful-pointer-art{display:block;position:absolute;left:-7px;top:-4px;width:56px;height:56px;max-width:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.18));transform-origin:14px 10px;transition:transform .16s cubic-bezier(.2,0,0,1)}
-.playful-pointer.is-action .playful-pointer-art{transform:rotate(-9deg)}
-.playful-pointer.pressed .playful-pointer-art{transform:scale(.96) rotate(-9deg)}
-.playful-pointer span{position:absolute;left:22px;top:48px;white-space:nowrap;font:700 13px/1.2 var(--font);letter-spacing:-.02em;color:#FFF;-webkit-text-stroke:3px var(--playful-primary);paint-order:stroke fill}
-.playful-pointer.flip-label span{left:auto;right:56px}
-.playful-pointer.lift-label span{top:auto;bottom:62px}
 
 :root[data-style="playful"][data-theme="dark"]{--bg:#101114;--surface:#202127;--surface-2:#30313A;--fg:#F6F6F2;--fg-2:#B1B1B7;--fg-3:#85858D;--line:rgba(246,246,242,.16);--fromt-solid:#1A1B20;--brand-mark-filter:brightness(0) invert(1)}
 @media(prefers-color-scheme:dark){:root[data-style="playful"]:not([data-theme="light"]){--bg:#101114;--surface:#202127;--surface-2:#30313A;--fg:#F6F6F2;--fg-2:#B1B1B7;--fg-3:#85858D;--line:rgba(246,246,242,.16);--fromt-solid:#1A1B20;--brand-mark-filter:brightness(0) invert(1)}}
