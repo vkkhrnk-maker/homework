@@ -6,6 +6,7 @@
 Версия кэша в sw.js обновляется автоматически, чтобы телефон подхватил новую сборку.
 """
 import hashlib
+import json
 import pathlib
 import re
 
@@ -84,11 +85,31 @@ blue_html = html.replace('<html lang="en">', '<html lang="en" data-variant="blue
 fromt_css = (ROOT / "src" / "fromt-theme.css").read_text(encoding="utf-8")
 fromt_html = html.replace('<html lang="en">', '<html lang="en" data-variant="fromt">', 1)
 fromt_html = fromt_html.replace("</head>", '<style id="fromt-theme">\n' + fromt_css + "\n</style>\n</head>", 1)
+# Отдельная игровая проба на том же интерфейсе и данных.
+playful_css = (ROOT / "src" / "playful-theme.css").read_text(encoding="utf-8")
+playful_js = (ROOT / "src" / "playful.js").read_text(encoding="utf-8")
+playful_assets = {
+    p.stem: p.read_text(encoding="utf-8")
+    for p in sorted((ROOT / "icons" / "playful").glob("*.svg"))
+    if p.stem != "cursor-green"
+}
+playful_js = playful_js.replace("const svgAssets = {}; // ASSETS_INLINE", "const svgAssets = " + json.dumps(playful_assets, ensure_ascii=False) + ";")
+playful_html = fromt_html.replace('data-variant="fromt"', 'data-variant="fromt" data-style="playful"', 1)
+playful_html = playful_html.replace("</head>", '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800;900&display=swap">\n<style id="playful-theme">\n' + playful_css + "\n</style>\n</head>", 1)
+playful_body, playful_end = playful_html.rsplit("</body>", 1)
+playful_html = playful_body + '<script id="playful-enhancements">\n' + playful_js + "\n</script>\n</body>" + playful_end
+green_html = playful_html.replace('data-style="playful"', 'data-style="playful" data-palette="green"', 1)
+bright_html = playful_html.replace('data-style="playful"', 'data-style="playful" data-palette="bright"', 1)
+yellow_html = playful_html.replace('data-style="playful"', 'data-style="playful" data-palette="yellow"', 1)
 pages = {
     "index.html": fromt_html,
     "soft.html": soft_html,
     "blue.html": blue_html,
     "fromt.html": fromt_html,
+    "playful.html": playful_html,
+    "playful-green.html": green_html,
+    "playful-bright.html": bright_html,
+    "playful-yellow.html": yellow_html,
 }
 for filename, document in pages.items():
     (ROOT / filename).write_text(document, encoding="utf-8")
@@ -98,4 +119,4 @@ sw = sw_path.read_text(encoding="utf-8")
 # Учитываем основную страницу: выбор другого варианта тоже обновляет офлайн-кэш.
 version = hashlib.sha1("".join(filename + "\n" + document for filename, document in pages.items()).encode()).hexdigest()[:10]
 sw_path.write_text(re.sub(r"const VERSION = '[^']*';", f"const VERSION = '{version}';", sw), encoding="utf-8")
-print(f"Главная Fromt, soft.html, blue.html и fromt.html собраны, версия кэша {version}")
+print(f"Собрано {len(pages)} вариантов, версия кэша {version}")

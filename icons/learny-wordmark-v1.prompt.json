@@ -1,0 +1,6 @@
+{
+  "tool": "built-in imagegen",
+  "reference": "Clipo lettering screenshot supplied by the user",
+  "text": "Learny",
+  "prompt": "Use case: logo-brand. Asset type: production wordmark for a friendly English-learning app. Input image 1 is a STYLE REFERENCE ONLY: the compact, very heavy, softly rounded and playful lettering, not the brand name or background. Create an ORIGINAL, beautifully kerned wordmark with the exact text \"Learny\" (L-e-a-r-n-y), capital L and lowercase earny. Large solid near-black #151517 lettering. Friendly chunky rounded letterforms, slightly condensed overall, rounded corners, circular open counters, confident simple silhouette. A distinctive slightly upturned, rounded tail on y gives a little personality. Maintain excellent readability at 160 CSS pixels wide. Flat vector-like edges and a single solid ink colour, suitable for conversion to SVG. Only the single word, no icon, no eyes, no mascot, no subtitle, no slogan, no layout mockup, no paper texture, no shadow, no gradient, no border, no background. Genuinely transparent background. Wide, tightly framed composition with minimal transparent padding, entire word and y descender clearly inside the canvas. Do not copy the Clipo letterforms exactly; this is a new Learny identity."
+}
