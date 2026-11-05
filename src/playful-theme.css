@@ -70,11 +70,12 @@
 [data-style="playful"] .lc-resume-arrow{color:var(--accent)}
 [data-style="playful"] .vb-head h2{font-family:var(--display-font);font-size:24px;font-weight:700;letter-spacing:-.055em}
 [data-style="playful"] .app-footer{margin-top:12px}
+[data-style="playful"] body.home #brand-home{gap:8px}
 [data-style="playful"] #brand-home i{position:relative;width:140px;height:40px;overflow:hidden}
 [data-style="playful"] #brand-home i img{position:absolute;top:-3.5px;left:0;width:140px;height:auto;max-width:none}
 [data-style="playful"] #brand-name{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-.playful-language-bubble{position:relative;flex:none;margin-top:-6px;padding:5px 7px;border-radius:5px;background:var(--playful-yellow);color:#000;font-size:10px;font-weight:700;line-height:1;text-transform:uppercase;letter-spacing:.06em}
-.playful-language-bubble::after{content:"";position:absolute;right:8px;bottom:-4px;width:5px;height:5px;background:inherit;border-radius:0 0 5px 0}
+.playful-language-bubble{position:relative;display:inline-flex;align-items:center;flex:none;min-height:32px;margin-top:-2px;padding:0 10px;border-radius:7px;background:var(--playful-yellow);color:#000;font-size:11px;font-weight:700;line-height:1;white-space:nowrap;text-transform:uppercase;letter-spacing:.06em}
+.playful-language-bubble::after{content:"";position:absolute;right:10px;bottom:-4px;width:6px;height:6px;background:inherit;border-radius:0 0 6px 0}
 body:not(.home) .playful-language-bubble{display:none}
 
 .playful-editor-frame{position:relative;border:1.5px solid #000;background:#FFF;--editor-marker:var(--playful-yellow)}
@@ -152,6 +153,18 @@ body:not(.home) .playful-language-bubble{display:none}
   [data-style="playful"] .lesson-card{padding:20px;min-height:250px}
   [data-style="playful"] .lc-art{width:108px;height:108px}
   [data-style="playful"] .lesson-list::before{font-size:23px}
+}
+@media(max-width:420px){
+  [data-style="playful"] #brand-home i{width:108px;height:31px}
+  [data-style="playful"] #brand-home i img{width:108px;top:-2.7px}
+  .playful-language-bubble{min-height:24px;padding:0 7px;border-radius:5px;font-size:9px}
+  .playful-language-bubble::after{right:7px;bottom:-3px;width:5px;height:5px;border-radius:0 0 5px 0}
+}
+@media(max-width:360px){
+  [data-style="playful"] body.home #brand-home{gap:6px}
+  [data-style="playful"] #brand-home i{width:94px;height:27px}
+  [data-style="playful"] #brand-home i img{width:94px;top:-2.35px}
+  .playful-language-bubble{min-height:21px;padding-inline:5px;font-size:8px}
 }
 @media(prefers-reduced-motion:reduce){.playful-pointer-art{transition:none}[data-style="playful"] .mascot-eyes{animation:none}}
 

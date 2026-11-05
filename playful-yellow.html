@@ -95,6 +95,20 @@ header.top .bar{display:flex;align-items:center;gap:12px;padding-block:12px;posi
 .pbar i{display:block;height:100%;width:0;background:var(--accent);border-radius:2px;transition:width .35s}
 .ibtn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none;color:var(--fg);background:var(--surface)}
 .ibtn:hover{background:var(--surface-2)}
+.header-actions{display:flex;align-items:center;gap:8px;flex:none}
+.header-lang{display:grid;place-items:center;width:64px;height:40px;--lang-offset:0;--lang-squash:1}
+.header-lang-track{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(2,1fr);align-items:center;width:100%;height:30px;padding:3px;border-radius:999px;background:color-mix(in srgb,currentColor 14%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,currentColor 18%,transparent);font-size:11px;font-weight:700;line-height:1;transition:background-color .2s}
+.header-lang-track::before{content:"";position:absolute;z-index:-1;left:3px;top:3px;width:calc(50% - 3px);height:24px;border-radius:999px;background:#fff;box-shadow:0 1px 3px #0002;transform:translateX(var(--lang-offset)) scaleX(var(--lang-squash));transition:transform .28s cubic-bezier(.2,.82,.25,1.16)}
+.header-lang[data-language="en"]{--lang-offset:100%}
+.header-lang[data-language="en"] .header-lang-track{background:var(--accent);color:var(--accent-fg)}
+.header-lang[data-language="ru"] .header-lang-track span:first-child,.header-lang[data-language="en"] .header-lang-track span:last-child{color:#151517}
+.header-lang:active{--lang-squash:.87}
+@media(max-width:900px){.progress-wrap .pbar{width:56px}}
+@media(max-width:420px){
+  .header-actions{gap:6px}
+  .progress-wrap .pbar{display:none}
+  #brand-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
 .tabs-row{padding-bottom:10px}
 .tabs{display:flex;gap:4px;background:var(--surface);border-radius:999px;padding:4px;width:max-content;max-width:100%;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
@@ -647,7 +661,6 @@ body.home main{padding-top:0}
   .intake{grid-template-columns:minmax(0,1fr);gap:20px}
 }
 @media (max-width:560px){
-  .progress-wrap .pbar{width:56px}
   .intake-copy h1{font-size:40px;line-height:1.04}
   .intake-copy .lede{font-size:14px;line-height:1.4}
   .intake .how-item p,.lc-sub{font-size:14px}
@@ -985,11 +998,12 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 [data-style="playful"] .lc-resume-arrow{color:var(--accent)}
 [data-style="playful"] .vb-head h2{font-family:var(--display-font);font-size:24px;font-weight:700;letter-spacing:-.055em}
 [data-style="playful"] .app-footer{margin-top:12px}
+[data-style="playful"] body.home #brand-home{gap:8px}
 [data-style="playful"] #brand-home i{position:relative;width:140px;height:40px;overflow:hidden}
 [data-style="playful"] #brand-home i img{position:absolute;top:-3.5px;left:0;width:140px;height:auto;max-width:none}
 [data-style="playful"] #brand-name{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-.playful-language-bubble{position:relative;flex:none;margin-top:-6px;padding:5px 7px;border-radius:5px;background:var(--playful-yellow);color:#000;font-size:10px;font-weight:700;line-height:1;text-transform:uppercase;letter-spacing:.06em}
-.playful-language-bubble::after{content:"";position:absolute;right:8px;bottom:-4px;width:5px;height:5px;background:inherit;border-radius:0 0 5px 0}
+.playful-language-bubble{position:relative;display:inline-flex;align-items:center;flex:none;min-height:32px;margin-top:-2px;padding:0 10px;border-radius:7px;background:var(--playful-yellow);color:#000;font-size:11px;font-weight:700;line-height:1;white-space:nowrap;text-transform:uppercase;letter-spacing:.06em}
+.playful-language-bubble::after{content:"";position:absolute;right:10px;bottom:-4px;width:6px;height:6px;background:inherit;border-radius:0 0 6px 0}
 body:not(.home) .playful-language-bubble{display:none}
 
 .playful-editor-frame{position:relative;border:1.5px solid #000;background:#FFF;--editor-marker:var(--playful-yellow)}
@@ -1068,6 +1082,18 @@ body:not(.home) .playful-language-bubble{display:none}
   [data-style="playful"] .lc-art{width:108px;height:108px}
   [data-style="playful"] .lesson-list::before{font-size:23px}
 }
+@media(max-width:420px){
+  [data-style="playful"] #brand-home i{width:108px;height:31px}
+  [data-style="playful"] #brand-home i img{width:108px;top:-2.7px}
+  .playful-language-bubble{min-height:24px;padding:0 7px;border-radius:5px;font-size:9px}
+  .playful-language-bubble::after{right:7px;bottom:-3px;width:5px;height:5px;border-radius:0 0 5px 0}
+}
+@media(max-width:360px){
+  [data-style="playful"] body.home #brand-home{gap:6px}
+  [data-style="playful"] #brand-home i{width:94px;height:27px}
+  [data-style="playful"] #brand-home i img{width:94px;top:-2.35px}
+  .playful-language-bubble{min-height:21px;padding-inline:5px;font-size:8px}
+}
 @media(prefers-reduced-motion:reduce){.playful-pointer-art{transition:none}[data-style="playful"] .mascot-eyes{animation:none}}
 
 [data-palette="green"] .intake-copy .lede,[data-palette="green"] .intake .drop-card .hint,[data-palette="green"] .intake .drop-card .parse-status{color:rgba(255,255,255,.94)}
@@ -1082,7 +1108,12 @@ body:not(.home) .playful-language-bubble{display:none}
     <button class="brand" id="brand-home"><i id="brand-dot" aria-hidden="true"><img src="icons/homework-mark-v1.png" alt="" width="40" height="40"></i><span id="brand-name">Домашка</span></button>
     <nav class="top-nav" aria-label="Разделы"><button data-nav="lesson-list" data-ui="navLessons"></button><button data-nav="vocab-box" data-ui="navVocab"></button></nav>
     <div class="progress-wrap" id="progress-wrap" hidden><span id="progress-label" class="num">0%</span><div class="pbar"><i id="progress-fill"></i></div></div>
-    <button class="ibtn" id="menu-btn" aria-label="Меню"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+    <div class="header-actions">
+      <button type="button" class="header-lang" id="header-lang" data-language="en" aria-label="Switch to Russian">
+        <span class="header-lang-track" aria-hidden="true"><span>RU</span><span>EN</span></span>
+      </button>
+      <button class="ibtn" id="menu-btn" aria-label="Меню"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+    </div>
   </div>
   <div class="wrap tabs-row" id="tabs-row" hidden><nav class="tabs" id="tabs" aria-label="Шаги урока"></nav></div>
 </header>
@@ -1559,6 +1590,7 @@ const UI = {
   parseReady:   { ru: "Готово. Нажмите «Разобрать урок».", en: "Done. Press \"Break down the lesson\"." },
   menuTitle:    { ru: "Домашка", en: "Homework" },
   langLabel:    { ru: "Язык подсказок", en: "Hint language" },
+  switchLanguage: { ru: "Переключить на английский", en: "Switch to Russian" },
   themeLabel:   { ru: "Тема", en: "Theme" },
   themeLight:   { ru: "Светлая", en: "Light" },
   themeDark:    { ru: "Тёмная", en: "Dark" },
@@ -4039,6 +4071,8 @@ function applyLang() {
   if (unifiedIntake) $("#paste-area").setAttribute("aria-label", t("intakePlaceholder").split("\n")[0]);
   renderMode();
   $$(".lang-switch button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === S.lang)));
+  $("#header-lang").dataset.language = S.lang;
+  $("#header-lang").setAttribute("aria-label", t("switchLanguage"));
   /* Phosphor Icons · Duotone · MIT, см. LICENSE.phosphor-icons */
   const HOW_ICONS = [
     "<path d=\"M208,48V216a8,8,0,0,1-8,8H56a8,8,0,0,1-8-8V48a8,8,0,0,1,8-8H96a39.83,39.83,0,0,0-8,24v8h80V64a39.83,39.83,0,0,0-8-24h40A8,8,0,0,1,208,48Z\" opacity=\"0.2\"/><path d=\"M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.26a47.92,47.92,0,0,1,71.48,0H200A16,16,0,0,1,216,48ZM96,64h64a32,32,0,0,0-64,0ZM200,48H173.25A47.93,47.93,0,0,1,176,64v8a8,8,0,0,1-8,8H88a8,8,0,0,1-8-8V64a47.93,47.93,0,0,1,2.75-16H56V216H200Z\"/>",
@@ -4057,7 +4091,23 @@ function applyLang() {
   if (S.lessonId) renderTheory();
   show(S.view, true);
 }
-$$(".lang-switch button").forEach(b => b.addEventListener("click", () => { S.lang = b.dataset.lang; save(); applyLang(); }));
+function setLanguage(lang, button) {
+  if (lang === S.lang) return;
+  const draft = $(`#view-${S.view} :is(#drill-input, #sp-text)`);
+  S.lang = lang;
+  save();
+  applyLang();
+  if (draft) {
+    const field = document.getElementById(draft.id);
+    if (field) {
+      field.value = draft.value;
+      if (field.id === "sp-text") field.dispatchEvent(new Event("input"));
+    }
+  }
+  button.focus({ preventScroll: true });
+}
+$$(".lang-switch button").forEach(b => b.addEventListener("click", () => setLanguage(b.dataset.lang, b)));
+$("#header-lang").addEventListener("click", e => setLanguage(S.lang === "en" ? "ru" : "en", e.currentTarget));
 
 /* ============ список уроков ============ */
 const LESSON_ILLUSTRATIONS = {
