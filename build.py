@@ -58,7 +58,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   let reg;
   try { reg = await navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }); } catch { return; }
   const hadController = !!navigator.serviceWorker.controller;
-  const busy = () => !!document.querySelector('#parse-status:not([hidden])');
+  const busy = () => !!document.querySelector('#parse-status:not([hidden]), #intake-level:not([hidden])');
   let pending = false;
   const apply = () => { if (busy()) { pending = true; return; } location.reload(); };
   navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadController) apply(); });

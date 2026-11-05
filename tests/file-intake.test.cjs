@@ -6,14 +6,17 @@ const path = require('node:path');
 
 const source = fs.readFileSync(path.join(__dirname, '../src/homework.html'), 'utf8');
 const fileCode = source.slice(source.indexOf('const MATERIAL_LIMITS ='), source.indexOf('/* FILE_INTAKE_END */'));
+const lessonPrompts = source.slice(source.indexOf('const LESSON_FORMAT ='), source.indexOf('const PARSE_ERRORS ='));
+const lessonFlow = source.slice(source.indexOf('const newMode ='), source.indexOf('function openLesson('));
+const intakeQuestion = source.slice(source.indexOf('let parseCtl = null, intakeQuestion'), source.indexOf('function setParsing('));
 const png = Uint8Array.from([137,80,78,71,13,10,26,10,0]);
 function file(name = 'notes.png', bytes = png, size = bytes.length) {
   return { name, size, lastModified: 1, arrayBuffer: async () => bytes.slice().buffer };
 }
-function harness() {
-  const elements = new Map(), notes = [], revoked = [], env = { mode: 'material', keys: {}, sheets: [] };
+function harness({ unifiedIntake = false } = {}) {
+  const elements = new Map(), notes = [], revoked = [], stored = [], env = { mode: 'material', keys: {}, sheets: [] };
   const el = selector => {
-    if (!elements.has(selector)) elements.set(selector, { value: '', hidden: false, innerHTML: '', textContent: '', listeners: {}, classList: { add() {}, remove() {} }, addEventListener(name, fn) { this.listeners[name] = fn; }, contains() { return false; }, click() {}, focus() { env.focused=selector; } });
+    if (!elements.has(selector)) elements.set(selector, { value: '', hidden: false, innerHTML: '', textContent: '', listeners: {}, classList: { add() {}, remove() {} }, addEventListener(name, fn) { this.listeners[name] = fn; }, contains() { return false; }, click() {}, focus() { env.focused=selector; }, scrollIntoView() {} });
     return elements.get(selector);
   };
   const ctx = {
@@ -22,16 +25,20 @@ function harness() {
     Image: class { constructor() { this.naturalWidth = 100; this.naturalHeight = 100; } decode() { return env.decode ? env.decode(this) : Promise.resolve(); } },
     $: el, $$: selector => selector === '[data-file-remove]' ? [...el('#material-files').innerHTML.matchAll(/data-file-remove="(\d+)"/g)].map(m => { const b=el('remove:'+m[1]); b.dataset={fileRemove:m[1]}; return b; }) : [],
     document: { addEventListener() {} }, UI: new Proxy({}, { get: (_,key) => String(key).startsWith('file') ? true : undefined }),
-    S: { lang: 'en' }, AI_NAMES: {gemini:'Gemini',claude:'Claude'}, KEY_GEMINI:'g',KEY_CLAUDE:'c',
+    S: { lang: 'en' }, unifiedIntake, AI_NAMES: {gemini:'Gemini',claude:'Claude'}, KEY_GEMINI:'g',KEY_CLAUDE:'c',
     aiProvider:()=>env.provider||'gemini',lsGet:key=>env.keys[key]||'', lessonAI:async()=>env.ai||null,
     keySheet:(...args)=>env.sheets.push(args),PARSE_ERRORS:{rate_limited:'parseBusy',bad_key:'parseBadKey'},
     t: (key,...args) => key==='fileHeading' ? 'Material from: '+args[0] : key,
     newMode: () => env.mode, setParsing: on => {env.busy=on;}, parseHint: (key, error) => notes.push({ key, error }),
-    withTimeout: promise => promise
+    withTimeout: promise => promise,
+    save() {}, buildLesson: ({lesson}) => assert.ok(lesson.title),
+    storeLesson: async record => { stored.push(record); return true; },
+    openLesson: id => { env.opened = id; }
   };
   vm.createContext(ctx);
-  vm.runInContext(`let parseCtl = null;\n${fileCode}\nglobalThis.intake={materialMime,materialSelectionError,materialBase64,materialEsc,materialWait,extractedMaterialText,appendMaterialText,addMaterialFiles,extractMaterial,renderMaterialFiles,clearMaterialFiles,files:()=>materialDraft.files,cancel:()=>parseCtl?.abort(),limits:MATERIAL_LIMITS};`, ctx);
-  return { ...ctx.intake, env, notes, revoked, el };
+  vm.runInContext(`${intakeQuestion}\n${fileCode}\n${unifiedIntake ? lessonPrompts + lessonFlow : ""}
+    globalThis.intake={materialMime,materialSelectionError,materialBase64,materialEsc,materialWait,extractedMaterialText,appendMaterialText,addMaterialFiles,extractMaterial,renderMaterialFiles,clearMaterialFiles,files:()=>materialDraft.files,cancel:()=>parseCtl?.abort(),limits:MATERIAL_LIMITS,parseLesson:typeof parseLesson==="function"?parseLesson:null};`, ctx);
+  return { ...ctx.intake, env, notes, revoked, el, stored, state: ctx.S };
 }
 
 test('detects supported formats from bytes, not a spoofed filename or MIME', () => {
@@ -146,6 +153,73 @@ test('cancelling a model request does not append late results or erase files',as
  h.cancel();resolve({pages:[{page:1,text:'Late result'}]});await running;
  assert.equal(h.el('#paste-area').value,'Keep me');assert.equal(h.files()[0].inserted,false);
  assert.equal(h.notes.at(-1).key,'fileStopped');assert.equal(h.env.busy,false);
+});
+
+test('a topic with an unclear level waits for a choice and remembers the chosen level', async () => {
+  const h = harness({ unifiedIntake: true });
+  const prompts = [];
+  h.state.newMode = 'topic';
+  h.env.ai = { json: async prompt => {
+    prompts.push(prompt);
+    return prompts.length === 1 ? { needsLevel: 'topic' } : { title: 'Present Perfect', level: 'B2' };
+  } };
+  h.el('#paste-area').value = 'When do I use the present perfect?';
+  await h.parseLesson();
+  assert.equal(h.stored.length, 0);
+  assert.equal(h.el('#intake-level').hidden, false);
+  assert.equal(h.el('#paste-area').value, 'When do I use the present perfect?');
+
+  await h.parseLesson('B2');
+  assert.match(prompts[1], /from scratch.*level B2/);
+  assert.equal(h.state.newLevel, 'B2');
+  assert.equal(h.stored.length, 1);
+  assert.equal(h.el('#intake-level').hidden, true);
+
+  h.el('#paste-area').value = 'Conditionals';
+  await h.parseLesson();
+  assert.match(prompts[2], /saved level \(B2\)/);
+  assert.equal(h.stored.length, 2);
+  assert.equal(h.el('#intake-level').hidden, true);
+});
+
+test('an imported exercise stays teacher material when the learner is unsure of the level', async () => {
+  const h = harness({ unifiedIntake: true });
+  h.state.newMode = 'topic';
+  const prompts = [];
+  h.env.ai = { json: async (prompt, options) => {
+    if (options.media) return { pages: [{ page: 1, text: 'She ____ yesterday.' }] };
+    prompts.push(prompt);
+    return prompts.length === 1 ? { needsLevel: 'material' } : { title: 'Past Simple' };
+  } };
+  await h.addMaterialFiles([file()]);
+  await h.parseLesson();
+  assert.equal(prompts.length, 0);
+  assert.match(h.el('#paste-area').value, /She ____ yesterday\./);
+
+  await h.parseLesson();
+  assert.match(prompts[0], /learner provided a file/);
+  assert.equal(h.el('#intake-level').hidden, false);
+  await h.parseLesson('');
+  assert.match(prompts[1], /teacher's homework material/);
+  assert.match(prompts[1], /She ____ yesterday\./);
+  assert.equal(h.state.newLevel, undefined);
+  assert.equal(h.stored.length, 1);
+  assert.equal(h.files().length, 0);
+});
+
+test('editing the input dismisses the level question and sends the new draft for analysis', async () => {
+  const h = harness({ unifiedIntake: true });
+  h.env.ai = { json: async prompt => prompt.includes('A2 articles')
+    ? { title: 'Articles', level: 'A2' } : { needsLevel: 'topic' } };
+  h.el('#paste-area').value = 'Articles';
+  await h.parseLesson();
+  assert.equal(h.el('#intake-level').hidden, false);
+  h.el('#paste-area').value = 'A2 articles';
+  h.el('#paste-area').listeners.input();
+  assert.equal(h.el('#intake-level').hidden, true);
+  await h.parseLesson();
+  assert.equal(h.stored[0].lesson.level, 'A2');
+  assert.equal(h.state.newLevel, undefined);
 });
 
 test('media payload helpers retain binary MIME and text, without changing audio-only or text-only input',()=>{
