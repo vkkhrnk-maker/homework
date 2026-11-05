@@ -18,7 +18,6 @@ body.home header.top,body.home::before{color:var(--fg)}
 .intake .drop-card .material-composer{border-color:var(--soft-edge);background:var(--soft-panel);box-shadow:0 12px 32px rgba(32,33,39,.05)}
 .intake .drop-card .material-composer:focus-within{outline-color:var(--accent)}
 body.home header.top .brand i img{filter:var(--brand-mark-filter)}
-body.home header.top .ibtn{background:var(--soft-panel);color:var(--fg);box-shadow:0 3px 12px rgba(32,33,39,.05)}
 
 .intake{
   --glass:var(--soft-panel);
