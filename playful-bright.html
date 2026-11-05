@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-variant="fromt" data-style="playful" data-palette="bright">
+<html lang="en" data-variant="fromt" data-style="playful" data-palette="bright" data-intake="unified">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -252,6 +252,12 @@ body.home main{padding-top:0}
 .topic-ideas button{height:32px;padding:0 12px;border-radius:999px;background:var(--bg);font-size:13px;font-weight:500;color:var(--fg-2)}
 .topic-ideas button:hover{color:var(--accent);background:var(--accent-soft)}
 .drop-actions{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:16px;text-align:center}
+.intake-level{min-width:0;margin:0;padding:0;border:0}
+.intake-level legend{margin:0 auto 10px;padding:0;color:var(--fg);font-size:16px;font-weight:700}
+.intake-level-options{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.intake-level-options button{min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r-s);background:var(--bg);color:var(--fg);font-weight:600}
+.intake-level-options button:hover:not(:disabled){background:var(--surface)}
+.intake-level-options button:disabled{opacity:.6}
 .parse-status{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums}
 .spinner{width:14px;height:14px;flex:none;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -917,6 +923,7 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
   --lesson-ink:var(--fg);--lesson-ink-muted:var(--fg-2);--lesson-art-filter:none;--brand-mark-filter:brightness(0);
   --playful-primary:#3038EE;--mascot-main:var(--playful-primary);--playful-native-cursor:url("icons/playful/cursor.svg") 6 3;--playful-yellow:#FFE46A;--playful-mint:#A9E8CD;--playful-pink:#F6BFD7;
   --display-font:"Unbounded","Arial Black",var(--font);
+  --playful-feature-gap:58px;--playful-card-tail:16px;
 }
 
 [data-style="playful"] body.home::before,[data-style="playful"] body.home header.top{background:var(--playful-primary);color:#FFF}
@@ -950,25 +957,22 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 [data-style="playful"] .intake .drop-card .primary-btn{background:var(--playful-yellow);color:#151517;border:1.5px solid #151517;border-radius:12px;font-weight:700;box-shadow:0 4px 0 rgba(21,21,23,.28);height:52px;padding:0 26px}
 [data-style="playful"] .intake .drop-card .primary-btn:hover{background:#FFED91;transform:translateY(-2px)}
 [data-style="playful"] .intake .drop-card .primary-btn:active{transform:scale(.96)}
-.intake-level{min-width:0;margin:0;padding:0;border:0}
-.intake-level legend{margin:0 auto 10px;padding:0;color:#FFF;font-size:16px;font-weight:700}
-.intake-level-options{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
-.intake-level-options button{min-width:44px;min-height:44px;padding:0 12px;border:1px solid #151517;border-radius:9px;background:#FFF;color:#151517;font-weight:600}
+.intake-level legend{color:#FFF}
+.intake-level-options button{border-color:#151517;border-radius:9px;background:#FFF;color:#151517}
 .intake-level-options button:hover:not(:disabled){background:var(--playful-yellow)}
-.intake-level-options button:disabled{opacity:.6}
 :is([data-palette="bright"],[data-palette="yellow"]) .intake-level legend{color:#000}
 [data-style="playful"] .intake .drop-card .hint,[data-style="playful"] .intake .drop-card .parse-status,[data-style="playful"] .intake .drop-card .link-btn{color:rgba(255,255,255,.76)}
-[data-style="playful"] .intake .how-list{padding-top:28px;padding-bottom:32px;margin-top:0;background:var(--bg);border-radius:24px 24px 0 0}
+[data-style="playful"] .intake .how-list{padding:var(--playful-feature-gap) 0 var(--playful-card-tail);margin-top:0;background:var(--bg);border-radius:24px 24px 0 0}
 [data-style="playful"] .intake .how-item{height:254px;padding:22px;border-radius:22px;color:#151517;--ink:rgba(21,21,23,.72);background:var(--playful-mint);box-shadow:none}
 [data-style="playful"] .intake .how-item[data-c="3"]{background:var(--playful-yellow)}
 [data-style="playful"] .intake .how-item[data-c="4"]{background:var(--playful-pink)}
 [data-style="playful"] .intake .how-item[data-c="5"]{background:var(--accent);color:#FFF;--ink:rgba(255,255,255,.76)}
 [data-style="playful"] .intake .how-item[data-c="6"]{background:#151517;color:#FFF;--ink:rgba(255,255,255,.72)}
-[data-style="playful"] .intake .how-item::after{content:"";position:absolute;bottom:-16px;left:30px;width:26px;height:27px;background:inherit;border-radius:0 0 23px 0}
+[data-style="playful"] .intake .how-item::after{content:"";position:absolute;bottom:calc(-1 * var(--playful-card-tail));left:30px;width:26px;height:27px;background:inherit;border-radius:0 0 23px 0}
 [data-style="playful"] .intake .how-item .ico{width:84px;height:84px;top:14px;left:18px;object-fit:contain}
 [data-style="playful"] .intake .how-item strong{font-size:22px;font-weight:700;letter-spacing:-.025em}
 [data-style="playful"] .intake .how-item p{font-size:14px;line-height:1.4}
-[data-style="playful"] #lesson-list{margin-top:42px}
+[data-style="playful"] #lesson-list{margin-top:var(--playful-feature-gap)}
 [data-style="playful"] .lesson-list::before{font-family:var(--display-font);font-size:25px;font-weight:700;letter-spacing:-.055em;margin-bottom:4px}
 [data-style="playful"] .lesson-card{min-height:262px;border:0;border-radius:22px;padding:26px;background:var(--fromt-solid);transition:transform .16s,box-shadow .16s}
 [data-style="playful"] .lesson-card:hover{transform:translateY(-3px);box-shadow:0 6px 0 var(--surface-2)}
@@ -1510,8 +1514,8 @@ const UI = {
   intakePlaceholder: { ru: "Вставьте материал от учителя или напишите тему.\n\nНапример, «Когда употреблять present perfect?»",
                        en: "Paste your teacher’s notes or enter a topic.\n\nFor example, “When do I use the present perfect?”" },
   intakeBtn:    { ru: "Продолжить", en: "Continue" },
-  intakeHint:   { ru: "Learny подготовит объяснения и упражнения. Обычно это занимает одну-две минуты.",
-                  en: "Learny prepares explanations and practice. It usually takes a minute or two." },
+  intakeHint:   { ru: "ИИ подготовит объяснения и упражнения. Обычно это занимает одну-две минуты.",
+                  en: "AI prepares explanations and practice. It usually takes a minute or two." },
   intakeEmpty:  { ru: "Вставьте материал, прикрепите файл или напишите тему.", en: "Paste your notes, attach a file or enter a topic." },
   intakeReady:  { ru: "Нажмите «Продолжить», чтобы создать урок.", en: "Choose Continue to create your lesson." },
   intakeRefused: { ru: "Не получилось собрать урок по этому запросу. Проверьте текст или уточните тему.",
@@ -3006,7 +3010,7 @@ const PARSE_ERRORS = {
   prompt_too_large: "parseTooLong", invalid_json: "parseBad", empty_completion: "parseBad",
   refused: "parseRefused", session_expired: "parseSignIn", bad_key: "parseBadKey", offline: "parseOffline"
 };
-const unifiedIntake = document.documentElement.dataset.style === "playful";
+const unifiedIntake = document.documentElement.dataset.intake === "unified";
 const intakeCopy = {
   parseHint: "intakeHint", parseHintEmpty: "intakeEmpty",
   parseReady: "intakeReady", parseRefused: "intakeRefused"

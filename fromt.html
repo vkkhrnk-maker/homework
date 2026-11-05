@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-variant="fromt">
+<html lang="en" data-variant="fromt" data-intake="unified">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -252,6 +252,12 @@ body.home main{padding-top:0}
 .topic-ideas button{height:32px;padding:0 12px;border-radius:999px;background:var(--bg);font-size:13px;font-weight:500;color:var(--fg-2)}
 .topic-ideas button:hover{color:var(--accent);background:var(--accent-soft)}
 .drop-actions{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:16px;text-align:center}
+.intake-level{min-width:0;margin:0;padding:0;border:0}
+.intake-level legend{margin:0 auto 10px;padding:0;color:var(--fg);font-size:16px;font-weight:700}
+.intake-level-options{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.intake-level-options button{min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r-s);background:var(--bg);color:var(--fg);font-weight:600}
+.intake-level-options button:hover:not(:disabled){background:var(--surface)}
+.intake-level-options button:disabled{opacity:.6}
 .parse-status{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums}
 .spinner{width:14px;height:14px;flex:none;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -1344,8 +1350,8 @@ const UI = {
   intakePlaceholder: { ru: "Вставьте материал от учителя или напишите тему.\n\nНапример, «Когда употреблять present perfect?»",
                        en: "Paste your teacher’s notes or enter a topic.\n\nFor example, “When do I use the present perfect?”" },
   intakeBtn:    { ru: "Продолжить", en: "Continue" },
-  intakeHint:   { ru: "Learny подготовит объяснения и упражнения. Обычно это занимает одну-две минуты.",
-                  en: "Learny prepares explanations and practice. It usually takes a minute or two." },
+  intakeHint:   { ru: "ИИ подготовит объяснения и упражнения. Обычно это занимает одну-две минуты.",
+                  en: "AI prepares explanations and practice. It usually takes a minute or two." },
   intakeEmpty:  { ru: "Вставьте материал, прикрепите файл или напишите тему.", en: "Paste your notes, attach a file or enter a topic." },
   intakeReady:  { ru: "Нажмите «Продолжить», чтобы создать урок.", en: "Choose Continue to create your lesson." },
   intakeRefused: { ru: "Не получилось собрать урок по этому запросу. Проверьте текст или уточните тему.",
@@ -2840,7 +2846,7 @@ const PARSE_ERRORS = {
   prompt_too_large: "parseTooLong", invalid_json: "parseBad", empty_completion: "parseBad",
   refused: "parseRefused", session_expired: "parseSignIn", bad_key: "parseBadKey", offline: "parseOffline"
 };
-const unifiedIntake = document.documentElement.dataset.style === "playful";
+const unifiedIntake = document.documentElement.dataset.intake === "unified";
 const intakeCopy = {
   parseHint: "intakeHint", parseHintEmpty: "intakeEmpty",
   parseReady: "intakeReady", parseRefused: "intakeRefused"

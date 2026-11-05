@@ -83,7 +83,7 @@ soft_html = soft_html.replace("</head>", '<style id="soft-theme">\n' + soft_css 
 blue_html = html.replace('<html lang="en">', '<html lang="en" data-variant="blue">', 1)
 # Холодный градиент и компактные контролы, вдохновлённые fromt.app.
 fromt_css = (ROOT / "src" / "fromt-theme.css").read_text(encoding="utf-8")
-fromt_html = html.replace('<html lang="en">', '<html lang="en" data-variant="fromt">', 1)
+fromt_html = html.replace('<html lang="en">', '<html lang="en" data-variant="fromt" data-intake="unified">', 1)
 fromt_html = fromt_html.replace("</head>", '<style id="fromt-theme">\n' + fromt_css + "\n</style>\n</head>", 1)
 # Отдельная игровая проба на том же интерфейсе и данных.
 playful_css = (ROOT / "src" / "playful-theme.css").read_text(encoding="utf-8")
