@@ -1301,33 +1301,14 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 }
 
 
-/* ---------- темная тема: те же роли, другой свет ---------- */
+/* ---------- темная тема «теплая тьма»: та же температура, что у светлой бумаги, акцент тот же сиреневый.
+   Чем выше поверхность, тем она светлее: страница < полоса первого экрана < карточка < чип. ---------- */
 :root[data-calm][data-style="learny"][data-variant="fromt"][data-theme="dark"] {
-  --bg: #151417; --fg: #f1efe9; --fg-2: #b5b0ba; --fg-3: #8d8892;
-  --surface: #222026; --surface-2: #2c2931; --line: #37343c;
-  --fromt-solid: #1e1d21; --fromt-selected: #2c2931; --fromt-controls: #222026;
-  --accent: #a885ff; --accent-hover: #bda2ff; --accent-fg: #17101f; --accent-soft: #2a2140;
-  --learny-purple: var(--accent); --learny-paper-mint: #1b2822; --learny-editor-edge: #2f4238;
-  --learny-muted-border: #6f6a75; --calm-edge: var(--line);
-  --practice-ok: #86d3b1; --practice-ok-soft: #1a2c25;
-  --practice-error: #f19b93; --practice-error-soft: #33201f;
-  --danger: #ff7a70; --danger-soft: rgba(255,122,112,.16);
-  --scrim: rgba(0,0,0,.6); --shadow: 0 8px 32px rgba(0,0,0,.5);
-  color-scheme: dark;
+  --bg: #161311; --fg: #f5f0e8; --fg-2: #bfb6a9; --fg-3: #968b7c; --surface: #221d19; --surface-2: #2e2722; --line: #3b332c; --fromt-solid: #2c2620; --fromt-selected: #2e2722; --fromt-controls: #221d19; --accent: #b7a1ff; --accent-hover: #c9b8ff; --accent-fg: #171020; --accent-soft: #2f2646; --learny-purple: var(--accent); --calm-band: #1f1b17; --learny-paper-mint: #352d26; --learny-editor-edge: #3b332c; --learny-muted-border: #7a6e61; --calm-chip-bg: #3b3229; --calm-chip-hover: #443a31; --calm-edge: transparent; --practice-ok: #86d3b1; --practice-ok-soft: #1f2e27; --practice-error: #f19b93; --practice-error-soft: #3a2422; --danger: #ff7a70; --danger-soft: rgba(255,122,112,.16); --scrim: rgba(0,0,0,.6); --shadow: 0 8px 32px rgba(0,0,0,.5); color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
   :root[data-calm][data-style="learny"][data-variant="fromt"]:not([data-theme="light"]) {
-    --bg: #151417; --fg: #f1efe9; --fg-2: #b5b0ba; --fg-3: #8d8892;
-  --surface: #222026; --surface-2: #2c2931; --line: #37343c;
-  --fromt-solid: #1e1d21; --fromt-selected: #2c2931; --fromt-controls: #222026;
-  --accent: #a885ff; --accent-hover: #bda2ff; --accent-fg: #17101f; --accent-soft: #2a2140;
-  --learny-purple: var(--accent); --learny-paper-mint: #1b2822; --learny-editor-edge: #2f4238;
-  --learny-muted-border: #6f6a75; --calm-edge: var(--line);
-  --practice-ok: #86d3b1; --practice-ok-soft: #1a2c25;
-  --practice-error: #f19b93; --practice-error-soft: #33201f;
-  --danger: #ff7a70; --danger-soft: rgba(255,122,112,.16);
-  --scrim: rgba(0,0,0,.6); --shadow: 0 8px 32px rgba(0,0,0,.5);
-  color-scheme: dark;
+    --bg: #161311; --fg: #f5f0e8; --fg-2: #bfb6a9; --fg-3: #968b7c; --surface: #221d19; --surface-2: #2e2722; --line: #3b332c; --fromt-solid: #2c2620; --fromt-selected: #2e2722; --fromt-controls: #221d19; --accent: #b7a1ff; --accent-hover: #c9b8ff; --accent-fg: #171020; --accent-soft: #2f2646; --learny-purple: var(--accent); --calm-band: #1f1b17; --learny-paper-mint: #352d26; --learny-editor-edge: #3b332c; --learny-muted-border: #7a6e61; --calm-chip-bg: #3b3229; --calm-chip-hover: #443a31; --calm-edge: transparent; --practice-ok: #86d3b1; --practice-ok-soft: #1f2e27; --practice-error: #f19b93; --practice-error-soft: #3a2422; --danger: #ff7a70; --danger-soft: rgba(255,122,112,.16); --scrim: rgba(0,0,0,.6); --shadow: 0 8px 32px rgba(0,0,0,.5); color-scheme: dark;
   }
 }
 
@@ -1386,8 +1367,8 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 }
 :root:is(#_#_,[data-calm]) .answer-row input { height: var(--calm-control); }
 /* чипы: ответы, фильтры, оглавление */
-:root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip) { height: var(--calm-chip); min-height: var(--calm-chip); padding: 0 14px; border: 0; border-radius: var(--r-s); background: var(--bg); color: var(--fg); box-shadow: none; }
-:root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip):hover { background: var(--surface); }
+:root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip) { height: var(--calm-chip); min-height: var(--calm-chip); padding: 0 14px; border: 0; border-radius: var(--r-s); background: var(--calm-chip-bg, var(--bg)); color: var(--fg); box-shadow: none; }
+:root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip):hover { background: var(--calm-chip-hover, var(--surface)); }
 :root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip)[aria-pressed="true"] { background: var(--fromt-solid); color: var(--fg); box-shadow: inset 0 0 0 2px var(--fg); }
 :root:is(#_#_,[data-calm]) .chips { gap: 8px; margin-bottom: var(--calm-stack); }
 :root:is(#_#_,[data-calm]) .learny-filter { min-height: var(--calm-chip); padding-inline: 12px; border-radius: var(--r-s); color: var(--fg-2); }
@@ -1430,11 +1411,11 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 /* ================= лендинг ================= */
 /* мятный фон идет от края до края и под шапку: панель перестает быть рамкой в рамке */
 :root:is(#_#_,[data-calm]) body.home header.top,
-:root:is(#_#_,[data-calm]) body.home::before { background: var(--learny-paper-mint); }
+:root:is(#_#_,[data-calm]) body.home::before { background: var(--calm-band, var(--learny-paper-mint)); }
 :root:is(#_#_,[data-calm]) body.home.scrolled header.top { background: var(--bg); box-shadow: 0 1px 0 var(--line); }
 :root:is(#_#_,[data-calm]) body.home .intake { margin-top: 0; padding: clamp(20px, 4.4vw, 72px) 0 clamp(28px, 6vw, 96px); border-radius: 0; background: transparent; }
 :root:is(#_#_,[data-calm]) body.home .intake:not(.learny-own)::before {
-  content: ""; display: block; position: absolute; z-index: -1; inset: 0 calc(50% - 50vw); background: var(--learny-paper-mint);
+  content: ""; display: block; position: absolute; z-index: -1; inset: 0 calc(50% - 50vw); background: var(--calm-band, var(--learny-paper-mint));
   filter: none; -webkit-mask-image: none; mask-image: none;
 }
 :root:is(#_#_,[data-calm]) .intake-copy h1 { margin: 0 0 16px; }
@@ -1808,6 +1789,10 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 :root:is(#_#_,[data-calm]) .sheet .space-enter .field { margin-top: 0; }
 :root:is(#_#_,[data-calm]) .sheet .space-enter input { width: 100%; padding-inline: 16px; letter-spacing: .04em; }
 :root:is(#_#_,[data-calm]) .sheet .space-enter .ghost-btn { width: 100%; }
+
+/* ---------- запасной вариант темной темы для сравнения: ?dark=graphite (холодная нейтральная база) ---------- */
+:root[data-calm][data-style="learny"][data-variant="fromt"][data-dark="graphite"][data-theme="dark"] { --bg: #121317; --fg: #f2f2f0; --fg-2: #b3b4bd; --fg-3: #8a8c97; --surface: #1c1e25; --surface-2: #282b34; --line: #33363f; --fromt-solid: #252830; --fromt-selected: #282b34; --fromt-controls: #1c1e25; --accent: #b29cff; --accent-hover: #c5b4ff; --accent-fg: #14101f; --accent-soft: #2a2545; --learny-purple: var(--accent); --calm-band: #191b21; --learny-paper-mint: #2d303b; --learny-editor-edge: #33363f; --learny-muted-border: #6e7080; --calm-chip-bg: #323642; --calm-chip-hover: #393c49; --calm-edge: transparent; }
+@media (prefers-color-scheme: dark) { :root[data-calm][data-style="learny"][data-variant="fromt"][data-dark="graphite"]:not([data-theme="light"]) { --bg: #121317; --fg: #f2f2f0; --fg-2: #b3b4bd; --fg-3: #8a8c97; --surface: #1c1e25; --surface-2: #282b34; --line: #33363f; --fromt-solid: #252830; --fromt-selected: #282b34; --fromt-controls: #1c1e25; --accent: #b29cff; --accent-hover: #c5b4ff; --accent-fg: #14101f; --accent-soft: #2a2545; --learny-purple: var(--accent); --calm-band: #191b21; --learny-paper-mint: #2d303b; --learny-editor-edge: #33363f; --learny-muted-border: #6e7080; --calm-chip-bg: #323642; --calm-chip-hover: #393c49; --calm-edge: transparent; } }
 
 </style>
 </head>
@@ -7441,6 +7426,9 @@ if (false) addEventListener('load', async () => {
     if (!location.hash && new URLSearchParams(location.search).has("demo")) openDemo();
     else route();
   }
+
+  // Темная тема по умолчанию теплая; ?dark=graphite показывает запасной холодный вариант для сравнения.
+  if (new URLSearchParams(location.search).get("dark") === "graphite") document.documentElement.dataset.dark = "graphite";
 
   // Логотип — только слово Learny. Для сравнения ?logo=mascot возвращает в шапку книжку.
   if (new URLSearchParams(location.search).get("logo") === "mascot") document.documentElement.dataset.logo = "mascot";

@@ -619,6 +619,9 @@
     else route();
   }
 
+  // Темная тема по умолчанию теплая; ?dark=graphite показывает запасной холодный вариант для сравнения.
+  if (new URLSearchParams(location.search).get("dark") === "graphite") document.documentElement.dataset.dark = "graphite";
+
   // Логотип — только слово Learny. Для сравнения ?logo=mascot возвращает в шапку книжку.
   if (new URLSearchParams(location.search).get("logo") === "mascot") document.documentElement.dataset.logo = "mascot";
 
