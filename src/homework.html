@@ -27,6 +27,7 @@ if (location.pathname.endsWith("/src/homework.html")) {
   --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
   --brand-mark-filter:none;
   --r-l:24px; --r-m:16px; --r-s:12px;
+  --space-2:.5rem;
   --muted:var(--fg-2); --serif:var(--read-font);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -1207,6 +1208,8 @@ const UI = {
   drillInstruction: { ru: "Заполните пропуск подходящим словом или формой", en: "Fill the gap with the right word or form" },
   drillScore:   { ru: (ok, done) => `Верно: ${ok} из ${done}`, en: (ok, done) => `${ok} of ${done} correct` },
   answerLabel:  { ru: "Ваш ответ", en: "Your answer" },
+  answerRequired: { ru: "Впишите ответ в поле.", en: "Type your answer in the field." },
+  answerRequiredChoice: { ru: "Выберите вариант выше или впишите свой ответ.", en: "Choose an option above or type your own answer." },
   verbLabel:    { ru: "Глагол", en: "Verb" },
   correctSentence: { ru: "Правильное предложение", en: "Correct sentence" },
   explanationLabel: { ru: "Почему так", en: "Why this works" },
@@ -3059,6 +3062,7 @@ async function parseLesson(chosenLevel = null) {
     const rec = { id: "u-" + Date.now().toString(36), createdAt: Date.now(), lesson: raw };
     buildLesson(rec);
     const stored = await storeLesson(rec);
+    materialAbort(ctl.signal);
     field.value = "";
     if (unifiedIntake) setIntakeQuestion();
     if (!topic) clearMaterialFiles();
@@ -3076,9 +3080,9 @@ async function parseLesson(chosenLevel = null) {
     }
   }
 }
-function openLesson(id) {
+function openLesson(id, stage = "theory") {
   S.lessonId = id; save();
-  renderTabs(); renderTheory(); show("theory");
+  renderTabs(); renderTheory(); show(stage);
 }
 
 /* ---- нижние листы, тост, меню, тема ---- */
@@ -3630,7 +3634,9 @@ function renderHowMarquee(howSet) {
 }
 function applyLang() {
   document.documentElement.lang = S.lang;
-  document.title = S.lang === "en" ? "English homework" : "Домашка по английскому";
+  document.title = document.documentElement.dataset.style === "learny"
+    ? (S.lang === "en" ? "Learny — English practice" : "Learny — практика английского")
+    : (S.lang === "en" ? "English homework" : "Домашка по английскому");
   $("#footer-year").textContent = new Date().getFullYear();
   $$("[data-ui]").forEach(el => { const v = t(el.dataset.ui); if (typeof v === "string") el.textContent = v; });
   $("#brand-name").textContent = t("brandName");
@@ -3660,7 +3666,7 @@ function applyLang() {
   const howCard = (n, dup) => `<div class="how-item" data-c="${n}"${dup ? ' aria-hidden="true"' : ""}><svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">${HOW_ICONS[n - 1]}</svg>
     <strong>${t("how"+n+"t")}</strong><p>${t("how"+n+"p")}</p></div>`;
   const howSet = dup => [2,3,4,5,6].map(n => howCard(n, dup)).join("");   // без «Вставьте домашку»: поле ввода прямо над лентой
-  renderHowMarquee(howSet);
+  if (document.documentElement.dataset.style !== "learny") renderHowMarquee(howSet);
   renderLessonList();
   renderTabs();
   if (S.lessonId) renderTheory();
@@ -3677,6 +3683,9 @@ function setLanguage(lang, button) {
     if (field) {
       field.value = draft.value;
       if (field.id === "sp-text") field.dispatchEvent(new Event("input"));
+      if (field.id === "drill-input" && draft.dataset.selectedChip) {
+        [...document.querySelectorAll("#drill-card .chip")].find(chip => chip.dataset.chip === draft.dataset.selectedChip)?.click();
+      }
     }
   }
   button.focus({ preventScroll: true });
@@ -3712,6 +3721,24 @@ function lessonCompletion(steps) {
   const percent = total ? Math.min(complete ? 100 : 99, Math.round(done / total * 100)) : 0;
   return { total, done, complete, percent };
 }
+function startedLesson(l) {
+  const p = S.progress[l.id];
+  return !!p && (Boolean(p.lastStage || p.theorySeen) || Object.keys(p.speak?.answers || {}).length > 0 || stepProgress(l).some(step => step.n > 0 || p[step.key]?.i > 0));
+}
+function savedStage(l, steps = stepProgress(l)) {
+  const p = S.progress[l.id] || {};
+  if (steps.some(s => s.key === p.lastStage)) return p.lastStage;
+  const recent = steps.slice().reverse().find(s => s.key !== "theory" && (p[s.key]?.i > 0 || s.n > 0 || Object.keys(p[s.key]?.answers || {}).length));
+  return recent?.key || steps[0]?.key || "theory";
+}
+function savedPosition(l, steps = stepProgress(l)) {
+  const stage = savedStage(l, steps);
+  const current = steps.find(s => s.key === stage);
+  if (!current) return "";
+  const i = S.progress[l.id]?.[stage]?.i || 0;
+  const position = current.total ? (i >= current.total ? t("cabinetStageEnd") : t("qCounter", i + 1, current.total)) : "";
+  return [current.label, position].filter(Boolean).join(" · ");
+}
 function lessonResumeText(steps, completion) {
   if (completion.complete) return t("cardCompleted");
   const current = steps.find(s => !s.done);
@@ -3726,6 +3753,18 @@ function renderLessonList() {
   $("#lesson-list").innerHTML = LESSONS.map(l => {
     const steps = stepProgress(l), cur = steps.find(s => !s.done), art = LESSON_ILLUSTRATIONS[l.id];
     const completion = lessonCompletion(steps), resume = lessonResumeText(steps, completion);
+    if (document.documentElement.dataset.style === "learny") {
+      const started = startedLesson(l);
+      const position = document.documentElement.dataset.hero === "b" && started && !completion.complete ? savedPosition(l, steps) : resume;
+      return `<button class="lesson-card" data-lesson="${escH(l.id)}">
+        <span class="learny-lesson-copy">
+          <span class="learny-lesson-name">${escH(l.title)}</span>
+          ${started ? `<span class="learny-lesson-progress">${escH(position)}${completion.done ? ` · ${completion.percent}%` : ""}</span>` : ""}
+        </span>
+        <span class="learny-lesson-meta">${escH(L(l.date))}</span>
+        <span class="learny-row-arrow" aria-hidden="true">${completion.complete ? "✓" : "→"}</span>
+      </button>`;
+    }
     return `<button class="lesson-card" data-lesson="${l.id}">
       <div class="lc-overview${art ? " has-art" : ""}">
         ${art ? `<img class="lc-art" src="${art}" alt="" width="132" height="132" loading="lazy" decoding="async">` : ""}
@@ -3746,7 +3785,8 @@ function renderLessonList() {
     </button>`;
   }).join("");
   $$("#lesson-list [data-lesson]").forEach(b => b.addEventListener("click", () => {
-    openLesson(b.dataset.lesson);
+    const l = LESSONS.find(item => item.id === b.dataset.lesson);
+    openLesson(l.id, document.documentElement.dataset.hero === "b" ? savedStage(l) : "theory");
   }));
   renderVocabBox();
 }
@@ -3770,6 +3810,13 @@ function show(view, keepScroll) {
   const l = lesson();
   if (view !== "home" && view !== "report" && !lessonSteps(l).includes(view)) view = "theory";
   if (view === "theory" && S.lessonId) prog().theorySeen = true;   // для карточки урока: теорию открывали
+  if (document.documentElement.hasAttribute("data-calm") && S.lessonId && lessonSteps(l).includes(view)) {
+    const p = prog();
+    if (p.lastStage !== view || S.view !== view || !p.lastStudiedAt) {
+      p.lastStage = view;
+      p.lastStudiedAt = Date.now();
+    }
+  }
   S.view = view; save();
   if (view !== "speak") leaveSpeak();
 
@@ -3799,9 +3846,14 @@ function show(view, keepScroll) {
   if (view === "match") renderMatch();
   if (view === "speak") renderSpeak();
   updateProgress();
+  document.dispatchEvent(new CustomEvent("lessonviewchange", { detail: view }));
   if (!keepScroll) window.scrollTo({ top: 0, behavior: "instant" });
 }
-$("#brand-home").addEventListener("click", () => { if (S.view !== "home") show("home"); });
+$("#brand-home").addEventListener("click", () => {
+  if (document.documentElement.dataset.hero === "b") {
+    location.hash = S.view === "home" ? "welcome" : "cabinet";
+  } else if (S.view !== "home") show("home");
+});
 /* На голубой обложке стекло включается перед карточками; в светлой версии и уроке — при прокрутке. */
 function syncHeaderGlass() {
   const hero = document.body.classList.contains("home") ? document.querySelector(".intake") : null;
@@ -4417,6 +4469,13 @@ function drillStats() {
   const vals = Object.values(prog().drill.answered);
   return { done: vals.length, ok: vals.filter(v => v === "good" || v === "also").length };
 }
+function drillChoices(l, index) {
+  const choices = l.drill.chips;
+  if (!document.documentElement.hasAttribute("data-calm") || l.id !== "modals" || index !== 0 || !choices?.length) return choices;
+  const question = l.drill.items[index];
+  const shortlist = [...new Set([question.a[0], ...(question.also || []), choices[0], choices[choices.length - 1], ...choices])].slice(0, 4);
+  return [...new Set([...choices, ...shortlist])].filter(word => shortlist.includes(word));
+}
 function renderDrill() {
   const l = lesson(), D = l.drill, items = D.items, p = prog().drill;
   const st = drillStats();
@@ -4433,6 +4492,7 @@ function renderDrill() {
   $("#hint-text").innerHTML = TR(q.hint);
   renderRuleBox(i, q);
 
+  const choices = drillChoices(l, i);
   const cue = q.verb ? `<div class="drill-cue">${t("verbLabel")} <span class="verb-cue">${q.verb}</span></div>` : "";
   $("#drill-card").innerHTML = `
     <div class="q-counter">
@@ -4444,9 +4504,10 @@ function renderDrill() {
     <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? q.a[0] : "___") + stripTags(q.s[1]))}">${q.s[0]}<span class="blank empty">&nbsp;&nbsp;&nbsp;&nbsp;</span>${q.s[1]}</p>
     ${cue}
     ${state ? "" : `
-      ${D.chips ? `<div class="chips">${D.chips.map(c => `<button class="chip" data-chip="${c}" aria-pressed="false">${c}</button>`).join("")}</div>` : ""}
+      ${choices ? `<div class="chips">${choices.map(c => `<button class="chip" data-chip="${escH(c)}" aria-pressed="false">${escH(c)}</button>`).join("")}</div>` : ""}
       <div class="answer-row">
-        <input id="drill-input" aria-label="${t("answerLabel")}" placeholder="${D.chips ? t("inputPh") : t("inputPhForm")}" autocomplete="off" autocapitalize="off" spellcheck="false">
+        ${document.documentElement.dataset.style === "learny" ? `<label class="learny-answer-label" for="drill-input">${t("answerLabel")}</label>` : ""}
+        <input id="drill-input" aria-label="${t("answerLabel")}" aria-describedby="drill-feedback" placeholder="${D.chips?.length ? t("inputPh") : t("inputPhForm")}" autocomplete="off" autocapitalize="off" spellcheck="false">
         <button class="primary-btn" id="check-btn">${t("checkBtn")}</button>
       </div>`}
     <div id="drill-feedback" role="status" aria-live="polite" tabindex="-1"></div>
@@ -4460,15 +4521,29 @@ function renderDrill() {
 }
 function wireDrill(i) {
   const items = lesson().drill.items, p = prog().drill;
-  $$("#drill-card .chip").forEach(c => c.addEventListener("click", () => {
-    const inp = $("#drill-input"); if (inp) inp.value = c.dataset.chip;
-    $$("#drill-card .chip").forEach(x => x.setAttribute("aria-pressed", String(x === c)));
-  }));
   const inp = $("#drill-input");
   if (inp) {
-    inp.addEventListener("input", () => $$("#drill-card .chip").forEach(x => x.setAttribute("aria-pressed", "false")));
-    inp.addEventListener("keydown", e => { if (e.key === "Enter") check(i); });
-    inp.focus();
+    const chips = $$("#drill-card .chip");
+    const updateAnswer = selected => {
+      if (selected) {
+        inp.value = selected.dataset.chip;
+        inp.dataset.selectedChip = selected.dataset.chip;
+      } else delete inp.dataset.selectedChip;
+      chips.forEach(chip => chip.setAttribute("aria-pressed", String(chip === selected)));
+      if (inp.hasAttribute("aria-invalid") && inp.value.trim()) {
+        inp.removeAttribute("aria-invalid");
+        $("#drill-feedback").textContent = "";
+      }
+    };
+    chips.forEach(chip => chip.addEventListener("click", () => updateAnswer(chip)));
+    inp.addEventListener("input", () => updateAnswer(null));
+    inp.addEventListener("keydown", e => {
+      if (e.key !== "Enter" || e.isComposing || e.keyCode === 229 || e.repeat) return;
+      e.preventDefault();
+      check(i);
+    });
+    if (document.documentElement.hasAttribute("data-calm") && chips.length) chips[0].focus({ preventScroll: true });
+    else inp.focus();
   }
   $("#check-btn")?.addEventListener("click", () => check(i));
   $("#next-btn")?.addEventListener("click", () => { p.i = drillStep(p, items, i, 1); if (p.i >= items.length) delete p.redo; save(); renderDrill(); });
@@ -4500,8 +4575,17 @@ function isTypo(v, answers) {
   });
 }
 function check(i) {
-  const raw = ($("#drill-input")?.value || "").trim();
-  if (!raw) return;
+  const input = $("#drill-input");
+  if (!input) return;
+  const raw = input.value.trim();
+  if (!raw) {
+    if (!input.hasAttribute("aria-invalid")) {
+      input.setAttribute("aria-invalid", "true");
+      $("#drill-feedback").textContent = t(lesson().drill.chips?.length ? "answerRequiredChoice" : "answerRequired");
+    }
+    input.focus();
+    return;
+  }
   const q = lesson().drill.items[i], p = prog().drill, v = norm(raw);
   const best = q.a.map(norm), also = (q.also || []).map(norm);
   p.answered[i] = best.includes(v) ? "good" : also.includes(v) || isTypo(v, best) ? "also" : "bad";
@@ -4725,7 +4809,7 @@ function renderMatch() {
   const ok = vals.filter(v => v === true).length;
   $("#match-score").textContent = `${ok} / ${vals.length}`;
   $("[data-ui=matchTitle]").textContent = M.title ? L(M.title) : t("matchTitle");
-  $("[data-ui=matchEyebrow]").textContent = M.eyebrow
+  $("[data-ui=matchEyebrow]").textContent = document.documentElement.dataset.style === "learny" ? l.title : M.eyebrow
     ? `${t("stepN", lessonSteps(l).indexOf("match") + 1)} · ${L(M.eyebrow)}`
     : t("matchEyebrow");
   renderDots("#match-dots", items.length, p.i, Object.fromEntries(Object.entries(p.answered).map(([k,v]) => [k, v ? "good" : "bad"])), i => { p.i = i; save(); renderMatch(); });
@@ -4808,7 +4892,7 @@ function renderSpeak() {
   const marks = Object.fromEntries([...Object.keys(p.seen), ...Object.keys(p.answers)].map(k => [k, "good"]));
   renderDots("#speak-dots", SP.length, p.i, marks, i => { leaveSpeak(); p.i = i; save(); renderSpeak(); });
 
-  $("[data-ui=speakEyebrow]").textContent = cfg.eyebrow
+  $("[data-ui=speakEyebrow]").textContent = document.documentElement.dataset.style === "learny" ? l.title : cfg.eyebrow
     ? `${t("stepN", lessonSteps(l).indexOf("speak") + 1)} · ${L(cfg.eyebrow)}`
     : t("speakEyebrow");
   $("[data-ui=howToAnswerText]").textContent = cfg.howTo ? uiText(L(cfg.howTo)) : t("howToAnswerText");

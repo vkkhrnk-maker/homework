@@ -1,5 +1,5 @@
 function enableLearnyPointer(cursor) {
-  const finePointer = matchMedia("(hover: hover) and (pointer: fine) and (min-width: 760px)");
+  const finePointer = matchMedia("(hover: hover) and (pointer: fine) and (min-width: 760px) and (prefers-reduced-motion: no-preference)");
   const pointer = document.createElement("div");
   pointer.id = "playful-pointer"; pointer.className = "playful-pointer";
   pointer.setAttribute("aria-hidden", "true");

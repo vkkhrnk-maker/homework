@@ -144,6 +144,8 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 #drill-card .answer-row{flex-wrap:nowrap;gap:10px}
 #drill-card .answer-row input{height:52px;background:var(--bg);border-color:var(--line);transition:border-color .15s,box-shadow .15s}
 #drill-card .answer-row input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+#drill-card .answer-row input[aria-invalid="true"]{border-color:var(--practice-error)}
+#drill-card .answer-row + #drill-feedback:not(:empty){margin-block-start:var(--space-2);color:var(--practice-error)}
 #drill-card .answer-row .primary-btn{width:auto;height:52px;flex:none;padding:0 24px}
 #drill-card .primary-btn{transition:background .15s,transform .15s}
 #drill-card .primary-btn:active{transform:scale(.96)}

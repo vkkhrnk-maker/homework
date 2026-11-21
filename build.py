@@ -9,6 +9,7 @@ import hashlib
 import json
 import pathlib
 import re
+import sys
 
 ROOT = pathlib.Path(__file__).parent
 src = (ROOT / "src" / "homework.html").read_text(encoding="utf-8")
@@ -58,7 +59,8 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   let reg;
   try { reg = await navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }); } catch { return; }
   const hadController = !!navigator.serviceWorker.controller;
-  const busy = () => !!document.querySelector('#parse-status:not([hidden]), #intake-level:not([hidden])');
+  const busy = () => !!document.querySelector('#parse-status:not([hidden]), #intake-level:not([hidden]), #lesson-composer[open]')
+    || !!document.querySelector('#lesson-composer #paste-area')?.value || !!document.querySelector('#lesson-composer .material-remove');
   let pending = false;
   const apply = () => { if (busy()) { pending = true; return; } location.reload(); };
   navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadController) apply(); });
@@ -108,18 +110,24 @@ learny_js = (ROOT / "src" / "learny-home.js").read_text(encoding="utf-8")
 learny_mascots = {
     path.stem: path.read_text(encoding="utf-8")
     for path in sorted((ROOT / "icons" / "learny-home").glob("*.svg"))
-    if path.stem not in ("attach", "menu", "lesson-arrow")
+    if path.stem == "brand-book" or path.stem.startswith(("step-", "lesson-")) and path.stem != "lesson-arrow"
 }
-learny_mascots["cursor"] = playful_assets["cursor"]
 learny_js = learny_js.replace("const mascotAssets = {}; // MASCOTS_INLINE", "const mascotAssets = " + json.dumps(learny_mascots, ensure_ascii=False) + ";")
 learny_html = fromt_html.replace(
     'data-variant="fromt"',
     'data-variant="fromt" data-style="learny" data-theme="light" data-theme-mode="light"',
     1,
 )
-learny_html = learny_html.replace("</head>", '<style id="learny-home">\n' + pointer_css + learny_css + "\n</style>\n</head>", 1)
+learny_html = learny_html.replace("</head>", '<style id="learny-home">\n' + learny_css + "\n</style>\n</head>", 1)
 learny_body, learny_end = learny_html.rsplit("</body>", 1)
-learny_html = learny_body + '<script id="learny-home-script">\n' + pointer_js + learny_js + "\n</script>\n</body>" + learny_end
+learny_html = learny_body + '<script id="learny-home-script">\n' + learny_js + "\n</script>\n</body>" + learny_end
+# В рабочей версии Learny первый экран B ведёт в урок или кабинет.
+calm_css = (ROOT / "src" / "learny-calm.css").read_text(encoding="utf-8")
+calm_js = (ROOT / "src" / "learny-calm.js").read_text(encoding="utf-8")
+learny_html = learny_html.replace('data-theme="light" data-theme-mode="light"', 'data-calm data-hero="b"', 1)
+learny_html = learny_html.replace("</head>", '<style id="learny-calm">\n' + calm_css + "\n</style>\n</head>", 1)
+body, end = learny_html.rsplit("</body>", 1)
+learny_html = body + '<script id="learny-calm-script">\n' + calm_js + "\n</script>\n</body>" + end
 pages = {
     "index.html": learny_html,
     "soft.html": soft_html,
@@ -131,8 +139,18 @@ pages = {
     "playful-yellow.html": yellow_html,
     "learny.html": learny_html,
 }
+# Локальные варианты для сравнения открываются отдельно от офлайн-оболочки.
+preview = learny_html.replace("if ('serviceWorker' in navigator) addEventListener('load'", "if (false) addEventListener('load'", 1)
+for filename, hero in (("learny-calm.html", "b"), ("learny-calm-a.html", "a"), ("learny-calm-c.html", "c")):
+    (ROOT / filename).write_text(preview.replace('data-hero="b"', f'data-hero="{hero}"', 1), encoding="utf-8")
+if "--previews-only" in sys.argv:
+    print("Собраны три варианта Calm для сравнения")
+    sys.exit(0)
 for filename, document in pages.items():
     (ROOT / filename).write_text(document, encoding="utf-8")
+local_entry = ROOT / "english-homework.html"
+if local_entry.exists():
+    local_entry.write_text(learny_html, encoding="utf-8")
 
 sw_path = ROOT / "sw.js"
 sw = sw_path.read_text(encoding="utf-8")

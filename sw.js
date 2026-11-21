@@ -1,5 +1,5 @@
 // Офлайн-кэш оболочки приложения. Уроки и прогресс лежат в браузере и через этот файл не проходят.
-const VERSION = 'e23d191d07';
+const VERSION = '6c4b49b6b5';
 const CACHE = `homework-${VERSION}`;
 const SHELL = ['./', 'index.html', 'soft.html', 'blue.html', 'fromt.html', 'playful.html', 'playful-green.html', 'playful-bright.html', 'playful-yellow.html', 'learny.html', 'manifest.webmanifest', 'icons/homework-mark-v1.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'icons/learny-wordmark-v1.png', 'icons/playful/book.svg', 'icons/playful/bubble.svg', 'icons/playful/calendar.svg', 'icons/playful/cup.svg', 'icons/playful/globe.svg', 'icons/playful/pencil.svg', 'icons/playful/microphone.svg', 'icons/playful/star.svg', 'icons/playful/cursor.svg', 'icons/playful/cursor-green.svg',
@@ -25,7 +25,11 @@ self.addEventListener('fetch', e => {
 
   // страница: сначала сеть, чтобы обновления приходили сразу; без сети — из кэша
   if (req.mode === 'navigate') {
-    const page = ['soft.html', 'blue.html', 'fromt.html', 'playful.html', 'playful-green.html', 'playful-bright.html', 'playful-yellow.html', 'learny.html'].find(page => url.pathname.endsWith('/' + page)) || 'index.html';
+    const root = new URL(self.registration.scope);
+    if (url.origin !== root.origin || !url.pathname.startsWith(root.pathname)) return;
+    const name = url.pathname.slice(root.pathname.length);
+    const page = !name || name === 'english-homework.html' ? 'index.html' : name;
+    if (!SHELL.includes(page) || !page.endsWith('.html')) return;
     e.respondWith(
       fetch(req, { cache: 'no-cache' })   // мимо HTTP-кэша: GitHub Pages разрешает держать страницу 10 минут
         .then(res => { if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(page, copy)); } return res; })

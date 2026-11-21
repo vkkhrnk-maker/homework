@@ -1,0 +1,496 @@
+/* Learny, спокойная проба (learny-calm*.html). Слой поверх learny-home.css, исходник не меняет.
+   Одна система для лендинга и курса:
+   — текст: 5 кеглей с заметным шагом (13 · 16 · 22 · 30 · 38+), 3 насыщенности, 8 стилей, все на токенах --t-*;
+   — цвет: один фон, один акцент (фиолетовый = «твой ход»), две поверхности: белая карточка и мятная бумага;
+   — форма: радиусы 18 (карточка) · 12 (вложенный блок) · 8 (контрол), высота контрола 48, без теней;
+   — линии только там, где без них не обойтись: поле ввода, разделители списка, активный шаг.
+   Префикс :root:is(#_#_,[data-calm]) нужен только пробе: он перевешивает правила нижних слоев, не трогая их.
+   При вливании в основную версию правила встают на место прежних, префикс уходит. */
+:root[data-calm][data-style="learny"][data-variant="fromt"] {
+  --display-font: var(--font);
+  --display-weight: 700;
+  --t-display: var(--display-weight) clamp(38px, 4.5vw, 60px)/1.02 var(--display-font);
+  --t-title: var(--display-weight) clamp(30px, 2.6vw, 38px)/1.1 var(--display-font);
+  --t-head: var(--display-weight) 22px/1.2 var(--display-font);
+  --t-lead: 400 clamp(22px, 1.9vw, 26px)/1.3 var(--font);
+  --t-body: 400 16px/1.45 var(--font);
+  --t-body-strong: 600 16px/1.3 var(--font);
+  --t-caption: 400 13px/1.35 var(--font);
+  --t-caption-strong: 600 13px/1.2 var(--font);
+  --track-display: -.04em;
+  --track-title: -.03em;
+  --track-head: -.015em;
+
+  --read-font: var(--font);
+  --mono: var(--font);
+  --r-l: 18px; --r-m: 12px; --r-s: 8px;
+  --calm-control: 48px;
+  --calm-chip: 40px;
+  --calm-card-pad: clamp(20px, 2.3vw, 32px);
+  --calm-composer-width: 40rem;
+  --calm-stack: 16px;
+  --calm-edge: transparent;
+  --learny-corner: 8px;
+  --learny-target: var(--calm-control);
+  --learny-section-gap: clamp(40px, 4vw, 56px);
+}
+
+/* ---------- шрифт заголовков: три пробы на выбор, включаются адресом ?type=geologica | rubik | nunito ---------- */
+:root[data-calm][data-style="learny"][data-variant="fromt"][data-type="geologica"] { --display-font: "Geologica", var(--font); --display-weight: 800; --track-display: -.04em; --track-title: -.03em; --track-head: -.02em; }
+:root[data-calm][data-style="learny"][data-variant="fromt"][data-type="rubik"] { --display-font: "Rubik", var(--font); --display-weight: 800; --track-display: -.03em; --track-title: -.025em; --track-head: -.015em; }
+:root[data-calm][data-style="learny"][data-variant="fromt"][data-type="nunito"] { --display-font: "Nunito", var(--font); --display-weight: 900; --track-display: -.025em; --track-title: -.02em; --track-head: -.01em; }
+
+/* ---------- темная тема: те же роли, другой свет ---------- */
+:root[data-calm][data-style="learny"][data-variant="fromt"][data-theme="dark"] {
+  --bg: #151417; --fg: #f1efe9; --fg-2: #b5b0ba; --fg-3: #8d8892;
+  --surface: #222026; --surface-2: #2c2931; --line: #37343c;
+  --fromt-solid: #1e1d21; --fromt-selected: #2c2931; --fromt-controls: #222026;
+  --accent: #a885ff; --accent-hover: #bda2ff; --accent-fg: #17101f; --accent-soft: #2a2140;
+  --learny-purple: var(--accent); --learny-paper-mint: #1b2822; --learny-editor-edge: #2f4238;
+  --learny-muted-border: #6f6a75; --calm-edge: var(--line);
+  --practice-ok: #86d3b1; --practice-ok-soft: #1a2c25;
+  --practice-error: #f19b93; --practice-error-soft: #33201f;
+  --danger: #ff7a70; --danger-soft: rgba(255,122,112,.16);
+  --scrim: rgba(0,0,0,.6); --shadow: 0 8px 32px rgba(0,0,0,.5);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-calm][data-style="learny"][data-variant="fromt"]:not([data-theme="light"]) {
+    --bg: #151417; --fg: #f1efe9; --fg-2: #b5b0ba; --fg-3: #8d8892;
+  --surface: #222026; --surface-2: #2c2931; --line: #37343c;
+  --fromt-solid: #1e1d21; --fromt-selected: #2c2931; --fromt-controls: #222026;
+  --accent: #a885ff; --accent-hover: #bda2ff; --accent-fg: #17101f; --accent-soft: #2a2140;
+  --learny-purple: var(--accent); --learny-paper-mint: #1b2822; --learny-editor-edge: #2f4238;
+  --learny-muted-border: #6f6a75; --calm-edge: var(--line);
+  --practice-ok: #86d3b1; --practice-ok-soft: #1a2c25;
+  --practice-error: #f19b93; --practice-error-soft: #33201f;
+  --danger: #ff7a70; --danger-soft: rgba(255,122,112,.16);
+  --scrim: rgba(0,0,0,.6); --shadow: 0 8px 32px rgba(0,0,0,.5);
+  color-scheme: dark;
+  }
+}
+
+/* ================= текст: каждый элемент берет один из восьми стилей ================= */
+:root:is(#_#_,[data-calm]) body { font: var(--t-body); }
+
+/* display */
+:root:is(#_#_,[data-calm]) .intake-copy h1 { font: var(--t-display); letter-spacing: var(--track-display); text-wrap: balance; }
+/* title */
+:root:is(#_#_,[data-calm]) #view-theory .section-heading h1,
+:root:is(#_#_,[data-calm]) #view-report .section-heading h1,
+:root:is(#_#_,[data-calm]) .done-card h2,
+:root:is(#_#_,[data-calm]) :is(#learny-library-title, .vb-head h2, .learny-own-title, .learny-inside-title) { font: var(--t-title); letter-spacing: var(--track-title); text-transform: none; color: var(--fg); }
+/* head */
+:root:is(#_#_,[data-calm]) #brand-name,
+:root:is(#_#_,[data-calm]) :is(.rule .modal-name, .sheet h3, .intake-level legend, .learny-step-title, .feedback .verdict) {
+  font: var(--t-head); letter-spacing: var(--track-head); text-transform: none; color: var(--fg);
+}
+/* lead: то, что ученик читает и решает */
+:root:is(#_#_,[data-calm]) :is(#drill-card .q-sentence, .learny-work .cz-text, .learny-work .speak-q, .learny-work .speak-q.long, .learny-work .match-prompt, .learny-sample-q) {
+  font: var(--t-lead); letter-spacing: 0;
+}
+:root:is(#_#_,[data-calm]) .learny-work .cz-text { line-height: 1.9; } /* в строке стоят поля-пропуски, им нужен воздух */
+/* body */
+:root:is(#_#_,[data-calm]) :is(.intake-copy .lede, #paste-area, #topic-area, .answer-row input, .field input, .field textarea, .rule .examples li, .feedback .full, .sheet .tr-en, .ask-box p, .done-card p, .learny-step-desc, .vb-empty, .learny-empty, .rule .gloss, .rule .use-note, .rule .callout, .rule td, .aside-card p, .tips-list li, .form-list, .starter, .feedback, .cz-why, .cz-why p, .sheet p, .sheet .tr-ru, .drill-instruction, .learny-own-lede, .toast, .opt, .vb-row .vb-tr, .top-nav button, .learny-back, .feedback-explanation p, .chip, .learny-filter, .toc a, #tabs .tab, .seg button, .material-file-name, .learny-row-arrow) {
+  font: var(--t-body); letter-spacing: 0;
+}
+/* body-strong */
+:root:is(#_#_,[data-calm]) :is(.primary-btn, .ghost-btn, .link-btn, .learny-demo, .learny-own-link, #material-attach, .learny-lesson-name, .cz-why b, .vb-row b, .starter b, .rule .formula, .rule td b, .form-list b, .intake-level-options button),
+:root:is(#_#_,[data-calm]) :is(.learny-filter[aria-pressed="true"], .toc a.active, #tabs .tab[aria-selected="true"], .seg button[aria-pressed="true"], .chip[aria-pressed="true"]) {
+  font: var(--t-body-strong); letter-spacing: 0;
+}
+:root:is(#_#_,[data-calm]) :is(.rule .examples li b, .feedback .full b, .rule .callout b) { font-weight: 600; }
+/* caption */
+:root:is(#_#_,[data-calm]) :is(#material-help, #parse-hint, .material-review, .material-file-meta, .learny-lesson-meta, .learny-lesson-progress, .app-footer, .app-footer span, #progress-label, .learny-progress-caption, .score-pill, .timer, .q-counter, .q-counter > span, .step-number, .dot-q, .opt small, .sheet .tr-hint, .rule .examples li i, .rule .formula-label, #theory-body td div, .cz-why span, .cz-text .gap-n, .drill-cue, .report-note, .vb-head h2 small, .learny-sample-note) {
+  font: var(--t-caption); letter-spacing: 0; text-transform: none;
+}
+/* caption-strong: подписи и служебные действия, без капса */
+:root:is(#_#_,[data-calm]) :is(.header-lang-track, .rule .use-name, .aside-card h4, .toc-label, .sh-sub, .q-strip > span, .part-badge, .verb-cue, .feedback-attempt span, .feedback-label, .feedback-explanation h4, .feedback .correct-lbl, .q-counter button, .question-tools button, .fix-btn, .learny-stage .eyebrow, .report-group, .dot-q.current, .learny-sample-label, .field label, .app-footer .footer-name, #learny-material-label) {
+  font: var(--t-caption-strong); letter-spacing: 0; text-transform: none;
+}
+/* на заданиях название урока стоит подписью над заданием */
+:root:is(#_#_,[data-calm]) :is(#view-drill,#view-match,#view-speak) .section-heading .eyebrow.eyebrow { font: var(--t-caption-strong); color: var(--fg-2); }
+
+/* ================= форма: один набор радиусов, высот и поверхностей ================= */
+/* кнопки */
+:root:is(#_#_,[data-calm]) :is(.primary-btn, .ghost-btn, .learny-demo) { height: var(--calm-control); min-height: var(--calm-control); padding-inline: 20px; border-radius: var(--r-s); box-shadow: none; }
+:root:is(#_#_,[data-calm]) .ghost-btn,
+:root:is(#_#_,[data-calm]) .learny-demo { background: var(--fromt-solid); color: var(--fg); box-shadow: inset 0 0 0 1px var(--line); }
+:root:is(#_#_,[data-calm]) :is(.ghost-btn, .learny-demo):hover { background: var(--surface); }
+:root:is(#_#_,[data-calm]) .link-btn { color: var(--fg-2); padding: 12px 4px; }
+:root:is(#_#_,[data-calm]) .link-btn:hover { color: var(--fg); }
+/* поля */
+:root:is(#_#_,[data-calm]) :is(.answer-row input, .field input, .field textarea) {
+  min-height: var(--calm-control); border-radius: var(--r-s); border: 1px solid var(--learny-muted-border); background: var(--fromt-solid);
+}
+:root:is(#_#_,[data-calm]) .answer-row input { height: var(--calm-control); }
+/* чипы: ответы, фильтры, оглавление */
+:root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip) { height: var(--calm-chip); min-height: var(--calm-chip); padding: 0 14px; border: 0; border-radius: var(--r-s); background: var(--bg); color: var(--fg); box-shadow: none; }
+:root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip):hover { background: var(--surface); }
+:root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip)[aria-pressed="true"] { background: var(--fromt-solid); color: var(--fg); box-shadow: inset 0 0 0 2px var(--fg); }
+:root:is(#_#_,[data-calm]) .chips { gap: 8px; margin-bottom: var(--calm-stack); }
+:root:is(#_#_,[data-calm]) .learny-filter { min-height: var(--calm-chip); padding-inline: 12px; border-radius: var(--r-s); color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .learny-filter[aria-pressed="true"] { background: var(--surface); color: var(--fg); }
+:root:is(#_#_,[data-calm]) .seg { border-radius: var(--r-s); padding: 4px; }
+:root:is(#_#_,[data-calm]) .seg button { height: var(--calm-chip); border-radius: 6px; box-shadow: none; }
+:root:is(#_#_,[data-calm]) .seg button[aria-pressed="true"] { background: var(--fromt-solid); box-shadow: none; }
+/* карточки: белая для работы, мятная бумага для подсказок */
+:root:is(#_#_,[data-calm]) .learny-work :is(#drill-card, #match-card, #speak-card, .rule),
+:root:is(#_#_,[data-calm]) #report-card {
+  border: 0; border-radius: var(--r-l); background: var(--fromt-solid); padding: var(--calm-card-pad); box-shadow: none;
+}
+:root:is(#_#_,[data-calm]) .learny-work .aside-card,
+:root:is(#_#_,[data-calm]) #view-drill .learny-work .aside-card,
+:root:is(#_#_,[data-calm]) #view-report .aside-card {
+  border: 0; border-radius: var(--r-l); background: var(--learny-paper-mint); color: var(--fg); padding: var(--calm-card-pad); box-shadow: none;
+}
+:root:is(#_#_,[data-calm]) .aside-card h4 { margin: 0 0 6px; color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) :is(.rule .callout, .rule .formula, .learny-stage .starter, .cz-why) {
+  border: 0; border-radius: var(--r-m); background: var(--learny-paper-mint); padding: 12px 16px;
+}
+:root:is(#_#_,[data-calm]) .rule:nth-child(n) .formula { background: var(--learny-paper-mint); }
+:root:is(#_#_,[data-calm]) .feedback { border-radius: var(--r-m); padding: 16px; margin-top: var(--calm-stack); }
+:root:is(#_#_,[data-calm]) .vb-row { border-radius: var(--r-m); background: var(--fromt-solid); padding: 12px 16px; }
+:root:is(#_#_,[data-calm]) :is(.sheet, .ask-box) { border-radius: var(--r-l) var(--r-l) 0 0; }
+:root:is(#_#_,[data-calm]) .opt { border-radius: var(--r-s); }
+
+/* ================= шапка ================= */
+:root:is(#_#_,[data-calm]) body header.top { border-bottom: 0; }
+:root:is(#_#_,[data-calm]) .top-nav button { color: var(--fg-2); border-radius: var(--r-s); }
+/* переключатель языка: маленький сегмент без обводки и без черного пятна */
+:root:is(#_#_,[data-calm]) .header-actions .header-lang { border-radius: var(--r-s); }
+:root:is(#_#_,[data-calm]) .header-actions .header-lang-track { background: color-mix(in srgb, var(--fg) 7%, transparent); box-shadow: none; border-radius: var(--r-s); }
+:root:is(#_#_,[data-calm]) .header-actions .header-lang-track::before { background: var(--fromt-solid); border-radius: 6px; }
+:root:is(#_#_,[data-calm]) .header-actions .header-lang .header-lang-track span { color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .header-actions .header-lang[data-language="ru"] .header-lang-track span:first-child,
+:root:is(#_#_,[data-calm]) .header-actions .header-lang[data-language="en"] .header-lang-track span:last-child { color: var(--fg); }
+:root:is(#_#_,[data-calm]) .header-actions .ibtn { border-radius: var(--r-s); }
+
+/* ================= лендинг ================= */
+/* мятный фон идет от края до края и под шапку: панель перестает быть рамкой в рамке */
+:root:is(#_#_,[data-calm]) body.home header.top,
+:root:is(#_#_,[data-calm]) body.home::before { background: var(--learny-paper-mint); }
+:root:is(#_#_,[data-calm]) body.home.scrolled header.top { background: var(--bg); box-shadow: 0 1px 0 var(--line); }
+:root:is(#_#_,[data-calm]) body.home .intake { margin-top: 0; padding: clamp(20px, 4.4vw, 72px) 0 clamp(28px, 6vw, 96px); border-radius: 0; background: transparent; }
+:root:is(#_#_,[data-calm]) body.home .intake:not(.learny-own)::before {
+  content: ""; display: block; position: absolute; z-index: -1; inset: 0 calc(50% - 50vw); background: var(--learny-paper-mint);
+  filter: none; -webkit-mask-image: none; mask-image: none;
+}
+:root:is(#_#_,[data-calm]) .intake-copy h1 { margin: 0 0 16px; }
+:root:is(#_#_,[data-calm]) .intake-copy .lede { margin: 0; color: var(--fg-2); max-width: 40ch; }
+:root:is(#_#_,[data-calm]) .intake .drop-card .material-composer { border: 1px solid var(--calm-edge); border-radius: var(--r-m); }
+/* фокус поля: линия по краю карточки, а не отдельное кольцо вокруг нее */
+:root:is(#_#_,[data-calm]) .intake .drop-card .material-composer:focus-within { outline: 2px solid var(--accent); outline-offset: -1px; }
+:root:is(#_#_,[data-calm]) .learny-material-label { padding: 20px 20px 0; color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .intake .drop-card #paste-area { padding: 8px 20px 12px; }
+:root:is(#_#_,[data-calm]) .intake .material-tools { padding: 8px 20px 20px; }
+:root:is(#_#_,[data-calm]) .intake .material-tools #parse-btn { height: var(--calm-control); border-radius: var(--r-s); }
+:root:is(#_#_,[data-calm]) .intake .attach-btn { height: auto; min-height: 32px; }
+
+/* вход для гостя: готовый урок без ключа ИИ. Разовое действие, поэтому кнопка */
+.learny-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin-top: 24px; }
+.learny-demo {
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: background-color var(--learny-motion) var(--learny-ease), transform var(--learny-motion) var(--learny-ease);
+}
+.learny-demo:active { transform: scale(var(--learny-press)); }
+.learny-demo:focus-visible, .learny-own-link:focus-visible { outline: var(--learny-rule) solid var(--accent); outline-offset: var(--learny-focus-offset); }
+.learny-demo-arrow { color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .learny-demo { box-shadow: none; }
+:root:is(#_#_,[data-calm]) .learny-demo.is-primary { background: var(--accent); color: var(--accent-fg); }
+:root:is(#_#_,[data-calm]) .learny-demo.is-primary:hover { background: var(--accent-hover); }
+:root:is(#_#_,[data-calm]) .learny-demo.is-primary .learny-demo-arrow { color: inherit; }
+
+/* «Inside a lesson»: открытый раздел лендинга вместо раскрывашки, которую никто не откроет */
+.learny-inside { margin-top: var(--learny-section-gap); }
+.learny-inside-title { margin: 0 0 20px; }
+:root:is(#_#_,[data-calm]) .learny-inside .learny-guide-steps { margin: 0; border-radius: var(--r-l); padding: var(--calm-card-pad); gap: 24px; }
+:root:is(#_#_,[data-calm]) .learny-step-art { margin-bottom: 12px; }
+:root:is(#_#_,[data-calm]) .learny-step-desc { margin: 6px 0 0; color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .feedback .verdict { color: inherit; margin-bottom: 16px; }
+:root:is(#_#_,[data-calm]) .feedback.good .verdict { color: var(--practice-ok); }
+:root:is(#_#_,[data-calm]) .feedback.bad .verdict { color: var(--practice-error); }
+
+/* список уроков: строки разделены линией, сверху и снизу списка линий нет */
+:root:is(#_#_,[data-calm]) #learny-library { gap: 12px 16px; }
+:root:is(#_#_,[data-calm]) #lesson-list { border-top: 0; }
+:root:is(#_#_,[data-calm]) #lesson-list .lesson-card { padding-block: 16px; border-radius: 0; }
+:root:is(#_#_,[data-calm]) #lesson-list .lesson-card:last-child { border-bottom: 0; }
+:root:is(#_#_,[data-calm]) .learny-row-arrow { color: var(--fg-3); }
+:root:is(#_#_,[data-calm]) .vb-head { margin-bottom: 16px; }
+:root:is(#_#_,[data-calm]) .vb-empty { max-width: 44ch; }
+:root:is(#_#_,[data-calm]) .vb-list { gap: 8px; }
+
+/* ================= курс: навигация тише содержания ================= */
+:root:is(#_#_,[data-calm]) .learny-back span:first-child { width: auto; height: auto; border: 0; }
+:root:is(#_#_,[data-calm]) .learny-back { color: var(--fg-2); min-height: 40px; }
+:root:is(#_#_,[data-calm]) .learny-back:hover { color: var(--fg); }
+:root:is(#_#_,[data-calm]) .learny-lesson-context { padding-bottom: 4px; }
+:root:is(#_#_,[data-calm]) .learny-lesson-context #progress-label,
+:root:is(#_#_,[data-calm]) .learny-progress-caption { color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) #tabs-row { padding-block: 8px 0; }
+
+/* шаги урока: одна линия снизу, выбранный шаг держится на весе и подчеркивании */
+:root:is(#_#_,[data-calm]) #tabs { border-top: 0; border-bottom: 1px solid var(--line); }
+:root:is(#_#_,[data-calm]) #tabs .tab { background: transparent; color: var(--fg-2); border-radius: 0; }
+:root:is(#_#_,[data-calm]) #tabs .tab[aria-selected="true"] { background: transparent; color: var(--fg); }
+:root:is(#_#_,[data-calm]) #tabs .tab .step-number { width: auto; height: auto; border: 0; color: var(--fg-3); }
+:root:is(#_#_,[data-calm]) #tabs .tab .tick { color: var(--fg-3); font: var(--t-caption); }
+
+/* заголовок экрана: название шага уже стоит во вкладке, поэтому на заданиях остается название урока */
+:root:is(#_#_,[data-calm]) :is(#view-drill,#view-match,#view-speak) .section-heading h1 {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+:root:is(#_#_,[data-calm]) #view-theory .section-heading .eyebrow { display: none; }
+:root:is(#_#_,[data-calm]) .learny-stage .section-heading h1 { margin: 0; }
+:root:is(#_#_,[data-calm]) .learny-stage .section-heading { align-items: center; gap: 8px 12px; flex-wrap: nowrap; }
+:root:is(#_#_,[data-calm]) .learny-stage .section-heading > div:first-of-type { flex: 1; min-width: 0; }
+:root:is(#_#_,[data-calm]) .drill-instruction { margin: 2px 0 0; color: var(--fg); }
+:root:is(#_#_,[data-calm]) :is(.score-pill, .timer) { background: transparent; padding: 0; height: auto; color: var(--fg-2); white-space: nowrap; }
+:root:is(#_#_,[data-calm]) .timer.run { color: var(--accent); font-weight: 600; }
+/* маскот шага: тот же персонаж, что объясняет этот шаг на главной */
+.learny-step-mascot { flex: none; width: 44px; height: 44px; }
+
+/* карта вопросов: тихие номера, залит только текущий */
+:root:is(#_#_,[data-calm]) .learny-rail .q-strip > span { color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .learny-rail .dots { gap: 4px; }
+:root:is(#_#_,[data-calm]) .learny-rail .dot-q { width: 40px; height: 40px; border: 0; border-radius: var(--r-s); background: transparent; color: var(--fg-2); outline: none; }
+:root:is(#_#_,[data-calm]) .learny-rail .dot-q.done-good { background: var(--practice-ok-soft); color: var(--practice-ok); }
+:root:is(#_#_,[data-calm]) .learny-rail .dot-q.done-bad { background: var(--practice-error-soft); color: var(--practice-error); }
+:root:is(#_#_,[data-calm]) .learny-rail .dot-q.current { background: var(--fg); color: var(--bg); }
+:root:is(#_#_,[data-calm]) .learny-rail .dot-q:focus-visible { outline: var(--learny-rule) solid var(--accent); outline-offset: var(--learny-focus-offset); }
+
+/* карточка вопроса */
+:root:is(#_#_,[data-calm]) .q-counter { color: var(--fg-2); gap: 12px; }
+:root:is(#_#_,[data-calm]) :is(.q-counter button, .question-tools button, .fix-btn) { color: var(--fg-2); background: transparent; padding: 4px 0; border-radius: 0; }
+:root:is(#_#_,[data-calm]) :is(.q-counter button, .question-tools button, .fix-btn):hover { color: var(--fg); background: transparent; }
+:root:is(#_#_,[data-calm]) .question-tools { gap: 16px; }
+:root:is(#_#_,[data-calm]) #drill-card .q-sentence { margin: var(--calm-stack) 0 20px; max-width: 40ch; }
+:root:is(#_#_,[data-calm]) .learny-work :is(.speak-q, .cz-text) { margin: var(--calm-stack) 0; max-width: 36ch; }
+:root:is(#_#_,[data-calm]) .learny-work .cz-text { max-width: 44ch; }
+:root:is(#_#_,[data-calm]) #match-card .eyebrow { color: var(--fg-2); margin-top: 12px; }
+/* подпись «Your answer» повторяет подсказку в поле; для скринридера у поля остается aria-label */
+:root:is(#_#_,[data-calm]) .learny-answer-label { display: none; }
+:root:is(#_#_,[data-calm]) #drill-card .answer-row { gap: 8px; }
+:root:is(#_#_,[data-calm]) #drill-card .answer-row .primary-btn { height: var(--calm-control); border-radius: var(--r-s); }
+:root:is(#_#_,[data-calm]) .nav-row { margin-top: 12px; }
+:root:is(#_#_,[data-calm]) .sp-actions { margin-top: var(--calm-stack); gap: 8px; }
+:root:is(#_#_,[data-calm]) .feedback-explanation { border-top: 0; margin-top: 12px; padding-top: 0; }
+:root:is(#_#_,[data-calm]) .part-badge { background: var(--surface); border-radius: var(--r-s); color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .verb-cue { border-radius: var(--r-s); }
+:root:is(#_#_,[data-calm]) .learny-stage .starter { margin: 0; color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .learny-stage .starter b { color: var(--accent); }
+:root:is(#_#_,[data-calm]) .cz-text .gap { border-radius: var(--r-s); }
+
+/* теория: фиолетовым остается только изучаемое слово, блоки разделены воздухом, а не линиями */
+:root:is(#_#_,[data-calm]) .learny-work .theory-body { gap: 12px; }
+:root:is(#_#_,[data-calm]) .rule .gloss { margin-top: 4px; color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .rule .use { border-top: 0; padding-top: 0; margin-top: 24px; }
+:root:is(#_#_,[data-calm]) .rule .use-name { color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .rule .use-note { margin: 4px 0 8px; color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .rule .examples { gap: 6px; margin-top: 8px; }
+:root:is(#_#_,[data-calm]) .rule .examples li:not(.wrong)::before { background: var(--fg-3); }
+:root:is(#_#_,[data-calm]) .rule .examples li::before { top: calc(.725em - 3px); }
+:root:is(#_#_,[data-calm]) .rule .callout { margin-top: 12px; }
+:root:is(#_#_,[data-calm]) .rule .fix-btn { color: var(--fg-3); }
+@media (hover: hover) {
+  :root:is(#_#_,[data-calm]) .rule .fix-btn { opacity: 0; transition: opacity var(--learny-motion) var(--learny-ease); }
+  :root:is(#_#_,[data-calm]) .rule .use:is(:hover, :focus-within) .fix-btn,
+  :root:is(#_#_,[data-calm]) .rule .fix-btn:focus-visible { opacity: 1; }
+}
+:root:is(#_#_,[data-calm]) .learny-rail .toc a { padding: 8px 12px; border-radius: var(--r-s); color: var(--fg-2); background: transparent; }
+:root:is(#_#_,[data-calm]) .learny-rail .toc a.active { background: var(--surface); color: var(--fg); }
+:root:is(#_#_,[data-calm]) .learny-rail .toc-label { color: var(--fg-2); }
+
+/* меню и листы */
+:root:is(#_#_,[data-calm]) .sh-sub { color: var(--fg-2); margin-top: 16px; }
+:root:is(#_#_,[data-calm]) .opt small { margin-top: 2px; color: var(--fg-2); }
+
+/* ================= первый экран, вариант B: урок на витрине ================= */
+.learny-sample, .learny-own, .learny-own-link { display: none; }
+:root[data-hero="b"] .learny-sample {
+  display: grid; gap: 12px; align-content: start; padding: var(--calm-card-pad); border-radius: var(--r-m);
+  background: var(--fromt-solid); border: 1px solid var(--calm-edge);
+}
+.learny-sample-label { color: var(--fg-2); }
+.learny-sample-q { margin: 4px 0 8px; color: var(--fg); }
+.learny-sample-q .blank { display: inline-block; min-width: 3.5ch; border-bottom: 2px solid var(--fg-3); }
+.learny-sample-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.learny-sample-note { margin: 4px 0 0; color: var(--fg-2); }
+.learny-own-link { min-height: 48px; gap: 8px; color: var(--fg); }
+.learny-own-link:hover { color: var(--accent); }
+:root[data-hero="b"] .learny-own-link { display: inline-flex; align-items: center; }
+:root:is(#_#_,[data-calm])[data-hero="b"] body.home .intake:not(.learny-own) { grid-template-columns: minmax(0,1fr) minmax(0,.9fr); }
+#lesson-composer {
+  position: fixed; inset: var(--composer-viewport-top, 0) 0 auto; margin: 0; width: 100%; height: 100%; height: var(--composer-viewport-height, 100dvh);
+  max-width: none; max-height: none; box-sizing: border-box; padding: var(--learny-s5);
+  background: transparent; color: var(--fg); border: 0; overflow: hidden;
+}
+#lesson-composer[open] { display: grid; place-items: center; }
+#lesson-composer .sheet-wrap { position: absolute; }
+#lesson-composer::backdrop { background: var(--scrim); }
+html:has(#lesson-composer[open]) { overflow: hidden; }
+:root:is(#_#_,[data-calm]) body.home #lesson-composer .learny-own {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
+  gap: var(--learny-s2) var(--learny-s3); margin: 0; width: 100%; max-width: var(--calm-composer-width);
+  max-height: 100%; min-height: 0; overflow: auto; overscroll-behavior: contain; box-sizing: border-box;
+  padding: var(--calm-card-pad); background: var(--fromt-solid); border-radius: var(--r-l);
+}
+.learny-own-title, .learny-own-lede { margin: 0; }
+.learny-own-lede { grid-column: 1 / -1; color: var(--fg-2); max-width: var(--learny-measure); }
+.learny-own .drop-card { grid-column: 1 / -1; margin-block-start: var(--learny-s4); }
+.composer-close {
+  display: grid; place-items: center; width: var(--learny-target); height: var(--learny-target);
+  border-radius: var(--r-m); color: var(--fg-2); background: var(--bg); font: var(--t-head);
+}
+.composer-close:hover { color: var(--fg); background: var(--surface-2); }
+.composer-close:focus-visible { outline: var(--learny-rule) solid var(--accent); outline-offset: var(--learny-focus-offset); }
+:root:is(#_#_,[data-calm])[data-hero="b"] .learny-own .material-composer { border: var(--learny-hairline) solid var(--learny-muted-border); }
+@media (max-width: 630px) {
+  #lesson-composer { padding: max(var(--learny-s4), env(safe-area-inset-top)) 0 0; }
+  #lesson-composer[open] { align-items: end; }
+  :root:is(#_#_,[data-calm]) body.home #lesson-composer .learny-own {
+    border-radius: var(--r-l) var(--r-l) 0 0;
+    padding-bottom: calc(var(--calm-card-pad) + env(safe-area-inset-bottom));
+  }
+}
+:root[data-hero="b"] .learny-sample { position: relative; }
+
+/* ================= первый экран, вариант C: одно поле ================= */
+:root:is(#_#_,[data-calm])[data-hero="c"] body.home header.top,
+:root:is(#_#_,[data-calm])[data-hero="c"] body.home::before { background: var(--bg); }
+:root:is(#_#_,[data-calm])[data-hero="c"] body.home .intake::before { display: none; }
+:root:is(#_#_,[data-calm])[data-hero="c"] body.home .intake {
+  grid-template-columns: minmax(0,1fr); gap: 28px; max-width: 760px; margin-inline: 0; padding: clamp(24px,5vw,72px) 0 0;
+}
+:root:is(#_#_,[data-calm])[data-hero="c"] .intake-copy .lede { max-width: 48ch; }
+:root:is(#_#_,[data-calm])[data-hero="c"] .intake .drop-card .material-composer { min-height: 0; border: 1px solid var(--learny-muted-border); }
+:root[data-hero="c"] .learny-material-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+:root:is(#_#_,[data-calm])[data-hero="c"] .intake .drop-card #paste-area { min-height: 64px; padding: 20px 20px 8px; }
+:root[data-hero="c"] .learny-hero-actions { margin-top: 16px; }
+
+@media (max-width: 800px) {
+  /* четыре шага помещаются в ширину телефона: виден весь маршрут урока */
+  :root:is(#_#_,[data-calm]) #tabs { justify-content: space-between; gap: 8px; }
+  :root:is(#_#_,[data-calm]) #tabs .tab { flex: 0 0 auto; height: 44px; padding-inline: 0; gap: 0; }
+  :root:is(#_#_,[data-calm]) #tabs .tab .step-number { display: none; }
+  :root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip) { height: 36px; min-height: 36px; padding-inline: 12px; }
+  /* подпись «Questions» повторяет счетчик в карточке */
+  :root:is(#_#_,[data-calm]) .learny-rail .q-strip > span { display: none; }
+  :root:is(#_#_,[data-calm]) .learny-rail :is(.dots, .toc) { scrollbar-width: none; gap: 4px; padding: 0; }
+  :root:is(#_#_,[data-calm]) .learny-stage { gap: 12px; padding-block: 20px 40px; }
+  :root:is(#_#_,[data-calm]) .learny-work { gap: 12px; }
+  :root:is(#_#_,[data-calm])[data-hero="b"] body.home .intake:not(.learny-own) { grid-template-columns: minmax(0,1fr); }
+  .learny-step-mascot { width: 40px; height: 40px; }
+  /* счет и таймер на телефоне уходят на свою строку, чтобы не сжимать задание */
+  :root:is(#_#_,[data-calm]) .learny-stage .section-heading { flex-wrap: wrap; }
+  :root:is(#_#_,[data-calm]) .learny-stage .section-heading > div:first-of-type { flex-basis: calc(100% - 52px); }
+  :root:is(#_#_,[data-calm]) .learny-stage .section-heading :is(.score-pill, .timer) { margin-left: 52px; }
+}
+@media (min-width: 801px) {
+  /* на десктопе у теории маскот уже стоит в боковой колонке */
+  #view-theory .learny-step-mascot { display: none; }
+  :root:is(#_#_,[data-calm]) .learny-work { gap: 16px; }
+}
+@media (max-width: 630px) {
+  :root:is(#_#_,[data-calm]) .learny-inside .learny-guide-steps { gap: 20px; }
+  :root:is(#_#_,[data-calm]) .learny-step-art { margin: 0; }
+}
+@media (max-width: 500px) {
+  :root:is(#_#_,[data-calm]) .intake .material-tools #parse-btn { margin-top: 12px; }
+  .learny-hero-actions .learny-demo.is-primary { width: 100%; justify-content: center; }
+}
+@media (max-width: 460px) {
+  /* главное действие экрана во всю ширину карточки */
+  :root:is(#_#_,[data-calm]) #drill-card .answer-row .primary-btn { justify-self: stretch; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .learny-demo, P .rule .fix-btn { transition: none; }
+}
+
+/* вариант C: на бумажном фоне второстепенной кнопке нужна линия */
+:root:is(#_#_,[data-calm])[data-hero="c"] .learny-demo { box-shadow: inset 0 0 0 1px var(--line); }
+
+/* отчет учителю и остатки: те же восемь стилей и те же поверхности */
+:root:is(#_#_,[data-calm]) :is(#view-report .eyebrow, .summary-tile .label, #report-card th, #report-card .name-row label) { font: var(--t-caption-strong); letter-spacing: 0; text-transform: none; color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) :is(.summary-tile .sub, #report-card td.num, .learny-stage td div, .learny-stage td div .tr) { font: var(--t-caption); }
+:root:is(#_#_,[data-calm]) :is(#report-card td, .feedback-attempt s, .vb-row button) { font: var(--t-body); }
+:root:is(#_#_,[data-calm]) #report-card td:is(.given.ok, .given.no) { font: var(--t-body-strong); }
+:root:is(#_#_,[data-calm]) .summary-tile .value { font: var(--t-head); letter-spacing: var(--track-head); }
+:root:is(#_#_,[data-calm]) .summary-tile { border: 0; border-radius: var(--r-m); background: var(--learny-paper-mint); }
+:root:is(#_#_,[data-calm]) #view-report .section-heading { align-items: center; }
+:root:is(#_#_,[data-calm]) .learny-rail .dot-q.current { font: var(--t-caption-strong); }
+
+/* ---------- логотип: слово того же веса, что и заголовки; в темной теме тонкие линии маскотов светлеют ---------- */
+:root:is(#_#_,[data-calm]) #brand-name { font-weight: 800; letter-spacing: -.03em; }
+:root[data-calm][data-theme="dark"] :is(.learny-brand-mascot, .learny-step-art, .learny-step-mascot, .learny-stage-mascot, .learny-editor-pencil) [stroke="#151517"] { stroke: var(--fg); }
+@media (prefers-color-scheme: dark) {
+  :root[data-calm]:not([data-theme="light"]) :is(.learny-brand-mascot, .learny-step-art, .learny-step-mascot, .learny-stage-mascot, .learny-editor-pencil) [stroke="#151517"] { stroke: var(--fg); }
+}
+
+/* ---------- телефон: «Check» и «Next» прибиты к низу экрана, действие всегда под большим пальцем ---------- */
+.learny-actionbar { display: none; }
+@media (max-width: 800px) {
+  body.has-action .learny-actionbar {
+    display: block; position: fixed; z-index: 19; inset: auto 0 0; height: calc(80px + env(safe-area-inset-bottom, 0px));
+    background: var(--bg); box-shadow: 0 -1px 0 var(--line);
+  }
+  :root:is(#_#_,[data-calm]) body.has-action :is(#drill-card .answer-row .primary-btn, #drill-card .nav-row .primary-btn, #match-card .nav-row .primary-btn) {
+    position: fixed; z-index: 20; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px)); width: auto; height: var(--calm-control); margin: 0;
+  }
+  :root:is(#_#_,[data-calm]) body.has-action .learny-stage { padding-bottom: 24px; }
+  :root:is(#_#_,[data-calm]) body.has-action .app-footer { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
+  :root:is(#_#_,[data-calm]) body.has-action .toast { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Личный кабинет и вход в собственный урок. */
+[data-hero="b"] .top-nav { display: none; }
+[data-hero="b"] :is(.desk-nav,.desk-create,.desk-catalog) {
+  display: inline-flex; align-items: center; justify-content: center; min-height: var(--learny-target);
+  font: var(--t-body-strong); color: var(--fg); text-decoration: none; border-radius: var(--r-s);
+}
+[data-hero="b"] .desk-nav { padding-inline: var(--learny-s2); font: var(--t-caption-strong); }
+[data-hero="b"] .desk-nav[aria-current="page"] { color: var(--accent); }
+[data-hero="b"] :is(.desk-nav,.desk-catalog):hover { color: var(--accent); text-decoration: underline; }
+[data-hero="b"] :is(.desk-nav,.desk-catalog,.desk-create,.desk-guide-step summary):focus-visible {
+  outline: var(--learny-rule) solid var(--accent); outline-offset: var(--learny-focus-offset);
+}
+:root:is(#_#_,[data-calm])[data-hero="b"] body.home[data-calm-page]:not([data-calm-page="welcome"]) header.top {
+  background: var(--bg); border-block-end: var(--learny-hairline) solid var(--line);
+}
+.learner-desk { padding-block-start: var(--learny-section-gap); }
+.learner-desk-head,.desk-resume { display: flex; align-items: center; justify-content: space-between; gap: var(--learny-s5); }
+.learner-desk-title { font: var(--t-display); letter-spacing: var(--track-display); margin: var(--learny-square); }
+.desk-resume { margin-block-start: var(--learny-s6); padding: var(--calm-card-pad); background: var(--learny-paper-mint); border-radius: var(--r-l); }
+.desk-resume p { font: var(--t-caption-strong); color: var(--fg-2); margin: var(--learny-square); }
+.desk-resume h2 { font: var(--t-head); letter-spacing: var(--track-head); margin: var(--learny-s2) var(--learny-square) var(--learny-square); overflow-wrap: anywhere; }
+.desk-resume .primary-btn,.desk-create { flex: none; }
+[data-calm-page="cabinet"] #learny-library .desk-catalog { justify-self: end; font: var(--t-body); }
+[data-calm-page="cabinet"] .learny-empty { margin: var(--learny-square); color: var(--fg-2); }
+[data-hero="b"] .desk-guide-step summary { cursor: pointer; list-style: none; }
+[data-hero="b"] .desk-guide-step summary::-webkit-details-marker { display: none; }
+[data-hero="b"] .desk-guide-step summary:hover { color: var(--accent); }
+@media (max-width: 630px) {
+  .learner-desk-head,.desk-resume { align-items: start; flex-direction: column; gap: var(--learny-s3); }
+  .desk-resume .primary-btn { width: 100%; }
+  [data-calm-page="cabinet"] #learny-library .desk-catalog { justify-self: start; }
+  [data-hero="b"] .desk-nav { padding-inline: var(--learny-s1); }
+}
+
+[data-hero="b"] .learny-sample.has-saved-demo > :not(.desk-welcome-resume,.learny-editor-pencil) { display: none; }
+.desk-welcome-resume h2 { margin: var(--learny-square); font: var(--t-head); letter-spacing: var(--track-head); }
+.desk-welcome-resume p { margin: var(--learny-s3) var(--learny-square) var(--learny-square); color: var(--fg-2); font: var(--t-body); }
+@media (max-width: 800px) {
+  [data-hero="b"] .learny-inside .learny-guide-steps { display: grid; grid-template-columns: minmax(0,1fr); gap: var(--learny-s2); }
+  [data-hero="b"] .learny-inside li { display: block; }
+  .desk-guide-step summary { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--learny-s3); min-height: var(--calm-control); }
+  .desk-guide-step summary::after { content: "+"; color: var(--fg-2); }
+  .desk-guide-step[open] summary::after { content: "−"; }
+  :root[data-calm][data-hero="b"] .desk-guide-step .learny-step-art { margin: var(--learny-square); }
+  .desk-guide-step .learny-step-desc { padding-inline-start: calc(var(--learny-s10) + var(--learny-s3)); }
+}
+
+[data-calm-page="cabinet"]:has(.desk-resume:not([hidden])) #vb-review {
+  color: var(--accent); background: var(--fromt-solid); border: var(--learny-hairline) solid var(--line);
+}
