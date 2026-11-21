@@ -27,7 +27,8 @@
   };
   Object.assign(UI, {
     calmDemo: { ru: "Открыть готовый урок", en: "Try a sample lesson" },
-    calmOwnLink: { ru: "Собрать из своего текста", en: "Use my own text" },
+    calmOwnLink: { ru: "Создать свой урок", en: "Create my own lesson" },
+    calmSampleLink: { ru: "Открыть пример", en: "Open sample lesson" },
     calmOwnTitle: { ru: "Урок из текста", en: "A lesson from your text" },
     calmOwnLede: {
       ru: "Вставьте домашку от учителя или назовите тему. Нужен ключ ИИ, бесплатный подойдет.",
@@ -39,7 +40,45 @@
     cabinetContinue: { ru: "Продолжить урок", en: "Continue lesson" },
     cabinetCatalog: { ru: "Каталог уроков", en: "Lesson catalog" },
     cabinetEmpty: { ru: "Здесь появятся уроки, которые вы открыли или создали.", en: "Lessons you open or create will appear here." },
+    cabinetLocal: { ru: "Уроки и прогресс сохраняются в этом браузере.", en: "Your lessons and progress are saved in this browser." },
     cabinetStageEnd: { ru: "Итоги этапа", en: "Stage results" },
+    // Сохранение кабинета по личному коду: без почты и пароля.
+    syncBtn: { ru: "Сохранить кабинет", en: "Save my space" },
+    syncOn: { ru: "по личному коду", en: "under your code" },
+    syncOff: { ru: "только в этом браузере", en: "this browser only" },
+    spaceSave: { ru: "Сохранить кабинет", en: "Save my space" },
+    spaceShow: { ru: "Показать код", en: "Show my code" },
+    spaceLocal: { ru: "Кабинет сохранен только в этом браузере", en: "Your space is saved in this browser only" },
+    spaceSavedLine: { ru: "Кабинет сохранен по личному коду", en: "Your space is saved under your personal code" },
+    spaceLead: {
+      ru: "Уроки, прогресс и словарь сохранятся по личному коду. Почта и пароль не нужны.",
+      en: "Your lessons, progress and vocabulary are kept under a personal code. No email, no password."
+    },
+    spaceCreate: { ru: "Создать код", en: "Create my code" },
+    spaceHave: { ru: "У меня уже есть код", en: "I already have a code" },
+    spaceCodeLabel: { ru: "Личный код", en: "Personal code" },
+    spaceOpen: { ru: "Открыть кабинет", en: "Open my space" },
+    spaceSavedTitle: { ru: "Кабинет сохранен", en: "Your space is saved" },
+    spaceKeep: {
+      ru: "Сохраните код: по нему кабинет откроется на другом устройстве или после очистки браузера.",
+      en: "Keep this code: it opens your space on another device or after the browser is cleared."
+    },
+    spaceCopyCode: { ru: "Скопировать код", en: "Copy code" },
+    spaceCopyLink: { ru: "Скопировать ссылку", en: "Copy link" },
+    spaceCopied: { ru: "Скопировано", en: "Copied" },
+    spaceOff: { ru: "Отключить на этом устройстве", en: "Turn off on this device" },
+    spaceOffDone: { ru: "Отключено. Кабинет остался в этом браузере", en: "Turned off. Your space stays in this browser" },
+    spaceBusy: { ru: "Сохраняем…", en: "Saving…" },
+    spaceFail: {
+      ru: "Не получилось связаться с сервером. Кабинет остался в этом браузере.",
+      en: "Couldn’t reach the server. Your space is still in this browser."
+    },
+    spaceBad: { ru: "Такой код не найден", en: "This code wasn’t recognised" },
+    spaceEmpty: {
+      ru: "По этому коду кабинет пуст. Проверьте код: возможно, в нем опечатка.",
+      en: "There’s nothing under this code yet. Check it for a typo."
+    },
+    spaceShort: { ru: "Проверьте код: в нем 15 знаков", en: "Check the code: it has 15 characters" },
     calmReview: { ru: "Повторение", en: "Review" },
     calmSamples: { ru: "Готовые уроки", en: "Sample lessons" },
     calmSampleNote: { ru: "Выберите слово, урок откроется на этом вопросе", en: "Pick a word and the lesson opens on this question" }
@@ -75,12 +114,12 @@
   actions.className = "learny-hero-actions";
   const demo = document.createElement("button");
   demo.type = "button";
-  demo.className = "learny-demo" + (hero === "b" ? " is-primary" : "");
+  demo.className = "learny-demo";
   const arrow = document.createElement("span");
   arrow.className = "learny-demo-arrow";
   arrow.setAttribute("aria-hidden", "true");
   arrow.textContent = "→";
-  demo.append(translated("span", "calmDemo", ""), arrow);
+  demo.append(translated("span", hero === "b" ? "calmSampleLink" : "calmDemo", ""), arrow);
   demo.addEventListener("click", () => openDemo());
   actions.append(demo);
   (hero === "c" ? dropCard : copy).append(actions);
@@ -107,15 +146,15 @@
         chip.addEventListener("click", () => openDemo(word));
         chips.append(chip);
       }
-      sample.append(translated("span", "calmSampleLabel", "learny-sample-label"), sentence, chips, translated("p", "calmSampleNote", "learny-sample-note"));
+      sample.append(translated("span", "calmSampleLabel", "learny-sample-label"), sentence, chips, translated("p", "calmSampleNote", "learny-sample-note"), demo);
       intake.append(sample);
       // карандаш — персонаж шага «Practise», поэтому он сидит на карточке с вопросом
       const pencil = $one(".learny-editor-pencil");
       if (pencil) sample.append(pencil);
     }
-    const ownLink = translated("button", "calmOwnLink", "learny-own-link");
+    const ownLink = translated("button", "calmOwnLink", "primary-btn learny-own-link");
     ownLink.type = "button";
-    actions.append(ownLink);
+    actions.prepend(ownLink);
   }
 
   /* ---------- «Как устроен урок»: открытый раздел вместо раскрывашки ---------- */
@@ -144,7 +183,9 @@
   // шаги на главной называются так же, как вкладки урока: Theory, Practice, Mini-dialogues, Speaking
   ["navTheory", "navDrill", "navMatch", "navSpeak", "calmReview"].forEach((key, index) => {
     const title = steps.querySelectorAll(".learny-step-title")[index];
-    if (title && UI[key]) title.dataset.ui = key;
+    if (!title || !UI[key]) return;
+    title.dataset.ui = key;
+    title.textContent = t(key); // раздел еще не в документе, общий applyLang до него не дотянется
   });
   const art = [...steps.querySelectorAll(".learny-step-art")];
   ["theory", "drill", "match", "speak"].forEach((stage, index) => {
@@ -168,6 +209,145 @@
   for (const id of ["#drill-card", "#match-card"]) new MutationObserver(syncAction).observe($one(id), { childList: true, subtree: true });
   document.addEventListener("lessonviewchange", syncAction);
 
+  /* ---------- «Сохранить кабинет»: личный код вместо регистрации ----------
+     Код создается на устройстве и служит ключом к данным на сервере синхронизации.
+     Адрес сервера в окне не показываем: если он был задан раньше, он сохраняется. */
+  const SPACE_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789";
+  const spaceCode = () => syncCfg().code || "";
+  const cleanCode = value => value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const prettyCode = value => (cleanCode(value).match(/.{1,5}/g) || []).join("-");
+  function newSpaceCode() {
+    const bytes = new Uint8Array(15);
+    crypto.getRandomValues(bytes);
+    return prettyCode(Array.from(bytes, x => SPACE_ALPHABET[x % SPACE_ALPHABET.length]).join(""));
+  }
+  function spaceLink() {
+    return location.href.split("#")[0] + "#space=" + spaceCode();
+  }
+  // Строка в кабинете говорит, где сейчас лежат данные, и предлагает одно действие.
+  function syncSpaceLine() {
+    const note = $one(".desk-storage-note"), button = $one(".desk-sync");
+    if (!note || !button) return;
+    const saved = !!spaceCode();
+    note.dataset.ui = saved ? "spaceSavedLine" : "spaceLocal";
+    button.dataset.ui = saved ? "spaceShow" : "spaceSave";
+    note.textContent = t(note.dataset.ui);
+    button.textContent = t(button.dataset.ui);
+  }
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); }
+    catch {
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.cssText = "position:fixed;opacity:0";
+      $one("#sheet-body").append(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+    }
+    toast(t("spaceCopied"));
+  }
+  // Сервер заводит кабинет под любой новый код, поэтому опечатка молча открыла бы пустой кабинет.
+  // Перед подключением читаем кабинет без записи: true — в нем что-то есть, false — пусто, null — не удалось узнать.
+  async function spaceExists(code) {
+    try {
+      const base = (syncCfg().url || SYNC_DEFAULT_URL).replace(/\/+$/, "");
+      const res = await fetch(base + "/api/state", { headers: { Authorization: "Bearer " + code } });
+      if (!res.ok) return null;
+      const state = await res.json();
+      const size = value => Array.isArray(value) ? value.length : Object.keys(value || {}).length;
+      return ["vocab", "lessons", "progress", "overrides", "deleted"].some(key => size(state[key]) > 0);
+    } catch { return null; }
+  }
+  async function connectSpace(code, status, button) {
+    const previous = syncCfg();
+    lsSet(SYNC_KEY, JSON.stringify({ url: previous.url || SYNC_DEFAULT_URL, code }));
+    status(t("spaceBusy"));
+    button.disabled = true;
+    try {
+      await runSync();
+      syncSpaceLine();
+      spaceSheet();
+    } catch (error) {
+      // не получилось: возвращаем прежнее состояние и не говорим «сохранено»
+      if (previous.code) lsSet(SYNC_KEY, JSON.stringify(previous));
+      else localStorage.removeItem(SYNC_KEY);
+      syncSpaceLine();
+      status(t(error?.code === "badcode" ? "spaceBad" : "spaceFail"));
+      button.disabled = false;
+    }
+  }
+  function spaceSheet(prefill) {
+    const code = spaceCode();
+    if (code && !prefill) {
+      openSheet(`<h3>${t("spaceSavedTitle")}</h3>
+        <p class="space-label">${t("spaceCodeLabel")}</p>
+        <p class="space-code" id="space-code">${escH(code)}</p>
+        <p class="space-note">${t("spaceKeep")}</p>
+        <div class="space-actions">
+          <button class="primary-btn" data-a="code">${t("spaceCopyCode")}</button>
+          <button class="ghost-btn" data-a="link">${t("spaceCopyLink")}</button>
+        </div>
+        <button class="link-btn space-off" data-a="off">${t("spaceOff")}</button>`, el => {
+        el.querySelector("[data-a=code]").onclick = () => copyText(code);
+        el.querySelector("[data-a=link]").onclick = () => copyText(spaceLink());
+        el.querySelector("[data-a=off]").onclick = () => {
+          localStorage.removeItem(SYNC_KEY);
+          syncSpaceLine();
+          closeSheet();
+          toast(t("spaceOffDone"));
+        };
+        el.querySelector("[data-a=code]").focus({ preventScroll: true });
+      });
+      return;
+    }
+    openSheet(`<h3>${t("spaceSave")}</h3>
+      <p>${t("spaceLead")}</p>
+      <button class="primary-btn space-create" data-a="create">${t("spaceCreate")}</button>
+      <button class="link-btn space-have" data-a="have" aria-expanded="${prefill ? "true" : "false"}" aria-controls="space-enter">${t("spaceHave")}</button>
+      <div class="space-enter" id="space-enter" ${prefill ? "" : "hidden"}>
+        <div class="field">
+          <label for="space-input">${t("spaceCodeLabel")}</label>
+          <input id="space-input" value="${escH(prefill || "")}" placeholder="abcde-fghjk-mnpqr" autocapitalize="off" autocomplete="off" spellcheck="false">
+        </div>
+        <button class="ghost-btn" data-a="open">${t("spaceOpen")}</button>
+      </div>
+      <p class="space-status" id="space-status" aria-live="polite"></p>`, el => {
+      const status = message => { el.querySelector("#space-status").textContent = message; };
+      const create = el.querySelector("[data-a=create]"), have = el.querySelector("[data-a=have]");
+      const enter = el.querySelector("#space-enter"), input = el.querySelector("#space-input"), open = el.querySelector("[data-a=open]");
+      create.onclick = () => connectSpace(newSpaceCode(), status, create);
+      have.onclick = () => {
+        enter.hidden = false;
+        have.setAttribute("aria-expanded", "true");
+        input.focus({ preventScroll: true });
+      };
+      const submit = async () => {
+        const typed = cleanCode(input.value);
+        if (typed.length !== 15) { status(t("spaceShort")); return; }
+        status(t("spaceBusy"));
+        open.disabled = true;
+        const found = await spaceExists(prettyCode(typed));
+        open.disabled = false;
+        if (found === false) { status(t("spaceEmpty")); return; }
+        connectSpace(prettyCode(typed), status, open);
+      };
+      open.onclick = submit;
+      input.addEventListener("keydown", event => { if (event.key === "Enter") submit(); });
+      (prefill ? open : create).focus({ preventScroll: true });
+    });
+  }
+  // Пункт меню «···» открывает то же окно, а не прежнее с адресом сервера.
+  $one("#sync-btn").addEventListener("click", event => {
+    event.stopImmediatePropagation();
+    closeMenu();
+    spaceSheet();
+  }, true);
+  // Ссылка вида …#space=код: код не уходит на сервер вместе с адресом; подключение человек подтверждает сам.
+  const linkedSpace = location.hash.startsWith("#space=") ? prettyCode(decodeURIComponent(location.hash.slice(7))) : "";
+  if (linkedSpace) history.replaceState(null, "", "#cabinet");
+
   function setupCabinet() {
     const home = $one("#view-home");
     const vocab = $one("#vocab-box");
@@ -177,7 +357,7 @@
     const welcomeLesson = document.createElement("h2");
     const welcomeStage = document.createElement("p");
     welcomeResume.append(welcomeLesson, welcomeStage);
-    sample?.append(welcomeResume);
+    sample?.insertBefore(welcomeResume, demo);
     const cabinet = document.createElement("section");
     cabinet.className = "learner-desk";
     const deskHead = document.createElement("div");
@@ -195,6 +375,14 @@
     const continueButton = translated("button", "cabinetContinue", "primary-btn");
     resume.append(resumeCopy, continueButton);
     cabinet.append(deskHead, resume);
+    const storage = document.createElement("div");
+    storage.className = "desk-storage";
+    const sync = translated("button", "spaceSave", "desk-sync");
+    sync.type = "button";
+    sync.setAttribute("aria-haspopup", "dialog");
+    sync.addEventListener("click", () => spaceSheet());
+    storage.append(translated("span", "spaceLocal", "desk-storage-note"), sync);
+    syncSpaceLine();
 
     const nav = $one(".header-actions");
     const cabinetLink = link("cabinet", "cabinet", "desk-nav");
@@ -211,9 +399,12 @@
       summary.append(item.querySelector(".learny-step-art"), item.querySelector(".learny-step-title"));
       details.append(summary, item.querySelector(".learny-step-desc"));
       item.append(details);
+      // Шаги урока раскрыты всегда: это рассказ о продукте, под «+» его никто не откроет.
+      summary.tabIndex = -1;
+      summary.addEventListener("click", event => event.preventDefault());
     }
     function setGuideLayout() {
-      steps.querySelectorAll("details").forEach(details => { details.open = !narrow.matches; });
+      steps.querySelectorAll("details").forEach(details => { details.open = true; });
     }
     setGuideLayout();
     narrow.addEventListener("change", setGuideLayout);
@@ -231,7 +422,7 @@
     panel.append(title, close, translated("p", "calmOwnLede", "learny-own-lede"), dropCard);
     dialog.append(panel);
     document.body.append(dialog);
-    home.replaceChildren(intake, inside, cabinet, library, vocab);
+    home.replaceChildren(intake, inside, cabinet, library, vocab, storage);
     const homePages = ["welcome", "cabinet", "catalog"];
     let routing = false;
     let candidate = null;
@@ -338,6 +529,7 @@
       const personal = page === "cabinet";
       const welcome = page === "welcome";
       cabinet.hidden = !personal;
+      storage.hidden = !personal;
       intake.hidden = !welcome;
       inside.hidden = !welcome;
       vocab.hidden = !personal;
@@ -360,9 +552,11 @@
         }
       }
       const demoLabel = demo.querySelector("[data-ui]");
-      demoLabel.dataset.ui = demoStarted ? "cabinetContinue" : "calmDemo";
+      demoLabel.dataset.ui = demoStarted ? "cabinetContinue" : "calmSampleLink";
       demoLabel.textContent = t(demoLabel.dataset.ui);
       candidate = personal ? lastUnfinished() : null;
+      newLink.classList.toggle("primary-btn", !candidate);
+      newLink.classList.toggle("ghost-btn", !!candidate);
       resume.hidden = !candidate;
       if (candidate) {
         resumeStage.textContent = savedPosition(candidate);
@@ -425,19 +619,13 @@
     else route();
   }
 
-  // Шрифт заголовков на пробу: ?type=geologica | rubik | nunito
-  const TYPE = { geologica: "Geologica:wght@800", rubik: "Rubik:wght@800", nunito: "Nunito:wght@900" };
-  const type = new URLSearchParams(location.search).get("type");
-  if (TYPE[type]) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = `https://fonts.googleapis.com/css2?family=${TYPE[type]}&display=swap`;
-    document.head.append(link);
-    document.documentElement.dataset.type = type;
-  }
+  // Логотип — только слово Learny. Для сравнения ?logo=mascot возвращает в шапку книжку.
+  if (new URLSearchParams(location.search).get("logo") === "mascot") document.documentElement.dataset.logo = "mascot";
 
   applyLang();
   if (hero === "b") setupCabinet();
   else if (new URLSearchParams(location.search).has("demo")) openDemo();
+  if (linkedSpace && linkedSpace !== spaceCode()) spaceSheet(linkedSpace);
+  document.addEventListener("lessonviewchange", ({detail}) => { if (detail === "home") syncSpaceLine(); });
   syncAction();
 })();

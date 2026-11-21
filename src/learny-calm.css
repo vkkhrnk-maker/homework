@@ -35,10 +35,6 @@
   --learny-section-gap: clamp(40px, 4vw, 56px);
 }
 
-/* ---------- шрифт заголовков: три пробы на выбор, включаются адресом ?type=geologica | rubik | nunito ---------- */
-:root[data-calm][data-style="learny"][data-variant="fromt"][data-type="geologica"] { --display-font: "Geologica", var(--font); --display-weight: 800; --track-display: -.04em; --track-title: -.03em; --track-head: -.02em; }
-:root[data-calm][data-style="learny"][data-variant="fromt"][data-type="rubik"] { --display-font: "Rubik", var(--font); --display-weight: 800; --track-display: -.03em; --track-title: -.025em; --track-head: -.015em; }
-:root[data-calm][data-style="learny"][data-variant="fromt"][data-type="nunito"] { --display-font: "Nunito", var(--font); --display-weight: 900; --track-display: -.025em; --track-title: -.02em; --track-head: -.01em; }
 
 /* ---------- темная тема: те же роли, другой свет ---------- */
 :root[data-calm][data-style="learny"][data-variant="fromt"][data-theme="dark"] {
@@ -197,9 +193,11 @@
 .learny-demo:focus-visible, .learny-own-link:focus-visible { outline: var(--learny-rule) solid var(--accent); outline-offset: var(--learny-focus-offset); }
 .learny-demo-arrow { color: var(--fg-2); }
 :root:is(#_#_,[data-calm]) .learny-demo { box-shadow: none; }
-:root:is(#_#_,[data-calm]) .learny-demo.is-primary { background: var(--accent); color: var(--accent-fg); }
-:root:is(#_#_,[data-calm]) .learny-demo.is-primary:hover { background: var(--accent-hover); }
-:root:is(#_#_,[data-calm]) .learny-demo.is-primary .learny-demo-arrow { color: inherit; }
+:root:is(#_#_,[data-calm]) .learny-sample .learny-demo {
+  justify-self: start; padding-inline: 0; height: auto; min-height: var(--learny-target);
+  background: transparent; color: var(--fg-2); font: var(--t-body);
+}
+:root:is(#_#_,[data-calm]) .learny-sample .learny-demo:hover { color: var(--fg); text-decoration: underline; }
 
 /* «Inside a lesson»: открытый раздел лендинга вместо раскрывашки, которую никто не откроет */
 .learny-inside { margin-top: var(--learny-section-gap); }
@@ -317,9 +315,7 @@
 .learny-sample-q .blank { display: inline-block; min-width: 3.5ch; border-bottom: 2px solid var(--fg-3); }
 .learny-sample-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .learny-sample-note { margin: 4px 0 0; color: var(--fg-2); }
-.learny-own-link { min-height: 48px; gap: 8px; color: var(--fg); }
-.learny-own-link:hover { color: var(--accent); }
-:root[data-hero="b"] .learny-own-link { display: inline-flex; align-items: center; }
+:root[data-hero="b"] .learny-own-link { display: inline-flex; align-items: center; justify-content: center; }
 :root:is(#_#_,[data-calm])[data-hero="b"] body.home .intake:not(.learny-own) { grid-template-columns: minmax(0,1fr) minmax(0,.9fr); }
 #lesson-composer {
   position: fixed; inset: var(--composer-viewport-top, 0) 0 auto; margin: 0; width: 100%; height: 100%; height: var(--composer-viewport-height, 100dvh);
@@ -398,7 +394,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 }
 @media (max-width: 500px) {
   :root:is(#_#_,[data-calm]) .intake .material-tools #parse-btn { margin-top: 12px; }
-  .learny-hero-actions .learny-demo.is-primary { width: 100%; justify-content: center; }
+  .learny-hero-actions .learny-own-link { width: 100%; }
 }
 @media (max-width: 460px) {
   /* главное действие экрана во всю ширину карточки */
@@ -466,6 +462,10 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 .desk-resume p { font: var(--t-caption-strong); color: var(--fg-2); margin: var(--learny-square); }
 .desk-resume h2 { font: var(--t-head); letter-spacing: var(--track-head); margin: var(--learny-s2) var(--learny-square) var(--learny-square); overflow-wrap: anywhere; }
 .desk-resume .primary-btn,.desk-create { flex: none; }
+[data-hero="b"] .desk-create.primary-btn { color: var(--accent-fg); }
+.desk-storage { display: flex; flex-wrap: wrap; align-items: center; gap: var(--learny-s1) var(--learny-s4); margin-block-start: var(--learny-s8); font: var(--t-caption); color: var(--fg-2); }
+.desk-sync { min-height: var(--learny-target); color: var(--fg); font: var(--t-caption-strong); text-decoration: underline; }
+.desk-sync:focus-visible { outline: var(--learny-rule) solid var(--accent); outline-offset: var(--learny-focus-offset); }
 [data-calm-page="cabinet"] #learny-library .desk-catalog { justify-self: end; font: var(--t-body); }
 [data-calm-page="cabinet"] .learny-empty { margin: var(--learny-square); color: var(--fg-2); }
 [data-hero="b"] .desk-guide-step summary { cursor: pointer; list-style: none; }
@@ -478,7 +478,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   [data-hero="b"] .desk-nav { padding-inline: var(--learny-s1); }
 }
 
-[data-hero="b"] .learny-sample.has-saved-demo > :not(.desk-welcome-resume,.learny-editor-pencil) { display: none; }
+[data-hero="b"] .learny-sample.has-saved-demo > :not(.desk-welcome-resume,.learny-editor-pencil,.learny-demo) { display: none; }
 .desk-welcome-resume h2 { margin: var(--learny-square); font: var(--t-head); letter-spacing: var(--track-head); }
 .desk-welcome-resume p { margin: var(--learny-s3) var(--learny-square) var(--learny-square); color: var(--fg-2); font: var(--t-body); }
 @media (max-width: 800px) {
@@ -494,3 +494,52 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 [data-calm-page="cabinet"]:has(.desk-resume:not([hidden])) #vb-review {
   color: var(--accent); background: var(--fromt-solid); border: var(--learny-hairline) solid var(--line);
 }
+
+/* ---------- кабинет и лендинг: сверка с системой (после сборки кабинета) ---------- */
+/* шаги урока на телефоне всегда раскрыты: без «+», название 22 и описание 16 */
+:root:is(#_#_,[data-calm]) .desk-guide-step summary { cursor: default; pointer-events: none; }
+:root:is(#_#_,[data-calm]) .desk-guide-step summary:hover { color: inherit; }
+@media (max-width: 800px) {
+  :root:is(#_#_,[data-calm]) .learny-inside .learny-guide-steps { gap: 20px; }
+  :root:is(#_#_,[data-calm]) .desk-guide-step summary { grid-template-columns: auto 1fr; min-height: 0; }
+  :root:is(#_#_,[data-calm]) .desk-guide-step summary::after { content: none; }
+  :root:is(#_#_,[data-calm]) .desk-guide-step .learny-step-desc { margin-top: 4px; }
+}
+/* заголовок рабочего экрана того же кегля, что у каталога; самый крупный остается только у обещания на лендинге */
+:root:is(#_#_,[data-calm]) .learner-desk-title { font: var(--t-title); letter-spacing: var(--track-title); }
+/* навигация в шапке: обычный текст, текущая страница отмечена чернилами и весом, акцент оставлен действию */
+:root:is(#_#_,[data-calm]) .desk-nav { font: var(--t-body); color: var(--fg-2); padding-inline: 8px; }
+:root:is(#_#_,[data-calm]) .desk-nav[aria-current="page"] { font: var(--t-body-strong); color: var(--fg); }
+:root:is(#_#_,[data-calm]) .desk-nav:hover { color: var(--fg); text-decoration: none; }
+/* текстовые действия одного вида: полужирные, чернила, без подчеркивания; у перехода стрелка */
+:root:is(#_#_,[data-calm]) #learny-library .desk-catalog { font: var(--t-body-strong); color: var(--fg); gap: 8px; }
+:root:is(#_#_,[data-calm]) .desk-catalog::after { content: "→"; color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .desk-catalog:hover { color: var(--accent); text-decoration: none; }
+:root:is(#_#_,[data-calm]) .desk-sync { text-decoration: none; }
+:root:is(#_#_,[data-calm]) .desk-sync::after { content: " →"; color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .desk-sync:hover { color: var(--accent); }
+/* «Review» рядом с «Continue lesson»: обычная вторая кнопка, без фиолетового текста */
+:root:is(#_#_,[data-calm]) #vb-review:not(:disabled) { box-shadow: none; }
+:root:is(#_#_,[data-calm])[data-hero="b"] body[data-calm-page="cabinet"]:has(.desk-resume:not([hidden])) #vb-review { color: var(--fg); border: 0; box-shadow: inset 0 0 0 1px var(--line); }
+
+/* ---------- логотип: только слово Learny; маскоты остаются внутри продукта (шаги урока, карточка вопроса).
+   Прежний вариант с книжкой можно посмотреть по адресу ?logo=mascot ---------- */
+:root[data-calm]:not([data-logo="mascot"]) #brand-home i { display: none; }
+:root:is(#_#_,[data-calm]):not([data-logo="mascot"]) #brand-name { font-size: 26px; letter-spacing: -.04em; }
+
+/* ---------- «Сохранить кабинет»: окно с личным кодом ---------- */
+:root:is(#_#_,[data-calm]) .sheet :is(.space-label) { margin: 16px 0 6px; font: var(--t-caption-strong); color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .sheet .space-code {
+  margin: 0; padding: 16px; border-radius: var(--r-m); background: var(--learny-paper-mint); color: var(--fg);
+  font: var(--t-lead); letter-spacing: .04em; overflow-wrap: anywhere; user-select: all; -webkit-user-select: all;
+}
+:root:is(#_#_,[data-calm]) .sheet :is(.space-note, .space-status) { margin: 12px 0 0; font: var(--t-caption); color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .sheet .space-status:empty { display: none; }
+.space-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.space-actions > * { flex: 1 1 auto; }
+:root:is(#_#_,[data-calm]) .sheet .space-create { width: 100%; margin-top: 8px; }
+:root:is(#_#_,[data-calm]) .sheet :is(.space-have, .space-off) { display: block; margin-top: 8px; padding-inline: 0; }
+.space-enter { display: grid; gap: 12px; margin-top: 4px; }
+:root:is(#_#_,[data-calm]) .sheet .space-enter .field { margin-top: 0; }
+:root:is(#_#_,[data-calm]) .sheet .space-enter input { width: 100%; padding-inline: 16px; letter-spacing: .04em; }
+:root:is(#_#_,[data-calm]) .sheet .space-enter .ghost-btn { width: 100%; }

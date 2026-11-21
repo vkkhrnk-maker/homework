@@ -5625,6 +5625,7 @@ try { navigator.storage?.persist?.(); } catch {}
 if ('serviceWorker' in navigator) addEventListener('load', async () => {
   let reg;
   try { reg = await navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }); } catch { return; }
+  if (!reg) return;
   const hadController = !!navigator.serviceWorker.controller;
   const busy = () => !!document.querySelector('#parse-status:not([hidden]), #intake-level:not([hidden]), #lesson-composer[open]')
     || !!document.querySelector('#lesson-composer #paste-area')?.value || !!document.querySelector('#lesson-composer .material-remove');
