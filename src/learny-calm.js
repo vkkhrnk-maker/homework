@@ -30,20 +30,26 @@
     calmOwnLink: { ru: "Создать свой урок", en: "Create my own lesson" },
     calmSampleLink: { ru: "Открыть пример", en: "Open sample lesson" },
     calmOwnTitle: { ru: "Урок из текста", en: "A lesson from your text" },
-    calmOwnLede: {
+    // Над полем — одно предложение о том, что делать; куда уходит текст — подписью под кнопкой.
+    calmOwnLede: { ru: "Вставьте домашку от учителя или назовите тему.", en: "Paste your teacher’s homework or name a topic." },
+    calmOwnNote: {
       // Ключ не нужен: без своего ключа текст уходит на сервер Learny. Со своим ключом строка честно говорит другое.
       ru: () => aiKey()
-        ? "Вставьте домашку от учителя или назовите тему. Текст отправится напрямую в ИИ по вашему ключу."
-        : "Вставьте домашку от учителя или назовите тему. Текст отправится на сервер Learny и в Google Gemini для разбора.",
+        ? "Текст отправится напрямую в ИИ по вашему ключу."
+        : "Текст отправится на сервер Learny и в Google Gemini для разбора.",
       en: () => aiKey()
-        ? "Paste your teacher’s homework or name a topic. Your text goes straight to the AI under your own key."
-        : "Paste your teacher’s homework or name a topic. Your text is sent to the Learny server and Google Gemini to build the lesson."
+        ? "Your text goes straight to the AI under your own key."
+        : "Your text is sent to the Learny server and Google Gemini to build the lesson."
     },
+    calmTrLabel: { ru: "Перевод теории", en: "Theory translation" },
+    calmTrTap: { ru: "По тапу", en: "On tap" },
+    calmTrShow: { ru: "Сразу", en: "Always" },
     calmSampleLabel: { ru: "Вопрос из готового урока", en: "A question from a sample lesson" },
     cabinet: { ru: "Кабинет", en: "My space" },
     cabinetTitle: { ru: "Мой кабинет", en: "My learning space" },
     cabinetContinue: { ru: "Продолжить урок", en: "Continue lesson" },
-    cabinetCatalog: { ru: "Каталог уроков", en: "Lesson catalog" },
+    // ссылка называется так же, как страница, на которую ведет («Sample lessons»)
+    cabinetCatalog: { ru: "Готовые уроки", en: "Sample lessons" },
     cabinetEmpty: { ru: "Здесь появятся уроки, которые вы открыли или создали.", en: "Lessons you open or create will appear here." },
     cabinetLocal: { ru: "Уроки и прогресс сохраняются в этом браузере.", en: "Your lessons and progress are saved in this browser." },
     cabinetStageEnd: { ru: "Итоги этапа", en: "Stage results" },
@@ -85,6 +91,7 @@
     },
     spaceShort: { ru: "Проверьте код: в нем 15 знаков", en: "Check the code: it has 15 characters" },
     calmReview: { ru: "Повторение", en: "Review" },
+    calmStepMatch: { ru: "Мини-истории", en: "Mini-stories" },
     calmSamples: { ru: "Готовые уроки", en: "Sample lessons" },
     calmSampleNote: { ru: "Выберите слово, урок откроется на этом вопросе", en: "Pick a word and the lesson opens on this question" }
   }, HERO_COPY[hero] || {});
@@ -185,8 +192,9 @@
     arrangeComparison();
   }
   /* ---------- маскот шага в уроке: тот же персонаж, что и в «Как устроен урок» ---------- */
-  // шаги на главной называются так же, как вкладки урока: Theory, Practice, Mini-dialogues, Speaking
-  ["navTheory", "navDrill", "navMatch", "navSpeak", "calmReview"].forEach((key, index) => {
+  // шаги на главной называются так же, как вкладки урока: Theory, Practice, Mini-stories, Speaking.
+  // Третий шаг — «Mini-stories», как в большинстве уроков; общее «Meanings» (navMatch) остается запасным названием вкладки
+  ["navTheory", "navDrill", "calmStepMatch", "navSpeak", "navReport"].forEach((key, index) => {
     const title = steps.querySelectorAll(".learny-step-title")[index];
     if (!title || !UI[key]) return;
     title.dataset.ui = key;
@@ -209,10 +217,116 @@
   actionBar.className = "learny-actionbar";
   actionBar.setAttribute("aria-hidden", "true");
   document.body.append(actionBar);
-  const pinned = ":is(#view-drill, #view-match):not([hidden]) :is(#drill-card .answer-row .primary-btn, #drill-card .nav-row .primary-btn, #match-card .nav-row .primary-btn)";
-  const syncAction = () => document.body.classList.toggle("has-action", !!$one(pinned));
-  for (const id of ["#drill-card", "#match-card"]) new MutationObserver(syncAction).observe($one(id), { childList: true, subtree: true });
+  const pinned = ":is(#view-drill, #view-match):not([hidden]) :is(#drill-card .answer-row .primary-btn, #drill-card .nav-row .primary-btn, #match-card .nav-row .primary-btn), "
+    // в «Говорении» внизу — запись (или «Next», когда ответ уже есть), во время записи — «Stop»
+    + "#view-speak:not([hidden]) :is(#speak-card .nav-row .primary-btn, #speak-card #s-rec, #speak-card #s-stop)";
+  // Линия над панелью — только когда под нее уходит содержимое шага; на коротком экране панель сливается с фоном.
+  const syncCover = () => {
+    const stage = $one(".learny-stage:not([hidden])");
+    if (!stage || !document.body.classList.contains("has-action")) { actionBar.classList.remove("is-covering"); return; }
+    const end = stage.getBoundingClientRect().bottom - parseFloat(getComputedStyle(stage).paddingBottom);
+    actionBar.classList.toggle("is-covering", end > actionBar.getBoundingClientRect().top + 1);
+  };
+  let coverFrame = 0;
+  const queueCover = () => { if (!coverFrame) coverFrame = requestAnimationFrame(() => { coverFrame = 0; syncCover(); }); };
+  // Итог ответа — внизу, у кнопки «Next», как у Speak и Duolingo: полоса в цвете результата и вердикт; в карточке остается разбор.
+  // Полоса декоративная (aria-hidden): для скринридера вердикт по-прежнему объявляет карточка.
+  const barVerdict = document.createElement("span");
+  barVerdict.className = "learny-actionbar-verdict";
+  actionBar.append(barVerdict);
+  const syncVerdict = () => {
+    const feedback = $one("#view-drill:not([hidden]) #drill-feedback .feedback");
+    const result = feedback ? (feedback.classList.contains("bad") ? "bad" : "good") : "";
+    actionBar.dataset.result = result;
+    document.body.classList.toggle("has-result", !!result && document.body.classList.contains("has-action"));
+    barVerdict.textContent = feedback?.querySelector(".verdict")?.textContent.trim() || "";
+  };
+  const syncAction = () => { document.body.classList.toggle("has-action", !!$one(pinned)); syncVerdict(); queueCover(); };
+  for (const id of ["#drill-card", "#match-card", "#speak-card"]) new MutationObserver(syncAction).observe($one(id), { childList: true, subtree: true });
+  // Теория на телефоне: «Fix» виден у того блока, по которому нажали, а не у всех семнадцати сразу
+  document.addEventListener("pointerdown", event => {
+    const use = event.target.closest?.("#theory-body .use");
+    if (!use) return;
+    document.querySelectorAll("#theory-body .use.is-active").forEach(other => { if (other !== use) other.classList.remove("is-active"); });
+    use.classList.add("is-active");
+  });
   document.addEventListener("lessonviewchange", syncAction);
+  window.addEventListener("scroll", queueCover, { passive: true });
+  window.addEventListener("resize", queueCover);
+
+  /* ---------- меню: заголовок «Learny» только для скринридера, «Reset lesson» в самом низу и красным,
+     перевод теории — сегментом, как язык подсказок и тема, а не строкой, которая меняет надпись по нажатию ---------- */
+  $one("#menu-title").classList.add("learny-visually-hidden");
+  const resetButton = $one("#reset-btn");
+  resetButton.classList.add("dz", "learny-menu-last");
+  $one("#menu .opts").append(resetButton);
+  const trButton = $one("#tr-btn");
+  trButton.classList.add("learny-replaced");
+  const trLabel = translated("div", "calmTrLabel", "sh-sub");
+  const trSegment = document.createElement("div");
+  trSegment.className = "seg";
+  trSegment.setAttribute("role", "group");
+  trSegment.setAttribute("aria-labelledby", "learny-tr-label");
+  trLabel.id = "learny-tr-label";
+  const trOptions = [["click", "calmTrTap"], ["show", "calmTrShow"]].map(([mode, key]) => {
+    const option = translated("button", key, "");
+    option.type = "button";
+    option.dataset.trMode = mode;
+    option.addEventListener("click", () => { lsSet("et-tr", mode); renderTheory(); syncTranslation(); });
+    return option;
+  });
+  trSegment.append(...trOptions);
+  $one('#menu .sh-sub[data-ui="langLabel"]').before(trLabel, trSegment);
+  function syncTranslation() {
+    trLabel.hidden = trSegment.hidden = trButton.hidden;
+    trOptions.forEach(option => option.setAttribute("aria-pressed", String(option.dataset.trMode === trMode())));
+  }
+  new MutationObserver(syncTranslation).observe(trButton, { attributes: true, attributeFilter: ["hidden"] });
+  syncTranslation();
+
+  /* ---------- режим урока на телефоне ----------
+     Вместо шапки приложения, «← My space» и вкладок шагов — одна строка: «×» (в кабинет), название шага со списком шагов, «…» (меню урока).
+     Номера вопросов становятся сегментами полосы прогресса (это стили). На компьютере все как было. */
+  const phone = matchMedia("(max-width: 800px)");
+  const lessonContext = $one(".learny-lesson-context");
+  const menuButton = $one("#menu-btn");
+  const menuHome = $one(".header-actions");
+  const stepSwitch = document.createElement("button");
+  stepSwitch.type = "button";
+  stepSwitch.className = "learny-step-switch";
+  stepSwitch.setAttribute("aria-haspopup", "dialog");
+  const stepLabel = document.createElement("span");
+  const stepCaret = document.createElement("span");
+  stepCaret.className = "learny-step-caret";
+  stepCaret.setAttribute("aria-hidden", "true");
+  stepSwitch.append(stepLabel, stepCaret);
+  lessonContext.querySelector(".learny-back").after(stepSwitch);
+  const stepTabs = () => [...document.querySelectorAll("#tabs .tab[data-view]")].filter(tab => tab.dataset.view !== "home");
+  const tabName = tab => [...tab.childNodes].filter(node => node.nodeType === 3).map(node => node.textContent).join("").trim();
+  function syncLessonTop() {
+    const lessonMode = phone.matches && !$one("#tabs-row").hidden;
+    document.body.classList.toggle("learny-lesson-mode", lessonMode);
+    const place = lessonMode ? lessonContext : menuHome;
+    if (menuButton.parentElement !== place) place.append(menuButton);
+    const current = stepTabs().find(tab => tab.getAttribute("aria-selected") === "true");
+    stepLabel.textContent = current ? tabName(current) : ($one("#view-report:not([hidden]) h1")?.textContent || "");
+    stepSwitch.setAttribute("aria-label", `${t("stepsLabel")}: ${stepLabel.textContent}`);
+  }
+  stepSwitch.addEventListener("click", () => {
+    openSheet(`<h3 class="learny-steps-title">${escH(t("stepsLabel"))}</h3><div class="opts learny-steps">${stepTabs().map(tab => {
+      const done = tab.querySelector(".tick") && !tab.querySelector(".tick").hidden;
+      const current = tab.getAttribute("aria-selected") === "true";
+      return `<button type="button" class="opt" data-view="${tab.dataset.view}"${current ? ' aria-current="step"' : ""}><span>${escH(tabName(tab))}</span>${done ? '<span class="learny-step-done" aria-hidden="true">✓</span>' : ""}</button>`;
+    }).join("")}</div>`, body => body.querySelectorAll("[data-view]").forEach(button => button.addEventListener("click", () => {
+      closeSheet();
+      button.dataset.view === "report" ? openReport() : show(button.dataset.view);
+    })));
+  });
+  new MutationObserver(syncLessonTop).observe($one("#tabs"), { childList: true, subtree: true, attributes: true, attributeFilter: ["aria-selected", "hidden"] });
+  new MutationObserver(syncLessonTop).observe($one("#tabs-row"), { attributes: true, attributeFilter: ["hidden"] });
+  phone.addEventListener("change", syncLessonTop);
+  document.addEventListener("lessonviewchange", syncLessonTop);
+  syncLessonTop();
 
   /* ---------- «Сохранить кабинет»: личный код вместо регистрации ----------
      Код создается на устройстве и служит ключом к данным на сервере синхронизации.
@@ -424,7 +538,7 @@
     close.type = "button";
     close.className = "composer-close";
     close.textContent = "×";
-    panel.append(title, close, translated("p", "calmOwnLede", "learny-own-lede"), dropCard);
+    panel.append(title, close, translated("p", "calmOwnLede", "learny-own-lede"), dropCard, translated("p", "calmOwnNote", "learny-own-note"));
     dialog.append(panel);
     document.body.append(dialog);
     home.replaceChildren(intake, inside, cabinet, library, vocab, storage);
@@ -461,7 +575,7 @@
       if (dialog.open) return;
       returnScroll = history.state?.composerScroll ?? window.scrollY;
       close.setAttribute("aria-label", t("wdClose"));
-      panel.querySelector(".learny-own-lede").textContent = t("calmOwnLede"); // после подключения своего ключа строка меняется
+      panel.querySelector(".learny-own-note").textContent = t("calmOwnNote"); // после подключения своего ключа строка меняется
       // Keep key setup and its validation messages interactive inside the native modal.
       dialog.append(sheet, toast);
       dialog.showModal();
@@ -569,7 +683,16 @@
         resumeTitle.textContent = plain(candidate.title);
       }
       document.dispatchEvent(new Event("learnylibrarychange"));
+      markResumed();
     }
+    // Урок из карточки «Continue lesson» не повторяется первым в списке ниже; если он единственный, список его оставляет.
+    function markResumed() {
+      const id = !resume.hidden && document.body.dataset.calmPage === "cabinet" ? candidate?.id : "";
+      const cards = [...$one("#lesson-list").children];
+      const others = cards.filter(card => !card.hidden && card.dataset.lesson !== id).length;
+      cards.forEach(card => card.classList.toggle("is-resumed", !!id && others > 0 && card.dataset.lesson === id));
+    }
+    new MutationObserver(markResumed).observe($one("#lesson-list"), { childList: true });
     continueButton.addEventListener("click", () => {
       if (candidate) openLesson(candidate.id, savedStage(candidate));
     });

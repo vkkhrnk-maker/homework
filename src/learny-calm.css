@@ -78,15 +78,22 @@
 }
 :root:is(#_#_,[data-calm]) :is(.rule .examples li b, .feedback .full b, .rule .callout b) { font-weight: 600; }
 /* caption */
-:root:is(#_#_,[data-calm]) :is(#material-help, #parse-hint, .material-review, .material-file-meta, .learny-lesson-meta, .learny-lesson-progress, .app-footer, .app-footer span, #progress-label, .learny-progress-caption, .score-pill, .timer, .q-counter, .q-counter > span, .step-number, .dot-q, .opt small, .sheet .tr-hint, .rule .examples li i, .rule .formula-label, #theory-body td div, .cz-why span, .cz-text .gap-n, .drill-cue, .report-note, .vb-head h2 small, .learny-sample-note) {
+:root:is(#_#_,[data-calm]) :is(#material-help, #parse-hint, .material-review, .material-file-meta, .learny-lesson-meta, .learny-lesson-progress, .app-footer, .app-footer span, #progress-label, .learny-progress-caption, .score-pill, .timer, .q-counter, .q-counter > span, .step-number, .dot-q, .opt small, .sheet .tr-hint, .rule .examples li i, .rule .formula-label, #theory-body td div, .cz-why span, .cz-text .gap-n, .drill-cue, .report-note, .vb-head h2 small, .learny-sample-note, .part-badge, .verb-cue) {
   font: var(--t-caption); letter-spacing: 0; text-transform: none;
 }
 /* caption-strong: подписи и служебные действия, без капса */
-:root:is(#_#_,[data-calm]) :is(.header-lang-track, .rule .use-name, .aside-card h4, .toc-label, .sh-sub, .q-strip > span, .part-badge, .verb-cue, .feedback-attempt span, .feedback-label, .feedback-explanation h4, .feedback .correct-lbl, .q-counter button, .question-tools button, .fix-btn, .learny-stage .eyebrow, .report-group, .dot-q.current, .learny-sample-label, .field label, .app-footer .footer-name, #learny-material-label) {
+:root:is(#_#_,[data-calm]) :is(.header-lang-track, .rule .use-name, .aside-card h4, .toc-label, .sh-sub, .q-strip > span, .feedback-attempt span, .feedback-label, .feedback-explanation h4, .feedback .correct-lbl, .q-counter button, .question-tools button, .fix-btn, .learny-stage .eyebrow, .report-group, .dot-q.current, .learny-sample-label, .field label, .app-footer .footer-name, #learny-material-label) {
   font: var(--t-caption-strong); letter-spacing: 0; text-transform: none;
 }
 /* на заданиях название урока стоит подписью над заданием */
 :root:is(#_#_,[data-calm]) :is(#view-drill,#view-match,#view-speak) .section-heading .eyebrow.eyebrow { font: var(--t-caption-strong); color: var(--fg-2); }
+/* на телефоне над заданием и так шапка, «← My space» и вкладки шагов: урок человек выбрал сам, его название здесь лишний слой */
+@media (max-width: 800px) {
+  :root:is(#_#_,[data-calm]) :is(#view-drill,#view-match,#view-speak) .section-heading .eyebrow.eyebrow { display: none; }
+  /* без названия маскот остался бы один на строке; в строке остается только текст: задание, счет или таймер */
+  :root:is(#_#_,[data-calm]) :is(#view-drill,#view-match,#view-speak) .section-heading .learny-step-mascot { display: none; }
+  :root:is(#_#_,[data-calm]) :is(#view-drill,#view-match,#view-speak) .section-heading :is(.score-pill, .timer) { margin-left: 0; }
+}
 
 /* ================= форма: один набор радиусов, высот и поверхностей ================= */
 /* кнопки */
@@ -104,7 +111,8 @@
 /* чипы: ответы, фильтры, оглавление */
 :root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip) { height: var(--calm-chip); min-height: var(--calm-chip); padding: 0 14px; border: 0; border-radius: var(--r-s); background: var(--calm-chip-bg, var(--bg)); color: var(--fg); box-shadow: none; }
 :root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip):hover { background: var(--calm-chip-hover, var(--surface)); }
-:root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip)[aria-pressed="true"] { background: var(--fromt-solid); color: var(--fg); box-shadow: inset 0 0 0 2px var(--fg); }
+/* выбранный вариант — «твой выбор»: сиреневая подложка с фиолетовой рамкой, как активный пропуск, а не черная обводка */
+:root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip)[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
 :root:is(#_#_,[data-calm]) .chips { gap: 8px; margin-bottom: var(--calm-stack); }
 :root:is(#_#_,[data-calm]) .learny-filter { min-height: var(--calm-chip); padding-inline: 12px; border-radius: var(--r-s); color: var(--fg-2); }
 :root:is(#_#_,[data-calm]) .learny-filter[aria-pressed="true"] { background: var(--surface); color: var(--fg); }
@@ -119,13 +127,15 @@
 :root:is(#_#_,[data-calm]) .learny-work .aside-card,
 :root:is(#_#_,[data-calm]) #view-drill .learny-work .aside-card,
 :root:is(#_#_,[data-calm]) #view-report .aside-card {
-  border: 0; border-radius: var(--r-l); background: var(--learny-paper-mint); color: var(--fg); padding: var(--calm-card-pad); box-shadow: none;
+  border: 0; border-radius: var(--r-l); background: var(--surface); color: var(--fg); padding: var(--calm-card-pad); box-shadow: none;
 }
 :root:is(#_#_,[data-calm]) .aside-card h4 { margin: 0 0 6px; color: var(--fg-2); }
+/* роли цвета: справка (подсказка, формула, вывод, начало ответа, разбор) — нейтральная серая подложка.
+   Мятный остается фирменным цветом главной и приветствия: в уроке он путался с зеленым «верно» */
 :root:is(#_#_,[data-calm]) :is(.rule .callout, .rule .formula, .learny-stage .starter, .cz-why) {
-  border: 0; border-radius: var(--r-m); background: var(--learny-paper-mint); padding: 12px 16px;
+  border: 0; border-radius: var(--r-m); background: var(--calm-chip-bg, var(--bg)); padding: 12px 16px;
 }
-:root:is(#_#_,[data-calm]) .rule:nth-child(n) .formula { background: var(--learny-paper-mint); }
+:root:is(#_#_,[data-calm]) .rule:nth-child(n) .formula { background: var(--calm-chip-bg, var(--bg)); }
 :root:is(#_#_,[data-calm]) .feedback { border-radius: var(--r-m); padding: 16px; margin-top: var(--calm-stack); }
 :root:is(#_#_,[data-calm]) .vb-row { border-radius: var(--r-m); background: var(--fromt-solid); padding: 12px 16px; }
 :root:is(#_#_,[data-calm]) :is(.sheet, .ask-box) { border-radius: var(--r-l) var(--r-l) 0 0; }
@@ -157,12 +167,14 @@
 :root:is(#_#_,[data-calm]) .intake-copy .lede { margin: 0; color: var(--fg-2); max-width: 40ch; }
 :root:is(#_#_,[data-calm]) .intake .drop-card .material-composer { border: 1px solid var(--calm-edge); border-radius: var(--r-m); }
 /* фокус поля: линия по краю карточки, а не отдельное кольцо вокруг нее */
-:root:is(#_#_,[data-calm]) .intake .drop-card .material-composer:focus-within { outline: 2px solid var(--accent); outline-offset: -1px; }
+/* фокус — нейтральной рамкой: фиолетовая обводка вокруг блока с фиолетовой кнопкой внутри давала рамку в рамке */
+:root:is(#_#_,[data-calm]) .intake .drop-card .material-composer:focus-within { outline: 2px solid var(--learny-muted-border); outline-offset: -1px; }
+:root:is(#_#_,[data-calm]) .intake .drop-card :is(#paste-area, .material-composer) { resize: none; }
 :root:is(#_#_,[data-calm]) .learny-material-label { padding: 20px 20px 0; color: var(--fg-2); }
 :root:is(#_#_,[data-calm]) .intake .drop-card #paste-area { padding: 8px 20px 12px; }
 :root:is(#_#_,[data-calm]) .intake .material-tools { padding: 8px 20px 20px; }
 :root:is(#_#_,[data-calm]) .intake .material-tools #parse-btn { height: var(--calm-control); border-radius: var(--r-s); }
-:root:is(#_#_,[data-calm]) .intake .attach-btn { height: auto; min-height: 32px; }
+:root:is(#_#_,[data-calm]) .intake .attach-btn { height: auto; min-height: 44px; }
 
 /* вход для гостя: готовый урок без ключа ИИ. Разовое действие, поэтому кнопка */
 .learny-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin-top: 24px; }
@@ -236,18 +248,27 @@
 :root:is(#_#_,[data-calm]) .learny-rail .dot-q { width: 40px; height: 40px; border: 0; border-radius: var(--r-s); background: transparent; color: var(--fg-2); outline: none; }
 :root:is(#_#_,[data-calm]) .learny-rail .dot-q.done-good { background: var(--practice-ok-soft); color: var(--practice-ok); }
 :root:is(#_#_,[data-calm]) .learny-rail .dot-q.done-bad { background: var(--practice-error-soft); color: var(--practice-error); }
-:root:is(#_#_,[data-calm]) .learny-rail .dot-q.current { background: var(--fg); color: var(--bg); }
+/* текущий вопрос — отметка «где я», а не действие: серая подложка, как у текущего раздела в оглавлении теории, а не самая тяжелая плашка экрана */
+:root:is(#_#_,[data-calm]) .learny-rail .dot-q.current { background: var(--surface); color: var(--fg); }
 :root:is(#_#_,[data-calm]) .learny-rail .dot-q:focus-visible { outline: var(--learny-rule) solid var(--accent); outline-offset: var(--learny-focus-offset); }
 
 /* карточка вопроса */
 :root:is(#_#_,[data-calm]) .q-counter { color: var(--fg-2); gap: 12px; }
 :root:is(#_#_,[data-calm]) :is(.q-counter button, .question-tools button, .fix-btn) { color: var(--fg-2); background: transparent; padding: 4px 0; border-radius: 0; }
 :root:is(#_#_,[data-calm]) :is(.q-counter button, .question-tools button, .fix-btn):hover { color: var(--fg); background: transparent; }
-:root:is(#_#_,[data-calm]) .question-tools { gap: 16px; }
+:root:is(#_#_,[data-calm]) .question-tools { gap: 24px; }
+/* зона нажатия не меньше 44×44: текстовые кнопки и кнопки шапки получают невидимое поле вокруг, вид не меняется.
+   Соседние «Ask» и «Fix» стоят через 24px, чтобы их поля не накладывались */
+:root:is(#_#_,[data-calm]) .q-counter button + button { margin-left: 12px; }
+:root:is(#_#_,[data-calm]) :is(.q-counter button, .question-tools button, .fix-btn, .header-actions .ibtn, .header-actions .header-lang, #brand-home) { position: relative; }
+:root:is(#_#_,[data-calm]) :is(.q-counter button, .question-tools button, .fix-btn, .header-actions .ibtn, .header-actions .header-lang, #brand-home)::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: max(100%, 44px); transform: translate(-50%, -50%);
+}
 :root:is(#_#_,[data-calm]) #drill-card .q-sentence { margin: var(--calm-stack) 0 20px; max-width: 40ch; }
 :root:is(#_#_,[data-calm]) .learny-work :is(.speak-q, .cz-text) { margin: var(--calm-stack) 0; max-width: 36ch; }
 :root:is(#_#_,[data-calm]) .learny-work .cz-text { max-width: 44ch; }
-:root:is(#_#_,[data-calm]) #match-card .eyebrow { color: var(--fg-2); margin-top: 12px; }
+/* задание в «Мини-историях» звучит так же, как в «Практике»: обычный текст, а не мелкая жирная подпись */
+:root:is(#_#_,[data-calm]) #match-card .eyebrow.eyebrow { font: var(--t-body); color: var(--fg); margin-top: 12px; }
 /* подпись «Your answer» повторяет подсказку в поле; для скринридера у поля остается aria-label */
 :root:is(#_#_,[data-calm]) .learny-answer-label { display: none; }
 :root:is(#_#_,[data-calm]) #drill-card .answer-row { gap: 8px; }
@@ -260,6 +281,16 @@
 :root:is(#_#_,[data-calm]) .learny-stage .starter { margin: 0; color: var(--fg-2); }
 :root:is(#_#_,[data-calm]) .learny-stage .starter b { color: var(--accent); }
 :root:is(#_#_,[data-calm]) .cz-text .gap { border-radius: var(--r-s); }
+/* пропуски: фиолетовый («твой ход») — только у того, который ждет ответа. Остальные нейтральные, как варианты ответа;
+   после проверки верный зеленый, неверный красный — те же цвета, что в «Практике» */
+:root:is(#_#_,[data-calm]) .cz-text .gap { background: var(--calm-chip-bg, var(--bg)); color: var(--fg); border-bottom-color: var(--fg-3); }
+:root:is(#_#_,[data-calm]) .cz-text .gap .gap-n { color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) .cz-text .gap.active { background: var(--accent-soft); color: var(--accent); border-bottom-color: var(--accent); }
+:root:is(#_#_,[data-calm]) .cz-text .gap.active .gap-n { color: var(--accent); }
+:root:is(#_#_,[data-calm]) .cz-text .gap.right { background: var(--practice-ok-soft); color: var(--practice-ok); border-bottom-color: var(--practice-ok); }
+:root:is(#_#_,[data-calm]) .cz-text .gap.wrong { background: var(--practice-error-soft); color: var(--practice-error); border-bottom-color: var(--practice-error); }
+/* номер пропуска читается: без прозрачности он проходит контраст 4.5 на сиреневой подложке */
+:root:is(#_#_,[data-calm]) .cz-text .gap :is(.gap-n, sup) { opacity: 1; }
 
 /* теория: фиолетовым остается только изучаемое слово, блоки разделены воздухом, а не линиями */
 :root:is(#_#_,[data-calm]) .learny-work .theory-body { gap: 12px; }
@@ -272,6 +303,16 @@
 :root:is(#_#_,[data-calm]) .rule .examples li::before { top: calc(.725em - 3px); }
 :root:is(#_#_,[data-calm]) .rule .callout { margin-top: 12px; }
 :root:is(#_#_,[data-calm]) .rule .fix-btn { color: var(--fg-3); }
+/* «Rule» в подсказке — вторичная кнопка, как «New lesson»: белая плашка с тонким краем, а не слово в тесной рамке */
+:root:is(#_#_,[data-calm]) #view-drill #rule-btn { min-height: var(--calm-chip); padding: 0 16px; border: 0; border-radius: var(--r-s); background: var(--fromt-solid); color: var(--fg); box-shadow: inset 0 0 0 1px var(--line); }
+:root:is(#_#_,[data-calm]) #view-drill #rule-btn:hover { background: var(--surface); }
+/* под «Fix» сразу идет пояснение, где нажатие переводит предложение: поле нажатия растет вверх, в пустой отступ над разделом */
+:root:is(#_#_,[data-calm]) .rule .fix-btn::after { top: auto; bottom: -4px; transform: translateX(-50%); }
+/* в темной теме третий серый на карточке не дотягивает до контраста 4.5, «Fix» берет второй */
+:root:is(#_#_,[data-calm])[data-theme="dark"] .rule .fix-btn { color: var(--fg-2); }
+@media (prefers-color-scheme: dark) {
+  :root:is(#_#_,[data-calm]):not([data-theme="light"]) .rule .fix-btn { color: var(--fg-2); }
+}
 @media (hover: hover) {
   :root:is(#_#_,[data-calm]) .rule .fix-btn { opacity: 0; transition: opacity var(--learny-motion) var(--learny-ease); }
   :root:is(#_#_,[data-calm]) .rule .use:is(:hover, :focus-within) .fix-btn,
@@ -351,7 +392,8 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   :root:is(#_#_,[data-calm]) #tabs { justify-content: space-between; gap: 8px; }
   :root:is(#_#_,[data-calm]) #tabs .tab { flex: 0 0 auto; height: 44px; padding-inline: 0; gap: 0; }
   :root:is(#_#_,[data-calm]) #tabs .tab .step-number { display: none; }
-  :root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip) { height: 36px; min-height: 36px; padding-inline: 12px; }
+  /* варианты ответа на телефоне — главное нажатие в упражнении: не ниже 44 */
+  :root:is(#_#_,[data-calm]) :is(.chip, .cz-opts .chip) { height: 44px; min-height: 44px; padding-inline: 12px; }
   /* подпись «Questions» повторяет счетчик в карточке */
   :root:is(#_#_,[data-calm]) .learny-rail .q-strip > span { display: none; }
   :root:is(#_#_,[data-calm]) .learny-rail :is(.dots, .toc) { scrollbar-width: none; gap: 4px; padding: 0; }
@@ -394,8 +436,22 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 :root:is(#_#_,[data-calm]) :is(#report-card td, .feedback-attempt s, .vb-row button) { font: var(--t-body); }
 :root:is(#_#_,[data-calm]) #report-card td:is(.given.ok, .given.no) { font: var(--t-body-strong); }
 :root:is(#_#_,[data-calm]) .summary-tile .value { font: var(--t-head); letter-spacing: var(--track-head); }
-:root:is(#_#_,[data-calm]) .summary-tile { border: 0; border-radius: var(--r-m); background: var(--learny-paper-mint); }
+/* фиолетовые цифры на мятной подложке спорили: подложка в тон цифрам, светло-фиолетовая */
+:root:is(#_#_,[data-calm]) .summary-tile { border: 0; border-radius: var(--r-m); background: var(--accent-soft); }
 :root:is(#_#_,[data-calm]) #view-report .section-heading { align-items: center; }
+/* таблица ответов на телефоне — список без прокрутки вбок: номер слева, под предложением подписанные «My answer» и «Correct» */
+@media (max-width: 630px) {
+  :root:is(#_#_,[data-calm]) #report-card .report-card-scroll { overflow: visible; }
+  :root:is(#_#_,[data-calm]) #report-card .answers-table { display: block; min-width: 0; }
+  :root:is(#_#_,[data-calm]) #report-card .answers-table thead { display: none; }
+  :root:is(#_#_,[data-calm]) #report-card .answers-table tbody { display: block; }
+  :root:is(#_#_,[data-calm]) #report-card .answers-table tr { display: grid; grid-template-columns: 24px minmax(0, 1fr); column-gap: 8px; row-gap: 4px; padding: 12px 8px; border-bottom: 1px solid var(--line); }
+  :root:is(#_#_,[data-calm]) #report-card .answers-table tr:last-child { border-bottom: 0; }
+  :root:is(#_#_,[data-calm]) #report-card .answers-table td { padding: 0; border: 0; width: auto; white-space: normal; }
+  :root:is(#_#_,[data-calm]) #report-card .answers-table td.num { grid-row: span 3; }
+  :root:is(#_#_,[data-calm]) #report-card .answers-table td:not(.num) { grid-column: 2; }
+  :root:is(#_#_,[data-calm]) #report-card .answers-table td:is(.given, .correct)::before { content: attr(data-label) ": "; font: var(--t-caption); color: var(--fg-2); }
+}
 :root:is(#_#_,[data-calm]) .learny-rail .dot-q.current { font: var(--t-caption-strong); }
 
 /* ---------- логотип: слово того же веса, что и заголовки; в темной теме тонкие линии маскотов светлеют ---------- */
@@ -410,8 +466,10 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 @media (max-width: 800px) {
   body.has-action .learny-actionbar {
     display: block; position: fixed; z-index: 19; inset: auto 0 0; height: calc(80px + env(safe-area-inset-bottom, 0px));
-    background: var(--bg); box-shadow: 0 -1px 0 var(--line);
+    background: var(--bg);
   }
+  /* линия только когда под панелью есть содержимое шага; иначе панель сливается с фоном */
+  body.has-action .learny-actionbar.is-covering { box-shadow: 0 -1px 0 var(--line); }
   :root:is(#_#_,[data-calm]) body.has-action :is(#drill-card .answer-row .primary-btn, #drill-card .nav-row .primary-btn, #match-card .nav-row .primary-btn) {
     position: fixed; z-index: 20; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px));
     bottom: calc(16px + env(safe-area-inset-bottom, 0px)); width: auto; height: var(--calm-control); margin: 0;
@@ -433,9 +491,11 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 [data-hero="b"] :is(.desk-nav,.desk-catalog,.desk-create,.desk-guide-step summary):focus-visible {
   outline: var(--learny-rule) solid var(--accent); outline-offset: var(--learny-focus-offset);
 }
+/* линия под шапкой — только когда под нее уходит содержимое (класс scrolled), на верху страницы шапка сливается с фоном */
 :root:is(#_#_,[data-calm])[data-hero="b"] body.home[data-calm-page]:not([data-calm-page="welcome"]) header.top {
-  background: var(--bg); border-block-end: var(--learny-hairline) solid var(--line);
+  background: var(--bg); border-block-end: 0;
 }
+:root:is(#_#_,[data-calm])[data-hero="b"] body.home.scrolled[data-calm-page]:not([data-calm-page="welcome"]) header.top { box-shadow: 0 1px 0 var(--line); }
 .learner-desk { padding-block-start: var(--learny-section-gap); }
 .learner-desk-head,.desk-resume { display: flex; align-items: center; justify-content: space-between; gap: var(--learny-s5); }
 .learner-desk-title { font: var(--t-display); letter-spacing: var(--track-display); margin: var(--learny-square); }
@@ -511,7 +571,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 /* ---------- «Сохранить кабинет»: окно с личным кодом ---------- */
 :root:is(#_#_,[data-calm]) .sheet :is(.space-label) { margin: 16px 0 6px; font: var(--t-caption-strong); color: var(--fg-2); }
 :root:is(#_#_,[data-calm]) .sheet .space-code {
-  margin: 0; padding: 16px; border-radius: var(--r-m); background: var(--learny-paper-mint); color: var(--fg);
+  margin: 0; padding: 16px; border-radius: var(--r-m); background: var(--calm-chip-bg, var(--bg)); color: var(--fg);
   font: var(--t-lead); letter-spacing: .04em; overflow-wrap: anywhere; user-select: all; -webkit-user-select: all;
 }
 :root:is(#_#_,[data-calm]) .sheet :is(.space-note, .space-status) { margin: 12px 0 0; font: var(--t-caption); color: var(--fg-2); }
@@ -528,3 +588,145 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 /* ---------- запасной вариант темной темы для сравнения: ?dark=graphite (холодная нейтральная база) ---------- */
 :root[data-calm][data-style="learny"][data-variant="fromt"][data-dark="graphite"][data-theme="dark"] { --bg: #121317; --fg: #f2f2f0; --fg-2: #b3b4bd; --fg-3: #8a8c97; --surface: #1c1e25; --surface-2: #282b34; --line: #33363f; --fromt-solid: #252830; --fromt-selected: #282b34; --fromt-controls: #1c1e25; --accent: #b29cff; --accent-hover: #c5b4ff; --accent-fg: #14101f; --accent-soft: #2a2545; --learny-purple: var(--accent); --calm-band: #191b21; --learny-paper-mint: #2d303b; --learny-editor-edge: #33363f; --learny-muted-border: #6e7080; --calm-chip-bg: #323642; --calm-chip-hover: #393c49; --calm-edge: transparent; }
 @media (prefers-color-scheme: dark) { :root[data-calm][data-style="learny"][data-variant="fromt"][data-dark="graphite"]:not([data-theme="light"]) { --bg: #121317; --fg: #f2f2f0; --fg-2: #b3b4bd; --fg-3: #8a8c97; --surface: #1c1e25; --surface-2: #282b34; --line: #33363f; --fromt-solid: #252830; --fromt-selected: #282b34; --fromt-controls: #1c1e25; --accent: #b29cff; --accent-hover: #c5b4ff; --accent-fg: #14101f; --accent-soft: #2a2545; --learny-purple: var(--accent); --calm-band: #191b21; --learny-paper-mint: #2d303b; --learny-editor-edge: #33363f; --learny-muted-border: #6e7080; --calm-chip-bg: #323642; --calm-chip-hover: #393c49; --calm-edge: transparent; } }
+
+/* маскоты нарисованы в игровой палитре: их синий #3038EE рядом с фиолетовым акцентом читался как второй фиолетовый.
+   В Calm синий заменяется фиолетовым акцента светлой темы; желтый, мятный и розовый остаются цветами иллюстраций */
+:root[data-calm] svg [fill="#3038EE" i] { fill: #6824dd; }
+
+
+/* ---------- режим урока на телефоне: одна строка «× · шаг ▾ · …» вместо шапки, «← My space» и вкладок;
+   номера вопросов — сегменты полосы прогресса сразу под ней, как у Brilliant и Speak ---------- */
+.learny-step-switch { display: none; }
+@media (max-width: 800px) {
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode header.top { position: sticky; top: 0; z-index: 18; background: var(--bg); box-shadow: none; border: 0; }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode header.top .bar,
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode #tabs,
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode #progress-wrap { display: none; }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode #tabs-row { padding-block: 4px; }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode .learny-lesson-context { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; gap: 8px; min-height: 48px; padding: 0; }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode .learny-back { justify-content: center; width: 44px; height: 44px; min-height: 44px; padding: 0; color: var(--fg); }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode .learny-back > span:first-child { display: none; }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode .learny-back-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode .learny-back::before {
+    content: ""; width: 22px; height: 22px; background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode .learny-step-switch {
+    display: inline-flex; justify-self: center; align-items: center; gap: 6px; max-width: 100%; min-height: 44px; padding: 0 12px;
+    border: 0; border-radius: var(--r-s); background: transparent; color: var(--fg); font: var(--t-body-strong); white-space: nowrap;
+  }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode .learny-step-switch > span:first-child { overflow: hidden; text-overflow: ellipsis; }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode .learny-step-caret {
+    flex: none; width: 16px; height: 16px; background: var(--fg-2);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode .learny-lesson-context #menu-btn { justify-self: end; }
+  /* в упражнениях полоса вопросов идет первой, сразу под верхней строкой */
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode :is(#view-drill, #view-match, #view-speak).learny-stage { grid-template: "rail" auto "title" auto "work" auto / minmax(0, 1fr); padding-top: 4px; }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode :is(#view-drill, #view-match, #view-speak) .learny-rail .dots { display: flex; flex-wrap: nowrap; gap: 3px; width: 100%; overflow: visible; }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode :is(#view-drill, #view-match, #view-speak) .learny-rail .dot-q {
+    --seg: var(--line); flex: 1 1 0; min-width: 0; width: auto; height: 24px; padding: 0; border-radius: 0;
+    font-size: 0; color: transparent; background: linear-gradient(var(--seg) 0 0) center / 100% 4px no-repeat;
+  }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode :is(#view-drill, #view-match, #view-speak) .learny-rail .dot-q.done-good { --seg: var(--practice-ok); }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode :is(#view-drill, #view-match, #view-speak) .learny-rail .dot-q.done-bad { --seg: var(--practice-error); }
+  :root:is(#_#_,[data-calm]) body.learny-lesson-mode :is(#view-drill, #view-match, #view-speak) .learny-rail .dot-q.current { --seg: var(--accent); }
+}
+/* список шагов в нижнем листе */
+:root:is(#_#_,[data-calm]) .learny-steps-title { margin: 4px 0 12px; font: var(--t-head); }
+:root:is(#_#_,[data-calm]) .learny-steps .opt { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; }
+:root:is(#_#_,[data-calm]) .learny-steps .opt[aria-current="step"] { background: var(--surface); font-weight: 600; }
+:root:is(#_#_,[data-calm]) .learny-step-done { color: var(--practice-ok); }
+
+/* ---------- итог ответа в «Практике»: на телефоне — в нижней полосе у кнопки, в карточке — разбор на нейтральной подложке ---------- */
+.learny-actionbar-verdict { display: none; }
+@media (max-width: 800px) {
+  body.has-result .learny-actionbar { height: calc(116px + env(safe-area-inset-bottom, 0px)); box-shadow: none; }
+  body.has-result .learny-actionbar[data-result="good"] { background: var(--practice-ok-soft); }
+  body.has-result .learny-actionbar[data-result="bad"] { background: var(--practice-error-soft); }
+  body.has-result .learny-actionbar-verdict {
+    display: block; position: absolute; top: 16px; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px));
+    font: var(--t-body-strong);
+  }
+  body.has-result .learny-actionbar[data-result="good"] .learny-actionbar-verdict { color: var(--practice-ok); }
+  body.has-result .learny-actionbar[data-result="bad"] .learny-actionbar-verdict { color: var(--practice-error); }
+  :root:is(#_#_,[data-calm]) body.has-result .app-footer { padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px)); }
+  :root:is(#_#_,[data-calm]) body.has-result.learny-lesson-mode #drill-feedback .feedback .verdict { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  :root:is(#_#_,[data-calm]) body.has-result.learny-lesson-mode #drill-feedback .feedback { background: var(--calm-chip-bg, var(--bg)); }
+}
+/* после ответа подсказка уже не нужна: остается только кнопка «Rule» */
+:root:is(#_#_,[data-calm]) #view-drill:has(#drill-feedback .feedback) .aside-card:not(#forms-card) :is(h4, #hint-text) { display: none; }
+:root:is(#_#_,[data-calm]) #view-drill:has(#drill-feedback .feedback) .aside-card:not(#forms-card) { background: transparent; padding: 0; }
+:root:is(#_#_,[data-calm]) #view-drill:has(#drill-feedback .feedback) #rule-btn { margin-top: 0 !important; }
+
+/* ---------- кабинет: один заголовок страницы, разделы на ступень ниже, урок не повторяется, у рабочего пространства нет подвала ---------- */
+:root:is(#_#_,[data-calm]) body[data-calm-page="cabinet"] :is(#learny-library-title, #vocab-box .vb-head h2) { font: var(--t-head); letter-spacing: var(--track-head); }
+:root:is(#_#_,[data-calm]) body[data-calm-page="cabinet"] #learny-library { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+:root:is(#_#_,[data-calm]) body[data-calm-page="cabinet"] #learny-library .desk-catalog { justify-self: end; font: var(--t-body); color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) body[data-calm-page="cabinet"] #lesson-list .lesson-card.is-resumed { display: none; }
+:root:is(#_#_,[data-calm]) body.home:is([data-calm-page="cabinet"], [data-calm-page="catalog"]) .app-footer { display: none; }
+/* строка урока: шаг и тема одной строкой подписи («Theory · Grammar · B1–B2») */
+.learny-lesson-meta-inline { display: none; }
+@media (max-width: 630px) {
+  :root:is(#_#_,[data-calm]) #lesson-list .learny-lesson-meta { display: none; }
+  :root:is(#_#_,[data-calm]) #lesson-list .learny-lesson-meta-inline { display: inline; }
+  :root:is(#_#_,[data-calm]) #lesson-list .learny-lesson-sub { font: var(--t-caption); color: var(--fg-2); }
+  :root:is(#_#_,[data-calm]) #lesson-list .learny-lesson-progress + .learny-lesson-meta-inline::before { content: " · "; }
+}
+
+/* ---------- окно нового урока и меню ---------- */
+.learny-own-note { grid-column: 1 / -1; margin: 0; font: var(--t-caption); color: var(--fg-2); max-width: var(--learny-measure); }
+.learny-visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.learny-replaced { display: none !important; }
+:root:is(#_#_,[data-calm]) #menu .opts .learny-menu-last { margin-top: 8px; }
+
+/* ---------- теория, говорение, отчет, линии ---------- */
+/* теория на телефоне: «Fix» появляется у блока, по которому нажали (или где фокус) */
+@media (hover: none) {
+  :root:is(#_#_,[data-calm]) .rule .use .fix-btn { visibility: hidden; }
+  :root:is(#_#_,[data-calm]) .rule .use:is(.is-active, :focus-within) .fix-btn { visibility: visible; }
+}
+/* говорение: таймер виден только во время записи; «Fix» не съезжает на отдельную строку */
+:root:is(#_#_,[data-calm]) #view-speak:not(:has(.rec-live)) #timer { display: none !important; }
+:root:is(#_#_,[data-calm]) #speak-card .q-counter { flex-wrap: nowrap; }
+:root:is(#_#_,[data-calm]) #speak-card .q-counter > span:first-child { flex: none; white-space: nowrap; }
+:root:is(#_#_,[data-calm]) #speak-card .q-counter .part-badge { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:root:is(#_#_,[data-calm]) #speak-card .q-counter .fix-btn { flex: none; margin-left: auto; }
+@media (max-width: 800px) {
+  /* запись — главное действие внизу, как «Check»; «Type the answer» остается в карточке во всю ширину */
+  :root:is(#_#_,[data-calm]) body.has-action :is(#speak-card .nav-row .primary-btn, #speak-card #s-stop, #speak-card:not(:has(.nav-row .primary-btn)) #s-rec) {
+    position: fixed; z-index: 20; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px)); width: auto; height: var(--calm-control); margin: 0;
+  }
+  :root:is(#_#_,[data-calm]) #speak-card .sp-actions .ghost-btn { width: 100%; }
+}
+/* отчет: одна дорога назад — вкладки шагов (на телефоне список шагов) и «My space», без отдельной «← Back to the lesson» */
+:root:is(#_#_,[data-calm]) #report-back { display: none; }
+/* окно перед отчетом: разделы списком, по строке на раздел */
+:root:is(#_#_,[data-calm]) #ask-text { white-space: pre-line; }
+/* вкладки шагов на компьютере: без линии-дорожки, текущий шаг подчеркнут фиолетовым («твой ход»), а не черным */
+:root:is(#_#_,[data-calm]) #tabs { border-bottom: 0; }
+:root:is(#_#_,[data-calm]) #tabs .tab[aria-selected="true"] { border-bottom-color: var(--accent); }
+
+/* ---------- вторая попытка: пометка под предложением, использованный вариант зачеркнут, подсказка открывается по запросу ---------- */
+:root:is(#_#_,[data-calm]) .retry-note { margin-top: var(--calm-stack); border-radius: var(--r-m); padding: 12px 16px; background: var(--practice-error-soft); color: var(--fg); outline: 0; }
+:root:is(#_#_,[data-calm]) .retry-note b { display: block; font: var(--t-body-strong); color: var(--practice-error); }
+:root:is(#_#_,[data-calm]) .retry-note p { margin: 6px 0 0; font: var(--t-body); color: var(--fg); }
+:root:is(#_#_,[data-calm]) .retry-note .feedback-attempt { margin: 6px 0 0; }
+:root:is(#_#_,[data-calm]) .chip.tried { color: var(--fg-3); text-decoration: line-through; text-decoration-color: var(--practice-error); background: transparent; box-shadow: inset 0 0 0 1px var(--line); cursor: default; }
+:root:is(#_#_,[data-calm]) .aside-card:has(#hint-btn) h4 { display: none; }
+:root:is(#_#_,[data-calm]) .aside-card:has(#hint-btn) { background: transparent; padding: 0; }
+:root:is(#_#_,[data-calm]) #hint-text:has(#hint-btn) { margin: 0; }
+/* пока идет вторая попытка, подсказка стоит в пометке, рядом остается только «Rule» */
+:root:is(#_#_,[data-calm]) #view-drill:has(.retry-note) .aside-card:not(#forms-card) :is(h4, #hint-text) { display: none; }
+:root:is(#_#_,[data-calm]) #view-drill:has(.retry-note) .aside-card:not(#forms-card) { background: transparent; padding: 0; }
+:root:is(#_#_,[data-calm]) #view-drill:has(.retry-note) #rule-btn { margin-top: 0 !important; }
+:root:is(#_#_,[data-calm]) .feedback .feedback-attempt + .feedback-attempt { margin-top: -6px; }
+:root:is(#_#_,[data-calm]) #report-card .try-note { display: block; font: var(--t-caption); color: var(--fg-2); }
+/* на компьютере окно стоит по центру, поэтому это обычный диалог: углы скруглены со всех сторон, «ручки» для смахивания нет */
+@media (min-width: 600px) {
+  :root:is(#_#_,[data-calm]) :is(.sheet, .ask-box) { border-radius: var(--r-l); padding-top: 20px; }
+  :root:is(#_#_,[data-calm]) .sheet .grab, :root:is(#_#_,[data-calm]) .ask-box::before { display: none; }
+}

@@ -472,6 +472,7 @@ body.home main{padding-top:0}
 .q-sentence{font-family:var(--read-font);font-size:23px;line-height:1.55;margin:14px 0 20px;max-width:min(100%,44ch)}
 .blank{display:inline-block;min-width:4.5ch;border-bottom:2px solid var(--accent);text-align:center;color:var(--accent);padding:0 .15em}
 .blank.empty{border-bottom-color:var(--fg-3)}
+.blank.filled{color:var(--practice-ok,var(--accent));border-bottom-color:currentColor;font-weight:600}
 .blank.miss{color:var(--danger);border-bottom-color:var(--danger);text-decoration:line-through}
 .feedback .correct-lbl{font-family:var(--font);font-size:13px;font-weight:600;color:var(--fg-2);text-transform:uppercase;letter-spacing:.05em;margin-right:4px}
 .verb-cue{font-family:var(--font);font-size:13px;font-weight:600;color:var(--fg-2);background:var(--bg);border-radius:999px;padding:3px 10px;margin-left:6px;vertical-align:middle;white-space:nowrap}
@@ -688,6 +689,8 @@ body.home main{padding-top:0}
   .prob-table tr,.sum-table tr{display:block;padding:10px 0;border-bottom:1px solid var(--line)}
   .prob-table tr:last-child,.sum-table tr:last-child{border-bottom:0}
   .prob-table td,.sum-table td{display:block;padding:2px 0;border-bottom:0;white-space:normal}
+  /* в строку-карточку ячейки идут на всю ширину: доли колонок с десктопа сжимали «Past continuous» до «continuo / us» */
+  .prob-table td:nth-child(n),.sum-table td:nth-child(n){width:auto}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -1454,8 +1457,8 @@ const UI = {
                   en: { s: "Sentence", verb: "Verb cue", a: "Answer", also: "Other answers", why: "Explanation", hint: "Hint", name: "Heading", note: "Note", forms: "Formulas", ex: "Examples", wrong: "Mistakes", summary: "Table", callout: "Callout", q: "Question", starter: "Sentence opener" } },
   extendBtn:    { ru: "Дополнить урок", en: "Extend the lesson" },
   trBtn:        { ru: m => `Перевод теории: ${m === "show" ? "сразу" : "по тапу"}`, en: m => `Theory translation: ${m === "show" ? "always shown" : "on tap"}` },
-  reportWarn:   { ru: (list, hides) => `Вы ещё не закончили: ${list}. ${hides ? "Разделы, где нет ни одного ответа, в отчёт учителю не попадут. " : ""}Перейти к отчёту?`,
-                  en: (list, hides) => `Not finished yet: ${list}. ${hides ? "Sections with no answers at all will be left out of the report. " : ""}Go to the report?` },
+  reportWarn:   { ru: (list, hides) => `Вы ещё не закончили:\n${list}\n\n${hides ? "Разделы, где нет ни одного ответа, в отчёт учителю не попадут.\n\n" : ""}Перейти к отчёту?`,
+                  en: (list, hides) => `Not finished yet:\n${list}\n\n${hides ? "Sections with no answers at all will be left out of the report.\n\n" : ""}Go to the report?` },
   reportWarnYes:{ ru: "Да, к отчёту", en: "Yes, go to report" },
   gapNone:      { ru: "не начато", en: "not started" },
   gapPart:      { ru: (d, n) => `${d} из ${n}`, en: (d, n) => `${d} of ${n}` },
@@ -1622,6 +1625,10 @@ const UI = {
   menuTitle:    { ru: "Домашка", en: "Homework" },
   langLabel:    { ru: "Язык подсказок", en: "Hint language" },
   switchLanguage: { ru: "Переключить на английский", en: "Switch to Russian" },
+  menuLabel:    { ru: "Меню", en: "Menu" },
+  sectionsLabel:{ ru: "Разделы", en: "Sections" },
+  stepsLabel:   { ru: "Шаги урока", en: "Lesson steps" },
+  gapLabel:     { ru: (n, w) => w ? `Пропуск ${n}: ${w}` : `Пропуск ${n}`, en: (n, w) => w ? `Gap ${n}: ${w}` : `Gap ${n}` },
   themeLabel:   { ru: "Тема", en: "Theme" },
   themeLight:   { ru: "Светлая", en: "Light" },
   themeDark:    { ru: "Тёмная", en: "Dark" },
@@ -1674,6 +1681,12 @@ const UI = {
   correctSentence: { ru: "Правильное предложение", en: "Correct sentence" },
   explanationLabel: { ru: "Почему так", en: "Why this works" },
   hintLabel:    { ru: "Подсказка", en: "Hint" },
+  hintShow:     { ru: "Показать подсказку", en: "Show hint" },
+  retryTitle:   { ru: "Пока не то. Попробуйте снова", en: "Not quite. One more try" },
+  verdictFixed: { ru: "Верно со второй попытки", en: "Right on the second try" },
+  firstTryLabel:{ ru: "Первая попытка", en: "First try" },
+  secondTry:    { ru: w => `вторая попытка, сначала: ${w}`, en: w => `second try, first: ${w}` },
+  navReport:    { ru: "Итоги", en: "Results" },
   formsLabel:   { ru: "Формы будущего", en: "Future forms" },
   questionsLabel:{ ru: "Вопросы", en: "Questions" },
   qCounter:     { ru: (a,b) => `Вопрос ${a} из ${b}`, en: (a,b) => `Question ${a} of ${b}` },
@@ -1758,6 +1771,7 @@ const UI = {
   countWords:   { ru: n => `${n} ${plural(n, "слово", "слова", "слов")}`, en: n => `${n} ${n === 1 ? "word" : "words"}` },
   tileSpeak:    { ru: "Говорение", en: "Speaking" },
   tileOf:       { ru: n => `из ${n}`, en: n => `of ${n}` },
+  tileCorrect:  { ru: n => `верно: ${n}`, en: n => `${n} correct` },
   tileSpoken:   { ru: n => `${n} пройдено`, en: n => `${n} covered` },
   colNum:       { ru: "№", en: "#" },
   colSentence:  { ru: "Предложение", en: "Sentence" },
@@ -4192,6 +4206,9 @@ function applyLang() {
   $$(".lang-switch button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === S.lang)));
   $("#header-lang").dataset.language = S.lang;
   $("#header-lang").setAttribute("aria-label", t("switchLanguage"));
+  $("#menu-btn").setAttribute("aria-label", t("menuLabel"));
+  $(".top-nav").setAttribute("aria-label", t("sectionsLabel"));
+  $("#tabs").setAttribute("aria-label", t("stepsLabel"));
   /* Phosphor Icons · Duotone · MIT, см. LICENSE.phosphor-icons */
   const HOW_ICONS = [
     "<path d=\"M208,48V216a8,8,0,0,1-8,8H56a8,8,0,0,1-8-8V48a8,8,0,0,1,8-8H96a39.83,39.83,0,0,0-8,24v8h80V64a39.83,39.83,0,0,0-8-24h40A8,8,0,0,1,208,48Z\" opacity=\"0.2\"/><path d=\"M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.26a47.92,47.92,0,0,1,71.48,0H200A16,16,0,0,1,216,48ZM96,64h64a32,32,0,0,0-64,0ZM200,48H173.25A47.93,47.93,0,0,1,176,64v8a8,8,0,0,1-8,8H88a8,8,0,0,1-8-8V64a47.93,47.93,0,0,1,2.75-16H56V216H200Z\"/>",
@@ -4259,9 +4276,13 @@ function lessonCompletion(steps) {
   const percent = total ? Math.min(complete ? 100 : 99, Math.round(done / total * 100)) : 0;
   return { total, done, complete, percent };
 }
+/* Свой урок считается начатым, как только его открыли. Готовый образец — после первого задания:
+   открыть и полистать теорию еще не значит заниматься, такой урок не должен занимать «Продолжить». */
 function startedLesson(l) {
   const p = S.progress[l.id];
-  return !!p && (Boolean(p.lastStage || p.theorySeen) || Object.keys(p.speak?.answers || {}).length > 0 || stepProgress(l).some(step => step.n > 0 || p[step.key]?.i > 0));
+  if (!p) return false;
+  const worked = Object.keys(p.speak?.answers || {}).length > 0 || stepProgress(l).some(step => step.key !== "theory" && (step.n > 0 || p[step.key]?.i > 0));
+  return worked || (!!l.own && Boolean(p.lastStage || p.theorySeen));
 }
 function savedStage(l, steps = stepProgress(l)) {
   const p = S.progress[l.id] || {};
@@ -4297,7 +4318,7 @@ function renderLessonList() {
       return `<button class="lesson-card" data-lesson="${escH(l.id)}">
         <span class="learny-lesson-copy">
           <span class="learny-lesson-name">${escH(l.title)}</span>
-          ${started ? `<span class="learny-lesson-progress">${escH(position)}${completion.done ? ` · ${completion.percent}%` : ""}</span>` : ""}
+          <span class="learny-lesson-sub">${started ? `<span class="learny-lesson-progress">${escH(position)}${completion.done ? ` · ${completion.percent}%` : ""}</span>` : ""}<span class="learny-lesson-meta-inline">${escH(L(l.date))}</span></span>
         </span>
         <span class="learny-lesson-meta">${escH(L(l.date))}</span>
         <span class="learny-row-arrow" aria-hidden="true">${completion.complete ? "✓" : "→"}</span>
@@ -4338,8 +4359,10 @@ function renderTabs() {
   $("#tabs").innerHTML =
     `<button class="tab" data-view="home"><span aria-hidden="true">←</span> ${t("navHome")}</button>
      <span class="tab-divider"></span>` +
-    steps.map((v, i) => `<button class="tab" data-view="${v}"><span class="step-number">${i+1}</span> ${label(v)} <span class="tick" data-tick="${v}" hidden>✓</span></button>`).join("");
-  $$("#tabs .tab").forEach(x => x.addEventListener("click", () => show(x.dataset.view)));
+    steps.map((v, i) => `<button class="tab" data-view="${v}"><span class="step-number">${i+1}</span> ${label(v)} <span class="tick" data-tick="${v}" hidden>✓</span></button>`).join("") +
+    // в рабочей версии итоги и отчет учителю — последний шаг урока, а не только кнопка в меню
+    (document.documentElement.hasAttribute("data-calm") ? `<button class="tab" data-view="report"><span class="step-number">${steps.length + 1}</span> ${t("navReport")}</button>` : "");
+  $$("#tabs .tab").forEach(x => x.addEventListener("click", () => x.dataset.view === "report" ? openReport() : show(x.dataset.view)));
 }
 
 /* ============ навигация ============ */
@@ -4908,7 +4931,7 @@ function renderTheory() {
       <div class="rule-head"><span class="modal-name">${TR(r.modal)}</span><span class="gloss">${TR(r.gloss)}</span></div>
       ${r.uses.map((u, j) => `
         <div class="use">
-          <div class="use-head"><div class="use-name">${TR(u.name)}</div><button class="fix-btn" data-fix-path="theory.${i}.uses.${j}">${t("fixBtn")}</button></div>
+          <div class="use-head"><div class="use-name">${TR(u.name)}</div><button class="fix-btn" data-fix-path="theory.${i}.uses.${j}" aria-label="${escH(t("fixBtn") + ": " + plainEn(u.name))}">${t("fixBtn")}</button></div>
           ${u.note ? `<p class="use-note">${TR(u.note)}</p>` : ""}
           ${u.forms ? u.forms.map(f => `<div class="formula">${EN(f[0]) ? `<span class="formula-label">${EN(f[0])}</span>` : ""}${f[1]}</div>`).join("") : ""}
           ${u.table ? `<div class="table-scroll"><table class="prob-table">${u.table.map(row =>
@@ -5007,13 +5030,25 @@ function drillStats() {
   const vals = Object.values(prog().drill.answered);
   return { done: vals.length, ok: vals.filter(v => v === "good" || v === "also").length };
 }
+/* Четыре варианта на вопрос вместо всего списка: верный ответ, один из тоже принятых, слово-ловушка и соседи по списку.
+   Набор зависит только от номера вопроса, поэтому при возврате он тот же. Свой ответ по-прежнему можно ввести в поле. */
 function drillChoices(l, index) {
-  const choices = l.drill.chips;
-  if (!document.documentElement.hasAttribute("data-calm") || l.id !== "modals" || index !== 0 || !choices?.length) return choices;
-  const question = l.drill.items[index];
-  const shortlist = [...new Set([question.a[0], ...(question.also || []), choices[0], choices[choices.length - 1], ...choices])].slice(0, 4);
+  const choices = l.drill.chips, question = l.drill.items[index];
+  if (!document.documentElement.hasAttribute("data-calm") || !question || !choices || choices.length <= 4) return choices;
+  const also = question.also || [];
+  const start = (index * 7 + 3) % choices.length;
+  const neighbours = index === 0 ? [choices[0], choices[choices.length - 1], ...choices] : [...choices.slice(start), ...choices.slice(0, start)];
+  const shortlist = [...new Set([question.a[0], also[0], question.trap?.word, ...neighbours.filter(word => !also.includes(word))].filter(Boolean))].slice(0, 4);
   return [...new Set([...choices, ...shortlist])].filter(word => shortlist.includes(word));
 }
+/* слово в пропуске после проверки: «тоже подходит» оставляет ваш вариант, в начале предложения оно с заглавной буквы */
+function gapWord(q, state, raw) {
+  const mine = state === "also" ? (q.also || []).find(a => norm(a) === norm(raw || "")) : null;
+  const word = mine || q.a[0], before = stripTags(q.s[0]).trim();
+  return !before || /[.!?…]["'”’)]?$/.test(before) ? word.charAt(0).toUpperCase() + word.slice(1) : word;
+}
+/* вторая попытка есть только в рабочей версии Learny */
+const drillRetry = () => document.documentElement.hasAttribute("data-calm");
 function renderDrill() {
   const l = lesson(), D = l.drill, items = D.items, p = prog().drill;
   const st = drillStats();
@@ -5027,10 +5062,17 @@ function renderDrill() {
   if (p.i >= items.length) { $("#rule-box").innerHTML = ""; return renderDrillDone(); }
 
   const i = Math.min(p.i, items.length - 1), q = items[i], state = p.answered[i];
-  $("#hint-text").innerHTML = TR(q.hint);
+  // первая ошибка не закрывает вопрос: остается вторая попытка, а подсказка открывается сама
+  const tried = !state && p.tries?.[i]?.length ? p.tries[i] : null;
+  const hinted = !drillRetry() || !q.hint || !!state || !!tried || !!p.hinted?.[i];
+  $("#hint-text").innerHTML = hinted ? TR(q.hint) : `<button class="fix-btn" id="hint-btn">${t("hintShow")}</button>`;
+  $("#hint-btn")?.addEventListener("click", () => { (p.hinted ??= {})[i] = true; save(); $("#hint-text").innerHTML = TR(q.hint); });
   renderRuleBox(i, q);
 
   const choices = drillChoices(l, i);
+  const used = c => !!tried?.some(x => norm(x) === norm(c));
+  const shown = state ? gapWord(q, state, p.lastInput?.[i]) : "";
+  const retryNote = tried ? `<div class="retry-note" id="drill-retry" role="status" tabindex="-1"><b>${t("retryTitle")}</b>${choices?.some(used) ? "" : `<p class="feedback-attempt"><span>${t("answerLabel")}</span><s>${escH(tried[0])}</s></p>`}${q.hint ? `<p>${TR(q.hint)}</p>` : ""}</div>` : "";
   const cue = q.verb ? `<div class="drill-cue">${t("verbLabel")} <span class="verb-cue">${q.verb}</span></div>` : "";
   $("#drill-card").innerHTML = `
     <div class="q-counter">
@@ -5039,10 +5081,11 @@ function renderDrill() {
       <span class="question-tools"><button class="fix-btn" id="drill-ask">${t("askBtn")}</button>
       <button class="fix-btn" id="drill-fix">${t("fixBtn")}</button></span>
     </div>
-    <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? q.a[0] : "___") + stripTags(q.s[1]))}">${q.s[0]}<span class="blank empty">&nbsp;&nbsp;&nbsp;&nbsp;</span>${q.s[1]}</p>
+    <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? shown : "___") + stripTags(q.s[1]))}">${q.s[0]}${state ? `<span class="blank filled">${shown}</span>` : `<span class="blank empty">&nbsp;&nbsp;&nbsp;&nbsp;</span>`}${q.s[1]}</p>
     ${cue}
+    ${retryNote}
     ${state ? "" : `
-      ${choices ? `<div class="chips">${choices.map(c => `<button class="chip" data-chip="${escH(c)}" aria-pressed="false">${escH(c)}</button>`).join("")}</div>` : ""}
+      ${choices ? `<div class="chips">${choices.map(c => `<button class="chip${used(c) ? " tried" : ""}" data-chip="${escH(c)}" aria-pressed="false"${used(c) ? " disabled" : ""}>${escH(c)}</button>`).join("")}</div>` : ""}
       <div class="answer-row">
         ${document.documentElement.dataset.style === "learny" ? `<label class="learny-answer-label" for="drill-input">${t("answerLabel")}</label>` : ""}
         <input id="drill-input" aria-label="${t("answerLabel")}" aria-describedby="drill-feedback" placeholder="${D.chips?.length ? t("inputPh") : t("inputPhForm")}" autocomplete="off" autocapitalize="off" spellcheck="false">
@@ -5062,12 +5105,15 @@ function wireDrill(i) {
   const inp = $("#drill-input");
   if (inp) {
     const chips = $$("#drill-card .chip");
+    // «Check» неактивна, пока нет ответа, как в «Мини-историях»; Enter по пустому полю по-прежнему подсказывает, что нужен ответ
+    const syncCheck = () => { const button = $("#check-btn"); if (button) button.disabled = !inp.value.trim(); };
     const updateAnswer = selected => {
       if (selected) {
         inp.value = selected.dataset.chip;
         inp.dataset.selectedChip = selected.dataset.chip;
       } else delete inp.dataset.selectedChip;
       chips.forEach(chip => chip.setAttribute("aria-pressed", String(chip === selected)));
+      syncCheck();
       if (inp.hasAttribute("aria-invalid") && inp.value.trim()) {
         inp.removeAttribute("aria-invalid");
         $("#drill-feedback").textContent = "";
@@ -5075,12 +5121,13 @@ function wireDrill(i) {
     };
     chips.forEach(chip => chip.addEventListener("click", () => updateAnswer(chip)));
     inp.addEventListener("input", () => updateAnswer(null));
+    syncCheck();
     inp.addEventListener("keydown", e => {
       if (e.key !== "Enter" || e.isComposing || e.keyCode === 229 || e.repeat) return;
       e.preventDefault();
       check(i);
     });
-    if (document.documentElement.hasAttribute("data-calm") && chips.length) chips[0].focus({ preventScroll: true });
+    if (document.documentElement.hasAttribute("data-calm") && chips.length) chips.find(chip => !chip.disabled)?.focus({ preventScroll: true });
     else inp.focus();
   }
   $("#check-btn")?.addEventListener("click", () => check(i));
@@ -5126,24 +5173,30 @@ function check(i) {
   }
   const q = lesson().drill.items[i], p = prog().drill, v = norm(raw);
   const best = q.a.map(norm), also = (q.also || []).map(norm);
-  p.answered[i] = best.includes(v) ? "good" : also.includes(v) || isTypo(v, best) ? "also" : "bad";
+  const result = best.includes(v) ? "good" : also.includes(v) || isTypo(v, best) ? "also" : "bad";
+  if (result === "bad" && drillRetry() && !p.tries?.[i]?.length) {
+    (p.tries ??= {})[i] = [raw];
+    save(); renderDrill();
+    $("#drill-retry")?.focus({ preventScroll: true });
+    return;
+  }
+  p.answered[i] = result;
   p.lastInput[i] = raw;
   save(); renderDrill(); updateProgress();
   $("#drill-feedback")?.focus({ preventScroll: true });
 }
 function showFeedback(i, raw) {
   const q = lesson().drill.items[i], state = prog().drill.answered[i];
-  const full = `${q.s[0]}<b>${q.a[0]}</b>${q.s[1]}`;
   const typo = state === "also" && !(q.also || []).map(norm).includes(norm(raw));
-  const verdict = state === "good" ? t("verdictGood") : typo ? t("verdictTypo") : state === "also" ? t("verdictAlso") : t("verdictBad");
+  const first = state !== "bad" ? prog().drill.tries?.[i]?.[0] : "";
+  const verdict = state === "good" ? t(first ? "verdictFixed" : "verdictGood") : typo ? t("verdictTypo") : state === "also" ? t("verdictAlso") : t("verdictBad");
   const lead = typo ? t("typoLead", escH(raw), q.a[0]) : state === "also" ? t("alsoLead", escH(raw), q.a[0]) : "";
   const alsoLine = q.also ? t("alsoLine", q.also.join(", ")) : "";
   $("#drill-feedback").innerHTML = `
     <div class="feedback ${state === "bad" ? "bad" : "good"}">
       <span class="verdict"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/>${state === "bad" ? '<path d="M12 7v6m0 3v1"/>' : '<path d="m8 12 2.5 2.5L16 9"/>'}</svg>${verdict}</span>
       ${state === "bad" ? `<p class="feedback-attempt"><span>${t("answerLabel")}</span><s>${escH(raw)}</s></p>` : ""}
-      <span class="feedback-label">${t("correctSentence")}</span>
-      <p class="full">${full}</p>
+      ${first ? `<p class="feedback-attempt"><span>${t("firstTryLabel")}</span><s>${escH(first)}</s></p>` : ""}
       <div class="feedback-explanation"><h4>${t("explanationLabel")}</h4>
       ${lead ? `<p class="why">${lead}</p>` : ""}
       ${state === "bad" ? `<p class="why wrong-why" id="why-wrong" hidden></p>` : ""}
@@ -5264,7 +5317,7 @@ function renderDrillDone() {
     </div>`;
   if (!hasNext) renderLessonEnd();
   $("#redo-wrong")?.addEventListener("click", () => {
-    wrong.forEach(i => { delete p.answered[i]; delete p.lastInput[i]; });
+    wrong.forEach(i => { delete p.answered[i]; delete p.lastInput[i]; delete p.tries?.[i]; });
     p.redo = open.slice();   // повтор идёт только по тому, что не получилось, а не по всем вопросам подряд
     p.i = open[0]; save(); renderDrill(); updateProgress();
   });
@@ -5308,7 +5361,7 @@ function renderCloze(M, items, p) {
     if (k % 2 === 0) return x.replace(/\s+(?=[A-Z]: )/g, "<br>");   // диалог «A: … B: …» — каждая реплика с новой строки
     const g = +x - 1, pick = U.picks[g];
     const cls = checked ? (pick === gaps[g].a ? "right" : "wrong") : (g === U.active ? "active" : "");
-    return `<button class="gap ${cls}" data-gap="${g}" ${checked ? "disabled" : ""}>${pick ? `${escH(pick)}<sup>${x}</sup>` : `<span class="gap-n">${x}</span>`}</button>`;
+    return `<button class="gap ${cls}" data-gap="${g}" ${checked ? "disabled" : ""} aria-label="${escH(t("gapLabel", x, pick ? stripTags(pick) : ""))}">${pick ? `${escH(pick)}<sup>${x}</sup>` : `<span class="gap-n">${x}</span>`}</button>`;
   }).join("");
   const why = checked ? `<div class="cz-whys">${gaps.map((g, k) => {
     const ok = U.picks[k] === g.a;
@@ -5345,7 +5398,9 @@ function renderMatch() {
   const l = lesson(), M = l.match, items = matchItems(l), p = prog().match;
   const vals = Object.values(p.answered);
   const ok = vals.filter(v => v === true).length;
-  $("#match-score").textContent = `${ok} / ${vals.length}`;
+  // как в «Практике»: до первого ответа счета нет, потом «2 of 3 correct» словами
+  $("#match-score").textContent = t("drillScore", ok, vals.length);
+  $("#match-score").hidden = vals.length === 0;
   $("[data-ui=matchTitle]").textContent = M.title ? L(M.title) : t("matchTitle");
   $("[data-ui=matchEyebrow]").textContent = document.documentElement.dataset.style === "learny" ? l.title : M.eyebrow
     ? `${t("stepN", lessonSteps(l).indexOf("match") + 1)} · ${L(M.eyebrow)}`
@@ -5745,7 +5800,7 @@ async function openReport(from) {
   const gaps = reportGaps(), pr = prog();
   delete pr.reportHide;
   if (gaps.length) {
-    const list = gaps.map(g => `${g.label}: ${g.done ? t("gapPart", g.done, g.total) : t("gapNone")}`).join(" · ");
+    const list = gaps.map(g => `${g.label}: ${g.done ? t("gapPart", g.done, g.total) : t("gapNone")}`).join("\n");
     const empty = gaps.filter(g => !g.done);
     const total = [lesson().drill, lesson().match, lesson().speak].filter(Boolean).length;
     if (!(await ask(t("reportWarn", list, empty.length > 0 && empty.length < total), "reportWarnYes"))) return;
@@ -5764,6 +5819,7 @@ function reportRows() {
       given: state ? (p.drill.lastInput?.[i] || "") : null,
       correct: q.a[0],
       ok: state === "good" || state === "also",
+      first: state && state !== "bad" ? p.drill.tries?.[i]?.[0] || "" : "",
       state
     });
   });
@@ -5820,12 +5876,13 @@ function renderReport() {
         <tr class="${r.given && !r.ok ? "row-bad" : ""}">
           <td class="num">${r.n}</td>
           <td class="sentence">${r.sentence}</td>
-          <td class="given ${r.given ? (r.state === "also" ? "alt" : r.ok ? "ok" : "no") : "skip"}">${r.given ? `${r.state === "also" ? "≈" : r.ok ? "✓" : "✕"} ${r.given}` : t("notAnswered")}</td>
-          <td class="correct">${r.correct}</td>
+          <td class="given ${r.given ? (r.state === "also" ? "alt" : r.ok ? "ok" : "no") : "skip"}" data-label="${t("colGiven")}">${r.given ? `${r.state === "also" ? "≈" : r.ok ? "✓" : "✕"} ${r.given}${r.first ? ` <small class="try-note">${t("secondTry", escH(r.first))}</small>` : ""}` : t("notAnswered")}</td>
+          <td class="correct" data-label="${t("colCorrect")}">${r.given == null ? "—" : r.correct}</td>
         </tr>`).join("")}
       </tbody>
     </table></div>`;
 
+  // в плитках крупно — сколько вопросов пройдено, мелко — сколько из них верно: две дроби рядом читались как противоречие («0/22» и «1 of 22»)
   $("#report-card").innerHTML = `
     <div class="name-row">
       <label for="student-name">${t("nameLabel")}</label>
@@ -5833,8 +5890,8 @@ function renderReport() {
     </div>
     <div class="eyebrow">${l.title}</div>
     <div class="report-summary" style="margin-top:14px">
-      ${st.drill ? tile(t("tileDrill"), `${st.drill.ok}/${st.drill.total}`, st.drill.done < st.drill.total ? `${st.drill.done} ${t("tileOf", st.drill.total)}` : "&nbsp;") : ""}
-      ${st.match ? tile(matchLabels(l).tile, `${st.match.ok}/${st.match.total}`, st.match.done < st.match.total ? `${st.match.done} ${t("tileOf", st.match.total)}` : "&nbsp;") : ""}
+      ${st.drill ? tile(t("tileDrill"), `${st.drill.done}/${st.drill.total}`, t("tileCorrect", st.drill.ok)) : ""}
+      ${st.match ? tile(matchLabels(l).tile, `${st.match.done}/${st.match.total}`, t("tileCorrect", st.match.ok)) : ""}
       ${st.speak ? tile(t("tileSpeak"), `${st.speak.done}/${st.speak.total}`, t("tileSpoken", st.speak.done)) : ""}
     </div>
     ${rows.drill.length ? table(t("groupDrill"), rows.drill) : ""}
@@ -5861,9 +5918,9 @@ function buildReportText() {
     lines.push("", title);
     list.forEach(r => {
       const mark = !r.given ? "–" : r.state === "also" ? "≈" : r.ok ? "✓" : "✕";
-      const mine = r.given ? r.given : t("notAnswered");
+      const mine = r.given ? r.given + (r.first ? ` (${t("secondTry", r.first)})` : "") : t("notAnswered");
       lines.push(`${mark} ${r.n}. ${r.sentence}`);
-      lines.push(r.ok && r.state !== "also" ? `   ${mine}` : `   ${mine} → ${r.correct}`);
+      lines.push(r.given == null || (r.ok && r.state !== "also") ? `   ${mine}` : `   ${mine} → ${r.correct}`);
     });
   };
   if (rows.drill.length) block(t("groupDrill"), rows.drill);
@@ -5887,8 +5944,8 @@ function buildReportHTML() {
       <tr><th>${esc(t("colNum"))}</th><th>${esc(t("colSentence"))}</th><th>${esc(t("colGiven"))}</th><th>${esc(t("colCorrect"))}</th></tr>
       ${list.map(r => `<tr class="${r.given && !r.ok ? "bad" : ""}">
         <td class="num">${r.n}</td><td>${esc(r.sentence)}</td>
-        <td class="${r.given ? (r.state === "also" ? "alt" : r.ok ? "ok" : "no") : "skip"}">${r.given ? `${r.state === "also" ? "≈" : r.ok ? "✓" : "✕"} ${esc(r.given)}` : esc(t("notAnswered"))}</td>
-        <td class="cor">${esc(r.correct)}</td></tr>`).join("")}
+        <td class="${r.given ? (r.state === "also" ? "alt" : r.ok ? "ok" : "no") : "skip"}">${r.given ? `${r.state === "also" ? "≈" : r.ok ? "✓" : "✕"} ${esc(r.given)}${r.first ? ` <small>${esc(t("secondTry", r.first))}</small>` : ""}` : esc(t("notAnswered"))}</td>
+        <td class="cor">${r.given == null ? "—" : esc(r.correct)}</td></tr>`).join("")}
     </table>`;
   return `<!DOCTYPE html><html lang="${S.lang}"><head><meta charset="utf-8">
 <title>${esc(t("reportFor"))} — ${esc(l.title)}</title><style>

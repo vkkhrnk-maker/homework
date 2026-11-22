@@ -23,13 +23,39 @@ test('a saved question from before the cabinet resumes at its stage, including s
   assert.equal(context.savedPosition(lesson), 'Mini-dialogues · Question 1 of 10');
 });
 
-test('the first sample offers four choices including both accepted answers and later questions keep the full set', () => {
-  const chips = ['can', 'must', 'should', 'may', 'have to', 'ought to'];
-  const lesson = { id: 'modals', drill: { chips, items: [{ a: ['must'], also: ['have to'] }] } };
+test('every question offers four choices: the answer, one accepted alternative, the trap word and neighbours', () => {
+  const chips = ['can', 'must', 'should', 'may', 'have to', 'might', 'could', 'ought to'];
+  const lesson = { id: 'modals', drill: { chips, items: [
+    { a: ['must'], also: ['have to'] },
+    { a: ['could'], also: ['can', 'may'], trap: { word: 'might' } }
+  ] } };
   const context = vm.createContext({ document: { documentElement: { hasAttribute: () => true } } });
-  vm.runInContext(functionsBetween('drillChoices','renderDrill'), context);
+  vm.runInContext(functionsBetween('drillChoices','gapWord'), context);
   assert.deepEqual(Array.from(context.drillChoices(lesson, 0)), ['can', 'must', 'have to', 'ought to']);
-  assert.equal(context.drillChoices(lesson, 1), chips);
+  const second = Array.from(context.drillChoices(lesson, 1));
+  assert.equal(second.length, 4);
+  assert.ok(second.includes('could') && second.includes('can') && second.includes('might'));
+  assert.ok(!second.includes('may'), 'only one accepted alternative is offered');
+  assert.deepEqual(Array.from(context.drillChoices(lesson, 1)), second);
+  assert.equal(context.drillChoices({ drill: { chips: chips.slice(0, 4), items: [{ a: ['must'] }] } }, 0).length, 4);
+});
+
+test('a sample lesson joins the cabinet after the first task, an own lesson as soon as it is opened', () => {
+  const steps = () => [{ key: 'theory', n: 1 }, { key: 'drill', n: 0, total: 40 }];
+  const context = vm.createContext({ S: { progress: { sample: { theorySeen: true, lastStage: 'theory' }, mine: { theorySeen: true } } }, stepProgress: steps });
+  vm.runInContext(functionsBetween('startedLesson','savedStage'), context);
+  assert.equal(context.startedLesson({ id: 'sample' }), false);
+  assert.equal(context.startedLesson({ id: 'mine', own: true }), true);
+  context.S.progress.sample.drill = { i: 1 };
+  assert.equal(context.startedLesson({ id: 'sample' }), true);
+});
+
+test('the gap keeps an accepted alternative and starts a sentence with a capital letter', () => {
+  const context = vm.createContext({ norm: s => String(s).trim().toLowerCase(), stripTags: s => String(s).replace(/<[^>]+>/g, '') });
+  vm.runInContext(functionsBetween('gapWord','renderDrill'), context);
+  assert.equal(context.gapWord({ s: ['', ' you help me?'], a: ['could'], also: ['can'] }, 'bad', 'must'), 'Could');
+  assert.equal(context.gapWord({ s: ['You ', ' wear a seatbelt.'], a: ['must'], also: ['have to'] }, 'also', 'Have to'), 'have to');
+  assert.equal(context.gapWord({ s: ['It is late. ', ' we go?'], a: ['shall'] }, 'good', 'shall'), 'Shall');
 });
 
 test('preview navigations under a project subpath cannot overwrite its offline home', async () => {
