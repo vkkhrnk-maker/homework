@@ -2,6 +2,15 @@
 <html lang="en" data-variant="fromt" data-style="learny" data-calm data-hero="b" data-intake="unified">
 <head>
 <meta charset="utf-8">
+<script>
+(function(){try{
+  if (location.hash && location.hash !== "#welcome") return;
+  var filled = function (key) { try { var v = JSON.parse(localStorage.getItem(key) || "null"); return !!v && (Array.isArray(v) ? v.length > 0 : Object.keys(v).length > 0); } catch (e) { return true; } };
+  var state = JSON.parse(localStorage.getItem("homework-english-v3") || "null");
+  var progress = state && state.progress ? Object.keys(state.progress).length : 0;
+  if (!progress && !filled("homework-english-lessons-v1") && !filled("et-vocab-v1")) location.replace("landing.html");
+}catch(e){}})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#080808" media="(prefers-color-scheme: dark)">
@@ -7813,6 +7822,8 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     function refresh() {
       if (S.view !== "home") return;
       page = homePage();
+      // Первого экрана внутри приложения больше нет: его роль играет лендинг. Окно создания урока поверх него остается.
+      if (page === "welcome" && (!location.hash || location.hash === "#welcome")) { location.replace("landing.html"); return; }
       document.body.dataset.calmPage = page;
       const personal = page === "cabinet";
       const welcome = page === "welcome";
@@ -7865,6 +7876,15 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
       if (candidate) openLesson(candidate.id, savedStage(candidate));
     });
 
+    // Текст, набранный на лендинге в блоке «свой урок», переезжает в поле создания урока.
+    function takeDraft() {
+      let draft = "";
+      try { draft = sessionStorage.getItem("learny-draft") || ""; sessionStorage.removeItem("learny-draft"); } catch {}
+      const field = $one("#paste-area");
+      if (!draft || !field) return;
+      field.value = draft;
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+    }
     // A lesson URL contains the stage; the question index remains in the regular progress store.
     function route(focusHeading) {
       const hash = location.hash.slice(1);
@@ -7884,7 +7904,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
         if (hash && hash !== "new-lesson" && !homePages.includes(hash)) history.replaceState(null, "", "#cabinet");
         if (S.view !== "home") show("home");
         else refresh();
-        if (hash === "new-lesson") { openComposer(); return; }
+        if (hash === "new-lesson") { openComposer(); takeDraft(); return; }
         if (closing) { hideComposer(true); return; }
         window.scrollTo({ top: 0, behavior: "instant" });
         if (focusHeading) {

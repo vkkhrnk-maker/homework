@@ -1,0 +1,326 @@
+/* Проба направления «тетрадь с пометками»: общие стили для трех экранов урока и главной.
+   Роли: Literata — английский текст, Golos — интерфейс, Caveat — написанное рукой.
+   Фиолетовый — мой ответ и действие, красный карандаш — правка и слово преподавателя,
+   желтый маркер — мои слова, зеленый — верно. Поверхности плоские: тонкий контур вместо тени. */
+:root{
+  --desk:#e9e6dc; --paper:#f6f4ec; --sheet:#fffdf8; --tint:#efede3;
+  --ink:#1a171c; --ink-2:#5b5660; --ink-3:#8d8892; --line:#e3e0d4;
+  --purple:#6824dd; --purple-hover:#5a1fc2; --purple-soft:#eee6fc; --ball:#4a1fbe;
+  --marker:#ffe46a; --mint-soft:#e2f4ea; --green:#1f6a4d; --tick:#2e9a70;
+  --pencil:#e0442e; --pencil-ink:#b3301d;
+  --ui:"Golos Text",system-ui,-apple-system,sans-serif;
+  --read:"Literata",Georgia,serif;
+  --hand:"Caveat","Bradley Hand",cursive;
+  --ease:cubic-bezier(.2,0,0,1);
+  --ring:0 0 0 1px rgba(26,23,28,.08);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--desk);color:var(--ink);font:400 16px/1.45 var(--ui);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+
+/* ---------- кнопки и мелкие контролы ---------- */
+.icon-btn{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;transition:background-color .15s var(--ease),scale .15s var(--ease)}
+.icon-btn:hover{background:rgba(26,23,28,.06)}
+.icon-btn:active{scale:.96}
+.icon-btn svg{width:20px;height:20px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:54px;padding:0 22px;border-radius:16px;font:600 17px/1 var(--ui);
+  transition:background-color .15s var(--ease),scale .15s var(--ease),opacity .15s var(--ease)}
+.btn:active{scale:.96}
+.btn.primary{background:var(--purple);color:#fff}
+.btn.primary:hover{background:var(--purple-hover)}
+.btn.primary:disabled{opacity:.32;pointer-events:none}
+.btn.ghost{background:var(--sheet);box-shadow:var(--ring)}
+.btn.text{height:44px;font-weight:500;font-size:15.5px;color:var(--ink-2)}
+.btn.text:hover{color:var(--ink)}
+.seg{display:inline-flex;padding:3px;border-radius:12px;background:var(--tint)}
+.seg button{height:34px;padding:0 14px;border-radius:9px;font:500 14.5px/1 var(--ui);color:var(--ink-2);transition:background-color .15s var(--ease),color .15s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--sheet);color:var(--ink);font-weight:600;box-shadow:var(--ring)}
+.seg.sm button{height:30px;padding:0 10px;font-size:13px}
+
+/* ---------- лист, разделы ---------- */
+.page{position:relative;background:var(--sheet);border-radius:20px;box-shadow:var(--ring)}
+.sec{margin-top:28px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font:600 12px/1.2 var(--ui);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+.sec-h em{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.kicker{display:flex;justify-content:space-between;font:500 13.5px/1.2 var(--ui);color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* ---------- маркер: по центру строчных букв, от верха выносных до низа свисающих ---------- */
+.mk,.w{background-image:linear-gradient(100deg,rgba(255,228,106,0) 1%,var(--marker) 4%,rgba(255,228,106,.88) 95%,rgba(255,228,106,0) 99%);
+  background-repeat:no-repeat;background-position:0 .43em;padding:0 .1em;margin:0 -.1em;border-radius:.3em .15em;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone}
+.mk{background-size:100% .95em}
+.w{background-size:0% .95em;cursor:pointer;transition:background-size .3s var(--ease)}
+.w.marked{background-size:100% .95em}
+
+/* ---------- правка: зачеркнуто карандашом по середине строчных, верное вписано рукой ---------- */
+.strike{position:absolute;left:-4%;top:63%;width:108%;height:.34em;translate:0 -50%;overflow:visible;color:var(--pencil);pointer-events:none}
+.strike path{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
+.fx-in s{position:relative;text-decoration:none;color:var(--ink-3);margin:0 .04em 0 .08em;white-space:nowrap}
+.fx-in ins{display:inline-block;text-decoration:none;font:700 1.3em/1 var(--hand);color:var(--pencil);margin:0 .1em 0 .22em;rotate:-3deg;white-space:nowrap}
+
+/* ---------- предложение с пропуском ---------- */
+.sentence{margin:0;font:500 27px/1.55 var(--read);letter-spacing:-.012em;text-wrap:pretty}
+.gap{position:relative;display:inline-block;min-width:3.3em;margin-right:.1em;text-align:center;line-height:1;white-space:nowrap}
+.gap .ans{position:relative;display:inline-block;padding:0 .14em;font:600 1.24em/1 var(--hand);color:var(--ball);rotate:-2deg}
+.gap .ans.wrong{opacity:.85}
+.gap .ans .strike{top:65%}
+.gap .uline{position:absolute;left:0;bottom:-.2em;width:100%;height:.28em;color:var(--ink-3);overflow:visible}
+.gap .uline path{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.gap .fixword{position:absolute;left:50%;bottom:88%;translate:-50% 0;rotate:-5deg;font:700 1.34em/1 var(--hand);color:var(--pencil);white-space:nowrap}
+.gap .tick{position:absolute;left:100%;top:-.4em;width:.8em;height:.7em;margin-left:-.08em;color:var(--tick);overflow:visible}
+.gap .tick path,.h-tick path,.set path{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.gap .tick path{stroke-width:3}
+.note{display:flex;align-items:flex-start;gap:6px;margin:12px 0 0 -2px;font:600 24px/1.05 var(--hand);color:var(--pencil);rotate:-1.6deg;transform-origin:left center}
+.note svg{flex:none;width:26px;height:30px;margin-top:-6px;overflow:visible}
+.note path{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.opt{position:relative;height:54px;border-radius:14px;background:var(--sheet);font:500 19px/1 var(--read);box-shadow:var(--ring);
+  transition:box-shadow .15s var(--ease),background-color .15s var(--ease),scale .15s var(--ease),color .15s var(--ease)}
+.opt:active{scale:.96}
+.opt[aria-pressed="true"]{background:var(--purple-soft);color:#35128f;box-shadow:0 0 0 2px var(--purple)}
+.opt.struck{background:transparent;color:var(--ink-3);box-shadow:0 0 0 1px var(--line);pointer-events:none}
+.opt span{position:relative;display:inline-block}
+.opt .strike{top:67%}
+
+/* ---------- наведение и фокус ----------
+   Общий язык наведения — бледный след маркера: на слове в предложении, на названии урока в списке.
+   Поверхности светлеют и получают контур плотнее. На тач-экранах ничего из этого не залипает. */
+:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+.hl{background-image:linear-gradient(100deg,rgba(255,228,106,0) 1%,rgba(255,228,106,.55) 4%,rgba(255,228,106,.5) 95%,rgba(255,228,106,0) 99%);
+  background-repeat:no-repeat;background-position:0 .43em;background-size:0% .95em;padding:0 .1em;margin:0 -.1em;border-radius:.3em .15em;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-size .3s var(--ease)}
+@media (hover:hover){
+  .w:not(.marked):hover{background-image:linear-gradient(100deg,rgba(255,228,106,0) 1%,rgba(255,228,106,.55) 4%,rgba(255,228,106,.5) 95%,rgba(255,228,106,0) 99%);background-size:100% .95em}
+  a:hover .hl{background-size:100% .95em}
+  .opt:not(.struck):not([aria-pressed="true"]):hover{background:#fff;box-shadow:0 0 0 1px rgba(26,23,28,.2)}
+  .btn.ghost:hover{background:#fff;box-shadow:0 0 0 1px rgba(26,23,28,.2)}
+  .seg button:not([aria-pressed="true"]):hover{color:var(--ink)}
+  .wcard{transition:rotate .2s var(--ease),translate .2s var(--ease),box-shadow .2s var(--ease)}
+  .wcard:hover{rotate:0deg;translate:0 -3px;box-shadow:0 0 0 1px rgba(26,23,28,.2)}
+  .fixlist.tap li{transition:background-color .15s var(--ease)}
+  .fixlist.tap li:hover{background:var(--sheet)}
+  .fixlist.tap li:hover small{color:var(--ink)}
+}
+
+/* рисуем пометки при появлении */
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes rise{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+@keyframes write{from{opacity:0;scale:.8;filter:blur(3px)}to{opacity:1;scale:1;filter:blur(0)}}
+.anim .strike path,.anim .tick path,.anim.note path{stroke-dasharray:1;animation:draw .28s var(--ease) both}
+.anim .fixword{animation:write .26s var(--ease) .22s both}
+.anim .tick path{animation-delay:.1s}
+.note.anim,.rise{animation:rise .28s var(--ease) both}
+
+/* =====================================================================
+   Три экрана урока (learny-notebook-probe.html)
+   ===================================================================== */
+.intro{max-width:1250px;margin:0 auto;padding:36px 24px 8px}
+.intro h1{font:600 22px/1.2 var(--ui);letter-spacing:-.02em;margin:0 0 8px}
+.intro p{margin:0;max-width:68ch;color:var(--ink-2);font-size:15px;text-wrap:pretty}
+.intro a{color:var(--ink);font-weight:600;box-shadow:inset 0 -1px 0 currentColor}
+.desk{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,390px));gap:44px 36px;justify-content:center;align-items:start;padding:28px 24px 72px}
+.col{min-width:0}
+.cap{margin:0 4px 12px}
+.cap b{display:block;font:600 14px/1.3 var(--ui)}
+.cap span{display:block;font-size:13px;color:var(--ink-2);margin-top:2px;min-height:2.9em;text-wrap:pretty}
+.screen{position:relative;display:flex;flex-direction:column;min-height:812px;background:var(--paper);border-radius:32px;overflow:hidden;box-shadow:0 0 0 1px rgba(26,23,28,.08)}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 6px}
+.bar-title{font:600 15px/1 var(--ui)}
+.foot{margin-top:auto;padding:18px 20px calc(20px + env(safe-area-inset-bottom,0px))}
+.foot .two{display:grid;grid-template-columns:auto 1fr;gap:10px}
+.foot .two .ghost{width:auto}
+
+/* 1. задание */
+.segs{display:flex;gap:4px;padding:2px 20px 0}
+.segs i{flex:1;height:4px;border-radius:2px;background:var(--line);transition:background-color .25s var(--ease)}
+.segs i.done{background:var(--purple)}
+.segs i.now{background:#c8b2f3}
+.task{padding:22px 20px 0}
+.task .page{margin-top:12px;padding:18px 22px 18px}
+.task .sentence{padding-top:.55em}
+.tap-hint{margin:18px 0 0;font-size:12.5px;color:var(--ink-3)}
+.verdict{margin-top:12px;padding:16px 20px 17px;background:var(--sheet);border-radius:20px;box-shadow:var(--ring)}
+.verdict h3{margin:0 0 6px;font:600 17px/1.2 var(--ui)}
+.verdict.right h3{color:var(--green)}
+.verdict.shown h3{color:var(--pencil-ink)}
+.verdict p{margin:0;font-size:15.5px;line-height:1.45;text-wrap:pretty}
+.verdict p i{font-family:var(--read);font-size:1.04em}
+.verdict p.also{margin-top:4px;color:var(--ink-2)}
+.toast{position:absolute;left:50%;bottom:92px;translate:-50% 6px;padding:9px 14px;border-radius:12px;background:var(--ink);color:#fff;font:500 13.5px/1.2 var(--ui);white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .2s var(--ease),translate .2s var(--ease)}
+.toast.on{opacity:1;translate:-50% 0}
+
+/* 2. итог подхода */
+.sum{padding:8px 22px 0}
+.sum h2{margin:14px 0 0;font:600 37px/1.06 var(--read);letter-spacing:-.025em}
+.h-tick{width:.82em;height:.62em;margin-left:.2em;vertical-align:.04em;color:var(--tick);overflow:visible}
+.h-tick path{stroke-width:3.4;stroke-dasharray:1;stroke-dashoffset:1}
+.h-tick.in path{animation:draw .36s var(--ease) .2s both}
+.tale{margin:18px 0 0;font:400 21px/1.78 var(--read);text-wrap:pretty}
+.tale b{font-weight:600}
+.nb{white-space:nowrap}
+.pill{display:inline-block;padding:.12em .58em .16em;border-radius:999px;font:600 .78em/1.35 var(--ui);white-space:nowrap;vertical-align:.1em;font-variant-numeric:tabular-nums}
+.pill.ok{background:var(--mint-soft);color:var(--green)}
+.pill.fx{background:#fbe6e2;color:var(--pencil-ink)}
+.tale .mk{font-weight:600;white-space:nowrap}
+.fixlist{margin:10px 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.fixlist li{padding:11px 0 12px;border-bottom:1px solid var(--line);font:400 17.5px/1.5 var(--read)}
+.fixlist small{display:block;margin-top:1px;font:400 12.5px/1.3 var(--ui);color:var(--ink-3)}
+.cards{display:flex;justify-content:center;gap:8px;padding:16px 0 6px}
+.wcard{flex:none;display:flex;flex-direction:column;justify-content:space-between;width:112px;height:128px;padding:14px 12px 12px;background:var(--sheet);border-radius:12px;box-shadow:var(--ring)}
+.wcard b{align-self:flex-start;font:600 18.5px/1.2 var(--read)}
+.wcard span{font-size:12.5px;line-height:1.3;color:var(--ink-2)}
+.cards .wcard{flex:1 1 0;width:auto;max-width:112px;rotate:var(--r,0deg)}
+.left{margin:0 0 12px;text-align:center;font-size:14px;color:var(--ink-2)}
+
+/* 3. кабинет */
+.home{padding:0 20px 28px}
+.brand{font:600 24px/1 var(--read);letter-spacing:-.02em;white-space:nowrap}
+.brand i{display:inline-block;margin-left:-.035em;font:700 1.36em/0 var(--hand);font-style:normal;color:var(--pencil);rotate:-5deg;translate:0 .02em}
+.bar .brand{padding-left:8px}
+.today{margin:14px 0 12px;font-size:13.5px;color:var(--ink-2)}
+.hw{padding:20px}
+.hw-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font:600 13.5px/1.2 var(--ui);color:var(--ink-2)}
+.hw-top .due{font-weight:400;color:var(--ink-3)}
+.hw h2{margin:12px 0 4px;font:600 31px/1.08 var(--read);letter-spacing:-.022em}
+.hw .from{margin:0;font-size:14px;color:var(--ink-2)}
+.sets{display:flex;gap:8px;margin:18px 0}
+.set{flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:var(--tint);font:600 14px/1 var(--ui);color:var(--ink-3);font-variant-numeric:tabular-nums}
+.set.done{background:var(--mint-soft);color:var(--tick)}
+.set svg{width:24px;height:24px}
+.set path{stroke-width:2.6}
+.set.next{background:var(--sheet);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.home .fixlist{margin-inline:-10px}
+.home .fixlist li{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-inline:10px;font-size:17px;cursor:pointer}
+.home .fixlist small{display:inline;font-size:13px;white-space:nowrap}
+.home .sec .btn{margin-top:14px}
+.strip{display:flex;gap:10px;margin:10px -20px 0;padding:1px 20px;overflow-x:auto;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.report{margin-top:10px;padding:14px 16px 15px;border-radius:16px;background:var(--tint)}
+.report b{display:block;font:600 15px/1.3 var(--ui)}
+.report span{display:block;margin-top:2px;font-size:13.5px;line-height:1.35;color:var(--ink-2)}
+
+@media (max-width:520px){
+  body.probe{background:var(--paper)}
+  .intro{padding:22px 20px 0}
+  .desk{grid-template-columns:minmax(0,1fr);gap:0;padding:0}
+  .cap{margin:26px 20px 10px}
+  .cap span{min-height:0}
+  .screen{border-radius:0;min-height:100svh;box-shadow:0 -1px 0 var(--line)}
+}
+
+/* =====================================================================
+   Главная (learny-notebook-home.html)
+   ===================================================================== */
+body.lp{background:var(--paper)}
+.lp-wrap{max-width:1168px;margin:0 auto;padding:0 32px}
+.lp-top{display:flex;align-items:center;justify-content:space-between;height:72px}
+.lp-top .brand{font-size:27px}
+.lp-nav{display:flex;align-items:center;gap:10px}
+.lp-nav a{padding:10px 8px;font:500 15px/1 var(--ui);color:var(--ink-2);transition:color .15s var(--ease)}
+.lp-nav a:hover{color:var(--ink)}
+.lp-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:72px;align-items:center;padding:64px 0 96px}
+.lp-hero h1{margin:0;font:600 clamp(40px,5.4vw,68px)/1.04 var(--read);letter-spacing:-.032em;text-wrap:balance}
+.lp-hero .lede{margin:22px 0 0;max-width:33ch;font-size:19px;line-height:1.5;color:var(--ink-2);text-wrap:pretty}
+.lp-hero .btn{width:auto;margin-top:30px;padding:0 26px}
+.lp-demo{padding:26px 28px 24px;border-radius:24px;container:demo/inline-size}
+.lp-demo .sentence{margin-top:.2em;padding-top:.75em;font-size:28px}
+/* четыре варианта: в один ряд, если помещаются, иначе ровной сеткой два на два, без одинокого четвертого */
+.lp-demo .opts{gap:8px;margin-top:22px}
+.lp-demo .opt{height:50px;padding:0 16px;font-size:18px}
+@container demo (min-width:420px){.lp-demo .opts{display:flex}.lp-demo .opt{flex:1 1 auto}}
+.lp-demo .note{margin-top:16px;min-height:1.2em;font-size:25px}
+.lp-open{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:10px 0;font:600 15px/1 var(--ui);color:var(--ink)}
+.lp-open span{transition:translate .15s var(--ease)}
+.lp-open:hover span{translate:3px 0}
+.lp-sec{padding:0 0 88px}
+.lp-sec h2{margin:0;font:600 34px/1.1 var(--read);letter-spacing:-.025em}
+.lp-sec-h{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.lp-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:28px;margin:28px 0 0;padding:0;list-style:none;counter-reset:step}
+.lp-steps li{counter-increment:step;padding-top:16px;border-top:1px solid var(--ink)}
+.lp-steps li::before{content:counter(step);display:block;font:500 13px/1 var(--ui);color:var(--ink-3);font-variant-numeric:tabular-nums}
+.lp-steps h3{margin:14px 0 6px;font:600 21px/1.2 var(--read);letter-spacing:-.01em}
+.lp-steps p{margin:0;font-size:15px;line-height:1.45;color:var(--ink-2);text-wrap:pretty}
+/* примеры уроков: на листе одна крупная пометка из урока вместо картинки, под листом только название и уровень */
+.lp-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px 24px;margin:24px 0 0;padding:0;list-style:none}
+.lp-card{display:block}
+.lp-sheet{display:grid;place-items:center;aspect-ratio:3/2;padding:16px;background:var(--sheet);border-radius:18px;box-shadow:var(--ring);
+  transition:translate .2s var(--ease),box-shadow .2s var(--ease)}
+.lp-mark{font:600 clamp(26px,2.7vw,34px)/1.2 var(--read);letter-spacing:-.015em;white-space:nowrap}
+.lp-mark.up{padding-top:.75em}
+.lp-mark .gap{min-width:0;margin:0}
+.lp-mark .hand{font:600 1.24em/1 var(--hand);color:var(--ball);letter-spacing:0}
+.lp-mark svg.plus{display:block;width:44px;height:44px;color:var(--ball);overflow:visible}
+.lp-mark svg.plus path{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
+.lp-sheet.blank{background:var(--tint);box-shadow:none}
+.lp-card .t{display:block;margin:14px 2px 0;font:600 20px/1.25 var(--read);letter-spacing:-.012em;text-wrap:balance}
+.lp-meta{display:block;margin:5px 2px 0;font-size:13.5px;color:var(--ink-2)}
+@media (hover:hover){.lp-card:hover .lp-sheet{translate:0 -3px;box-shadow:0 0 0 1px rgba(26,23,28,.2)}}
+
+/* --- проба: чем может быть «лист» урока. Переключатель служебный, в продукт не идет. --- */
+.probe-switch{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:20px 0 0;font:400 13px/1.2 var(--ui);color:var(--ink-3)}
+/* 1. обложка тетради: вертикальная, слева корешок-лента, у корешка углы острее, чем у обреза,
+      справа и снизу виден срез страниц; на наклейке мелкая строка с типом урока и пометка от руки */
+.lp-print{display:none}
+[data-look="cover"] .lp-sheet{aspect-ratio:5/6;place-items:start center;padding:17% 9% 0 calc(9% + 20px);border-radius:5px 14px 14px 5px;
+  background:var(--c,var(--tint));
+  box-shadow:inset 20px 0 0 color-mix(in srgb,var(--c,var(--tint)) 80%,#1a171c),3px 3px 0 -1px var(--sheet),3px 3px 0 0 rgba(26,23,28,.16)}
+[data-look="cover"] .lp-mark{display:grid;grid-template-rows:auto 1fr;justify-items:center;align-items:center;width:100%;aspect-ratio:7/4;padding:11px 12px 14px;
+  background:var(--sheet);border-radius:4px;outline:1px solid rgba(26,23,28,.2);outline-offset:-5px;font-size:clamp(21px,2.1vw,27px)}
+[data-look="cover"] .lp-print{display:block;justify-self:start;margin-left:5px;font:600 9.5px/1 var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+[data-look="cover"] .lp-mark.up{padding-top:11px}
+[data-look="cover"] .lp-mark.up .gap{margin-top:.7em}
+[data-look="cover"] .lp-meta{display:none}
+[data-look="cover"] .lp-card .t{margin-top:16px}
+[data-look="cover"] .lp-sheet.blank{place-items:center;padding:0;background:var(--tint);box-shadow:none}
+[data-look="cover"] .lp-sheet.blank .lp-mark{display:block;width:auto;aspect-ratio:auto;padding:0;background:none;outline:0}
+[data-look="cover"] .lp-sheet.blank+.t+.lp-meta{display:block}
+@media (hover:hover){[data-look="cover"] .lp-card:hover .lp-sheet:not(.blank){translate:-2px -3px;
+  box-shadow:inset 20px 0 0 color-mix(in srgb,var(--c,var(--tint)) 80%,#1a171c),5px 6px 0 -1px var(--sheet),5px 6px 0 0 rgba(26,23,28,.16)}}
+/* вход в урок: тетрадь выезжает в центр, обложка перелистывается через корешок и ложится слева,
+   затем камера приближается к правой странице */
+.nb-dim{position:fixed;inset:0;z-index:40;background:var(--paper);pointer-events:none}
+.nb-stage{position:fixed;z-index:50;perspective:2400px;pointer-events:none}
+.nb-page{position:absolute;inset:0;z-index:1;background:var(--sheet);border-radius:5px 14px 14px 5px;box-shadow:var(--ring)}
+.nb-leaf{position:absolute;inset:0;z-index:2;transform-origin:left center;transform-style:preserve-3d}
+.nb-leaf .lp-sheet{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;translate:none!important;backface-visibility:hidden}
+/* внутренняя сторона обложки: светлее самой обложки, лента корешка остается у сгиба */
+.nb-inside{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;border-radius:14px 5px 5px 14px;
+  background:color-mix(in srgb,var(--c,var(--tint)) 42%,#fffdf8);box-shadow:inset -20px 0 0 color-mix(in srgb,var(--c,var(--tint)) 80%,#1a171c)}
+/* урок, открытый из тетради: один экран по центру, без служебных подписей пробы */
+body.solo{background:var(--paper)}
+body.solo .intro,body.solo .cap,body.solo .col:not(:first-child){display:none}
+body.solo .desk{padding:0;grid-template-columns:minmax(0,430px)}
+body.solo .screen{min-height:100svh;border-radius:0;box-shadow:none;animation:rise .45s var(--ease) both}
+
+/* 2. лист в линейку: пометка стоит на строке, своя черта под ответом не нужна */
+[data-look="ruled"] .lp-sheet:not(.blank){background-image:linear-gradient(to bottom,transparent 29px,#dfe6ee 29px);background-size:100% 30px;background-position:0 calc(50% + 7px)}
+[data-look="ruled"] .lp-mark .uline{display:none}
+.lp-foot{display:flex;justify-content:space-between;gap:16px;padding:22px 0 30px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-2)}
+.lp-foot .brand{margin-right:12px;font-size:17px;color:var(--ink)}
+
+@media (max-width:900px){
+  .lp-wrap{padding:0 20px}
+  .lp-top{height:60px}
+  .lp-hero{grid-template-columns:minmax(0,1fr);gap:36px;padding:28px 0 64px}
+  .lp-hero .lede{font-size:17.5px;margin-top:16px}
+  .lp-hero .btn{width:100%;margin-top:24px}
+  .lp-demo{padding:22px 20px 18px;border-radius:20px}
+  .lp-demo .sentence{font-size:25px}
+  .lp-sec{padding-bottom:64px}
+  .lp-sec h2{font-size:28px}
+  .lp-steps{grid-template-columns:minmax(0,1fr);gap:0;margin-top:20px;border-bottom:1px solid var(--line)}
+  .lp-steps li{display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:4px;padding:16px 0;border-top:1px solid var(--line)}
+  .lp-steps li::before{grid-row:1/3;padding-top:6px}
+  .lp-steps h3{margin:0 0 4px;font-size:19px}
+  .lp-cards{display:flex;gap:14px;margin:20px -20px 0;padding:4px 20px 8px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:20px;scrollbar-width:none}
+  .lp-cards::-webkit-scrollbar{display:none}
+  .lp-cards li{flex:0 0 min(80%,320px);scroll-snap-align:start}
+  .lp-mark{font-size:30px}
+  [data-look="cover"] .lp-mark{font-size:24px}
+  .lp-nav a{display:none}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.h-tick path{stroke-dashoffset:0}}

@@ -1,0 +1,295 @@
+/* Креативный лендинг Learny: одна тетрадь на всю историю.
+   Тетрадь закреплена на экране; прокрутка открывает обложку и перелистывает страницы:
+   слева на развороте название шага, справа сам шаг в действии. На телефоне разворот не помещается,
+   поэтому закреплена правая страница, а название шага стоит над ней. */
+body.ld{background:var(--paper);overflow-x:clip}
+.ld-top{position:absolute;inset:0 0 auto 0;z-index:6;display:flex;align-items:center;justify-content:space-between;height:72px;padding:0 32px}
+.ld-top .brand{font-size:27px}
+
+/* ---------- закрепленная сцена ---------- */
+.ld-book{position:relative}
+.ld-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.ld-copy{position:absolute;left:32px;top:50%;z-index:3;width:min(54vw,760px);translate:0 -50%;will-change:transform,opacity}
+.ld-copy h1{margin:0;font:600 clamp(48px,7.1vw,112px)/.9 var(--read);letter-spacing:-.038em;text-wrap:balance}
+.ld-copy .lede{margin:26px 0 0;max-width:30ch;font-size:clamp(17px,1.5vw,21px);line-height:1.45;color:var(--ink-2);text-wrap:pretty}
+.ld-scroll{position:absolute;left:50%;bottom:26px;z-index:3;translate:-50% 0;font:600 22px/1 var(--hand);color:var(--pencil);rotate:-2deg;white-space:nowrap;transition:opacity .3s var(--ease)}
+
+/* тетрадь: левый край правой страницы стоит на сгибе; все размеры внутри считаются от ширины листа */
+.ld-nb{--nbw:min(44vw,58svh);--hx:.045;--hy:0;--hs:.8;--hr:-5;
+  position:absolute;left:50%;top:calc(50% - var(--nbw)*.6 + 12px);z-index:2;width:var(--nbw);height:calc(var(--nbw)*1.2);
+  perspective:calc(var(--nbw)*9);font-size:calc(var(--nbw)/18);will-change:transform}
+.ld-leaf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;will-change:transform}
+.ld-face{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;background:var(--sheet);box-shadow:var(--ring)}
+.ld-front{border-radius:.2em .55em .55em .2em;padding:1.5em 1.5em 1.4em 1.7em}
+.ld-back{transform:rotateY(180deg);border-radius:.55em .2em .2em .55em;padding:2.2em 2.1em 1.6em 1.8em;display:flex;flex-direction:column;justify-content:center}
+.ld-base{transform:none}
+
+/* обложка */
+.ld-cover .ld-front{padding:17% 9% 0 calc(9% + .8em)}
+.ld-label{display:grid;grid-template-rows:auto 1fr;justify-items:center;align-items:center;aspect-ratio:7/4;padding:.62em .6em .7em}
+.ld-label small{justify-self:start;margin-left:.5em;font:600 max(.4em,8px)/1 var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.ld-label b{font:600 1.5em/1 var(--hand);color:var(--ball);rotate:-2deg}
+.ld-cover .ld-back{padding-right:2.4em}
+
+/* левая страница: номер шага, название, одна строка */
+.ld-n{font:500 max(.55em,12px)/1 var(--ui);color:var(--ink-3);font-variant-numeric:tabular-nums}
+.ld-back h3{margin:.5em 0 .3em;font:600 1.75em/1.05 var(--read);letter-spacing:-.025em}
+.ld-back p{margin:0;max-width:17em;font:400 .64em/1.45 var(--ui);color:var(--ink-2);text-wrap:pretty}
+
+/* правая страница: сам шаг. Пометки появляются по мере прокрутки (класс .on ставит скрипт) */
+.ld-demo{display:flex;flex-direction:column;height:100%}
+.ld-demo .kicker{font-size:max(.47em,11px)}
+/* содержимое страницы стоит по центру одной группой: пометка преподавателя сразу под предложением */
+.ld-demo .sentence{margin:auto 0 0;padding-top:.5em;font-size:1.06em;line-height:1.55}
+.ld-demo>:last-child{margin-bottom:auto}
+.ld-demo .ask{display:block;margin-bottom:.5em;font-size:.8em;line-height:1.4;color:var(--ink-2)}
+.ld-demo .note{margin-top:.55em;font-size:.92em}
+.ld-demo .note svg{width:1em;height:1.15em;margin-top:-.2em}
+.ld-demo .rule-h{margin:.7em 0 0;font:600 1.5em/1.1 var(--read);letter-spacing:-.02em}
+.ld-demo .rule-g{margin:.2em 0 .7em;font:400 max(.56em,12px)/1.4 var(--ui);color:var(--ink-2)}
+.ld-demo .ex{margin:0;font:500 .9em/1.7 var(--read)}
+.ld-demo .wcard{position:absolute;right:1.5em;bottom:1.4em;width:auto;height:auto;gap:.5em;padding:.6em .7em;border-radius:.5em}
+.ld-demo .wcard b{font-size:max(.74em,15px)}
+.ld-demo .wcard span{font-size:max(.5em,11px)}
+.ld-demo .tale{margin:.7em 0 0;font-size:.82em;line-height:1.75}
+.ld-demo .print{margin:auto 0 .9em;font:600 max(.4em,10.5px)/1 var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.ld-demo .rep{margin:0;font:500 .98em/1.45 var(--read)}
+.ld-demo .pills{display:flex;flex-wrap:wrap;gap:.35em;margin:.6em 0 0;font-size:.86em}
+.ld-demo .pills .mk{align-self:center;font:600 .86em/1.3 var(--ui);white-space:nowrap}
+.ld-demo .note .ok{width:.95em;height:.85em;margin:.05em .1em 0 0}
+.ld-demo .note .ok path{stroke-width:3}
+.ld-demo .sent{margin-top:.9em;font:400 max(.56em,12px)/1.4 var(--ui);color:var(--ink-2)}
+.ld-demo [data-q]{opacity:0;transition:opacity .25s var(--ease)}
+.ld-demo [data-q].on{opacity:1}
+.ld-demo .hand{display:inline-block;font:600 1.24em/1 var(--hand);color:var(--ball)}
+.ld-demo .ans[data-q],.ld-demo .hand[data-q],.ld-demo .fixword[data-q],.ld-demo .note[data-q]{clip-path:inset(-30% 100% -30% -5%);transition:clip-path .5s var(--ease),opacity .15s}
+.ld-demo .ans[data-q].on,.ld-demo .hand[data-q].on,.ld-demo .fixword[data-q].on,.ld-demo .note[data-q].on{clip-path:inset(-30% -8% -30% -5%)}
+.ld-demo svg[data-q]{opacity:1}
+.ld-demo svg[data-q] path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .32s var(--ease)}
+.ld-demo svg[data-q].on path{stroke-dashoffset:0}
+.ld-demo .w[data-q]{opacity:1;cursor:default}
+.ld-demo .w[data-q].on{background-size:100% .95em}
+.ld-demo .wcard[data-q]{translate:0 .5em;transition:opacity .3s var(--ease),translate .3s var(--ease)}
+.ld-demo .wcard[data-q].on{translate:0 0}
+
+/* подпись шага над страницей: только там, где разворот не помещается */
+.ld-caps{display:none}
+
+/* ---------- полка тетрадей ---------- */
+.ld-shelf{padding:120px 0 40px}
+.ld-shelf-h{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px;padding:0 32px}
+.ld-shelf h2,.ld-own h2{margin:0;font:600 clamp(40px,5.6vw,88px)/1 var(--read);letter-spacing:-.035em}
+.ld-shelf-h p{margin:0 0 .6em;max-width:26ch;font-size:16px;color:var(--ink-2);text-wrap:pretty}
+.ld-row{display:flex;gap:28px;margin:44px 0 0;padding:6px 32px 24px;list-style:none;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-left:32px;scrollbar-width:none}
+.ld-row::-webkit-scrollbar{display:none}
+.ld-row li{flex:0 0 clamp(230px,23vw,320px);scroll-snap-align:start}
+.ld-row .lp-card .t{font-size:19px}
+
+/* ---------- свой урок ---------- */
+.ld-own{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:center;padding:96px 32px 120px}
+.ld-own .lede{margin:22px 0 0;max-width:30ch;font-size:19px;line-height:1.5;color:var(--ink-2);text-wrap:pretty}
+.ld-form{position:relative;padding:24px 26px 22px;border-radius:24px}
+.ld-form label{display:block;font:500 13.5px/1.2 var(--ui);color:var(--ink-2)}
+.ld-form textarea{display:block;width:100%;min-height:150px;margin:10px 0 0;padding:0;border:0;outline:0;resize:none;background:none;font:400 21px/1.5 var(--read);color:var(--ink)}
+.ld-form textarea::placeholder{color:var(--ink-3)}
+.ld-form-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--line)}
+.ld-attach{display:inline-flex;align-items:center;gap:8px;height:44px;font:600 15px/1 var(--ui);color:var(--ink)}
+.ld-attach svg{width:18px;height:18px}
+.ld-form .note{position:absolute;right:26px;top:-34px;margin:0;font-size:24px;rotate:2deg}
+.ld-foot{display:flex;justify-content:space-between;gap:16px;margin:0 32px;padding:22px 0 30px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-2)}
+.ld-foot .brand{margin-right:12px;font-size:17px;color:var(--ink)}
+
+/* шаги текстом: для скринридера всегда, а на экране когда движение отключено в системе и закрепленной сцены нет */
+.ld-steps{position:absolute;width:1px;height:1px;margin:0;padding:0;overflow:hidden;clip-path:inset(50%);list-style:none}
+body.ld-still .ld-pin{position:relative;height:auto;min-height:100svh}
+body.ld-still .ld-scroll{display:none}
+body.ld-still .ld-steps{position:static;width:auto;height:auto;overflow:visible;clip-path:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:28px;margin:0;padding:0 32px 40px;list-style:none;counter-reset:step}
+body.ld-still .ld-steps li{counter-increment:step;padding-top:16px;border-top:1px solid var(--ink)}
+body.ld-still .ld-steps li::before{content:counter(step);font:500 13px/1 var(--ui);color:var(--ink-3)}
+body.ld-still .ld-steps h3{margin:14px 0 6px;font:600 21px/1.2 var(--read)}
+body.ld-still .ld-steps p{margin:0;font-size:15px;color:var(--ink-2)}
+
+/* ---------- узкий экран: закреплена правая страница, шаг подписан над ней ---------- */
+@media (max-width:900px){
+  .ld-top{height:60px;padding:0 20px}
+  .ld-top .brand{font-size:24px}
+  .ld-top .lp-nav a{display:none}
+  .ld-copy{left:20px;right:20px;top:76px;width:auto;translate:none}
+  .ld-copy h1{font-size:clamp(40px,11.5vw,56px)}
+  .ld-copy .lede{margin-top:14px;font-size:17px}
+  .ld-copy .split{display:flex;margin-top:18px;height:50px}
+  .ld-copy .split .s-ic{width:50px}
+  .split .s-tx{flex:1}
+  .ld-form .split{width:100%}
+  .ld-nb{--nbw:min(86vw,calc((75svh - 136px)/1.2));--hx:0;--hy:.19;--hs:.78;--hr:-4;left:calc(50% - var(--nbw)/2);top:calc(16svh + 136px)}
+  .ld-caps{display:block;position:absolute;left:20px;right:20px;top:16svh;z-index:3;margin:0;padding:0;list-style:none}
+  .ld-caps li{position:absolute;inset:0 0 auto 0;opacity:0;translate:0 8px;transition:opacity .3s var(--ease),translate .3s var(--ease)}
+  .ld-caps li.on{opacity:1;translate:0 0}
+  .ld-caps .ld-n{font-size:13px}
+  .ld-caps h3{margin:8px 0 4px;font:600 32px/1.05 var(--read);letter-spacing:-.025em}
+  .ld-caps p{margin:0;max-width:30ch;font-size:15.5px;line-height:1.4;color:var(--ink-2)}
+  .ld-shelf{padding:72px 0 24px}
+  .ld-shelf-h{grid-template-columns:minmax(0,1fr);gap:10px;padding:0 20px}
+  .ld-row{gap:16px;margin-top:26px;padding:6px 20px 18px;scroll-padding-left:20px;scroll-snap-type:x mandatory}
+  .ld-row li{flex-basis:min(70%,280px)}
+  .ld-own{grid-template-columns:minmax(0,1fr);gap:46px;padding:64px 20px 72px}
+  .ld-own .lede{font-size:17px;margin-top:14px}
+  .ld-form{padding:20px 20px 18px;border-radius:20px}
+  .ld-form textarea{min-height:120px;font-size:19px}
+  .ld-form .note{right:18px;top:-30px;font-size:21px}
+  .ld-foot{margin:0 20px}
+  body.ld-still .ld-steps{grid-template-columns:minmax(0,1fr);gap:0;padding:0 20px 24px}
+}
+
+/* =====================================================================
+   Настоящая тетрадь: материалы и свет. Только для лендинга, прежняя главная остается плоской.
+   Обложка — матовый картон с зерном, корешок — тканевая лента, наклейка — бумага с печатной рамкой,
+   страницы — кремовая бумага в точку. Свет сверху слева, тень на столе вправо вниз.
+   Цвет обложки по-прежнему задается одной переменной --c: тетрадь собирается для любого урока.
+   ===================================================================== */
+.ld{
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .15 0 0 0 0 .1 0 0 0 0 .05 0 0 0 .3 -.11'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-soft:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .2 0 0 0 0 .1 0 0 0 .3 -.11'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --weave:repeating-linear-gradient(0deg,rgba(0,0,0,.11) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(255,255,255,.12) 0 1px,transparent 1px 3px);
+  --light:linear-gradient(128deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 36%,rgba(30,20,10,.09) 100%);
+  --paper-c:#fbf7ea;
+  --dots:radial-gradient(circle,rgba(70,80,125,.19) .04em,transparent .06em);
+  --bevel:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(30,20,10,.16),inset -1px 0 0 rgba(30,20,10,.12);
+}
+
+/* обложка: спереди, сзади и на полке */
+.ld-cover .ld-front,.ld-backcover,.ld-row .lp-sheet:not(.blank),body.ld .nb-stage .lp-sheet{
+  --tape:.8em;position:absolute;background:var(--light),var(--grain),var(--c);box-shadow:var(--bevel)}
+.ld-row .lp-sheet:not(.blank){position:relative;--tape:20px}
+body.ld .nb-stage .lp-sheet{--tape:20px}
+.ld-cover .ld-front::before,.ld-row .lp-sheet:not(.blank)::before,body.ld .nb-stage .lp-sheet::before{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--tape);
+  background:linear-gradient(90deg,rgba(0,0,0,.24),rgba(0,0,0,0) 32%,rgba(255,255,255,.07) 72%,rgba(0,0,0,.12)),var(--weave),var(--grain),color-mix(in srgb,var(--c) 66%,#2b2630);
+  box-shadow:1px 0 0 rgba(255,255,255,.2),3px 0 4px -1px rgba(30,20,10,.24)}
+/* биговка: линия сгиба рядом с лентой */
+.ld-cover .ld-front::after,.ld-row .lp-sheet:not(.blank)::after,body.ld .nb-stage .lp-sheet::after{content:"";position:absolute;top:0;bottom:0;left:calc(var(--tape) + .34em);width:2px;
+  background:linear-gradient(90deg,rgba(30,20,10,.13),rgba(255,255,255,.3))}
+.ld-backcover{inset:0;z-index:0;border-radius:.2em .6em .6em .2em}
+
+/* наклейка */
+.ld-label,.ld-row .lp-mark,body.ld .nb-stage .lp-mark{position:relative;background:var(--grain-soft),#fbf8ee;border-radius:.14em;outline:1px solid rgba(45,50,95,.5);outline-offset:-.24em;
+  box-shadow:0 .5px 1px rgba(30,20,10,.3),0 0 0 .5px rgba(30,20,10,.08);rotate:-.5deg}
+.ld-row .lp-mark,body.ld .nb-stage .lp-mark{border-radius:3px;outline-offset:-5px}
+.ld-row .lp-sheet.blank .lp-mark{background:none;outline:0;box-shadow:none;rotate:none}
+.ld-label::after{content:"";position:absolute;left:14%;right:14%;top:74%;height:1px;background:rgba(45,50,95,.32)}
+.ld-label b{position:relative;z-index:1}
+
+/* страницы: блок чуть меньше обложки, у сгиба тень, бумага в точку */
+.ld-leaf:not(.ld-cover){inset:1.3% 1.7% 1.3% 0}
+.ld-leaf:not(.ld-cover) .ld-front{background:linear-gradient(90deg,rgba(70,50,30,.18) 0,rgba(70,50,30,.05) 3.5%,rgba(70,50,30,0) 11%),var(--dots) .39em .39em/.78em .78em,var(--grain-soft),var(--paper-c);
+  box-shadow:inset 0 0 0 1px rgba(60,45,30,.1);border-radius:.1em .42em .42em .1em}
+.ld-leaf:not(.ld-cover) .ld-back{background:linear-gradient(270deg,rgba(70,50,30,.18) 0,rgba(70,50,30,.05) 3.5%,rgba(70,50,30,0) 11%),var(--dots) .39em .39em/.78em .78em,var(--grain-soft),var(--paper-c);
+  box-shadow:inset 0 0 0 1px rgba(60,45,30,.1);border-radius:.42em .1em .1em .42em}
+/* срез страниц у нижнего листа */
+.ld-base .ld-front{overflow:visible;box-shadow:inset 0 0 0 1px rgba(60,45,30,.1),1.5px 1px 0 -.5px #efe9d8,1.5px 1px 0 0 rgba(60,45,30,.22),3px 2px 0 -.5px #f4eedf,3px 2px 0 0 rgba(60,45,30,.18)}
+/* изнутри обложка — тот же картон, на него наклеен первый лист */
+.ld-cover .ld-back{background:var(--light),var(--grain),var(--c);box-shadow:var(--bevel);border-radius:.6em .2em .2em .6em}
+.ld-cover .ld-back::before{content:"";position:absolute;inset:1.3% 0 1.3% 1.7%;border-radius:.42em .1em .1em .42em;
+  background:linear-gradient(270deg,rgba(70,50,30,.18) 0,rgba(70,50,30,.05) 3.5%,rgba(70,50,30,0) 11%),var(--dots) .39em .39em/.78em .78em,var(--grain-soft),var(--paper-c);box-shadow:inset 0 0 0 1px rgba(60,45,30,.1)}
+.ld-cover .ld-back>*{position:relative;z-index:1}
+.ld-cover .ld-front{border-radius:.2em .6em .6em .2em}
+
+/* тень на столе: растет влево вместе с раскрытой обложкой */
+.ld-ground{position:absolute;top:0;bottom:0;right:0;left:calc(-100% * var(--open,0));z-index:0;border-radius:.6em;pointer-events:none;
+  box-shadow:0 1px 1px rgba(40,30,20,.2),.35em .6em 1.1em -.3em rgba(40,30,20,.3),.9em 1.6em 2.6em -1em rgba(40,30,20,.32)}
+/* лист темнеет, пока перелистывается */
+.ld-shade{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:var(--sh,0);background:linear-gradient(90deg,rgba(40,30,20,.55),rgba(40,30,20,.14) 55%,rgba(40,30,20,0))}
+.ld-back .ld-shade{background:linear-gradient(270deg,rgba(40,30,20,.55),rgba(40,30,20,.14) 55%,rgba(40,30,20,0))}
+.ld-demo .wcard{background:#fffdf6;box-shadow:0 .5px 1px rgba(30,20,10,.26),0 0 0 .5px rgba(30,20,10,.1)}
+
+/* тетради на полке лежат на столе */
+.ld-row .lp-sheet:not(.blank){border-radius:5px 14px 14px 5px;
+  box-shadow:var(--bevel),2px 2px 0 -.5px #efe9d8,2px 2px 0 0 rgba(60,45,30,.2),4px 3px 0 -.5px #f4eedf,4px 3px 0 0 rgba(60,45,30,.16),0 1px 1px rgba(40,30,20,.18),7px 12px 20px -8px rgba(40,30,20,.28),16px 28px 40px -22px rgba(40,30,20,.3)}
+.ld-row{padding-bottom:44px}
+@media (hover:hover){.ld-row .lp-card:hover .lp-sheet:not(.blank){translate:-2px -4px;
+  box-shadow:var(--bevel),2px 2px 0 -.5px #efe9d8,2px 2px 0 0 rgba(60,45,30,.2),4px 3px 0 -.5px #f4eedf,4px 3px 0 0 rgba(60,45,30,.16),0 1px 1px rgba(40,30,20,.18),10px 18px 26px -10px rgba(40,30,20,.3),22px 38px 50px -26px rgba(40,30,20,.32)}}
+/* раскрытие тетради с полки: те же материалы */
+body.ld .nb-page{background:var(--dots) 7px 7px/14px 14px,var(--grain-soft),var(--paper-c)}
+body.ld .nb-inside{background:var(--light),var(--grain),var(--c);box-shadow:var(--bevel)}
+
+/* ---------- переход к любому шагу: флажки-закладки на страницах ----------
+   Флажок приклеен к странице своего шага и переворачивается вместе с ней: пройденные шаги оказываются слева,
+   предстоящие остаются справа, как в настоящей тетради. Цвет флажка — цвет стола этого шага.
+   Текущий флажок выдвинут сильнее. На закрытой тетради флажков нет. */
+.ld-flag{position:absolute;left:calc(100% - .55em);top:var(--fy);width:2em;height:1.5em;padding:0;transform-style:preserve-3d;
+  opacity:0;pointer-events:none;transition:opacity .3s var(--ease),width .25s var(--ease)}
+.ld-pin.opened .ld-flag{opacity:1;pointer-events:auto}
+.ld-flag span{position:absolute;inset:0;display:grid;place-items:center;padding-left:.5em;border-radius:0 .3em .3em 0;backface-visibility:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 46%),var(--fc);font:700 max(.6em,13px)/1 var(--ui);color:#1a171c;font-variant-numeric:tabular-nums;
+  box-shadow:0 1px 1px rgba(40,30,20,.22),inset 0 0 0 1px rgba(26,23,28,.08)}
+.ld-flag span+span{transform:rotateY(180deg);padding:0 .5em 0 0;border-radius:.3em 0 0 .3em}
+.ld-flag.cur{width:2.75em}
+.ld-flag:focus-visible{outline-offset:2px}
+.ld-flag::after{content:"";position:absolute;inset:-.45em -.6em -.45em 0}
+/* набор для телефона: флажки стоят на правом краю и не перелистываются, пройденные утоплены */
+.ld-flags-side{display:none;position:absolute;inset:1.3% 1.7% 1.3% 0;pointer-events:none;transform:translateZ(1px)}
+@media (hover:hover){.ld-flag:not(.cur):hover{width:2.35em}}
+/* подпись от руки под тетрадью: до раскрытия зовет листать, после — дает уйти со сцены, не досматривая */
+button.ld-scroll{padding:8px 12px;border-radius:10px}
+@media (hover:hover){button.ld-scroll:hover{color:var(--pencil-ink)}}
+
+/* ---------- остальные контролы в том же языке ---------- */
+/* выбор из двух-трех вариантов: выбранное отмечено маркером, как свое слово в тексте */
+.ld .seg{padding:0;gap:2px;background:none}
+.ld .seg button{height:34px;padding:0 9px;background:none;box-shadow:none;color:var(--ink-2)}
+.ld .seg button[aria-pressed="true"]{color:var(--ink);font-weight:600;box-shadow:none;
+  background:linear-gradient(100deg,rgba(255,228,106,0) 2%,var(--marker) 9%,rgba(255,228,106,.88) 91%,rgba(255,228,106,0) 98%) no-repeat center/100% 1.45em}
+/* главное действие — две печатные наклейки: стрелка и подпись. При наведении стрелка перескакивает
+   на другую сторону, подпись чуть наклоняется (прием подсмотрен у extrafazant.nl) */
+.split{display:inline-flex;gap:4px;height:54px;margin-top:30px;font:600 17px/1 var(--ui);color:#fff;cursor:pointer}
+.split span{display:grid;place-items:center;height:100%;border-radius:11px;background:var(--grain),var(--purple);outline:1px solid rgba(255,255,255,.42);outline-offset:-5px;
+  transition:translate .38s cubic-bezier(.3,1.35,.5,1),rotate .38s cubic-bezier(.3,1.35,.5,1),scale .15s var(--ease)}
+.split .s-ic{width:54px;font-size:20px}
+.split .s-tx{padding:0 24px;white-space:nowrap}
+@media (hover:hover){
+  .split:hover .s-ic{translate:calc(var(--tw,0px) + 4px) 0}
+  .split:hover .s-tx{translate:-58px 0;rotate:-2deg}
+}
+.split:active span{scale:.96}
+.split:focus-visible{outline:2px solid var(--purple);outline-offset:4px;border-radius:12px}
+.ld-form .split{margin-top:0;height:48px;font-size:16px}
+.ld-form .split .s-ic{width:48px}
+@media (hover:hover){.ld-form .split:hover .s-tx{translate:-52px 0}}
+/* лист для своей домашки: та же бумага в точку, подпись поля набрана как мелкая печать на наклейке */
+.ld-form{background:var(--dots) 7px 7px/14px 14px,var(--grain-soft),var(--paper-c);box-shadow:inset 0 0 0 1px rgba(60,45,30,.12),0 1px 1px rgba(40,30,20,.14),6px 10px 22px -12px rgba(40,30,20,.26);border-radius:6px 16px 16px 6px}
+.ld-form label{font:600 11px/1 var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.ld-form-foot{border-top:1px solid rgba(45,50,95,.28)}
+.ld-attach{padding:0 4px;border-radius:8px}
+@media (hover:hover){.ld-attach:hover{color:var(--purple)}}
+.ld-top .lp-nav a{position:relative}
+@media (hover:hover){.ld-top .lp-nav a:hover{color:var(--ink)}}
+@media (max-width:900px){
+  .ld-nb{--nbw:min(84vw,calc((72svh - 140px)/1.2));top:calc(16svh + 140px)}
+  .ld-leaf .ld-flag{display:none}
+  .ld-flags-side{display:block}
+  .ld-flag{width:1.75em}
+  .ld-flag.cur{width:2.2em}
+  .ld-flag.past{width:1.3em}
+  .ld-flag.past span{filter:saturate(.55) brightness(1.06);color:rgba(26,23,28,.6)}
+  .ld-scroll{bottom:10px;font-size:20px}
+  .ld-scroll[data-state="closed"]{display:none}
+}
+
+/* ---------- фон закрепленной сцены ----------
+   Первый экран остается на бумаге. Когда тетрадь выезжает в центр, под ней проявляется «стол»:
+   цветная поверхность с мягким светом сверху. К концу сцены фон снова уходит в бумагу.
+   Выбран вариант «по шагам»: у каждого шага свой цвет стола, он плавно сменяется при перелистывании. */
+.ld-pin::before{content:"";position:absolute;inset:0;z-index:0;opacity:var(--lit,0);pointer-events:none;
+  background:radial-gradient(ellipse 70% 60% at 50% 42%,rgba(255,255,255,.34),rgba(255,255,255,0) 70%),var(--stage,transparent);transition:background-color .6s var(--ease)}
+.ld-pin[data-bg="paper"]{--stage:transparent}
+.ld-pin[data-bg="mint"]{--stage:#c4e4d3}
+.ld-pin[data-bg="night"]{--stage:#2a1c57}
+.ld-pin[data-bg="night"]::before{background:radial-gradient(ellipse 70% 60% at 50% 42%,rgba(140,110,255,.3),rgba(140,110,255,0) 70%),var(--stage)}
+.ld-pin[data-bg="steps"]{--stage:#f1e2a8}
+.ld-pin[data-bg="steps"][data-step="1"]{--stage:#c4e4d3}
+.ld-pin[data-bg="steps"][data-step="2"]{--stage:#f0cfd6}
+.ld-pin[data-bg="steps"][data-step="3"]{--stage:#cddcec}
+.ld-pin[data-bg="steps"][data-step="4"]{--stage:#d9d0f0}
+/* на темном столе подписи вокруг тетради светлеют вместе с фоном */
+.ld-pin[data-bg="night"].lit .ld-caps{color:#fffdf8}
+.ld-pin[data-bg="night"].lit .ld-caps :is(p,.ld-n){color:rgba(255,253,248,.72)}
+.ld-pin[data-bg="night"].lit .ld-scroll{color:#ffd9d0}

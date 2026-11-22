@@ -129,7 +129,25 @@ learny_html = learny_html.replace('data-theme="light" data-theme-mode="light"', 
 learny_html = learny_html.replace("</head>", '<style id="learny-calm">\n' + calm_css + "\n</style>\n</head>", 1)
 body, end = learny_html.rsplit("</body>", 1)
 learny_html = body + '<script id="learny-calm-script">\n' + calm_js + "\n</script>\n</body>" + end
+# Новый посетитель без уроков, прогресса и словаря сразу уходит на лендинг, еще до отрисовки приложения.
+# У кого есть данные или ссылка внутрь приложения (урок, кабинет, код кабинета), остается здесь.
+landing_redirect = """<script>
+(function(){try{
+  if (location.hash && location.hash !== "#welcome") return;
+  var filled = function (key) { try { var v = JSON.parse(localStorage.getItem(key) || "null"); return !!v && (Array.isArray(v) ? v.length > 0 : Object.keys(v).length > 0); } catch (e) { return true; } };
+  var state = JSON.parse(localStorage.getItem("homework-english-v3") || "null");
+  var progress = state && state.progress ? Object.keys(state.progress).length : 0;
+  if (!progress && !filled("homework-english-lessons-v1") && !filled("et-vocab-v1")) location.replace("landing.html");
+}catch(e){}})();
+</script>
+"""
+learny_html = learny_html.replace('<meta charset="utf-8">\n', '<meta charset="utf-8">\n' + landing_redirect, 1)
+# Лендинг: исходник learny-notebook-landing.html публикуется как landing.html; версия в ссылках на стили и скрипт считается по их содержимому.
+landing_assets = ["learny-notebook.css", "learny-notebook-landing.css", "learny-notebook-open.js"]
+landing_version = hashlib.sha1(b"".join((ROOT / name).read_bytes() for name in landing_assets)).hexdigest()[:10]
+landing_html = re.sub(r'(learny-notebook(?:-landing)?\.css|learny-notebook-open\.js)(\?v=[0-9a-f]+)?"', lambda m: m.group(1) + "?v=" + landing_version + '"', (ROOT / "learny-notebook-landing.html").read_text(encoding="utf-8"))
 pages = {
+    "landing.html": landing_html,
     "index.html": learny_html,
     "soft.html": soft_html,
     "blue.html": blue_html,

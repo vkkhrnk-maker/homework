@@ -645,6 +645,8 @@
     function refresh() {
       if (S.view !== "home") return;
       page = homePage();
+      // Первого экрана внутри приложения больше нет: его роль играет лендинг. Окно создания урока поверх него остается.
+      if (page === "welcome" && (!location.hash || location.hash === "#welcome")) { location.replace("landing.html"); return; }
       document.body.dataset.calmPage = page;
       const personal = page === "cabinet";
       const welcome = page === "welcome";
@@ -697,6 +699,15 @@
       if (candidate) openLesson(candidate.id, savedStage(candidate));
     });
 
+    // Текст, набранный на лендинге в блоке «свой урок», переезжает в поле создания урока.
+    function takeDraft() {
+      let draft = "";
+      try { draft = sessionStorage.getItem("learny-draft") || ""; sessionStorage.removeItem("learny-draft"); } catch {}
+      const field = $one("#paste-area");
+      if (!draft || !field) return;
+      field.value = draft;
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+    }
     // A lesson URL contains the stage; the question index remains in the regular progress store.
     function route(focusHeading) {
       const hash = location.hash.slice(1);
@@ -716,7 +727,7 @@
         if (hash && hash !== "new-lesson" && !homePages.includes(hash)) history.replaceState(null, "", "#cabinet");
         if (S.view !== "home") show("home");
         else refresh();
-        if (hash === "new-lesson") { openComposer(); return; }
+        if (hash === "new-lesson") { openComposer(); takeDraft(); return; }
         if (closing) { hideComposer(true); return; }
         window.scrollTo({ top: 0, behavior: "instant" });
         if (focusHeading) {
