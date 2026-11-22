@@ -277,6 +277,7 @@ body.home main{padding-top:0}
 .topic-ideas button{height:32px;padding:0 12px;border-radius:999px;background:var(--bg);font-size:13px;font-weight:500;color:var(--fg-2)}
 .topic-ideas button:hover{color:var(--accent);background:var(--accent-soft)}
 .drop-actions{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:16px;text-align:center}
+.parse-fallback{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px}
 .intake-level{min-width:0;margin:0;padding:0;border:0}
 .intake-level legend{margin:0 auto 10px;padding:0;color:var(--fg);font-size:16px;font-weight:700}
 .intake-level-options{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
@@ -1033,6 +1034,10 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
           <span class="parse-status" id="parse-status" hidden><span class="spinner" aria-hidden="true"></span><span id="parse-progress" aria-live="polite"></span></span>
           <button class="link-btn" id="parse-stop" data-ui="parseStop" hidden></button>
           <span class="hint" id="parse-hint" aria-live="polite"></span>
+          <div class="parse-fallback" id="parse-fallback" hidden>
+            <button class="ghost-btn" id="fallback-demo" type="button" data-ui="fallbackDemo"></button>
+            <button class="link-btn" id="fallback-key" type="button" data-ui="fallbackKey"></button>
+          </div>
         </div>
       </div>
       <div class="how-list" id="how-list"></div>
@@ -1368,6 +1373,24 @@ const UI = {
   parseFailed:  { ru: "Не получилось связаться с ИИ. Попробуйте ещё раз.", en: "Couldn't reach the AI. Try again." },
   parseOffline: { ru: "Нет связи с интернетом. Разбор работает только онлайн.", en: "No internet connection. Breaking down needs to be online." },
   parseBadKey:  { ru: "Ключ ИИ не подошёл. Проверьте его: меню → «ИИ для разбора уроков».", en: "The AI key didn't work. Check it: menu → \"AI for lessons\"." },
+  aiQuotaDevice:{ ru: "На сегодня бесплатный лимит на этом устройстве исчерпан. Текст и файлы остались на месте, завтра можно продолжить.",
+                  en: "Today's free limit on this device is used up. Your text and files are still here; you can continue tomorrow." },
+  aiQuotaDay:   { ru: "На сегодня общий бесплатный лимит Learny исчерпан. Текст и файлы остались на месте, завтра можно продолжить.",
+                  en: "Learny's shared free limit for today is used up. Your text and files are still here; you can continue tomorrow." },
+  aiServerDown: { ru: "Сервис создания уроков сейчас недоступен. Текст и файлы остались на месте, попробуйте позже.",
+                  en: "The lesson service is unavailable right now. Your text and files are still here; try again later." },
+  aiServerBusy: { ru: "Сейчас слишком много запросов. Подождите пару минут и попробуйте снова.",
+                  en: "Too many requests right now. Wait a couple of minutes and try again." },
+  aiLimitShort: { ru: "Бесплатный лимит ИИ на сегодня исчерпан. Свой ключ можно подключить в меню «···».",
+                  en: "Today's free AI limit is used up. You can connect your own key in the ··· menu." },
+  aiDownShort:  { ru: "Сервис ИИ сейчас недоступен. Попробуйте позже.", en: "The AI service is unavailable right now. Try again later." },
+  aiServer:     { ru: "через сервер Learny, без ключа", en: "via the Learny server, no key" },
+  aiSheetServer:{ ru: "Ключ не обязателен: без него уроки создаются через сервер Learny с дневным лимитом. Со своим ключом лимита нет, а запросы идут напрямую в ИИ.",
+                  en: "A key is optional: without one, lessons are built through the Learny server with a daily limit. With your own key there is no limit and requests go straight to the AI." },
+  fallbackDemo: { ru: "Открыть готовый урок", en: "Open a sample lesson" },
+  fallbackKey:  { ru: "Подключить свой ключ ИИ", en: "Use my own AI key" },
+  fileSendServer:{ ru: "По нажатию «Распознать текст» файлы отправятся на сервер Learny и в Google Gemini. Результат можно будет проверить перед созданием урока.",
+                  en: "Choosing Extract text sends the files to the Learny server and Google Gemini. You can review the result before building your lesson." },
   modeMaterial: { ru: "Текст от учителя", en: "Teacher's text" },
   modeTopic:    { ru: "Своя тема", en: "My topic" },
   topicBtn:     { ru: "Составить урок", en: "Build the lesson" },
@@ -2566,6 +2589,19 @@ function safe(s) {
 const bi = v => (v && typeof v === "object" && !Array.isArray(v)) ? { ru: safe(v.ru ?? v.en), en: safe(v.en ?? v.ru) } : safe(v);
 const arr = v => Array.isArray(v) ? v : [];
 const countRu = (n, one, few, many) => `${n} ${plural(n, one, few, many)}`;
+/* модель иногда отдаёт текст до и после пропуска без пробелов: тогда слова слипаются с ответом («My familyused tolive») */
+function gapSpaces([before, after]) {
+  if (before && !/[\s(\[“"'‘«\/-]$/.test(before)) before += " ";
+  if (after && !/^(?:[\s.,!?;:)\]”"’'»…%\/-]|n['’]t\b)/.test(after)) after = " " + after;
+  return [before, after];
+}
+/* модель иногда повторяет последнее слово ответа сразу после пропуска («used to be» + « be a cinema»): лишний повтор убираем */
+function gapEcho([before, after], answer) {
+  const words = stripTags(String(answer ?? "")).trim().split(/\s+/);
+  if (words.length < 2 || !after) return [before, after];
+  const last = words[words.length - 1].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return [before, after.replace(new RegExp("^\\s*" + last + "(?=[\\s.,!?;:])", "i"), "")];
+}
 
 /* ответ Claude → урок в формате встроенных; бросает, если собрать нечего */
 function buildLesson({ id, createdAt, lesson: x }) {
@@ -2612,7 +2648,7 @@ function buildLesson({ id, createdAt, lesson: x }) {
       mode: "form",
       items: drill.map(q => ({
         part: parts > 1 ? Number(q.part) || undefined : undefined,
-        s: q.s.map(safe), verb: q.verb ? safe(q.verb) : undefined,
+        s: gapSpaces(gapEcho(q.s.map(safe), q.a[0])), verb: q.verb ? safe(q.verb) : undefined,
         a: arr(q.a).map(safe), also: arr(q.also).length ? arr(q.also).map(safe) : undefined,
         why: bi(q.why || ""), hint: bi(q.hint || ""),
         trap: q.trap?.word ? { word: safe(q.trap.word), why: bi(q.trap.why || "") } : undefined
@@ -2800,11 +2836,14 @@ match (kind "cloze", for grammar lessons about choosing between forms or tenses)
          "items": [{"s": "a short story paragraph of 3–4 sentences with 3 gaps written as {1}, {2}, {3}", "gaps": [{"options": ["right form", "tempting wrong form"], "a": "the right form, exactly one of options", "why": {"ru","en"} one sentence: why this form fits the meaning}]}]}
 speak = {"groups": [{"group": {"ru","en"}, "items": [{"q": "question or task in English", "starter"?: "sentence opener", "mode"?: "write" (only for writing tasks: essays, emails, "write N words")}]}],
          "howTo": {"ru","en"} how to answer, "tips"?: ["useful phrases"], "tipsLabel"?: {"ru","en"}, "seconds": 60–180}`;
-const LESSON_RULES = `- drill: gap-fill items on the lesson's grammar or vocabulary. Exactly one gap per item: "s" holds the text before and after it and never contains the answer. Each answer must follow unambiguously from the context; put real alternatives in "also". Answers are 1–4 words, lowercase unless a proper noun. Use "part" only to group items into 2–3 sections.
+const LESSON_RULES = `- drill: gap-fill items on the lesson's grammar or vocabulary. Exactly one gap per item: "s" holds the text before and after it and never contains the answer. Each answer must follow unambiguously from the context; put real alternatives in "also". Answers are 1–4 words, lowercase unless a proper noun or the first word of the sentence. Use "part" only to group items into 2–3 sections.
+- drill "s": keep the normal spaces next to the gap, as in ["She ", " to the gym every day."]. The answer and the text after the gap never overlap: a word that is part of "a" is not repeated at the start of "s"[1]. If a sentence in the material has two blanks (for example a question with the auxiliary and the verb apart), make one gap from the first blank to the last, with the words between them inside "a".
+- drill "also": only complete answers a student could type into the gap as they are. Never copy answer-key shorthand with dots, slashes or brackets (such as "did ... go").
 - drill "trap": only where a learner could confidently pick a similar but wrong answer (e.g. "comparing" instead of "compared"); name that answer and explain in one short sentence why it does not fit. Skip it when no such confusion is likely.
-- match: never make items that only ask the student to NAME a tense, form or category ("Which tense is this?") — that tests labels, not use. For grammar where forms are chosen by meaning use "cloze": 3–4 mini-stories or short dialogues, 3 gaps each, two options per gap, exactly one of them right in context; the {n} markers in "s" must match "gaps" one to one. For a word list use "vocab". "a" must exactly equal one of the options (choice, cloze) or be one of the lesson's words (vocab).
-- speak: writing tasks (essays, emails, "write 150 words…") go here too, with "mode": "write".
-- Russian: natural and short, addressing the student with «вы». English: plain.
+- match: never make items that only ask the student to NAME a tense, form or category ("Which tense is this?") — that tests labels, not use. For grammar where forms are chosen by meaning use "cloze": 3–4 mini-stories or short dialogues, 3 gaps each, two options per gap, exactly one of them right in context; the {n} markers in "s" must match "gaps" one to one. The wrong option in a gap is always a real, correctly spelled English form that a learner could honestly choose there (another tense or structure), never a misspelling or an invented form: the student has to think about meaning, not spot a non-word. For a word list use "vocab". "a" must exactly equal one of the options (choice, cloze) or be one of the lesson's words (vocab).
+- speak: writing tasks go here too, with "mode": "write". Any task that asks the student to write or make up sentences, a paragraph, an essay or an email is a writing task. "starter" is one short sentence opener, never a sample answer or a numbered list.
+- Russian: natural and short, addressing the student with «вы». Every explanation ("why", "hint", "note", "gloss", "callout") is a complete, grammatical Russian sentence; English appears in it only as the form or example being discussed, never as a stray word of your own. Do not present a tendency as an absolute rule («всегда», «никогда») unless it has no exceptions at this level.
+- English: plain. Before answering, reread every English example and every Russian explanation once and fix spelling and grammar slips.
 - Questions for the student to discuss or answer (e.g. "Question: …") are not theory: put them in "speak", never in a rule's "callout" or "note". A "callout" is only a short tip or reminder.
 - Inside strings only <b>, <i> and <br> are allowed. No Markdown.`;
 
@@ -2812,7 +2851,8 @@ const MATERIAL_LESSON_RULES = `- theory: 3–9 rules. Keep all of the material's
 - Use the material's own exercises, examples, vocabulary and questions first. Add your own items only where a block would otherwise be thin. Match the material's level unless a target level is given.
 - If the material contains an answer key or the teacher's answers, use them as "a" exactly and do not replace them with your own; put other acceptable answers in "also".
 - drill: 10–25 items. match: 8–12 items (cloze: 3–4 stories). speak: up to 15 tasks; put the material's speaking and writing tasks here.
-- Use null for a block the material gives no basis for.`;
+- match for grammar material: when the material teaches grammar where the form is chosen by meaning (tenses, modals, conditionals, articles, comparisons and the like), always include a "cloze" block of 3–4 mini-stories on that grammar, even if the material has no such exercise: without it the lesson loses a whole step.
+- Use null only for a block the material gives no basis for. This never applies to "theory", and for grammar material never to "match".`;
 const TOPIC_LESSON_RULES = `- If the topic is broad (for example "the tenses" or «времена»), pick the core of it that matters most at the target level and say in theoryTitle what the lesson covers. If the topic is not about the English language, make a vocabulary-and-speaking lesson on that theme.
 - theory: 4–9 rules that explain the topic from zero: the form, when to use it, how it differs from what a Russian speaker would expect, signal words, and one or two typical mistakes in "wrong". When the lesson compares several forms, end with a summary rule that puts them side by side in "summary".
 - Examples: natural everyday English at the target level, short, with the key form in <b>bold</b>.
@@ -2876,8 +2916,11 @@ const PARSE_ERRORS = {
   cancelled: "parseStopped", not_granted: "parseDenied", sampling_disabled: "parseDenied", not_declared: "parseDenied",
   capability_disabled: "parseDenied", capability_removed: "parseDenied", rate_limited: "parseBusy",
   prompt_too_large: "parseTooLong", invalid_json: "parseBad", empty_completion: "parseBad",
-  refused: "parseRefused", session_expired: "parseSignIn", bad_key: "parseBadKey", offline: "parseOffline"
+  refused: "parseRefused", session_expired: "parseSignIn", bad_key: "parseBadKey", offline: "parseOffline",
+  quota_device: "aiQuotaDevice", quota_day: "aiQuotaDay", server_down: "aiServerDown", server_busy: "aiServerBusy"
 };
+/* урок сейчас не создать: рядом с сообщением показываем выход в готовый урок и запасной путь со своим ключом */
+const PARSE_FALLBACK = new Set(["aiQuotaDevice", "aiQuotaDay", "aiServerDown"]);
 const unifiedIntake = document.documentElement.dataset.intake === "unified";
 const intakeCopy = {
   parseHint: "intakeHint", parseHintEmpty: "intakeEmpty",
@@ -2894,6 +2937,7 @@ function setParsing(on) {
   $("#parse-stop").hidden = !on;
   $("#parse-status").hidden = !on;
   $("#parse-hint").hidden = on;
+  if (on && $("#parse-fallback")) $("#parse-fallback").hidden = true;
   $$("#mode-seg button").forEach(b => { b.disabled = on; });
   $$("#intake-level button").forEach(b => { b.disabled = on; });
   $("#material-attach").disabled = on;
@@ -2906,6 +2950,8 @@ function parseHint(key, isError) {
   h.dataset.message = key;
   h.textContent = t((unifiedIntake && intakeCopy[key]) || key);
   h.classList.toggle("err", !!isError);
+  const fallback = $("#parse-fallback");
+  if (fallback) fallback.hidden = !PARSE_FALLBACK.has(key);
 }
 /* ---- кто разбирает: Claude на claude.ai, иначе ИИ по ключу с этого устройства (как в English Tutor) ---- */
 const lsGet = k => { try { return localStorage.getItem(k) || ""; } catch(e) { return ""; } };
@@ -3012,11 +3058,58 @@ async function geminiJSON(prompt, { signal, audio, quick, media } = {}) {
   }
   throw lastErr;
 }
-/* null — разбирать некому: нет ни Claude на claude.ai, ни ключа */
-async function lessonAI({ requireMedia = false } = {}) {
+/* null — разбирать некому: так бывает только там, где серверного пути нет */
+/* SERVER_AI_START — без своего ключа запрос идёт на сервер Learny: ключ ИИ живёт только там, в страницу не попадает */
+const AI_SERVER_DEFAULT = "https://homework-sync-vika.fly.dev", DEVICE_KEY = "et-device";
+const SERVER_ERRORS = { device_limit: "quota_device", daily_limit: "quota_day", busy: "server_busy", no_key: "server_down", origin: "server_down",
+  too_large: "prompt_too_large", refused: "refused", bad_answer: "invalid_json", timeout: "upstream_error", upstream: "upstream_error", bad_request: "upstream_error" };
+/* другой адрес сервера можно задать только на локальной странице: так проверяется сборка до выкладки */
+function aiServerURL() {
+  const local = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? lsGet("et-ai-server") : "";
+  return (local || AI_SERVER_DEFAULT).replace(/\/+$/, "");
+}
+/* случайная метка устройства: по ней сервер считает дневной лимит. Ни имени, ни почты в ней нет */
+function deviceId() {
+  let id = lsGet(DEVICE_KEY);
+  if (!/^[a-f0-9]{32}$/.test(id)) {
+    id = [...crypto.getRandomValues(new Uint8Array(16))].map(b => b.toString(16).padStart(2, "0")).join("");
+    lsSet(DEVICE_KEY, id);
+  }
+  return id;
+}
+async function serverJSON(prompt, { signal, media, task = "quick" } = {}) {
+  if (signal?.aborted) throw { code: "cancelled" };
+  const ctl = new AbortController(), onAbort = () => ctl.abort();
+  signal?.addEventListener("abort", onAbort);
+  const timer = setTimeout(() => ctl.abort(), task === "quick" ? 60000 : 300000);
+  try {
+    let status = 0, last = null;
+    try {
+      const r = await fetch(aiServerURL() + "/api/ai", {
+        method: "POST", signal: ctl.signal, headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task, device: deviceId(), prompt, media: (media || []).map(file => ({ mime: file.mime, data: file.data })) })
+      });
+      status = r.status;
+      /* пока ИИ думает, сервер шлёт строки-пульсы; результат или ошибка — в последней строке */
+      const lines = (await r.text()).trim().split("\n");
+      try { last = JSON.parse(lines[lines.length - 1]); } catch (e) {}
+    } catch (e) {
+      if (signal?.aborted) throw { code: "cancelled" };
+      if (ctl.signal.aborted) throw { code: "upstream_error", message: "timeout" };
+      throw { code: typeof navigator !== "undefined" && navigator.onLine === false ? "offline" : "server_down" };
+    }
+    if (signal?.aborted) throw { code: "cancelled" };
+    if (status === 200 && typeof last?.text === "string") return parseJSONLoose(last.text);
+    throw { code: SERVER_ERRORS[last?.error] || "server_down" };
+  } finally { clearTimeout(timer); signal?.removeEventListener("abort", onAbort); }
+}
+/* SERVER_AI_END */
+/* кто разбирает: Claude на claude.ai; свой ключ, если он подключён; иначе сервер Learny. task — вид задачи для лимитов сервера */
+async function lessonAI({ requireMedia = false, task = "quick" } = {}) {
   const sample = requireMedia ? null : await claudeCap("sample");
   if (sample) return { builtIn: true, json: (prompt, opts) => sample.json(prompt, { ...opts, cache: false }) };
-  if (requireMedia ? !lsGet(KEY_GEMINI) && !lsGet(KEY_CLAUDE) : !aiKey()) return null;
+  if (requireMedia ? !lsGet(KEY_GEMINI) && !lsGet(KEY_CLAUDE) : !aiKey())
+    return typeof serverJSON === "function" ? { builtIn: false, server: true, json: (prompt, opts) => serverJSON(prompt, { ...opts, task }) } : null;
   /* если выбранный ИИ перегружен или не отвечает, а ключ второго есть — пробуем его, чтобы проверка не зависала */
   const claude = requireMedia ? (aiProvider() === "claude" ? !!lsGet(KEY_CLAUDE) : !lsGet(KEY_GEMINI)) : aiProvider() === "claude", primary = claude ? claudeJSON : geminiJSON;
   const backup = claude ? (lsGet(KEY_GEMINI) ? geminiJSON : null) : (lsGet(KEY_CLAUDE) ? claudeJSON : null);
@@ -3172,7 +3265,7 @@ function renderMaterialFiles() {
   }));
   const providers = materialProviderOrder();
   $("#material-review").hidden = !materialDraft.review && !pending;
-  $("#material-review").textContent = pending ? t("fileSendNotice", AI_NAMES[providers[0] || aiProvider()], providers[1] ? AI_NAMES[providers[1]] : "") : t("fileReview");
+  $("#material-review").textContent = !pending ? t("fileReview") : providers.length || !UI.fileSendServer ? t("fileSendNotice", AI_NAMES[providers[0] || aiProvider()], providers[1] ? AI_NAMES[providers[1]] : "") : t("fileSendServer");
   if (newMode() === "material") $("#parse-btn").textContent = t(pending ? "fileExtract" : unifiedIntake ? "intakeBtn" : "parseBtn");
 }
 function clearMaterialFiles() {
@@ -3206,7 +3299,7 @@ async function addMaterialFiles(incoming) {
 }
 async function extractMaterial() {
   if (parseCtl) return;
-  const ai = await lessonAI({ requireMedia: true });
+  const ai = await lessonAI({ requireMedia: true, task: "extract" });
   if (!ai) { parseHint("fileNeedKey", true); return keySheet("gemini", "fileNeedKey"); }
   const targets = materialDraft.files.filter(file => !file.inserted);
   if (!targets.length) return;
@@ -3305,7 +3398,7 @@ async function parseLesson(chosenLevel = null) {
   let askLevel = false;
   $("#parse-progress").textContent = t(auto ? "intakeThinking" : topic ? "topicThinking" : "parseThinking");
   try {
-    const ai = await lessonAI();
+    const ai = await lessonAI({ task: "lesson" });
     materialAbort(ctl.signal);
     if (!ai) { parseHint("parseNeedKey", true); return keySheet("gemini"); }
     const prompt = auto ? intakeLessonPrompt(text, fromFile, level)
@@ -3347,6 +3440,12 @@ function openLesson(id, stage = "theory") {
   S.lessonId = id; save();
   renderTabs(); renderTheory(); show(stage);
 }
+/* выход, когда создать урок сейчас нельзя: готовый урок или свой ключ */
+$("#fallback-demo")?.addEventListener("click", () => {
+  const ready = LESSONS.find(l => l.id === "modals" && !l.own) || LESSONS.find(l => !l.own);
+  if (ready) openLesson(ready.id);
+});
+$("#fallback-key")?.addEventListener("click", () => keySheet());
 
 /* ---- нижние листы, тост, меню, тема ---- */
 let toastT;
@@ -3358,7 +3457,7 @@ function closeMenu() { $("#menu").hidden = true; }
 $("#menu-btn").addEventListener("click", async () => {
   $("#menu").hidden = false;
   const ai = await claudeCap("sample");
-  $("#ai-btn").innerHTML = `<span>${t("aiBtn")}<small>${ai ? t("aiBuiltIn") : aiKey() ? AI_NAMES[aiProvider()] : t("aiNone")}</small></span><span aria-hidden="true">›</span>`;
+  $("#ai-btn").innerHTML = `<span>${t("aiBtn")}<small>${ai ? t("aiBuiltIn") : aiKey() ? AI_NAMES[aiProvider()] : t("aiServer")}</small></span><span aria-hidden="true">›</span>`;
   $("#ai-btn").hidden = !!ai;
 });
 $("#menu").addEventListener("click", e => { if (e.target === $("#menu") || e.target.closest(".opt")) closeMenu(); });
@@ -3397,7 +3496,7 @@ async function testKey(pv, key) {
 function keySheet(pv = aiProvider(), leadKey = "aiSheetLead") {
   const isG = pv === "gemini", store = isG ? KEY_GEMINI : KEY_CLAUDE, has = !!lsGet(store);
   openSheet(`<h3>${t("aiSheetTitle")}</h3>
-    <p>${t(leadKey)}</p>
+    <p>${t(leadKey)}</p>${leadKey === "aiSheetLead" ? `<p>${t("aiSheetServer")}</p>` : ""}
     <div class="seg" role="group" style="margin-bottom:12px"><button data-pv="gemini" aria-pressed="${isG}">${t("aiGemini")}</button><button data-pv="claude" aria-pressed="${!isG}">Claude</button></div>
     <p>${isG ? t("aiGeminiHow") : t("aiClaudeHow")}</p>
     <div class="field"><label for="k-in">${t("aiKeyLabel", AI_NAMES[pv])}</label><input id="k-in" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${isG ? "AIza…" : "sk-ant-…"}" value="${has ? "••••••••" : ""}"></div>
@@ -3521,8 +3620,10 @@ function fixDiffHTML(was, now) {
   return Object.keys(now).filter(k => JSON.stringify(was[k]) !== JSON.stringify(now[k])).map(k =>
     `<div class="fx-row"><div class="fx-key">${names[k] || k}</div>${box("old", t("fixWas"), was[k], k)}${box("new", t("fixNow"), now[k], k)}</div>`).join("");
 }
+const AI_SHORT_ERRORS = { offline: "fixOffline", rate_limited: "fixBusy", server_busy: "fixBusy", bad_key: "parseBadKey",
+  quota_device: "aiLimitShort", quota_day: "aiLimitShort", server_down: "aiDownShort" };
 function aiErrorKey(e) {
-  return e?.code === "offline" ? "fixOffline" : e?.code === "rate_limited" ? "fixBusy" : e?.code === "bad_key" ? "parseBadKey" : "fixFailed";
+  return AI_SHORT_ERRORS[e?.code] || "fixFailed";
 }
 function revertOverride(lessonId, path) {
   if (overrides[lessonId]) { delete overrides[lessonId][path]; if (!Object.keys(overrides[lessonId]).length) delete overrides[lessonId]; }
@@ -3544,7 +3645,7 @@ function fixSheet(kind, path, rerender, draft = "") {
     okBtn.addEventListener("click", async () => {
       const note = field.value.trim();
       if (!note) return toast(t("fixEmpty"));
-      const ai = await lessonAI();
+      const ai = await lessonAI({ task: "edit" });
       if (!ai) { closeSheet(); return keySheet(); }
       okBtn.disabled = true; okBtn.textContent = t("fixThinking");
       try {
@@ -3731,7 +3832,7 @@ function extendSheet(draft = "") {
     okBtn.addEventListener("click", async () => {
       const request = field.value.trim();
       if (!request) return toast(t("extendEmpty"));
-      const ai = await lessonAI();
+      const ai = await lessonAI({ task: "edit" });
       if (!ai) { closeSheet(); return keySheet(); }
       okBtn.disabled = true; okBtn.textContent = t("extendThinking");
       try {
@@ -5401,7 +5502,7 @@ async function checkAnswer(i, { audio, text }) {
     save(); renderSpeak(); updateProgress();
   } catch (e) {
     speakUI.mode = "idle";
-    speakUI.err = e?.code === "cancelled" ? "" : t(PARSE_ERRORS[e?.code] || "parseFailed") + (e?.message ? ` (${e.message})` : "");
+    speakUI.err = e?.code === "cancelled" ? "" : t(AI_SHORT_ERRORS[e?.code] && e.code !== "bad_key" && e.code !== "rate_limited" ? AI_SHORT_ERRORS[e.code] : PARSE_ERRORS[e?.code] || "parseFailed") + (e?.message ? ` (${e.message})` : "");
     renderSpeak();
   } finally { speakCtl = null; clearInterval(waitTimer); }
 }

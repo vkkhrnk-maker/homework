@@ -31,8 +31,13 @@
     calmSampleLink: { ru: "Открыть пример", en: "Open sample lesson" },
     calmOwnTitle: { ru: "Урок из текста", en: "A lesson from your text" },
     calmOwnLede: {
-      ru: "Вставьте домашку от учителя или назовите тему. Нужен ключ ИИ, бесплатный подойдет.",
-      en: "Paste your teacher’s homework or name a topic. It needs an AI key; a free one works."
+      // Ключ не нужен: без своего ключа текст уходит на сервер Learny. Со своим ключом строка честно говорит другое.
+      ru: () => aiKey()
+        ? "Вставьте домашку от учителя или назовите тему. Текст отправится напрямую в ИИ по вашему ключу."
+        : "Вставьте домашку от учителя или назовите тему. Текст отправится на сервер Learny и в Google Gemini для разбора.",
+      en: () => aiKey()
+        ? "Paste your teacher’s homework or name a topic. Your text goes straight to the AI under your own key."
+        : "Paste your teacher’s homework or name a topic. Your text is sent to the Learny server and Google Gemini to build the lesson."
     },
     calmSampleLabel: { ru: "Вопрос из готового урока", en: "A question from a sample lesson" },
     cabinet: { ru: "Кабинет", en: "My space" },
@@ -456,6 +461,7 @@
       if (dialog.open) return;
       returnScroll = history.state?.composerScroll ?? window.scrollY;
       close.setAttribute("aria-label", t("wdClose"));
+      panel.querySelector(".learny-own-lede").textContent = t("calmOwnLede"); // после подключения своего ключа строка меняется
       // Keep key setup and its validation messages interactive inside the native modal.
       dialog.append(sheet, toast);
       dialog.showModal();
