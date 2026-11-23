@@ -378,6 +378,16 @@ html[data-look][lang][data-look="g"][data-cover="green"] .ld-own{box-shadow:none
 /* футер компактный: не во весь экран, фраза сразу под колонками */
 html[data-look][lang][data-look="g"] .ld-foot{min-height:0;padding-top:72px}
 html[data-look][lang][data-look="g"] .ld-foot-say{padding-top:88px}
+/* Футер компактный, без крупной фразы «See you on Thursday» (23 ноября 2026, Виктория): после крупного «What are we learning?»
+   второй огромный заголовок подряд утяжелял низ, а шутка про четверг уже есть в тетради («See you on Thursday») и в «Well done!» внизу.
+   Подписку на новости не ставим: рассылки нет, форма без адресата была бы обманкой */
+html[data-look][lang][data-look="g"] .ld-foot-say{display:none}
+html[data-look][lang][data-look="g"] .ld-foot{padding-top:64px}
+html[data-look][lang][data-look="g"] .ld-foot-bot{margin-top:64px}
+html[data-look][lang][data-look="g"] .ld-foot-cols{grid-template-columns:minmax(0,1fr) auto;align-items:start}
+html[data-look][lang][data-look="g"] .ld-foot-nav ul{display:flex;flex-wrap:wrap;gap:10px 32px;margin:0;padding:0;list-style:none}
+@media (max-width:800px){html[data-look][lang][data-look="g"] .ld-foot-cols{grid-template-columns:minmax(0,1fr);gap:28px}
+  html[data-look][lang][data-look="g"] .ld-foot-nav ul{gap:10px 24px}}
 @media (max-width:900px){html[data-look][lang][data-look="g"] .ld-foot{padding-top:56px} html[data-look][lang][data-look="g"] .ld-foot-say{padding-top:48px}}
 /* полоса прокрутки: тонкая, глубокий зеленый ползунок на лаймовой дорожке */
 html[data-look="g"]{scrollbar-width:thin;scrollbar-color:var(--cover,#0e6b44) var(--acc,#c8f26a)}
@@ -429,3 +439,44 @@ html[lang="ru"] .ld-foot-brand p{max-width:none}
   /* «Готовые уроки» одной строкой: в две строки хвост «у» ложился на подпись под заголовком */
   html[data-look][lang="ru"][data-look="g"] .ld-shelf h2{font-size:56px}
 }
+
+/* Низ футера: огромная марка глубоким зеленым во всю ширину и наклейки из мира урока поверх нее (24 ноября 2026, реф truus).
+   Наклейки — наши, а не смайлики: ярлык тетради, карточка слова, стикер с грамматическим мемом, звезда «+12 words»,
+   «Well done!» карандашом, уровень, Клякса. Наклейки можно двигать; тень четкая, как у всего на странице */
+html[data-look="g"] .lk-foot-stage{position:relative;margin:clamp(40px,6vw,80px) 0 0;aspect-ratio:2459/675;font-size:clamp(12px,1.25vw,19px)}
+html[data-look="g"] .lk-foot-mark{position:absolute;inset:0;background:var(--cover,#0e6b44);
+  -webkit-mask:url(icons/learny-wordmark.svg) center/100% 100% no-repeat;mask:url(icons/learny-wordmark.svg) center/100% 100% no-repeat}
+html[data-look="g"] .lk-st{position:absolute;left:var(--x);top:var(--y);rotate:var(--r);translate:var(--dx,0) var(--dy,0);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
+  box-shadow:.14em .14em 0 0 rgba(11,58,36,.22);transition:scale .18s var(--ease),box-shadow .18s var(--ease)}
+@media (hover:hover){html[data-look="g"] .lk-st:hover{scale:1.05}}
+html[data-look="g"] .lk-st.is-dragging{cursor:grabbing;scale:1.08;box-shadow:.32em .32em 0 0 rgba(11,58,36,.22);transition:none}
+html[data-look="g"] .lk-st-label{display:grid;gap:.15em;padding:.55em .9em .6em;border-radius:.35em;background:#fff;color:var(--ink)}
+html[data-look="g"] .lk-st-label span{display:flex;align-items:baseline;gap:.7em;padding-bottom:.1em;border-bottom:1px solid rgba(26,23,28,.18)}
+html[data-look="g"] .lk-st-label i{width:4.2em;font:400 .62em/1 var(--ui);font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+html[data-look="g"] .lk-st-label b{font:600 1.35em/1.05 var(--hand);color:#2b4ad8}
+html[data-look="g"] .lk-st-word{display:grid;gap:.25em;padding:.8em 1.2em .85em 1.9em;border-radius:.6em;background:#fff;color:var(--ink)}
+html[data-look="g"] .lk-st-word::before{content:"";position:absolute;left:.6em;top:.75em;width:.55em;height:.55em;border-radius:50%;background:var(--acc,#c8f26a);box-shadow:inset 0 0 0 1.5px rgba(26,23,28,.35)}
+html[data-look="g"] .lk-st-word b{font:900 2em/.9 var(--disp);letter-spacing:-.005em}
+html[data-look="g"] .lk-st-word i{font:400 .8em/1.2 var(--ui);font-style:normal;color:var(--ink-2)}
+html[data-look="g"] .lk-st-note{width:7.4em;padding:.7em .75em .9em;background:#ffe46a;font:600 1.45em/1.02 var(--hand);color:var(--ink)}
+html[data-look="g"] .lk-st-burst{display:grid;place-items:center;width:7.2em;aspect-ratio:1;background:#6f45e8;color:#fff;box-shadow:none;
+  clip-path:polygon(50% 0,61% 13%,77% 6%,79% 23%,96% 25%,89% 40%,100% 52%,87% 63%,93% 79%,76% 80%,71% 96%,57% 88%,44% 100%,36% 86%,20% 92%,19% 75%,3% 70%,11% 55%,0 42%,13% 33%,8% 17%,25% 17%,30% 2%,43% 12%)}
+html[data-look="g"] .lk-st-burst span{font:900 1.5em/.88 var(--disp);text-align:center;text-transform:uppercase}
+html[data-look="g"] .lk-st-done{display:inline-flex;align-items:center;gap:.4em;padding:.45em .8em .5em;border-radius:.3em;background:#fff;font:600 1.6em/1 var(--hand);color:var(--pencil,#e0452b)}
+html[data-look="g"] .lk-st-done svg{width:1em;height:.75em;overflow:visible}
+html[data-look="g"] .lk-st-done path{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+html[data-look="g"] .lk-st-pill{padding:.5em 1.1em;border-radius:999px;background:#f2619c;font:400 1.1em/1 var(--ui);color:#fff}
+html[data-look="g"] .lk-st-blot{width:5.5em;height:auto;box-shadow:none;filter:drop-shadow(.14em .14em 0 rgba(11,58,36,.22))}
+html[data-look="g"] .lk-drag-hint{font-size:22px}
+html[data-look="g"] .lk-st-note .lk-ne{font:400 .9em/1 var(--ui)}
+/* огромная марка внизу — она и есть логотип футера: маленький LEARNY над ссылками ее повторял */
+html[data-look="g"] .ld-foot-brand .brand{display:none}
+@media (hover:none){html[data-look="g"] .lk-drag-hint{display:none}}
+/* на телефоне марка внизу полосы, наклейки — над ней, по своим местам; Клякса и уровень остаются */
+@media (max-width:800px){
+  html[data-look="g"] .lk-foot-stage{aspect-ratio:auto;height:clamp(250px,74vw,330px);font-size:12px}
+  html[data-look="g"] .lk-foot-mark{inset:auto 0 0;aspect-ratio:2459/675}
+  html[data-look="g"] .lk-st{left:var(--mx);top:var(--my)}
+  html[data-look="g"] .lk-st-word{display:none}
+}
+@media (prefers-reduced-motion:reduce){html[data-look="g"] .lk-st{transition:none}}

@@ -2914,6 +2914,55 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & #lesson-list .lesson-card.nb-open :is(.learny-lesson-copy, .learny-lesson-meta, .nb-row-word, .learny-row-arrow) { opacity: 1; transition-delay: .14s; }
   & #lesson-list .lesson-card.nb-open .learny-lesson-meta { opacity: .82; }
   @media (hover: hover) { & #lesson-list .lesson-card.nb-open:hover .learny-row-arrow { translate: 4px 0; } }
+  /* Кабинет: «Мои уроки» — сетка тетрадей, а не картотека (23 ноября 2026, выбрано Викторией).
+     Картотека — витрина лендинга: раскрыт один урок, остальные за ярлычками. В кабинете нужно видеть все свои уроки сразу
+     и продолжить нужный: каждая карточка — обложка тетради в цвете урока с ярлычком сверху, все раскрыты.
+     Первая карточка — «Свой урок»: из нее начинают новый */
+  & body[data-calm-page="cabinet"] #lesson-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 64px 24px; padding-top: 38px; }
+  & body[data-calm-page="cabinet"] #lesson-list .lesson-card.lesson-card { height: clamp(300px, 24vw, 340px); aspect-ratio: auto; margin: 0; border-radius: 16px; transition: translate .2s var(--nb-ease); }
+  & body[data-calm-page="cabinet"] #lesson-list .nb-row-tab { left: 24px; min-width: 0; max-width: calc(100% - 48px); }
+  & body[data-calm-page="cabinet"] #lesson-list :is(.learny-lesson-copy, .learny-lesson-meta, .nb-row-word, .learny-row-arrow) { opacity: 1; transition-delay: 0s; }
+  & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-meta { left: 28px; right: 28px; top: 28px; opacity: .82; }
+  & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-copy { left: 28px; right: 28px; top: 58px; }
+  & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-name { font-size: clamp(34px, 2.9vw, 46px); }
+  & body[data-calm-page="cabinet"] #lesson-list .nb-row-word { right: 6%; font-size: clamp(110px, 9vw, 150px); }
+  & body[data-calm-page="cabinet"] #lesson-list .nb-own-row { order: -1; }
+  & body[data-calm-page="cabinet"] #lesson-list .nb-own-row .learny-lesson-name { font-size: clamp(28px, 2.3vw, 36px); }
+  @media (hover: hover) {
+    & body[data-calm-page="cabinet"] #lesson-list .lesson-card:hover { translate: 0 -4px; }
+    & body[data-calm-page="cabinet"] #lesson-list .lesson-card:hover .learny-row-arrow { translate: 4px 0; }
+  }
+  @media (max-width: 900px) { & body[data-calm-page="cabinet"] #lesson-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  /* Кабинет: разделы вкладками «Уроки · Словарь · Настройки» в плашке шапки (23 ноября 2026). Огромного «Мой кабинет» нет:
+     где вы, говорит выбранная вкладка. «Готовые уроки» и «Свой урок» в шапке кабинета не стоят: они повторяли ссылку
+     над сеткой и первую тетрадь. Выбранная вкладка — белая пилюля, под курсором — черная, как пункты шапки */
+  & .nb-cab-tabs, & .nb-settings { display: none; }
+  & body.home[data-calm-page="cabinet"] .nb-cab-tabs { display: inline-flex; align-items: center; gap: 4px; }
+  & body.home[data-calm-page="cabinet"] .nb-notch :is(.nb-catalog, .nb-own) { display: none; }
+  & .nb-cab-tab { height: 36px; padding: 0 16px; border: 0; border-radius: var(--nb-pill); background: none; font: 400 16px/1 var(--nb-ui); color: var(--nb-ink); cursor: pointer;
+    transition: background-color .2s var(--nb-ease), color .2s var(--nb-ease); }
+  & .nb-cab-tab[aria-selected="true"] { background: #fff; }
+  @media (hover: hover) { & .nb-cab-tab[aria-selected="false"]:hover { background: var(--nb-ink); color: #fff; } }
+  & .nb-cab-tab:focus-visible { outline: 2px solid var(--nb-ink); outline-offset: 2px; }
+  & body.home[data-calm-page="cabinet"] :is(.learner-desk, #learny-library-title, #vocab-box .vb-head h2) { display: none; }
+  & body.home[data-calm-page="cabinet"]:not([data-cab-tab="lessons"]) #learny-library { display: none; }
+  & body.home[data-calm-page="cabinet"]:not([data-cab-tab="words"]) #vocab-box { display: none; }
+  & body.home[data-calm-page="cabinet"] #learny-library .desk-catalog { justify-self: end; }
+  & body.home[data-calm-page="cabinet"][data-cab-tab="settings"] .nb-settings { display: grid; max-width: 760px; margin: clamp(24px, 4vw, 48px) 0 0; }
+  & .nb-set { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 10px 32px; align-items: start; padding: 28px 0; border-top: 1px solid var(--nb-line); }
+  & .nb-set:first-child { padding-top: 0; border-top: 0; }
+  & .nb-set[hidden] { display: none; }
+  & .nb-set > h3 { grid-row: span 3; margin: 0; font: 400 20px/1.3 var(--nb-ui); letter-spacing: -.01em; color: var(--nb-ink); }
+  & .nb-set > :not(h3) { grid-column: 2; }
+  & .nb-set > p { margin: 0; font: 400 15px/1.45 var(--nb-ui); color: var(--nb-ink-2); }
+  & .nb-set > :is(.seg, .nb-set-ai-b) { justify-self: start; }
+  /* выбор в настройках — та же плашка с белой пилюлей, что вкладки в шапке */
+  & .nb-set .seg { display: inline-flex; gap: 4px; padding: 4px; border-radius: var(--nb-pill); background: var(--hd-plate, #efedf1); }
+  & .nb-set .seg button { height: 36px; padding: 0 16px; border-radius: var(--nb-pill); background: none; font: 400 16px/1 var(--nb-ui); color: var(--nb-ink); transition: background-color .2s var(--nb-ease), color .2s var(--nb-ease); }
+  & .nb-set .seg button[aria-pressed="true"] { background: #fff; font: 400 16px/1 var(--nb-ui); }
+  @media (hover: hover) { & .nb-set .seg button:not([aria-pressed="true"]):hover { background: var(--nb-ink); color: #fff; } }
+  & body.home[data-calm-page="cabinet"] :is(#learny-library, #vocab-box) { margin-top: clamp(24px, 4vw, 48px); }
+  & .nb-set-space .desk-storage { display: grid; justify-items: start; gap: 10px; margin: 0; padding: 0; border: 0; font: 400 15px/1.45 var(--nb-ui); }
 
   /* словарь: свои слова карточками, слово закрашено маркером */
   & #vocab-box { max-width: none; margin-top: clamp(56px, 7vw, 96px); }
@@ -2951,6 +3000,22 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     & #lesson-list .learny-lesson-name { font-size: 40px; }
     & #lesson-list .learny-lesson-sub { font-size: 14px; }
     & #lesson-list .lesson-card.nb-open { --h: 212px; }
+    /* кабинет на телефоне: тетради одна под другой, подпись и крупное слово остаются */
+    & body[data-calm-page="cabinet"] #lesson-list { grid-template-columns: minmax(0, 1fr); gap: 52px; padding-top: 34px; }
+    & body[data-calm-page="cabinet"] #lesson-list .lesson-card.lesson-card { height: auto; min-height: 236px; border-radius: 13px; }
+    & body[data-calm-page="cabinet"] #lesson-list .nb-row-tab { left: 18px; max-width: calc(100% - 36px); }
+    & body[data-calm-page="cabinet"] #lesson-list .lesson-card:not(.nb-own-row) :is(.learny-lesson-meta, .nb-row-word), & body[data-calm-page="cabinet"] #lesson-list .nb-own-row .nb-row-word { display: block; }
+    & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-meta { left: 20px; top: 22px; font-size: 11px; }
+    & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-copy { left: 20px; right: 20px; top: 48px; }
+    & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-name { font-size: 34px; }
+    & body[data-calm-page="cabinet"] #lesson-list .nb-own-row .learny-lesson-name { font-size: 28px; }
+    & body[data-calm-page="cabinet"] #lesson-list .nb-row-word { font-size: 104px; }
+    /* вкладки кабинета на телефоне — строкой-плашкой над разделом */
+    & body.home[data-calm-page="cabinet"] .nb-cab-tabs { display: flex; gap: 4px; margin: 4px 0 24px; padding: 4px; border-radius: var(--nb-pill); background: var(--hd-plate, #efedf1); }
+    & body.home[data-calm-page="cabinet"] .nb-cab-tab { flex: 1 1 0; height: 40px; padding: 0 8px; font-size: 15px; }
+    & .nb-set { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 24px 0; }
+    & .nb-set > h3 { grid-row: auto; font-size: 18px; }
+    & .nb-set > :not(h3) { grid-column: 1; }
     & .vb-list { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); }
   }
 
@@ -9220,6 +9285,16 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     nbBad: { ru: n => `${n} с ошибкой`, en: n => `${n} with a mistake` },
     // раскрытый разделитель на главной: те же слова, что на лендинге
     nbRowGo: { ru: "Открыть урок →", en: "Open the notebook →" },
+    // кабинет: разделы вкладками в шапке
+    nbTabLessons: { ru: "Уроки", en: "Lessons" },
+    nbTabWords: { ru: "Словарь", en: "Vocabulary" },
+    nbTabSettings: { ru: "Настройки", en: "Settings" },
+    nbSetLang: { ru: "Язык", en: "Language" },
+    nbSetTr: { ru: "Перевод в теории", en: "Translation in theory" },
+    nbSetTrNote: { ru: "Перевод фразы — по нажатию на нее или сразу под ней", en: "A phrase's translation: when you tap it, or always under it" },
+    nbSetAi: { ru: "ИИ для своих уроков", en: "AI for your own lessons" },
+    nbSetAiBtn: { ru: "Настроить", en: "Set up" },
+    nbSetSpace: { ru: "Где хранится кабинет", en: "Where your space is kept" },
     // окно «Свой урок» — тексты пробы A: ничего не повторяет заголовок и соседнюю строку
     calmOwnTitle: { ru: "Урок из вашего текста", en: "A lesson from your text" },
     calmOwnLede: { ru: "Вставьте домашку или назовите тему", en: "Paste your homework or name a topic" },
@@ -9723,8 +9798,9 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   // Раскрыт всегда один разделитель: тот, с которого продолжают, иначе первый; дальше тот, на который навели или перешли с клавиатуры.
   function layoutLessons() {
     const own = list.querySelector(".nb-own-row");
-    // у нового посетителя под окном «Свой урок» та же главная с готовыми уроками («welcome»), что и в каталоге
-    if (own) own.hidden = !["catalog", "welcome"].includes(document.body.dataset.calmPage);
+    // у нового посетителя под окном «Свой урок» та же главная с готовыми уроками («welcome»), что и в каталоге;
+    // в кабинете «Свой урок» — первая тетрадь сетки, из нее начинают новый
+    if (own) own.hidden = !["catalog", "welcome", "cabinet"].includes(document.body.dataset.calmPage);
     const shown = [...list.children].filter(card => card.classList.contains("lesson-card") && !card.hidden && getComputedStyle(card).display !== "none");
     shown.forEach((card, index) => {
       // ярлычки лесенкой из шести ступеней, как на лендинге; седьмой возвращается влево
@@ -9745,6 +9821,88 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   new MutationObserver(markLessons).observe(list, { childList: true });
   document.addEventListener("learnylibrarychange", () => requestAnimationFrame(layoutLessons));
   one(".learny-filters")?.addEventListener("click", () => requestAnimationFrame(() => { openRow(null); layoutLessons(); }));
+
+  /* ---------- кабинет: разделы вкладками «Уроки · Словарь · Настройки» вместо огромного «Мой кабинет» ----------
+     (23 ноября 2026, по идее Виктории). Вкладки стоят в плашке шапки на месте «Готовых уроков» и «Своего урока»: в кабинете
+     они повторяли ссылку над сеткой и первую тетрадь. На телефоне вкладки — строкой над разделом. Какой раздел виден,
+     решают стили по body[data-cab-tab]; выбранная вкладка помнится до конца сеанса */
+  const homeView = one("#view-home"), notch = actions.querySelector(".nb-notch");
+  const cabTabs = document.createElement("span");
+  cabTabs.className = "nb-cab-tabs";
+  cabTabs.setAttribute("role", "tablist");
+  cabTabs.innerHTML = [["lessons", "nbTabLessons"], ["words", "nbTabWords"], ["settings", "nbTabSettings"]]
+    .map(([name, key]) => `<button type="button" role="tab" class="nb-cab-tab" data-cab="${name}" data-ui="${key}">${escH(t(key))}</button>`).join("");
+  function setCabTab(name, focus) {
+    document.body.dataset.cabTab = name;
+    try { sessionStorage.setItem("nb-cab-tab", name); } catch {}
+    cabTabs.querySelectorAll("[data-cab]").forEach(tab => {
+      const on = tab.dataset.cab === name;
+      tab.setAttribute("aria-selected", String(on));
+      tab.tabIndex = on ? 0 : -1;
+      if (on && focus) tab.focus();
+    });
+    if (name === "settings") syncSettings();
+  }
+  cabTabs.addEventListener("click", event => {
+    const tab = event.target.closest("[data-cab]");
+    if (!tab) return;
+    setCabTab(tab.dataset.cab);
+    scrollTo({ top: 0 });
+  });
+  cabTabs.addEventListener("keydown", event => {
+    if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+    const tabs = [...cabTabs.querySelectorAll("[data-cab]")], now = tabs.findIndex(tab => tab.getAttribute("aria-selected") === "true");
+    const next = tabs[(now + (event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+    event.preventDefault();
+    setCabTab(next.dataset.cab, true);
+  });
+  const placeCabTabs = () => {
+    if (phoneHead.matches) { if (cabTabs.parentElement !== homeView) homeView.prepend(cabTabs); }
+    else if (cabTabs.parentElement !== notch) notch.prepend(cabTabs);
+  };
+  phoneHead.addEventListener("change", placeCabTabs);
+  placeCabTabs();
+
+  // Настройки: то, что относится ко всему кабинету и раньше пряталось в «···». Кнопки здесь — те же, что в меню:
+  // язык меняется так же, как из шапки, перевод и ИИ нажимают пункты меню, хранение — та же строка, что была внизу кабинета
+  const settings = document.createElement("section");
+  settings.className = "nb-settings";
+  settings.innerHTML = `
+    <div class="nb-set"><h3 data-ui="nbSetLang"></h3><div class="seg nb-set-seg" role="group"><button type="button" data-lang="ru">Русский</button><button type="button" data-lang="en">English</button></div></div>
+    <div class="nb-set"><h3 data-ui="nbSetTr"></h3><p data-ui="nbSetTrNote"></p><div class="seg nb-set-seg" role="group"><button type="button" data-tr="click" data-ui="calmTrTap"></button><button type="button" data-tr="show" data-ui="calmTrShow"></button></div></div>
+    <div class="nb-set nb-set-ai"><h3 data-ui="nbSetAi"></h3><p class="nb-set-ai-now"></p><button type="button" class="ghost-btn nb-set-ai-b" data-ui="nbSetAiBtn"></button></div>
+    <div class="nb-set nb-set-space"><h3 data-ui="nbSetSpace"></h3></div>`;
+  settings.querySelectorAll("[data-ui]").forEach(el => { el.textContent = t(el.dataset.ui); });
+  homeView.append(settings);
+  const storageLine = one(".desk-storage");
+  if (storageLine) settings.querySelector(".nb-set-space").append(storageLine);
+  function syncSettings() {
+    settings.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === S.lang)));
+    const tr = lsGet("et-tr") === "show" ? "show" : "click";
+    settings.querySelectorAll("[data-tr]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tr === tr)));
+    syncAi();
+  }
+  // какой ИИ сейчас разбирает уроки — так же, как пишет пункт меню, но с заглавной: здесь это отдельная строка
+  async function syncAi() {
+    const row = settings.querySelector(".nb-set-ai");
+    try {
+      const ai = await claudeCap("sample");
+      row.hidden = !!ai;
+      const now = aiKey() ? AI_NAMES[aiProvider()] : t("aiServer");
+      settings.querySelector(".nb-set-ai-now").textContent = now.charAt(0).toUpperCase() + now.slice(1);
+    } catch { row.hidden = true; }
+  }
+  settings.addEventListener("click", event => {
+    const lang = event.target.closest("[data-lang]"), tr = event.target.closest("[data-tr]");
+    if (lang) setLanguage(lang.dataset.lang, lang);
+    if (tr) one(`#menu [data-tr-mode="${tr.dataset.tr}"]`)?.click();
+    if (event.target.closest(".nb-set-ai-b")) one("#ai-btn")?.click();
+    requestAnimationFrame(syncSettings);
+  });
+  new MutationObserver(syncSettings).observe(root, { attributes: true, attributeFilter: ["lang"] });
+  let startTab = "lessons";
+  try { startTab = sessionStorage.getItem("nb-cab-tab") || "lessons"; } catch {}
+  setCabTab(startTab);
 
   /* ---------- окно «Свой урок» — «открытка» из пробы A ----------
      Карточка в лаймовой рамке. Под полем — файл и ограничение одной строкой, ниже кнопка во всю ширину.

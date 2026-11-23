@@ -22,7 +22,7 @@
   };
 
   // «What are we learning?» в две строки: строки делятся поровну по длине, размер — по более длинной строке,
-  // но не выше трети экрана, чтобы поле и кнопка оставались на том же экране
+  // но не выше пятой части экрана, чтобы поле, варианты и кнопка оставались на том же экране
   function sizeOwn() {
     const ownH = document.getElementById("own-h");
     if (!ownH || !ownH.children.length) return;
@@ -30,7 +30,8 @@
     let longest = 0;
     [...ownH.children].forEach(line => { const r = document.createRange(); r.selectNodeContents(line); longest = Math.max(longest, r.getBoundingClientRect().width); });
     if (!longest) return;
-    const byWidth = ownH.clientWidth * .99 / longest * 100, byHeight = innerHeight * (innerWidth > 900 ? .29 : .2);
+    // по высоте — не больше пятой части экрана: при трети (было .29) в окне ниже 900 px поле, варианты и кнопка уходили за край
+    const byWidth = ownH.clientWidth * .99 / longest * 100, byHeight = innerHeight * (innerWidth > 900 ? .19 : .15);
     ownH.style.fontSize = Math.min(byWidth, byHeight).toFixed(1) + "px";
   }
   addEventListener("resize", sizeOwn);
@@ -120,6 +121,35 @@
   document.fonts?.ready.then(queueGrid);
   addEventListener("load", queueGrid);
 
+  // Наклейки в футере двигаются пальцем и мышью: сдвиг хранится в --dx/--dy, поворот остается свой; последняя тронутая — сверху
+  addEventListener("DOMContentLoaded", () => {
+    let top = 3;
+    document.querySelectorAll(".lk-st").forEach(st => {
+      let x0 = 0, y0 = 0, dx = 0, dy = 0;
+      const move = e => {
+        dx = e.clientX - x0; dy = e.clientY - y0;
+        st.style.setProperty("--dx", dx + "px");
+        st.style.setProperty("--dy", dy + "px");
+      };
+      const drop = () => {
+        st.classList.remove("is-dragging");
+        removeEventListener("pointermove", move);
+        removeEventListener("pointerup", drop);
+        removeEventListener("pointercancel", drop);
+      };
+      st.addEventListener("pointerdown", e => {
+        if (e.button) return;
+        e.preventDefault();
+        x0 = e.clientX - dx; y0 = e.clientY - dy;
+        st.classList.add("is-dragging");
+        st.style.zIndex = ++top;
+        addEventListener("pointermove", move);
+        addEventListener("pointerup", drop);
+        addEventListener("pointercancel", drop);
+      });
+    });
+  });
+
   // Цвет стола в сцене: переход между цветами шагов и с обложки на стол идет в oklch по короткой дуге оттенка.
   // Обычный переход через sRGB давал грязную середину: зеленый с желтым — оливковый, зеленый с розовым — серо-сиреневый
   addEventListener("DOMContentLoaded", () => {
@@ -137,7 +167,32 @@
     const shown = () => (pin.classList.contains("lit") ? getComputedStyle(pin).getPropertyValue("--stage") : getComputedStyle(document.documentElement).getPropertyValue("--cover") || getComputedStyle(pin).getPropertyValue("--stage")).trim();
     let cur = hexToOklch(shown()), raf = 0;
     const paint = c => pin.style.setProperty("--desk-now", `oklch(${c[0].toFixed(4)} ${c[1].toFixed(4)} ${c[2].toFixed(2)})`);
-    if (cur) paint(cur);
+    const mix = (a, b, k) => {
+      let dh = b[2] - a[2];
+      if (dh > 180) dh -= 360; else if (dh < -180) dh += 360;
+      return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, ((a[2] + dh * k) % 360 + 360) % 360];
+    };
+    // Конец сцены: пока картотека подъезжает снизу, стол перетекает в ее лайм вслед за прокруткой, и картотека выезжает
+    // уже на свой цвет, без стыка фиолетового с лаймом. Ниже блоки по-прежнему встык: там цвет делит зоны, а не шаги урока
+    const shelf = document.getElementById("lessons");
+    let handoff = 0;
+    const show = () => {
+      if (!cur) return;
+      const lime = handoff && hexToOklch(getComputedStyle(document.documentElement).getPropertyValue("--acc"));
+      paint(lime ? mix(cur, lime, handoff) : cur);
+    };
+    const toShelf = () => {
+      if (!shelf) return;
+      const H = innerHeight, k = Math.min(1, Math.max(0, (H * 1.45 - shelf.getBoundingClientRect().top) / (H * .45)));
+      const eased = k * k * (3 - 2 * k);
+      if (Math.abs(eased - handoff) < .002) return;
+      handoff = eased;
+      show();
+    };
+    addEventListener("scroll", toShelf, { passive: true });
+    addEventListener("resize", toShelf);
+    toShelf();
+    if (cur) show();
     const go = () => {
       const target = hexToOklch(shown());
       if (!target || !cur) return;
@@ -153,7 +208,7 @@
         // светлота идет быстрее к светлому концу: середина перехода остается светлой и чистой, без грязи
         const eL = target[0] > from[0] ? 1 - (1 - k) ** 3 : k ** 3;
         cur = [from[0] + (target[0] - from[0]) * eL, from[1] + (target[1] - from[1]) * e, ((from[2] + dh * e) % 360 + 360) % 360];
-        paint(cur);
+        show();
         if (k < 1) raf = requestAnimationFrame(step);
       };
       raf = requestAnimationFrame(step);
