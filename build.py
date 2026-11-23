@@ -174,6 +174,11 @@ notebook_html = re.sub(r'<i id="brand-dot"[^>]*>.*?</i>', lambda _: brand_logo, 
 notebook_html = notebook_html.replace('<span class="footer-name" data-ui="brandName"></span>',
                                       '<span class="footer-name" role="img" aria-label="Learny">' + brand_logo + '</span>', 1)
 notebook_html = notebook_html.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<script>' + paper_js + '</script>', 1)
+# Темная тема приложения выключена, пока ее дорабатывают (23 ноября 2026): приложение всегда светлое, переключатель темы
+# в меню скрыт. Посмотреть темную для доработки — параметр ?dark=1 в адресе. Включить для всех — DARK_READY = True.
+DARK_READY = False
+if not DARK_READY:
+    notebook_html = notebook_html.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<script>if (!/[?&]dark=1(&|$)/.test(location.search)) { document.documentElement.dataset.theme = "light"; document.documentElement.dataset.themeMode = "light"; }</script>', 1)
 # Стилистика лендинга G (23 ноября 2026): Geist 400 — интерфейс и английский текст, Sofia Sans Extra Condensed 900 — крупные заголовки,
 # Caveat 600 — пометки от руки. Других начертаний приложение не грузит: Golos Text и Literata нижних слоев убраны.
 notebook_html = re.sub(r'<link rel="stylesheet" crossorigin="anonymous" href="https://fonts\.googleapis\.com/css2\?family=Golos\+Text[^"]*">\n?', "", notebook_html)

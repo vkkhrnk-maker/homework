@@ -79,7 +79,8 @@
     }
     // «пять шагов» один раз — в описании картотеки, а не в каждом уроке
     const lp = document.querySelector('[data-t="lessonsP"]');
-    if (lp) lp.textContent = ru ? "Откройте любую тетрадь: в каждой целый урок из пяти шагов" : "Open any notebook. Each one is a complete lesson in five steps";
+    if (lp) lp.textContent = ru ? "Откройте любую тетрадь: в каждой целый урок из пяти шагов" : "Open any notebook. Each one is a complete lesson in five steps";
+    window.learnyGrid?.();
     // шапка: ссылки и язык — в одну плашку по центру, «Кабинет» остается справа
     const nav = document.querySelector(".ld-nav");
     if (nav && !nav.querySelector(".lk-notch")) {
@@ -89,6 +90,35 @@
       notch.append(...[...nav.children].filter(el => el !== notch && !el.classList.contains("ld-space")));
     }
   };
+
+  // Текст на страницах тетради стоит на рядах точек: базовая линия первой строки каждого текстового блока сдвигается
+  // на ближайший ряд (ряды — через шаг .78em тетради от верха страницы; у изнанки обложки бумага наклеена со сдвигом 1,5%).
+  // Сдвиг — свойством translate: оно не меняет раскладку, поэтому повторный расчет дает то же самое
+  const GRID_TEXT = ".ld-n, .ld-back h3, .ld-back p, .rule-h, .rule-g, .ex, .sentence, .ask, .note, .print, .rep, .ld-answers li, .tally, .sent, .tale";
+  const alignGrid = () => document.querySelectorAll(".ld-nb .ld-face").forEach(face => {
+    const g = parseFloat(getComputedStyle(face).fontSize) * .78;
+    const oy = face.matches(".ld-cover .ld-back") ? face.offsetHeight * .015 : 0;
+    if (!g || !face.offsetHeight) return;
+    face.querySelectorAll(GRID_TEXT).forEach(el => {
+      if (el.closest(".lk-ring, .wcard")) return;
+      const host = el.matches("li, .note") ? el.querySelector("span") || el : el;
+      const mark = document.createElement("span");
+      mark.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+      host.prepend(mark);
+      let y = 0, n = mark;
+      while (n && n !== face) { y += n.offsetTop; n = n.offsetParent; }
+      mark.remove();
+      if (n !== face) return;
+      const d = Math.round((y - oy) / g) * g + oy - y;
+      el.style.translate = `0 ${d.toFixed(2)}px`;
+    });
+  });
+  let gridFrame = 0;
+  const queueGrid = () => { cancelAnimationFrame(gridFrame); gridFrame = requestAnimationFrame(() => requestAnimationFrame(alignGrid)); };
+  window.learnyGrid = queueGrid;
+  addEventListener("resize", queueGrid);
+  document.fonts?.ready.then(queueGrid);
+  addEventListener("load", queueGrid);
 
   // Цвет стола в сцене: переход между цветами шагов и с обложки на стол идет в oklch по короткой дуге оттенка.
   // Обычный переход через sRGB давал грязную середину: зеленый с желтым — оливковый, зеленый с розовым — серо-сиреневый

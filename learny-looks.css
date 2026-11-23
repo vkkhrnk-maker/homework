@@ -394,3 +394,38 @@ html[data-look][lang][data-look="g"] :is(.ld-back h3,.ld-caps h3){font-family:va
 /* название урока в картотеке — узким, как заголовок шага в тетради: правило «все крупное — узким» без исключений */
 html[data-look][lang][data-look="g"][data-shelf="b"] .ld-nbbody b{font:900 clamp(44px,4.6vw,72px)/.9 var(--disp);letter-spacing:-.006em;text-transform:none;max-width:12em}
 @media (max-width:900px){html[data-look][lang][data-look="g"][data-shelf="b"] .ld-nbbody b{font-size:40px}}
+
+/* ---------- страницы тетради: точки светлее, текст стоит на рядах точек (23 ноября) ----------
+   Шаг сетки --lk-g = .78em тетради (как у фона в точку), считается в пикселях на тетради и наследуется как есть.
+   Межстрочные кратны шагу: основной текст — два ряда, мелкий — один. Базовую линию каждой строки на ближайший ряд
+   ставит скрипт (learny-looks.js): у разных шрифтов и кеглей базовая линия сидит в строке по-разному */
+@property --lk-g{syntax:"<length>";inherits:true;initial-value:0px}
+html[data-look="g"] .ld-nb{--lk-g:.78em}
+html[data-look="g"] body.ld{--dots:radial-gradient(circle,rgba(70,80,125,.1) .04em,transparent .06em)}
+html[data-look][lang][data-look="g"] .ld-nb :is(.ld-demo .sentence,.ld-demo .ex,.ld-demo .ask,.ld-demo .rule-h,.ld-back h3){line-height:calc(var(--lk-g) * 2)}
+html[data-look][lang][data-look="g"] .ld-nb :is(.ld-demo .rule-g,.ld-back p,.ld-report .rep,.ld-report .tally,.ld-demo .sent,.ld-demo .tale){line-height:var(--lk-g)}
+/* приписка от руки крупнее текста: ей два ряда */
+html[data-look][lang][data-look="g"] .ld-nb .ld-demo .note{line-height:calc(var(--lk-g) * 2);margin-top:0}
+html[data-look][lang][data-look="g"] .ld-nb .ld-answers{gap:0}
+html[data-look][lang][data-look="g"] .ld-nb .ld-answers li{box-sizing:border-box;min-height:calc(var(--lk-g) * 2);padding:0;align-items:center}
+/* соседние строки разного кегля не встают на соседние ряды: правило и его толкование, надзаголовок отчета и название урока
+   разведены минимум на ряд (скрипт округляет к ближайшему ряду, отступ уводит на следующий) */
+html[data-look][lang][data-look="g"] .ld-nb .ld-demo .rule-g{margin-top:calc(var(--lk-g) * .35)}
+html[data-look][lang][data-look="g"] .ld-nb .ld-report .print{margin-bottom:calc(var(--lk-g) * .9)}
+/* ---------- русская версия (23 ноября 2026) ----------
+   Русские строки длиннее английских; здесь только то, что нужно русскому тексту. Английский эти правила не задевают */
+/* телефон: подписи шага над тетрадью шире английских 30 знаков, иначе последнее слово уходит одно на третью строку */
+@media (max-width:900px){
+  html[lang="ru"] .ld-caps p{max-width:none;text-wrap:pretty}
+}
+/* H1: «по английскому» — самая длинная строка и стоит в обертке маркера; поля маркера (.1em с боков) подгонка считала шириной,
+   и буквы не доходили до краев на 23 px с каждой стороны. На зеленой обложке маркера нет, поля не нужны */
+html[lang="ru"] .ld-copy h1 .mk{padding:0;margin:0}
+/* «Немного английского каждый день» — одной строкой, как английская подпись (у колонки хватает места) */
+html[lang="ru"] .ld-foot-brand p{max-width:none}
+/* 320: «Вставить» и «Фото или файл» встают в одну строку. Прежнее правило про 14 px на самых узких перебивала шкала размеров */
+@media (max-width:360px){
+  html[data-look][lang="ru"][data-look="g"][data-cover] .ld-paper .ld-tools .ld-tool{font-size:14px}
+  /* «Готовые уроки» одной строкой: в две строки хвост «у» ложился на подпись под заголовком */
+  html[data-look][lang="ru"][data-look="g"] .ld-shelf h2{font-size:56px}
+}

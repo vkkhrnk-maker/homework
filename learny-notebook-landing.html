@@ -447,35 +447,37 @@
   const T = {
     title: ["Learny — English homework, step by step", "Learny — домашка по английскому, шаг за шагом"],
     navLessons: ["Sample lessons", "Готовые уроки"], navOwn: ["Your own lesson", "Свой урок"], navSpace: ["My space", "Кабинет"],
-    h1a: ["English homework,", "Домашка по английскому,"], h1b: ["step by step", "шаг за шагом"],
-    lede: ["Learny turns homework, a topic or any text into a lesson. Do one step now, the next one tomorrow: it remembers where you stopped", "Learny превращает домашку, тему или любой текст в\u00a0урок. Сделайте один шаг сейчас, следующий завтра: Learny помнит, где вы остановились"],
+    // русский заголовок короче английского: «Домашка по английскому, шаг за шагом» вставала во всю ширину только кеглем 160 px
+    // против 227 у английского, а «шаг» и так стоит в описании под ним. «Домашка / по английскому» встает в полный размер (23 ноября 2026)
+    h1a: ["English homework,", "Домашка"], h1b: ["step by step", "по\u00a0английскому"],
+    lede: ["Learny turns homework, a topic or any text into a lesson. Do one step now, the next one tomorrow: it remembers where you stopped", "Learny делает урок из\u00a0домашки, темы или любого текста. Один шаг сегодня, следующий завтра: урок откроется там, где вы остановились"],
     cta: ["Create my own lesson", "Создать свой урок"],
     hintClosed: ["scroll to open ↓", "листайте, чтобы открыть ↓"], hintOpen: ["skip to the lessons ↓", "сразу к\u00a0урокам ↓"],
     tagSubject: ["Subject", "Тема"], tagFor: ["For", "Срок"], tagDay: ["Thursday", "четверг"],
     s1name: ["Theory", "Теория"], s2name: ["Practice", "Практика"], s3name: ["Mini-dialogues", "Мини-диалоги"], s4name: ["Speaking", "Говорение"], s5name: ["Results", "Итоги"],
-    s1h: ["Your teacher's notes, made clear", "Заметки учителя, понятным языком"],
-    s1p: ["The rule in plain words, with examples. Translate any phrase and save new words", "Правило простыми словами и\u00a0с\u00a0примерами. Любую фразу можно перевести, новые слова сохранить"],
+    s1h: ["Your teacher's notes, made clear", "Заметки учителя понятным языком"],
+    s1p: ["The rule in plain words, with examples. Translate any phrase and save new words", "Правило с\u00a0примерами. Любую фразу можно перевести, а\u00a0новые слова сохранить"],
     s2h: ["A mistake is part of the page", "Ошибка\u00a0— часть страницы"],
-    s2p: ["Check every answer at once. Not right? Try again and see why", "Ответ проверяется сразу. Не\u00a0получилось? Попробуйте еще раз и\u00a0посмотрите разбор"],
+    s2p: ["Check every answer at once. Not right? Try again and see why", "Ответ проверяется сразу. Не\u00a0получилось? Попробуйте еще\u00a0раз и\u00a0посмотрите разбор"],
     s3h: ["The same rule in conversation", "То же правило в разговоре"],
     s3p: ["Read a short dialogue and choose the modal that fits the situation", "Прочитайте диалог и выберите подходящий модальный глагол"],
     s4h: ["Say it before the lesson", "Проговорите до\u00a0урока"],
     s4p: ["Record your answer and get suggestions for clearer English", "Запишите ответ и\u00a0получите подсказки, как сказать точнее"],
-    s5h: ["Bring this to your lesson", "Принесите это на\u00a0урок"],
-    s5p: ["A short report for your teacher: what went well, what you fixed, your new words", "Короткий отчет для учителя: что получилось, что исправлено, какие слова новые"],
+    s5h: ["Bring this to your lesson", "Покажите учителю"],
+    s5p: ["A short report for your teacher: what went well, what you fixed, your new words", "Короткий отчет: что получилось сразу, что исправлено и\u00a0какие слова новые"],
     lessonsP: ["Open any notebook. Each one is a complete lesson", "Откройте любой. Каждый\u00a0— целый урок"],
     metaG: ["Grammar · B1–B2", "Грамматика · B1–B2"], metaS1: ["Speaking · B1", "Говорение · B1"], metaS2: ["Speaking · C1", "Говорение · C1"], metaOwn: ["From anything", "Из чего угодно"],
     rowDialogues: ["Five steps: theory, practice, mini-dialogues, speaking, results", "Пять шагов: теория, практика, мини-диалоги, говорение, итоги"],
     rowWords: ["Five steps: theory, practice, words, speaking, results", "Пять шагов: теория, практика, слова, говорение, итоги"],
     rowSteps: ["Five steps: theory, practice, mini-stories, speaking, results", "Пять шагов: теория, практика, мини-истории, говорение, итоги"],
     rowGo: ["Open the notebook →", "Открыть урок →"], ownSmall: ["From homework, a topic, words or any text", "Из\u00a0домашки, темы, слов или любого текста"], ownGo: ["Start ↓", "Начать ↓"],
-    ownH: ["What are we learning?", "Что разберем?"], ownPh: ["Paste your homework or describe a topic", "Вставьте домашку или опишите тему"], attach: ["Photo or file", "Фото или файл"], paste: ["Paste", "Вставить"],
+    ownH: ["What are we learning?", "Что будем разбирать?"], ownPh: ["Paste your homework or describe a topic", "Вставьте домашку или опишите тему"], attach: ["Photo or file", "Фото или файл"], paste: ["Paste", "Вставить"],
     startsAria: ["Start with an example", "Начать с\u00a0примера"], start1: ["My teacher's homework", "Домашку от\u00a0учителя"], start2: ["A topic I don't get", "Тему, которая не\u00a0дается"], start3: ["Words from a show", "Слова из\u00a0сериала"], start4: ["A text to understand", "Текст, который хочу понять"],
     mk1: ["Create", "Создать"], mk2: ["my lesson", "урок"],
     tagline: ["A little English, every day", "Немного английского каждый день"], insideH: ["Inside a lesson", "Внутри урока"], how: ["How it works", "Как это устроено"],
     repK: ["Report for your teacher", "Отчет для учителя"], repSum: ["8 tasks in 9 minutes", "8 заданий за 9 минут"],
     rep1: ["right first time", "верно сразу"], rep2: ["fixed", "исправлено"], rep3: ["new words", "новых слова"],
-    sayA: ["See you on", "До\u00a0встречи в"], sayB: ["Thursday", "четверг"], well: ["Well done!", "Молодец!"]
+    sayA: ["See you on", "До\u00a0встречи"], sayB: ["Thursday", "в\u00a0четверг"], well: ["Well done!", "Молодец!"]
   };
   for (let i = 1; i <= 5; i++) {
     const [en, ru] = T[`s${i}name`];
@@ -510,7 +512,10 @@
         width = Math.max(width, right - box.left);
       });
       const room = el.clientWidth * +el.dataset.fit * (lang === "ru" && !full ? .9 : 1);
-      if (width) el.style.fontSize = Math.min(full ? 1000 : 230, parseFloat(style.fontSize) * room / width).toFixed(1) + "px";
+      // потолок крупной строки: английский H1 встает во всю ширину до 230 px; у русского длинная строка короче («по английскому»),
+      // и на 230 px она не доходила до краев уже на 1440, поэтому потолок выше
+      const cap = full ? 1000 : lang === "ru" ? 300 : 230;
+      if (width) el.style.fontSize = Math.min(cap, parseFloat(style.fontSize) * room / width).toFixed(1) + "px";
     });
   }
   function setLang(next, save) {
