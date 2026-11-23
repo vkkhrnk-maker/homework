@@ -1,5 +1,5 @@
 // Офлайн-кэш оболочки приложения. Уроки и прогресс лежат в браузере и через этот файл не проходят.
-const VERSION = 'b50b4a65e3';
+const VERSION = '6a01bf36a3';
 const CACHE = `homework-${VERSION}`;
 const LANDING_ASSETS = ["learny-paper.css?v=f594e75ea1", "learny-paper.js?v=f594e75ea1", "learny-notebook.css?v=f594e75ea1", "learny-notebook-landing.css?v=f594e75ea1", "learny-notebook-open.js?v=f594e75ea1", "learny-looks.css?v=f594e75ea1", "learny-looks.js?v=f594e75ea1"];
 const SHELL = [...LANDING_ASSETS, './', 'index.html', 'landing.html', 'soft.html', 'blue.html', 'fromt.html', 'playful.html', 'playful-green.html', 'playful-bright.html', 'playful-yellow.html', 'learny.html', 'manifest.webmanifest', 'icons/homework-mark-v1.png', 'icons/klyaksa-16.svg', 'icons/klyaksa-192.png', 'icons/klyaksa-512.png', 'icons/klyaksa-maskable-512.png', 'icons/klyaksa-touch.png',

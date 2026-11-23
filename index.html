@@ -1719,7 +1719,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 :root:is(#_#_,[data-calm])[data-hero="c"] .learny-demo { box-shadow: inset 0 0 0 1px var(--line); }
 
 /* отчет учителю и остатки: те же восемь стилей и те же поверхности */
-:root:is(#_#_,[data-calm]) :is(#view-report .eyebrow, .summary-tile .label, #report-card th, #report-card .name-row label) { font: var(--t-caption-strong); letter-spacing: 0; text-transform: none; color: var(--fg-2); }
+:root:is(#_#_,[data-calm]) :is(#view-report .eyebrow, .summary-tile .label, #report-card th, #report-card .name-row label, .nb-report-head .name-row label) { font: var(--t-caption-strong); letter-spacing: 0; text-transform: none; color: var(--fg-2); }
 :root:is(#_#_,[data-calm]) :is(.summary-tile .sub, #report-card td.num, .learny-stage td div, .learny-stage td div .tr) { font: var(--t-caption); }
 :root:is(#_#_,[data-calm]) :is(#report-card td, .feedback-attempt s, .vb-row button) { font: var(--t-body); }
 :root:is(#_#_,[data-calm]) #report-card td:is(.given.ok, .given.no) { font: var(--t-body-strong); }
@@ -2282,12 +2282,16 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     gap: 0; margin: 0; padding: 40px 0 40px;
   }
   /* отчет: сначала как отправить, потом сам отчет */
-  & main > section#view-report { grid-template: "title" auto "aside" auto "work" auto / minmax(0,1fr); }
+  & main > section#view-report { grid-template: "title" auto "head" auto "aside" auto "work" auto / minmax(0,1fr); }
   & .learny-stage .section-heading, & #view-report .section-heading { grid-area: title; display: block; margin: 0; }
   & .learny-stage .learny-rail { grid-area: rail; margin: 0; }
   & :is(#view-drill, #view-match, #view-speak) .learny-rail { display: none; }
   & .learny-stage .aside, & #view-report .aside { grid-area: aside; position: static; display: grid; gap: 22px; margin-top: 44px; padding: 0; }
   & #view-report .aside { margin: 0 0 40px; }
+  /* итоги: урок и счет, подпись, потом отправка (шапку собирает скрипт из карточки отчета) */
+  & #view-report .nb-report-head { grid-area: head; }
+  & #view-report .nb-report-head .name-row { margin: 30px 0 0; }
+  & #view-report .nb-report-head + .aside { margin-top: 36px; }
   & .learny-stage :is(#drill-card, #match-card, #speak-card), & #report-card, & #view-theory .learny-work > div {
     grid-area: work; min-width: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none;
   }
@@ -2604,7 +2608,9 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & .done-card .eyebrow { order: 1; }
   & .done-card h2 { order: 2; }
   & .done-card > p { order: 4; margin: 14px 0 0; max-width: 46ch; font: 400 17px/1.5 var(--nb-ui); color: var(--nb-ink-2); }
-  & .done-card > :is(.review-list, #out-slot, #sug-slot) { order: 5; }
+  & .done-card > :is(#out-slot, #sug-slot) { order: 5; }
+  /* разбор вопросов — после кнопок: при сорока пропусках «Дальше» иначе оказывалась в самом низу длинного списка */
+  & .done-card > .review-list { order: 8; margin-top: 36px; }
   & .done-card > .nav-row { order: 6; justify-content: flex-start !important; }
   /* итог строкой текста, без цветных плашек: цвет на странице уже у пометок карандашом и галочек */
   & .done-score { gap: 0; font: 400 17px/1.5 var(--nb-ui); letter-spacing: 0; color: var(--nb-ink-2); }
@@ -2649,13 +2655,13 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & #view-report .aside-card p { margin: 0 0 16px !important; color: var(--nb-ink-2); max-width: 34ch; }
   & #view-report .report-actions { display: flex; flex-wrap: wrap; gap: 10px; }
   & #view-report .aside-card p { max-width: 52ch !important; }
-  & #report-card .name-row { display: flex; align-items: baseline; gap: 12px; margin: 0 0 30px; }
-  & #report-card .name-row label { flex: none; font: 600 12px/1.25 var(--nb-ui); letter-spacing: .07em; text-transform: uppercase; color: var(--nb-ink-2); }
-  & #report-card .name-row input { flex: 1; min-width: 0; max-width: 320px; height: 40px; padding: 0 2px; border: 0; border-bottom: 1.5px solid rgba(26,23,28,.34); border-radius: 0; background: none; outline: 0; font: 600 27px/1 var(--nb-hand); color: var(--nb-ball); }
-  & #report-card .name-row input::placeholder { color: var(--nb-ink-3); font-weight: 500; }
-  & #report-card .name-row input:focus-visible { border-bottom-color: var(--nb-purple); box-shadow: 0 1px 0 var(--nb-purple); }
-  & #report-card > .eyebrow { font: 600 clamp(24px, 2.2vw, 30px)/1.15 var(--nb-read); letter-spacing: -.02em; text-transform: none; color: var(--nb-ink); text-wrap: balance; }
-  & #report-card .report-summary { display: flex; flex-wrap: wrap; gap: 14px 44px; margin: 22px 0 0 !important; }
+  & :is(#report-card, .nb-report-head) .name-row { display: flex; align-items: baseline; gap: 12px; margin: 0 0 30px; }
+  & :is(#report-card, .nb-report-head) .name-row label { flex: none; font: 600 12px/1.25 var(--nb-ui); letter-spacing: .07em; text-transform: uppercase; color: var(--nb-ink-2); }
+  & :is(#report-card, .nb-report-head) .name-row input { flex: 1; min-width: 0; max-width: 320px; height: 40px; padding: 0 2px; border: 0; border-bottom: 1.5px solid rgba(26,23,28,.34); border-radius: 0; background: none; outline: 0; font: 600 27px/1 var(--nb-hand); color: var(--nb-ball); }
+  & :is(#report-card, .nb-report-head) .name-row input::placeholder { color: var(--nb-ink-3); font-weight: 500; }
+  & :is(#report-card, .nb-report-head) .name-row input:focus-visible { border-bottom-color: var(--nb-purple); box-shadow: 0 1px 0 var(--nb-purple); }
+  & :is(#report-card, .nb-report-head) > .eyebrow { font: 600 clamp(24px, 2.2vw, 30px)/1.15 var(--nb-read); letter-spacing: -.02em; text-transform: none; color: var(--nb-ink); text-wrap: balance; }
+  & :is(#report-card, .nb-report-head) .report-summary { display: flex; flex-wrap: wrap; gap: 14px 44px; margin: 22px 0 0 !important; }
   & .summary-tile { padding: 0; border: 0; border-radius: 0; background: none; }
   & .summary-tile .label { font: 600 12px/1.25 var(--nb-ui); letter-spacing: .07em; text-transform: uppercase; color: var(--nb-ink-2); }
   & .summary-tile .value { margin-top: 6px; font: 600 38px/1 var(--nb-read); letter-spacing: -.03em; color: var(--nb-ink); }
@@ -2766,8 +2772,8 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     & .learny-work .rule, & .learny-stage .rule { margin-bottom: 34px; padding: 0 0 36px; }
     & #drill-card .q-sentence, & #match-card .q-sentence { margin-top: 18px; font-size: clamp(23px, 6.4vw, 27px); }
     & .learny-work .cz-text { font-size: 20.5px; line-height: 2.25; }
-    & #report-card .name-row { flex-wrap: wrap; gap: 4px 12px; }
-    & main > section#view-report { grid-template: "title" auto "aside" auto "work" auto / minmax(0,1fr); }
+    & :is(#report-card, .nb-report-head) .name-row { flex-wrap: wrap; gap: 4px 12px; }
+    & main > section#view-report { grid-template: "title" auto "head" auto "aside" auto "work" auto / minmax(0,1fr); }
   }
   @media (max-width: 360px) {
     /* язык меняется и в меню «…»: на самом узком экране в шапке остаются «Кабинет» и меню */
@@ -3160,6 +3166,10 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   /* мини-диалоги и говорение: тот же масштаб — текст задания 28–36, варианты и действия крупными пилюлями */
   & :is(#view-match, #view-speak) { margin-top: 40px; }
   & #view-match .cz-text { font-size: 28px; line-height: 1.55; }
+  /* после проверки над пропуском вписано верное слово: строкам нужен воздух, иначе пометка ложится на строку выше */
+  & #view-match .cz-text:has(.nb-fixword) { line-height: 2.15; }
+  /* «не отвечено» в отчете одной строкой */
+  & #report-card .answers-table td.given.skip { white-space: nowrap; }
   & #view-match .cz-opts .chip { height: 64px; border-radius: 999px; font-size: 20px; }
   & #view-match #cz-check, & #view-speak .sp-actions :is(.primary-btn, .ghost-btn) { height: 64px; padding: 0 32px; font-size: 20px; }
   & #view-speak .speak-q { font-size: 36px; line-height: 1.25; }
@@ -3183,13 +3193,16 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & #view-drill .aside { position: static; margin-top: 24px; }
   & #view-drill .aside:not(:has(#rule-box > :not(#rule-btn))) { display: none; }
   & #view-drill .aside-card { padding: 0; background: none; }
-  & #view-drill .nav-row { justify-content: flex-start; align-items: center; flex-wrap: wrap; gap: 8px 20px; min-height: 40px; }
-  & #view-drill .nav-row :is(.nb-foot-proxy, .question-tools) { display: inline-flex; gap: 20px; margin: 0; }
-  & #view-drill .nav-row .question-tools { margin: 0 16px 0 auto; }
-  & #view-drill .nav-row :is(#skip-btn, #prev-btn, #next-btn) { margin: 0; }
-  & #view-drill .nav-row .primary-btn { order: 0; }
-  & #view-drill .nav-row :is(.fix-btn, #skip-btn, #prev-btn) { height: 40px; padding: 0; line-height: 40px; font-size: 16px; color: var(--nb-ink-2); }
-  & #view-drill .nav-row :is(.fix-btn, #skip-btn, #prev-btn):is(:hover, :focus-visible) { color: var(--nb-ink); }
+  /* та же нижняя строка у мини-диалогов и говорения: «Спросить · Исправить», «Назад · Пропустить», главная кнопка справа */
+  & :is(#drill-card, #match-card, #speak-card) > .nav-row { justify-content: flex-start; align-items: center; flex-wrap: wrap; gap: 8px 20px; min-height: 40px; }
+  & :is(#drill-card, #match-card, #speak-card) > .nav-row :is(.nb-foot-proxy, .question-tools) { display: inline-flex; gap: 20px; margin: 0; }
+  & :is(#drill-card, #match-card, #speak-card) > .nav-row .question-tools { margin: 0 16px 0 auto; }
+  & :is(#drill-card, #match-card, #speak-card) > .nav-row > :is(.link-btn, .primary-btn) { margin: 0; }
+  & :is(#drill-card, #match-card, #speak-card) > .nav-row .primary-btn { order: 0; }
+  & :is(#drill-card, #match-card, #speak-card) > .nav-row:not(:has(.question-tools)) > :is(.link-btn, .primary-btn):first-child { margin-left: auto; }
+  & :is(#drill-card, #match-card, #speak-card) > .nav-row :is(.fix-btn, .link-btn) { height: 40px; padding: 0; line-height: 40px; font-size: 16px; color: var(--nb-ink-2); }
+  & :is(#drill-card, #match-card, #speak-card) > .nav-row :is(.fix-btn, .link-btn):is(:hover, :focus-visible) { color: var(--nb-ink); }
+  & :is(#match-card, #speak-card) > .nav-row .primary-btn { height: 64px; padding: 0 36px; font-size: 20px; }
   & #view-drill .nb-hint-note { margin-top: 14px; }
   & #view-drill #next-btn { height: 64px; padding: 0 36px; font-size: 20px; }
   & #view-drill #drill-feedback .feedback { padding: 0; border: 0; background: none; box-shadow: none; }
@@ -3202,11 +3215,16 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     & #view-match .cz-text { font-size: 22px; }
     /* на телефоне строка не вмещает пять ссылок: «Спросить · Исправить» — второй строкой, под подсказкой */
     /* первая строка — подсказка и «Пропустить», вторая — «Спросить · Исправить» и «Назад»; перенос — пустым элементом во всю ширину */
-    & #view-drill .nav-row { row-gap: 0; }
-    & #view-drill .nav-row #skip-btn { order: 1; margin-left: auto; }
-    & #view-drill .nav-row::after { content: ""; order: 2; flex-basis: 100%; }
-    & #view-drill .nav-row .question-tools { order: 3; margin: 0; }
-    & #view-drill .nav-row #prev-btn { order: 4; margin-left: auto; }
+    & #drill-card > .nav-row { row-gap: 0; }
+    & #drill-card > .nav-row > #skip-btn { order: 1; margin-left: auto; }
+    & #drill-card > .nav-row::after { content: ""; order: 2; flex-basis: 100%; }
+    & #drill-card > .nav-row .question-tools { order: 3; margin: 0; }
+    & #drill-card > .nav-row > #prev-btn { order: 4; margin-left: auto; }
+    /* у мини-диалогов и говорения подсказки нет: строка одна — «Спросить · Исправить» слева, «Назад · Пропустить» справа */
+    & :is(#match-card, #speak-card) > .nav-row .question-tools { margin: 0 auto 0 0; }
+    /* оглавление теории на телефоне — одной строкой с прокруткой вбок: пятнадцать пилюль в пять рядов занимали пол-экрана */
+    & .learny-rail .toc { flex-wrap: nowrap; }
+    & #theory-toc a { flex: none; white-space: nowrap; }
   }
 }
 
@@ -9513,9 +9531,20 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     if (!bad) done.querySelector("h2")?.insertAdjacentHTML("beforeend", TICK);
   }
 
+  // «Спросить» и «Исправить» — в нижнюю строку шага, как в тренажере: второстепенное в одном месте, задание во всю ширину.
+  // Если строки нет (идет запись или набор ответа), кнопки остаются над заданием
+  function toolsToRow(card) {
+    const row = [...card.querySelectorAll(":scope > .nav-row")].pop(), btns = card.querySelectorAll(":scope > .q-counter > .fix-btn");
+    if (!row || !btns.length) return;
+    const tools = document.createElement("span");
+    tools.className = "question-tools";
+    tools.append(...btns);
+    row.prepend(tools);
+  }
+
   function markMatch() {
     const card = one("#match-card");
-    if (card) markMatchDone(card);
+    if (card) { toolsToRow(card); markMatchDone(card); }
     const ask = card?.querySelector(":scope > .eyebrow");
     if (card && ask && !ask.classList.contains("nb-gone")) { kicker(card, ask.textContent.trim()); ask.classList.add("nb-gone"); }
     const text = card?.querySelector(".cz-text");
@@ -9562,6 +9591,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     markLessonDone();
     // как отвечать — строкой над вопросом, как «что сделать» в практике; отдельный блок «How to answer» под заданием не нужен
     const card = one("#speak-card");
+    if (card) toolsToRow(card);
     if (card) kicker(card, one('#view-speak [data-ui="howToAnswerText"]')?.textContent.trim() || "");
     const said = one("#speak-card .sp-said");
     if (!said || said.dataset.nb) return;
@@ -9585,6 +9615,16 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   function markReport() {
     const card = one("#report-card");
     if (!card || card.dataset.nb === card.innerHTML.length + "") return;
+    // Итоги по порядку дела: урок и счет, подпись, потом «Скопировать / Скачать», ниже подробности.
+    // Подпись раньше стояла после кнопок отправки, хотя ее надо поставить до них. Шапка отчета перерисовывается
+    // вместе с карточкой, поэтому переносится после каждой отрисовки, прежняя заменяется
+    const send = one("#view-report .aside");
+    if (send) {
+      let head = one("#view-report .nb-report-head");
+      if (!head) { head = document.createElement("div"); head.className = "nb-report-head"; send.before(head); }
+      const parts = [":scope > .eyebrow", ":scope > .report-summary", ":scope > .name-row"].map(sel => card.querySelector(sel)).filter(Boolean);
+      if (parts.length) head.replaceChildren(...parts);
+    }
     card.querySelectorAll(".answers-table tbody tr").forEach(row => {
       const given = row.querySelector("td.given"), correct = row.querySelector("td.correct");
       if (!given || !correct || given.dataset.nb) return;
