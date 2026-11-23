@@ -1,0 +1,35 @@
+/* Материалы лендинга и рабочей тетради. Цветные обложки, закладки и чернила
+   одинаковы в обоих вариантах бумаги. */
+:root {
+  --paper-canvas: #fff;
+  --paper-leaf: #fcfcfd;
+  --paper-surface: #fff;
+  --paper-label: #f8f8fa;
+  --paper-muted: #f1f1f4;
+  --paper-edge: #dedee4;
+  --paper-cut: #e1e1e7;
+  --paper-cut-light: #f2f2f5;
+  /* надпись LEARNY узкая: ширина считается от высоты прописной — 24px в шапке, 21px на телефоне, 28px в футере */
+  --brand-width-header: 90px;
+  --brand-width-mobile: 79px;
+  --brand-width-footer: 105px;
+  /* в этот цвет на главной вырастает разделитель урока перед переходом: урок открывается на бумаге, без стола */
+  --theory-desk: var(--paper-leaf);
+}
+.learny-logo {
+  display: block;
+  fill: var(--ink);
+  width: var(--brand-width, var(--brand-width-header));
+  height: auto;
+  flex: none;
+}
+:root[data-paper="warm"] {
+  --paper-canvas: #f6f4ec;
+  --paper-leaf: #fbf7ea;
+  --paper-surface: #fffdf8;
+  --paper-label: #fbf8ee;
+  --paper-muted: #efede3;
+  --paper-edge: #e3e0d4;
+  --paper-cut: #efe9d8;
+  --paper-cut-light: #f4eedf;
+}

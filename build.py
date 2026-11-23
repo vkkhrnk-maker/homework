@@ -28,8 +28,9 @@ HEAD = """<!doctype html>
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#080808" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/klyaksa-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="icons/klyaksa-16.svg" type="image/svg+xml" sizes="any">
+<link rel="apple-touch-icon" href="icons/klyaksa-touch.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -137,15 +138,18 @@ landing_redirect = """<script>
   var filled = function (key) { try { var v = JSON.parse(localStorage.getItem(key) || "null"); return !!v && (Array.isArray(v) ? v.length > 0 : Object.keys(v).length > 0); } catch (e) { return true; } };
   var state = JSON.parse(localStorage.getItem("homework-english-v3") || "null");
   var progress = state && state.progress ? Object.keys(state.progress).length : 0;
-  if (!progress && !filled("homework-english-lessons-v1") && !filled("et-vocab-v1")) location.replace("landing.html");
+  if (!progress && !filled("homework-english-lessons-v1") && !filled("et-vocab-v1")) location.replace(window.learnyPaperURL?.("landing.html") || "landing.html");
 }catch(e){}})();
 </script>
 """
 learny_html = learny_html.replace('<meta charset="utf-8">\n', '<meta charset="utf-8">\n' + landing_redirect, 1)
 # Лендинг: исходник learny-notebook-landing.html публикуется как landing.html; версия в ссылках на стили и скрипт считается по их содержимому.
-landing_assets = ["learny-notebook.css", "learny-notebook-landing.css", "learny-notebook-open.js"]
+landing_assets = ["learny-paper.css", "learny-paper.js", "learny-notebook.css", "learny-notebook-landing.css", "learny-notebook-open.js", "learny-looks.css", "learny-looks.js"]
 landing_version = hashlib.sha1(b"".join((ROOT / name).read_bytes() for name in landing_assets)).hexdigest()[:10]
-landing_html = re.sub(r'(learny-notebook(?:-landing)?\.css|learny-notebook-open\.js)(\?v=[0-9a-f]+)?"', lambda m: m.group(1) + "?v=" + landing_version + '"', (ROOT / "learny-notebook-landing.html").read_text(encoding="utf-8"))
+landing_html = re.sub(r'(learny-paper\.(?:css|js)|learny-notebook(?:-landing)?\.css|learny-notebook-open\.js|learny-looks\.(?:css|js))(\?v=[0-9a-f]+)?"', lambda m: m.group(1) + "?v=" + landing_version + '"', (ROOT / "learny-notebook-landing.html").read_text(encoding="utf-8"))
+# Встроенный SVG наследует цвет чернил темы и виден при открытии HTML с диска.
+brand_logo = (ROOT / "icons/learny-wordmark.svg").read_text(encoding="utf-8").strip()
+landing_html = landing_html.replace('<img class="learny-logo" src="icons/learny-wordmark.svg" alt="">', brand_logo)
 pages = {
     "landing.html": landing_html,
     "index.html": learny_html,
@@ -162,6 +166,24 @@ pages = {
 preview = learny_html.replace("if ('serviceWorker' in navigator) addEventListener('load'", "if (false) addEventListener('load'", 1)
 for filename, hero in (("learny-calm.html", "b"), ("learny-calm-a.html", "a"), ("learny-calm-c.html", "c")):
     (ROOT / filename).write_text(preview.replace('data-hero="b"', f'data-hero="{hero}"', 1), encoding="utf-8")
+# Основные точки входа сохраняют адрес, хранилище и маршруты уроков.
+paper_css = (ROOT / "learny-paper.css").read_text(encoding="utf-8")
+paper_js = (ROOT / "learny-paper.js").read_text(encoding="utf-8")
+notebook_css = (ROOT / "src" / "learny-notebook-app.css").read_text(encoding="utf-8")
+notebook_js = (ROOT / "src" / "learny-notebook-app.js").read_text(encoding="utf-8")
+notebook_html = learny_html.replace('data-calm data-hero="b"', 'data-calm data-hero="b" data-nb', 1)
+notebook_html = re.sub(r'<i id="brand-dot"[^>]*>.*?</i>', lambda _: brand_logo, notebook_html, count=1)
+notebook_html = notebook_html.replace('<span class="footer-name" data-ui="brandName"></span>',
+                                      '<span class="footer-name" role="img" aria-label="Learny">' + brand_logo + '</span>', 1)
+notebook_html = notebook_html.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<script>' + paper_js + '</script>', 1)
+# Стилистика лендинга G (23 ноября 2026): Geist 400 — интерфейс и английский текст, Sofia Sans Extra Condensed 900 — крупные заголовки,
+# Caveat 600 — пометки от руки. Других начертаний приложение не грузит: Golos Text и Literata нижних слоев убраны.
+notebook_html = re.sub(r'<link rel="stylesheet" crossorigin="anonymous" href="https://fonts\.googleapis\.com/css2\?family=Golos\+Text[^"]*">\n?', "", notebook_html)
+notebook_html = notebook_html.replace("</head>", '<link rel="stylesheet" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Geist:wght@400&family=Sofia+Sans+Extra+Condensed:wght@900&display=swap">\n<style id="learny-notebook-app">\n' + paper_css + notebook_css + "\n</style>\n</head>", 1)
+notebook_body, notebook_end = notebook_html.rsplit("</body>", 1)
+notebook_html = notebook_body + '<script id="learny-notebook-app-script">\n' + notebook_js + "\n</script>\n</body>" + notebook_end
+pages["index.html"] = pages["learny.html"] = notebook_html
+(ROOT / "learny-notebook-app.html").write_text(notebook_html.replace("if ('serviceWorker' in navigator) addEventListener('load'", "if (false) addEventListener('load'", 1), encoding="utf-8")
 if "--previews-only" in sys.argv:
     print("Собраны три варианта Calm для сравнения")
     sys.exit(0)
@@ -169,10 +191,12 @@ for filename, document in pages.items():
     (ROOT / filename).write_text(document, encoding="utf-8")
 local_entry = ROOT / "english-homework.html"
 if local_entry.exists():
-    local_entry.write_text(learny_html, encoding="utf-8")
+    local_entry.write_text(notebook_html, encoding="utf-8")
 
 sw_path = ROOT / "sw.js"
 sw = sw_path.read_text(encoding="utf-8")
+asset_urls = [f"{name}?v={landing_version}" for name in landing_assets]
+sw = re.sub(r"const LANDING_ASSETS = \[.*?\];", "const LANDING_ASSETS = " + json.dumps(asset_urls) + ";", sw)
 # Учитываем основную страницу: выбор другого варианта тоже обновляет офлайн-кэш.
 version = hashlib.sha1("".join(filename + "\n" + document for filename, document in pages.items()).encode()).hexdigest()[:10]
 sw_path.write_text(re.sub(r"const VERSION = '[^']*';", f"const VERSION = '{version}';", sw), encoding="utf-8")

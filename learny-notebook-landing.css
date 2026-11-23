@@ -2,63 +2,137 @@
    Тетрадь закреплена на экране; прокрутка открывает обложку и перелистывает страницы:
    слева на развороте название шага, справа сам шаг в действии. На телефоне разворот не помещается,
    поэтому закреплена правая страница, а название шага стоит над ней. */
-body.ld{background:var(--paper);overflow-x:clip}
+body.ld{
+  --hero-edge:32px;
+  --form-tool-gap:12px;
+  --form-stamp-gap:28px;
+  --nav-target:44px;
+  --nav-weight:600;
+  --nav-underline-offset:.24em;
+  --leaf-time:760ms;
+  --leaf-ease:cubic-bezier(.45,.05,.2,1);
+  --caption-enter:150ms;
+  background:var(--paper);overflow-x:clip}
+/* шапка — часть первого экрана: закреплена вместе с ним и уходит и возвращается заодно с заголовком (правила ниже, у .ld-copy) */
 .ld-top{position:absolute;inset:0 0 auto 0;z-index:6;display:flex;align-items:center;justify-content:space-between;height:72px;padding:0 32px}
-.ld-top .brand{font-size:27px}
+.ld-top .brand,.ld-foot-brand .brand{display:inline-flex;align-items:center;vertical-align:middle}
+/* Навигация. Ссылки и язык — простой текст одного веса и цвета, стоят плотной группой; под курсором пункт обводится
+   карандашом (рисует скрипт). «Кабинет» — единственная кнопка шапки: та же пара наклеек, что у главного действия
+   первого экрана, только меньше. Обводка — указание, кнопка — действие, поэтому состояния не путаются. */
+.ld-nav{display:flex;align-items:center;gap:22px}
+.ld-nav > a:not(.split),.ld-lang-b{position:relative;display:inline-flex;align-items:center;gap:6px;padding:13px 0;font:600 15px/1 var(--ui);color:var(--ink)}
+.ld-loop{position:absolute;left:-20px;top:1px;width:calc(100% + 40px);height:calc(100% - 2px);overflow:visible;pointer-events:none;color:var(--pencil)}
+/* пока обводки нет, линия скрыта целиком: иначе от нее остается точка в начале штриха */
+.ld-loop path{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:0;transition:stroke-dashoffset .2s var(--ease),opacity 0s .2s}
+:is(.ld-nav > a,.ld-lang-b):focus-visible .ld-loop path,.ld-lang-b[aria-expanded="true"] .ld-loop path{stroke-dashoffset:0;opacity:1;transition:stroke-dashoffset .4s var(--ease),opacity 0s}
+@media (hover:hover){:is(.ld-nav > a,.ld-lang-b):hover .ld-loop path{stroke-dashoffset:0;opacity:1;transition:stroke-dashoffset .4s var(--ease),opacity 0s}}
+/* язык: код языка и стрелка без рамки, под ними бумажный список; выбранный язык отмечен маркером */
+.ld-lang{position:relative}
+.ld-lang-b > svg:not(.ld-loop){width:11px;height:8px;transition:rotate .2s var(--ease)}
+.ld-lang-b > svg:not(.ld-loop) path{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ld-lang-b[aria-expanded="true"] > svg:not(.ld-loop){rotate:180deg}
+.ld-lang-m{position:absolute;right:-14px;top:calc(100% + 8px);z-index:8;display:grid;gap:2px;min-width:148px;padding:6px;border-radius:11px;background:var(--paper-surface);box-shadow:0 0 0 1px rgba(26,23,28,.14),0 2px 0 rgba(26,23,28,.1)}
+.ld-lang-m{transition:opacity .14s var(--ease),translate .14s var(--ease)}
+@starting-style{.ld-lang-m{opacity:0;translate:0 -4px}}
+.ld-lang-m button{display:block;padding:10px 12px;border-radius:7px;text-align:left;font:500 15px/1 var(--ui);color:#1a171c}
+.ld-lang-m button[aria-pressed="true"]{font-weight:600;background:linear-gradient(100deg,rgba(255,228,106,0) 2%,var(--marker) 7%,rgba(255,228,106,.9) 93%,rgba(255,228,106,0) 98%) no-repeat 0 50%/100% 1.7em}
+@media (hover:hover){.ld-lang-m button:not([aria-pressed="true"]):hover{background:rgba(26,23,28,.06)}}
 
 /* ---------- закрепленная сцена ---------- */
 .ld-book{position:relative}
 .ld-pin{position:sticky;top:0;height:100svh;overflow:hidden}
-.ld-copy{position:absolute;left:32px;top:50%;z-index:3;width:min(54vw,760px);translate:0 -50%;will-change:transform,opacity}
-.ld-copy h1{margin:0;font:600 clamp(48px,7.1vw,112px)/.9 var(--read);letter-spacing:-.038em;text-wrap:balance}
-.ld-copy .lede{margin:26px 0 0;max-width:30ch;font-size:clamp(17px,1.5vw,21px);line-height:1.45;color:var(--ink-2);text-wrap:pretty}
+/* первый экран: заголовок во всю ширину страницы, тетрадь занимает свободное место под первой строкой справа; текст и кнопка — под заголовком слева */
+.ld-copy{position:absolute;left:var(--hero-edge);right:var(--hero-edge);top:104px;z-index:1}
+/* Шапка, заголовок и кнопка — одна группа. Тетрадь уехала в центр сцены: группа уходит сразу и целиком;
+   возвращается с задержкой, когда тетрадь встала на место. Скрытая группа не ловит ни курсор, ни клавиатуру. */
+:is(.ld-copy,.ld-top){transition:opacity .5s var(--ease) var(--copy-delay,0s),translate .5s var(--ease) var(--copy-delay,0s),visibility 0s var(--copy-delay,0s)}
+.ld-pin.away :is(.ld-copy,.ld-top){opacity:0;translate:0 -48px;pointer-events:none;visibility:hidden;transition:opacity .3s var(--ease),translate .3s var(--ease),visibility 0s .3s}
+.ld-copy h1{position:relative;z-index:0;margin:0;font:600 clamp(56px,calc((100vw - 64px) / 8.75),196px)/.83 var(--read);letter-spacing:-.045em;white-space:nowrap}
+/* маркер лежит под буквами, а не поверх: иначе при плотной межстрочной он закрывает хвост «g» из верхней строки */
+.ld-copy h1 .mk{position:relative;background:none}
+.ld-copy h1 .mk::before{content:"";position:absolute;z-index:-1;left:-.08em;right:-.08em;top:.5em;height:.86em;border-radius:.06em .03em;
+  background:linear-gradient(100deg,rgba(255,228,106,0) .5%,var(--marker) 2%,rgba(255,228,106,.9) 97.5%,rgba(255,228,106,0) 99.5%)}
+.ld-copy .lede{margin:calc(clamp(56px,(100vw - 64px) / 8.75,196px) * .3 + 28px) 0 0;max-width:32ch;font-size:clamp(17px,1.5vw,21px);line-height:1.34;color:var(--ink-2);text-wrap:pretty}
 .ld-scroll{position:absolute;left:50%;bottom:26px;z-index:3;translate:-50% 0;font:600 22px/1 var(--hand);color:var(--pencil);rotate:-2deg;white-space:nowrap;transition:opacity .3s var(--ease)}
 
 /* тетрадь: левый край правой страницы стоит на сгибе; все размеры внутри считаются от ширины листа */
-.ld-nb{--nbw:min(44vw,58svh);--hx:.045;--hy:0;--hs:.8;--hr:-5;
+.ld-nb{--nbw:min(44vw,58svh);--hs:.84;--hr:-6;
   position:absolute;left:50%;top:calc(50% - var(--nbw)*.6 + 12px);z-index:2;width:var(--nbw);height:calc(var(--nbw)*1.2);
-  perspective:calc(var(--nbw)*9);font-size:calc(var(--nbw)/18);will-change:transform}
-.ld-leaf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;will-change:transform}
+  perspective:calc(var(--nbw)*9);font-size:calc(var(--nbw)/18);will-change:transform;transition:transform var(--leaf-time) var(--leaf-ease)}
+/* лист переворачивается сам, своим ходом: мягко трогается и мягко ложится */
+.ld-leaf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;will-change:transform;transition:transform var(--leaf-time) var(--leaf-ease)}
 .ld-face{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;background:var(--sheet);box-shadow:var(--ring)}
 .ld-front{border-radius:.2em .55em .55em .2em;padding:1.5em 1.5em 1.4em 1.7em}
 .ld-back{transform:rotateY(180deg);border-radius:.55em .2em .2em .55em;padding:2.2em 2.1em 1.6em 1.8em;display:flex;flex-direction:column;justify-content:center}
 .ld-base{transform:none}
 
-/* обложка */
-.ld-cover .ld-front{padding:17% 9% 0 calc(9% + .8em)}
-.ld-label{display:grid;grid-template-rows:auto 1fr;justify-items:center;align-items:center;aspect-ratio:7/4;padding:.62em .6em .7em}
-.ld-label small{justify-self:start;margin-left:.5em;font:600 max(.4em,8px)/1 var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
-.ld-label b{font:600 1.5em/1 var(--hand);color:var(--ball);rotate:-2deg}
 .ld-cover .ld-back{padding-right:2.4em}
 
 /* левая страница: номер шага, название, одна строка */
 .ld-n{font:500 max(.55em,12px)/1 var(--ui);color:var(--ink-3);font-variant-numeric:tabular-nums}
-.ld-back h3{margin:.5em 0 .3em;font:600 1.75em/1.05 var(--read);letter-spacing:-.025em}
-.ld-back p{margin:0;max-width:17em;font:400 .64em/1.45 var(--ui);color:var(--ink-2);text-wrap:pretty}
+.ld-back h3{margin:.55em 0 .4em;max-width:9.5em;font:600 1.42em/1.06 var(--read);letter-spacing:-.025em;text-wrap:balance}
+.ld-back p{margin:0;max-width:17em;font:400 .64em/1.34 var(--ui);color:var(--ink-2);text-wrap:pretty}
 
 /* правая страница: сам шаг. Пометки появляются по мере прокрутки (класс .on ставит скрипт) */
 .ld-demo{display:flex;flex-direction:column;height:100%}
 .ld-demo .kicker{font-size:max(.47em,11px)}
 /* содержимое страницы стоит по центру одной группой: пометка преподавателя сразу под предложением */
-.ld-demo .sentence{margin:auto 0 0;padding-top:.5em;font-size:1.06em;line-height:1.55}
+.ld-demo .sentence{margin:auto 0 0;padding-top:.5em;font-size:1.06em;line-height:1.34}
 .ld-demo>:last-child{margin-bottom:auto}
-.ld-demo .ask{display:block;margin-bottom:.5em;font-size:.8em;line-height:1.4;color:var(--ink-2)}
+.ld-demo .ask{display:block;margin-bottom:.5em;font-size:.8em;line-height:1.3;color:var(--ink-2)}
 .ld-demo .note{margin-top:.55em;font-size:.92em}
 .ld-demo .note svg{width:1em;height:1.15em;margin-top:-.2em}
-.ld-demo .rule-h{margin:.7em 0 0;font:600 1.5em/1.1 var(--read);letter-spacing:-.02em}
+.ld-demo .rule-h{margin:auto 0 0;font:600 1.5em/1.1 var(--read);letter-spacing:-.02em}
 .ld-demo .rule-g{margin:.2em 0 .7em;font:400 max(.56em,12px)/1.4 var(--ui);color:var(--ink-2)}
-.ld-demo .ex{margin:0;font:500 .9em/1.7 var(--read)}
+/* правило стоит по центру страницы, как содержимое остальных шагов: при перелистывании текст не прыгает вверх-вниз */
+.ld-demo .ex{margin:0 0 auto;font:500 .9em/1.42 var(--read)}
 .ld-demo .wcard{position:absolute;right:1.5em;bottom:1.4em;width:auto;height:auto;gap:.5em;padding:.6em .7em;border-radius:.5em}
 .ld-demo .wcard b{font-size:max(.74em,15px)}
-.ld-demo .wcard span{font-size:max(.5em,11px)}
-.ld-demo .tale{margin:.7em 0 0;font-size:.82em;line-height:1.75}
+.ld-demo .wcard > span{font-size:max(.5em,11px)}
+/* слово в карточке крупнее перевода: маркер внутри слова не должен уменьшать его до размера подписи */
+.ld-demo .wcard b span{font-size:inherit;line-height:inherit}
+.ld-demo .tale{margin:.7em 0 0;font-size:.82em;line-height:1.46}
 .ld-demo .print{margin:auto 0 .9em;font:600 max(.4em,10.5px)/1 var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
 .ld-demo .rep{margin:0;font:500 .98em/1.45 var(--read)}
-.ld-demo .pills{display:flex;flex-wrap:wrap;gap:.35em;margin:.6em 0 0;font-size:.86em}
-.ld-demo .pills .mk{align-self:center;font:600 .86em/1.3 var(--ui);white-space:nowrap}
-.ld-demo .note .ok{width:.95em;height:.85em;margin:.05em .1em 0 0}
-.ld-demo .note .ok path{stroke-width:3}
+/* страница отчета для учителя: что за урок, строки с ответами (верные с галочкой, ошибка зачеркнута и исправлена), итог и пометка */
+.ld-report .print{margin:auto 0 .8em}
+.ld-report .rep{font:400 .7em/1.3 var(--ui);color:var(--ink-2)}
+.ld-report .rep b{margin-right:.3em;font:600 1.5em/1.1 var(--read);letter-spacing:-.02em;color:var(--ink)}
+.ld-answers{display:grid;gap:.5em;margin:.8em 0 .25em;padding:0;list-style:none;counter-reset:answer;font:500 .78em/1.3 var(--read)}
+.ld-answers li{counter-increment:answer;display:grid;grid-template-columns:1.2em minmax(0,1fr) auto;align-items:baseline;gap:.25em;padding-bottom:.5em;border-bottom:1px solid rgba(45,50,95,.16)}
+.ld-answers li::before{content:counter(answer);font:500 .8em/1 var(--ui);color:var(--ink-3);font-variant-numeric:tabular-nums}
+.ld-answers i,.ld-answers s{margin:0 .14em;font:600 1.24em/1 var(--hand);font-style:normal;text-decoration:none;color:var(--ball)}
+.ld-answers s{position:relative;display:inline-block;color:color-mix(in srgb,var(--ball) 50%,#fff)}
+.ld-answers s svg{position:absolute;left:-4%;top:42%;width:108%;height:.5em;overflow:visible}
+.ld-answers s path{fill:none;stroke:var(--pencil);stroke-width:2;stroke-linecap:round}
+.ld-answers ins{margin-right:.14em;font:700 1.24em/1 var(--hand);text-decoration:none;color:var(--pencil)}
+.ld-answers .tick{width:1.15em;height:.9em;overflow:visible;color:var(--tick)}
+.ld-answers .tick path{fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+/* итог урока — одна строка текста без плашек: цифры чернилами, подписи серым. Цвет на странице отчета
+   остается только у пометок: ответ ученика, правка карандашом, галочки */
+.ld-report .tally{margin:.7em 0 0;font:500 .64em/1.4 var(--ui);color:var(--ink-2)}
+.ld-report .tally b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
 .ld-demo .sent{margin-top:.9em;font:400 max(.56em,12px)/1.4 var(--ui);color:var(--ink-2)}
+/* Английский текст на страницах тетради набран плотнее: при обычной разрядке Literata в этом размере выглядит рыхло.
+   Почерк поджат слегка, сильнее буквы начинают слипаться. Точки в конце строк не ставим, как и во всех подписях лендинга;
+   точка между предложениями прижата к пропуску, а не висит отдельно после линии */
+.ld-demo :is(.sentence,.ex,.ask,.rep,.ld-answers){letter-spacing:-.025em}
+.ld-demo :is(.ans,.hand,.fixword,.note,.ld-answers i,.ld-answers s,.ld-answers ins){letter-spacing:-.01em}
+.ld-demo .gap + .stop{margin-left:-.16em}
+/* Страница «Говорение»: ответ сказан, а не написан. Вопрос, запись голоса (кнопка, звуковая дорожка, длительность),
+   под ней расшифровка сказанного: свои слова фиолетовым, ошибка зачеркнута карандашом, правка над ней, пометка учителя.
+   Запись проявляется слева направо, как будто ее только что наговорили; расшифровка — следом, тем же движением */
+.ld-voice .ask{margin:auto 0 0;font-family:var(--read);letter-spacing:-.015em}
+.ld-voice .rec{display:flex;align-items:center;gap:.45em;margin:.55em 0 0}
+.ld-voice .rec-play{position:relative;flex:none;width:1.45em;height:1.45em;border-radius:50%;background:var(--purple)}
+.ld-voice .rec-play::after{content:"";position:absolute;left:55%;top:50%;width:.46em;height:.52em;translate:-50% -50%;background:#fff;clip-path:polygon(0 0,100% 50%,0 100%)}
+.ld-voice .rec-wave{flex:none;width:7.5em;height:1.5em;overflow:visible;color:var(--ball)}
+.ld-voice .rec-wave path{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.ld-voice .rec-time{font:500 max(.5em,11px)/1 var(--ui);color:var(--ink-3);font-variant-numeric:tabular-nums}
+.ld-voice .said{margin:.95em 0 0;padding:0;color:var(--ball)}
+.ld-voice .said .gap{min-width:0;margin:0}
+.ld-voice .said .gap .ans{padding:0;font:inherit;rotate:none;color:inherit;opacity:1;transition:color .3s var(--ease)}
+.ld-voice .said .gap .ans:has(.strike.on){color:color-mix(in srgb,var(--ball) 50%,#fff)}
 .ld-demo [data-q]{opacity:0;transition:opacity .25s var(--ease)}
 .ld-demo [data-q].on{opacity:1}
 .ld-demo .hand{display:inline-block;font:600 1.24em/1 var(--hand);color:var(--ball)}
@@ -69,35 +143,128 @@ body.ld{background:var(--paper);overflow-x:clip}
 .ld-demo svg[data-q].on path{stroke-dashoffset:0}
 .ld-demo .w[data-q]{opacity:1;cursor:default}
 .ld-demo .w[data-q].on{background-size:100% .95em}
+.ld-voice .rec[data-q]{opacity:1}
+.ld-voice .rec[data-q] > :not(.rec-wave){opacity:0;transition:opacity .2s var(--ease)}
+.ld-voice .rec[data-q] .rec-wave{clip-path:inset(-20% 100% -20% 0);transition:clip-path .7s var(--ease)}
+.ld-voice .rec.on > :not(.rec-wave){opacity:1}
+.ld-voice .rec.on .rec-wave{clip-path:inset(-20% 0 -20% 0)}
+.ld-voice .said[data-q]{opacity:1;clip-path:inset(-70% 100% -10% -4%);transition:clip-path .6s var(--ease)}
+.ld-voice .said[data-q].on{clip-path:inset(-70% -6% -10% -4%)}
 .ld-demo .wcard[data-q]{translate:0 .5em;transition:opacity .3s var(--ease),translate .3s var(--ease)}
 .ld-demo .wcard[data-q].on{translate:0 0}
 
 /* подпись шага над страницей: только там, где разворот не помещается */
 .ld-caps{display:none}
 
-/* ---------- полка тетрадей ---------- */
-.ld-shelf{padding:120px 0 40px}
-.ld-shelf-h{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px;padding:0 32px}
-.ld-shelf h2,.ld-own h2{margin:0;font:600 clamp(40px,5.6vw,88px)/1 var(--read);letter-spacing:-.035em}
-.ld-shelf-h p{margin:0 0 .6em;max-width:26ch;font-size:16px;color:var(--ink-2);text-wrap:pretty}
-.ld-row{display:flex;gap:28px;margin:44px 0 0;padding:6px 32px 24px;list-style:none;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-left:32px;scrollbar-width:none}
-.ld-row::-webkit-scrollbar{display:none}
-.ld-row li{flex:0 0 clamp(230px,23vw,320px);scroll-snap-align:start}
-.ld-row .lp-card .t{font-size:19px}
+/* ---------- уроки картотекой ----------
+   Цветные разделители во всю ширину стоят один за другим; ярлычок того же цвета и составляет с разделителем одну форму.
+   Ярлычки идут лесенкой слева направо, поэтому видны все сразу. Все уроки на экране без прокрутки вбок.
+   Под курсором (и в фокусе) разделитель раскрывается: полное название, что внутри и слово урока. Цвет плоский, без теней. */
+/* Блок во весь экран, как соседние: заголовок сверху, картотека занимает все остальное и стоит до нижнего края экрана,
+   как в ящике. Закрытые разделители одной высоты, раскрытый забирает свободное место. На низком экране отступы и
+   разделители ужимаются; если места все равно мало, блок становится выше экрана, а не режет содержимое. */
+.ld-shelf{display:flex;flex-direction:column;min-height:100svh;padding:clamp(64px,11svh,96px) 32px 0}
+.ld-shelf-h{display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
+.ld-shelf h2{margin:0;font:600 clamp(40px,5.6vw,88px)/1 var(--read);letter-spacing:-.035em}
+.ld-shelf-h p{margin:0 0 .5em;max-width:28ch;font-size:17px;line-height:1.34;color:var(--ink-2);text-wrap:pretty}
+.ld-stack{--row:clamp(62px,8svh,78px);flex:1;display:flex;flex-direction:column;margin:clamp(28px,5svh,52px) 0 0;padding:40px 0 0;list-style:none;overflow-anchor:none}
+.ld-stack li{position:relative;display:flex;flex:0 0 var(--row);min-height:0;margin-top:-12px;transition:flex-grow .4s cubic-bezier(.3,0,.2,1),min-height .4s cubic-bezier(.3,0,.2,1)}
+.ld-stack li:first-child{margin-top:0}
+.ld-nbrow{position:relative;display:block;flex:1;min-width:0;border-radius:16px 16px 0 0;background:var(--c);color:var(--on,#fffdf6)}
+/* ярлычок: продолжение разделителя вверх, внизу плавно переходит в его кромку.
+   Лесенка из шести ступеней равной ширины: ярлычки делят строку от левого края до подписи справа (под нее оставлено 206px),
+   поэтому последний, «Свой урок», стоит в конце и не закрывает подпись разделителя над ним */
+.ld-nbtab{--step:calc((100% - 236px) / 6);position:absolute;left:calc(30px + var(--tx,0) * var(--step));bottom:calc(100% - 1px);display:grid;align-items:center;min-width:calc(var(--step) - 6px);height:38px;padding:2px 24px 0;border-radius:14px 14px 0 0;
+  background:var(--c);font:600 17px/1 var(--read);letter-spacing:-.005em;white-space:nowrap}
+.ld-nbtab::before,.ld-nbtab::after{content:"";position:absolute;bottom:0;width:14px;height:14px}
+.ld-nbtab::before{right:100%;background:radial-gradient(circle at 0 0,transparent 13.5px,var(--c) 14px)}
+.ld-nbtab::after{left:100%;background:radial-gradient(circle at 100% 0,transparent 13.5px,var(--c) 14px)}
+.ld-nbmeta{position:absolute;right:30px;top:calc((var(--row) - 12px) / 2 - 6px);font:600 12px/1 var(--ui);letter-spacing:.1em;text-transform:uppercase;opacity:.82}
+.ld-nbbody{position:absolute;left:32px;right:42%;top:34px;display:grid;justify-items:start;gap:10px;opacity:0;transition:opacity .2s var(--ease)}
+.ld-nbbody b{font:600 clamp(26px,2.9vw,42px)/1.05 var(--read);letter-spacing:-.025em;text-wrap:balance}
+.ld-nbbody small{font:400 16px/1.4 var(--ui);opacity:.86}
+.ld-nbgo{margin-top:10px;font:600 16px/1 var(--ui)}
+.ld-nbclip{position:absolute;inset:0;overflow:hidden;border-radius:inherit;pointer-events:none}
+.ld-nbrow .nb-word{left:auto;right:5%;bottom:-.14em;font-size:clamp(120px,15vw,220px);line-height:.8;opacity:0;transition:opacity .25s var(--ease)}
+/* раскрыт всегда ровно один разделитель (класс .open ставит скрипт), пустая тетрадь — такой же разделитель, как остальные */
+.ld-nbrow:focus-visible{outline-offset:3px}
+/* раскрытая папка не ниже своего содержимого плюс место под ярлычок следующей (--need считает скрипт): длинный русский текст на узком экране иначе уходит под соседнюю папку */
+.ld-stack li.open{flex-grow:1;min-height:max(236px,var(--need,0px))}
+.ld-stack li.open :is(.ld-nbbody,.nb-word){opacity:1;transition-delay:.14s}
+/* переход в урок: разделитель вырастает во весь экран */
+.ld-grow{position:fixed;z-index:60;pointer-events:none}
 
-/* ---------- свой урок ---------- */
-.ld-own{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:center;padding:96px 32px 120px}
-.ld-own .lede{margin:22px 0 0;max-width:30ch;font-size:19px;line-height:1.5;color:var(--ink-2);text-wrap:pretty}
-.ld-form{position:relative;padding:24px 26px 22px;border-radius:24px}
-.ld-form label{display:block;font:500 13.5px/1.2 var(--ui);color:var(--ink-2)}
-.ld-form textarea{display:block;width:100%;min-height:150px;margin:10px 0 0;padding:0;border:0;outline:0;resize:none;background:none;font:400 21px/1.5 var(--read);color:var(--ink)}
-.ld-form textarea::placeholder{color:var(--ink-3)}
-.ld-form-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--line)}
-.ld-attach{display:inline-flex;align-items:center;gap:8px;height:44px;font:600 15px/1 var(--ui);color:var(--ink)}
-.ld-attach svg{width:18px;height:18px}
-.ld-form .note{position:absolute;right:26px;top:-34px;margin:0;font-size:24px;rotate:2deg}
-.ld-foot{display:flex;justify-content:space-between;gap:16px;margin:0 32px;padding:22px 0 30px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-2)}
-.ld-foot .brand{margin-right:12px;font-size:17px;color:var(--ink)}
+/* ---------- свой урок ----------
+   Самый важный блок и самый яркий: фиолетовое поле во весь экран (фиолетовый у нас — цвет своего ответа и действия).
+   Заголовок спрашивает, что разберем. Сразу под ним поле — светлый лист во всю ширину: самая светлая поверхность блока,
+   поэтому с первого взгляда читается как место для текста. Под ним второй лист со сдвигом вправо вниз — толщина бумаги
+   без размытой тени; когда поле в фокусе, нижний лист желтеет. Вставка из буфера и вложение живут внутри листа.
+   Под листом наклейки с готовыми началами. Кнопка — желтая печать, единственная такая на странице.
+   Блок «ловит» прокрутку: долистали — он встал ровно, дальше листает следующий жест. */
+.ld-own{background:#6824dd;color:#fffdf6}
+.ld-sheet{display:flex;flex-direction:column;min-height:100svh;padding:96px 32px 40px}
+.ld-own h2{margin:0;font:600 clamp(44px,calc((100vw - 64px) / 8.85),210px)/.9 var(--read);letter-spacing:-.045em;white-space:nowrap}
+/* лист компактный, на две строки, и растет по мере набора: огромный пустой лист пугает, будто нужно писать сочинение */
+.ld-paper{position:relative;margin-top:clamp(26px,2.8vw,42px);border-radius:16px;background:var(--paper-surface,#fff);
+  box-shadow:6px 6px 0 0 color-mix(in srgb,#fff 70%,#6824dd);transition:box-shadow .2s var(--ease)}
+.ld-paper:focus-within{box-shadow:6px 6px 0 0 var(--marker)}
+/* текст в листе — свой, поэтому фиолетовыми чернилами; набран книжным шрифтом: сюда вставляют длинную домашку */
+.ld-own textarea{display:block;width:100%;min-height:calc(3em + 22px);margin:0;padding:22px 24px 0;border:0;outline:0;resize:none;overflow:hidden;background:none;
+  font:400 clamp(19px,1.55vw,23px)/1.5 var(--read);letter-spacing:-.012em;color:var(--ball);caret-color:var(--purple)}
+.ld-own textarea::placeholder{color:var(--ink-3);opacity:1}
+.ld-tools{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px 14px}
+.ld-tool{display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 14px 0 12px;border-radius:10px;background:color-mix(in srgb,var(--purple) 8%,#fff);
+  font:600 15px/1 var(--ui);color:var(--purple);white-space:nowrap;transition:background-color .15s var(--ease),scale .15s var(--ease)}
+.ld-tool svg{width:18px;height:18px;flex:none}
+.ld-tool:active{scale:.96}
+.ld-tool:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+@media (hover:hover){.ld-tool:hover{background:color-mix(in srgb,var(--purple) 15%,#fff)}}
+/* под листом: сразу наклейки с началами, печать «Создать урок» закрывает блок в правом нижнем углу */
+.ld-own-foot{flex:1 1 auto;display:flex;justify-content:space-between;gap:24px;margin-top:22px}
+.ld-own-foot .ld-starts{align-self:flex-start}
+.ld-own-foot .ld-round{align-self:flex-end}
+/* наклейки с готовыми началами: чуть светлее фона, с печатной рамкой внутри, как остальные наклейки-кнопки.
+   Отвечают на вопрос заголовка и показывают, с чем сюда приходят. Под курсором наклейка становится маркером */
+.ld-starts{display:flex;flex-wrap:wrap;gap:8px}
+.ld-fill{display:inline-flex;align-items:center;height:42px;padding:0 16px;border-radius:10px;background:color-mix(in srgb,#fff 13%,#6824dd);
+  outline:1px solid rgba(255,253,246,.32);outline-offset:-4px;font:600 15.5px/1 var(--ui);color:#fffdf6;white-space:nowrap;
+  transition:background-color .15s var(--ease),color .15s var(--ease),outline-color .15s var(--ease),scale .15s var(--ease)}
+.ld-fill:active{scale:.96}
+.ld-fill:focus-visible{outline:2px solid var(--marker);outline-offset:3px}
+@media (hover:hover){.ld-fill:hover{background:var(--marker);color:#1a171c;outline-color:rgba(26,23,28,.3)}}
+/* главное действие блока — наклейка: желтая, с фигурным краем и печатной рамкой внутри, чуть повернута.
+   Под курсором выпрямляется и подрастает, при нажатии прижимается. Единственная такая на странице. */
+.ld-round{position:relative;flex:none;display:grid;place-content:center;justify-items:center;gap:6px;width:clamp(156px,14vw,208px);aspect-ratio:1;background:none;color:#1a171c;
+  font:700 clamp(18px,1.6vw,24px)/1.1 var(--ui);letter-spacing:-.01em;text-align:center;rotate:-9deg;transition:rotate .35s cubic-bezier(.3,1.4,.5,1),scale .2s var(--ease)}
+.ld-round::before{content:"";position:absolute;inset:0;background:var(--grain-soft),var(--marker);clip-path:polygon(100.00% 50.00%,99.32% 51.72%,97.53% 53.32%,95.30% 54.76%,93.42% 56.10%,92.54% 57.50%,92.89% 59.12%,94.20% 61.02%,95.80% 63.13%,96.94% 65.25%,96.98% 67.10%,95.76% 68.49%,93.53% 69.38%,90.94% 69.97%,88.72% 70.59%,87.41% 71.60%,87.19% 73.24%,87.76% 75.47%,88.55% 78.01%,88.89% 80.38%,88.30% 82.14%,86.67% 83.02%,84.28% 83.10%,81.64% 82.77%,79.34% 82.59%,77.77% 83.09%,77.00% 84.55%,76.77% 86.85%,76.65% 89.50%,76.15% 91.85%,75.00% 93.30%,73.17% 93.57%,70.89% 92.83%,68.53% 91.61%,66.43% 90.66%,64.78% 90.59%,63.55% 91.70%,62.56% 93.78%,61.53% 96.24%,60.26% 98.27%,58.68% 99.24%,56.87% 98.87%,54.98% 97.39%,53.18% 95.44%,51.53% 93.82%,50.00% 93.20%,48.47% 93.82%,46.82% 95.44%,45.02% 97.39%,43.13% 98.87%,41.32% 99.24%,39.74% 98.27%,38.47% 96.24%,37.44% 93.78%,36.45% 91.70%,35.22% 90.59%,33.57% 90.66%,31.47% 91.61%,29.11% 92.83%,26.83% 93.57%,25.00% 93.30%,23.85% 91.85%,23.35% 89.50%,23.23% 86.85%,23.00% 84.55%,22.23% 83.09%,20.66% 82.59%,18.36% 82.77%,15.72% 83.10%,13.33% 83.02%,11.70% 82.14%,11.11% 80.38%,11.45% 78.01%,12.24% 75.47%,12.81% 73.24%,12.59% 71.60%,11.28% 70.59%,9.06% 69.97%,6.47% 69.38%,4.24% 68.49%,3.02% 67.10%,3.06% 65.25%,4.20% 63.13%,5.80% 61.02%,7.11% 59.12%,7.46% 57.50%,6.58% 56.10%,4.70% 54.76%,2.47% 53.32%,0.68% 51.72%,0.00% 50.00%,0.68% 48.28%,2.47% 46.68%,4.70% 45.24%,6.58% 43.90%,7.46% 42.50%,7.11% 40.88%,5.80% 38.98%,4.20% 36.87%,3.06% 34.75%,3.02% 32.90%,4.24% 31.51%,6.47% 30.62%,9.06% 30.03%,11.28% 29.41%,12.59% 28.40%,12.81% 26.76%,12.24% 24.53%,11.45% 21.99%,11.11% 19.62%,11.70% 17.86%,13.33% 16.98%,15.72% 16.90%,18.36% 17.23%,20.66% 17.41%,22.23% 16.91%,23.00% 15.45%,23.23% 13.15%,23.35% 10.50%,23.85% 8.15%,25.00% 6.70%,26.83% 6.43%,29.11% 7.17%,31.47% 8.39%,33.57% 9.34%,35.22% 9.41%,36.45% 8.30%,37.44% 6.22%,38.47% 3.76%,39.74% 1.73%,41.32% 0.76%,43.13% 1.13%,45.02% 2.61%,46.82% 4.56%,48.47% 6.18%,50.00% 6.80%,51.53% 6.18%,53.18% 4.56%,54.98% 2.61%,56.87% 1.13%,58.68% 0.76%,60.26% 1.73%,61.53% 3.76%,62.56% 6.22%,63.55% 8.30%,64.78% 9.41%,66.43% 9.34%,68.53% 8.39%,70.89% 7.17%,73.17% 6.43%,75.00% 6.70%,76.15% 8.15%,76.65% 10.50%,76.77% 13.15%,77.00% 15.45%,77.77% 16.91%,79.34% 17.41%,81.64% 17.23%,84.28% 16.90%,86.67% 16.98%,88.30% 17.86%,88.89% 19.62%,88.55% 21.99%,87.76% 24.53%,87.19% 26.76%,87.41% 28.40%,88.72% 29.41%,90.94% 30.03%,93.53% 30.62%,95.76% 31.51%,96.98% 32.90%,96.94% 34.75%,95.80% 36.87%,94.20% 38.98%,92.89% 40.88%,92.54% 42.50%,93.42% 43.90%,95.30% 45.24%,97.53% 46.68%,99.32% 48.28%)}
+.ld-round::after{content:"";position:absolute;inset:11%;border-radius:50%;border:1.5px solid rgba(26,23,28,.42)}
+.ld-round span,.ld-round i{position:relative}
+.ld-round i{font-style:normal;font-size:1.3em;line-height:1}
+.ld-round:active{scale:.96}
+.ld-round:focus-visible{outline:2px solid var(--marker);outline-offset:6px;border-radius:50%}
+@media (hover:hover){.ld-round:hover{rotate:4deg;scale:1.05}}
+
+/* ---------- футер ----------
+   Во весь экран. Сверху наши пункты колонками: уроки, шаги урока, разделы. Внизу прощальная фраза тем же крупным
+   шрифтом, что заголовки; от руки только пометки преподавателя: обводка красным карандашом и короткая приписка. */
+/* overflow-x: прозрачное поле рисунка обводки шире самой линии и не должно давать странице боковую прокрутку */
+.ld-foot{display:flex;flex-direction:column;min-height:100svh;padding:88px 32px 26px;overflow-x:clip}
+.ld-foot-cols{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));gap:32px}
+.ld-foot-brand .brand{--brand-width:var(--brand-width-footer)}
+.ld-foot-brand p{margin:12px 0 0;max-width:18ch;font-size:16px;line-height:1.34;color:var(--ink-2)}
+.ld-foot h3{margin:6px 0 16px;font:600 12px/1 var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.ld-foot ul{display:grid;gap:9px;margin:0;padding:0;list-style:none;font:500 19px/1.2 var(--read);letter-spacing:-.01em}
+.ld-foot ul a{transition:color .15s var(--ease)}
+@media (hover:hover){.ld-foot ul a:hover{color:var(--purple)}}
+.ld-foot-say{margin:auto 0 0;padding-top:72px;font:600 clamp(48px,calc((100vw - 64px) / 9.4),196px)/.9 var(--read);letter-spacing:-.045em;white-space:nowrap}
+.ld-ring{position:relative;display:inline-block}
+/* обводка охватывает слово целиком: слева заходит за первую букву, справа чуть за последнюю */
+.ld-ring svg{position:absolute;left:-9.6%;top:-2%;width:116.7%;height:112%;overflow:visible;color:var(--pencil)}
+.ld-ring path,.ld-foot-note path{fill:none;stroke:currentColor;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.ld-foot-bot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:clamp(30px,4.6vw,72px);padding-top:16px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-2)}
+.ld-foot-note{display:inline-flex;align-items:center;gap:8px;font:600 28px/1 var(--hand);letter-spacing:-.01em;color:var(--pencil);rotate:-2deg}
+.ld-foot-note svg{width:26px;height:20px;overflow:visible}
+.ld-foot-note path{stroke-width:3}
 
 /* шаги текстом: для скринридера всегда, а на экране когда движение отключено в системе и закрепленной сцены нет */
 .ld-steps{position:absolute;width:1px;height:1px;margin:0;padding:0;overflow:hidden;clip-path:inset(50%);list-style:none}
@@ -109,35 +276,61 @@ body.ld-still .ld-steps li::before{content:counter(step);font:500 13px/1 var(--u
 body.ld-still .ld-steps h3{margin:14px 0 6px;font:600 21px/1.2 var(--read)}
 body.ld-still .ld-steps p{margin:0;font-size:15px;color:var(--ink-2)}
 
+/* неширокий экран: ярлычки картотеки компактнее, чтобы лесенка из шести помещалась до подписи справа */
+@media (max-width:1100px){
+  .ld-nbtab{padding:2px 16px 0;font-size:15.5px}
+}
 /* ---------- узкий экран: закреплена правая страница, шаг подписан над ней ---------- */
 @media (max-width:900px){
+  body.ld{--hero-edge:20px}
   .ld-top{height:60px;padding:0 20px}
-  .ld-top .brand{font-size:24px}
-  .ld-top .lp-nav a{display:none}
-  .ld-copy{left:20px;right:20px;top:76px;width:auto;translate:none}
-  .ld-copy h1{font-size:clamp(40px,11.5vw,56px)}
-  .ld-copy .lede{margin-top:14px;font-size:17px}
-  .ld-copy .split{display:flex;margin-top:18px;height:50px}
+  .ld-top .brand{--brand-width:var(--brand-width-mobile)}
+  .ld-nav{gap:14px}
+  .ld-nav a:not(.ld-space){display:none}
+  .ld-copy{top:76px;z-index:3}
+  .ld-copy h1{font-size:clamp(40px,11.5vw,56px);line-height:.88;white-space:normal}
+  .ld-copy .lede{margin-top:26px;font-size:17px}
+  .ld-copy .split{display:flex;margin-top:22px;height:50px}
   .ld-copy .split .s-ic{width:50px}
-  .split .s-tx{flex:1}
-  .ld-form .split{width:100%}
-  .ld-nb{--nbw:min(86vw,calc((75svh - 136px)/1.2));--hx:0;--hy:.19;--hs:.78;--hr:-4;left:calc(50% - var(--nbw)/2);top:calc(16svh + 136px)}
+  .ld-copy .split .s-tx{flex:1}
+  .ld-nb{--nbw:min(86vw,calc((75svh - 136px)/1.2));--hs:.78;--hr:-4;left:calc(50% - var(--nbw)/2);top:calc(16svh + 136px)}
   .ld-caps{display:block;position:absolute;left:20px;right:20px;top:16svh;z-index:3;margin:0;padding:0;list-style:none}
-  .ld-caps li{position:absolute;inset:0 0 auto 0;opacity:0;translate:0 8px;transition:opacity .3s var(--ease),translate .3s var(--ease)}
-  .ld-caps li.on{opacity:1;translate:0 0}
+  .ld-caps li{position:absolute;inset:0 0 auto 0;visibility:hidden;opacity:0}
+  .ld-caps li.on{visibility:visible;opacity:1;animation:ld-caption-in var(--caption-enter) var(--ease)}
+  @keyframes ld-caption-in{from{opacity:0}to{opacity:1}}
   .ld-caps .ld-n{font-size:13px}
   .ld-caps h3{margin:8px 0 4px;font:600 32px/1.05 var(--read);letter-spacing:-.025em}
   .ld-caps p{margin:0;max-width:30ch;font-size:15.5px;line-height:1.4;color:var(--ink-2)}
-  .ld-shelf{padding:72px 0 24px}
-  .ld-shelf-h{grid-template-columns:minmax(0,1fr);gap:10px;padding:0 20px}
-  .ld-row{gap:16px;margin-top:26px;padding:6px 20px 18px;scroll-padding-left:20px;scroll-snap-type:x mandatory}
-  .ld-row li{flex-basis:min(70%,280px)}
-  .ld-own{grid-template-columns:minmax(0,1fr);gap:46px;padding:64px 20px 72px}
-  .ld-own .lede{font-size:17px;margin-top:14px}
-  .ld-form{padding:20px 20px 18px;border-radius:20px}
-  .ld-form textarea{min-height:120px;font-size:19px}
-  .ld-form .note{right:18px;top:-30px;font-size:21px}
-  .ld-foot{margin:0 20px}
+  .ld-back h3{font-size:1.3em}
+  .ld-caps h3{font-size:27px}
+  .ld-shelf{padding:72px 20px 0}
+  .ld-shelf-h{display:block}
+  .ld-shelf-h p{margin-top:12px}
+  .ld-stack{--row:76px;margin-top:30px;padding-top:34px}
+  .ld-nbrow{border-radius:13px 13px 0 0}
+  .ld-nbtab{left:calc(18px + var(--tm,0) * 40%);min-width:0;height:34px;padding:2px 16px 0;font-size:15.5px}
+  .ld-stack li:nth-child(even){--tm:1}
+  .ld-nbmeta{display:none}
+  .ld-nbbody{left:20px;right:20px;top:30px}
+  .ld-nbbody b{font-size:26px}
+  .ld-nbrow .nb-word{display:none}
+  .ld-sheet{padding:84px 20px 28px}
+  .ld-own h2{font-size:clamp(46px,15.4vw,76px);white-space:normal}
+  .ld-own textarea{padding:18px 18px 0;font-size:18px}
+  .ld-tools{padding:8px 10px 10px}
+  .ld-starts{gap:6px}
+  .ld-fill{height:38px;padding:0 13px;font-size:14.5px}
+  .ld-own-foot{flex-direction:column;gap:18px;margin-top:18px}
+  .ld-own-foot .ld-round{margin:auto 4px 0 0}
+  .ld-round{width:132px;font-size:16.5px}
+  .ld-foot{padding:56px 20px 22px}
+  .ld-foot-cols{grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 20px}
+  .ld-foot-brand{grid-column:1 / -1}
+  .ld-foot ul{font-size:18px}
+  /* на узком экране фраза стоит в две строки: первая часть и обведенное слово; размер подгоняет скрипт по более длинной */
+  .ld-foot-say{padding-top:56px;font-size:calc((100vw - 40px) / 4.9)}
+  .ld-foot-say > [data-t]{display:block}
+  .ld-foot-note{font-size:25px}
   body.ld-still .ld-steps{grid-template-columns:minmax(0,1fr);gap:0;padding:0 20px 24px}
 }
 
@@ -148,68 +341,89 @@ body.ld-still .ld-steps p{margin:0;font-size:15px;color:var(--ink-2)}
    Цвет обложки по-прежнему задается одной переменной --c: тетрадь собирается для любого урока.
    ===================================================================== */
 .ld{
-  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .15 0 0 0 0 .1 0 0 0 0 .05 0 0 0 .3 -.11'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  --grain-soft:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .2 0 0 0 0 .1 0 0 0 .3 -.11'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain:none;
+  --grain-soft:none;
   --weave:repeating-linear-gradient(0deg,rgba(0,0,0,.11) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(255,255,255,.12) 0 1px,transparent 1px 3px);
   --light:linear-gradient(128deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 36%,rgba(30,20,10,.09) 100%);
-  --paper-c:#fbf7ea;
+  --paper-c:var(--paper-leaf);
   --dots:radial-gradient(circle,rgba(70,80,125,.19) .04em,transparent .06em);
   --bevel:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(30,20,10,.16),inset -1px 0 0 rgba(30,20,10,.12);
 }
 
-/* обложка: спереди, сзади и на полке */
-.ld-cover .ld-front,.ld-backcover,.ld-row .lp-sheet:not(.blank),body.ld .nb-stage .lp-sheet{
-  --tape:.8em;position:absolute;background:var(--light),var(--grain),var(--c);box-shadow:var(--bevel)}
-.ld-row .lp-sheet:not(.blank){position:relative;--tape:20px}
-body.ld .nb-stage .lp-sheet{--tape:20px}
-.ld-cover .ld-front::before,.ld-row .lp-sheet:not(.blank)::before,body.ld .nb-stage .lp-sheet::before{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--tape);
-  background:linear-gradient(90deg,rgba(0,0,0,.24),rgba(0,0,0,0) 32%,rgba(255,255,255,.07) 72%,rgba(0,0,0,.12)),var(--weave),var(--grain),color-mix(in srgb,var(--c) 66%,#2b2630);
-  box-shadow:1px 0 0 rgba(255,255,255,.2),3px 0 4px -1px rgba(30,20,10,.24)}
-/* биговка: линия сгиба рядом с лентой */
-.ld-cover .ld-front::after,.ld-row .lp-sheet:not(.blank)::after,body.ld .nb-stage .lp-sheet::after{content:"";position:absolute;top:0;bottom:0;left:calc(var(--tape) + .34em);width:2px;
-  background:linear-gradient(90deg,rgba(30,20,10,.13),rgba(255,255,255,.3))}
-.ld-backcover{inset:0;z-index:0;border-radius:.2em .6em .6em .2em}
-
-/* наклейка */
-.ld-label,.ld-row .lp-mark,body.ld .nb-stage .lp-mark{position:relative;background:var(--grain-soft),#fbf8ee;border-radius:.14em;outline:1px solid rgba(45,50,95,.5);outline-offset:-.24em;
-  box-shadow:0 .5px 1px rgba(30,20,10,.3),0 0 0 .5px rgba(30,20,10,.08);rotate:-.5deg}
-.ld-row .lp-mark,body.ld .nb-stage .lp-mark{border-radius:3px;outline-offset:-5px}
-.ld-row .lp-sheet.blank .lp-mark{background:none;outline:0;box-shadow:none;rotate:none}
-.ld-label::after{content:"";position:absolute;left:14%;right:14%;top:74%;height:1px;background:rgba(45,50,95,.32)}
-.ld-label b{position:relative;z-index:1}
+/* Тетрадь. Узнается по резинке, скругленным внешним углам и срезу страниц; обложка — плакат:
+   одно крупное слово из урока тоном чуть светлее картона и маленькая школьная этикетка с полями.
+   Собирается из переменных: --c картон, --band резинка, --wc цвет слова (по умолчанию светлее картона).
+   Все размеры внутри считаются от ширины обложки (cqw), поэтому одна и та же тетрадь живет и в сцене, и на полке. */
+.ld-cover .ld-front,.ld-backcover,.ld-row .lp-sheet,body.ld .nb-stage .lp-sheet{position:absolute;background:var(--grain),var(--c);box-shadow:inset 0 0 0 1px rgba(20,10,30,.1)}
+.ld-cover .ld-front,.ld-row .lp-sheet,body.ld .nb-stage .lp-sheet{container-type:inline-size;padding:0;overflow:hidden}
+.ld-row .lp-sheet{position:relative;display:block;aspect-ratio:5/6}
+/* переплет: узкая темная полоса у корешка */
+.ld-cover .ld-front::before,.ld-row .lp-sheet::before,body.ld .nb-stage .lp-sheet::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2.4cqw;background:rgba(20,10,30,.16)}
+.nb-word{position:absolute;left:8.5cqw;bottom:5cqw;font:700 29cqw/.8 var(--read);letter-spacing:-.055em;white-space:nowrap;color:var(--wc,color-mix(in srgb,var(--c) 70%,#fff))}
+.nb-band{position:absolute;top:0;bottom:0;right:11cqw;width:3.4cqw;background:var(--band,#1a171c);box-shadow:inset 1px 0 0 rgba(255,255,255,.2),inset -1px 0 0 rgba(0,0,0,.18)}
+.nb-tag{position:absolute;left:8.5cqw;top:9cqw;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:baseline;gap:.6cqw 2cqw;width:58cqw;padding:2.8cqw 3.2cqw 3.2cqw;border-radius:1cqw;
+  background:var(--paper-label);box-shadow:0 0 0 .5px rgba(30,20,10,.22),0 1px 0 rgba(30,20,10,.16);rotate:-1deg}
+.nb-tag small{font:600 max(3cqw,8px)/1 var(--ui);letter-spacing:.09em;text-transform:uppercase;color:#8d8892}
+.nb-tag b{min-height:1.05em;font:600 6.8cqw/1.05 var(--hand);letter-spacing:-.01em;color:#4a1fbe;border-bottom:1px solid rgba(45,50,95,.3);white-space:nowrap;overflow:hidden}
+/* пустая тетрадь: вместо слова плюс от руки */
+.nb-plus{left:50%;bottom:22cqw;width:22cqw;height:22cqw;translate:-50% 0}
+.nb-plus svg{display:block;width:100%;height:100%;overflow:visible}
+.nb-plus path{fill:none;stroke:color-mix(in srgb,var(--c) 58%,#3a2a12);stroke-width:2.6;stroke-linecap:round}
+.ld-row .lp-sheet.own+.t+.lp-meta{display:block}
+.ld-backcover{inset:0;z-index:0;border-radius:.25em .75em .75em .25em;box-shadow:inset 0 0 0 1px rgba(20,10,30,.1),.1em .1em 0 0 color-mix(in srgb,var(--c) 66%,#000)}
 
 /* страницы: блок чуть меньше обложки, у сгиба тень, бумага в точку */
-.ld-leaf:not(.ld-cover){inset:1.3% 1.7% 1.3% 0}
+.ld-leaf:not(.ld-cover){inset:1.5% 2.5% 2% 0}
+/* Толщина. Листы лежат стопкой: каждый следующий чуть шире и ниже верхнего, поэтому у блока страниц видны края.
+   Перевернутые листы уносят свои края налево: правая стопка тает, левая растет. Обложки показывают толщину картона. */
+.ld-leaf[data-i="2"]{inset:1.5% calc(2.5% - .09em) calc(2% - .07em) 0}
+.ld-leaf[data-i="3"]{inset:1.5% calc(2.5% - .18em) calc(2% - .14em) 0}
+.ld-leaf[data-i="4"]{inset:1.5% calc(2.5% - .27em) calc(2% - .21em) 0}
+.ld-leaf.ld-base{inset:1.5% calc(2.5% - .36em) calc(2% - .28em) 0}
+/* Слева стопка сложена наоборот: верхний перевернутый лист самый узкий, из-под него видны края предыдущих.
+   Размер лист меняет, когда стоит ребром (класс .over ставит скрипт), поэтому перехода не видно. */
+.ld-leaf.over[data-i="1"]{inset:1.5% calc(2.5% - .27em) calc(2% - .21em) 0}
+.ld-leaf.over[data-i="2"]{inset:1.5% calc(2.5% - .18em) calc(2% - .14em) 0}
+.ld-leaf.over[data-i="3"]{inset:1.5% calc(2.5% - .09em) calc(2% - .07em) 0}
+.ld-leaf.over[data-i="4"]{inset:1.5% 2.5% 2% 0}
+/* лист в перевороте приподнимается над стопкой и ложится обратно */
+.ld-leaf.moving{animation:ld-lift var(--leaf-time) var(--leaf-ease)}
+@keyframes ld-lift{50%{translate:0 0 1.5em}}
 .ld-leaf:not(.ld-cover) .ld-front{background:linear-gradient(90deg,rgba(70,50,30,.18) 0,rgba(70,50,30,.05) 3.5%,rgba(70,50,30,0) 11%),var(--dots) .39em .39em/.78em .78em,var(--grain-soft),var(--paper-c);
-  box-shadow:inset 0 0 0 1px rgba(60,45,30,.1);border-radius:.1em .42em .42em .1em}
+  box-shadow:inset 0 0 0 1px rgba(60,45,30,.12),inset -1.5px -1.5px 0 rgba(60,45,30,.2);border-radius:.1em .42em .42em .1em}
 .ld-leaf:not(.ld-cover) .ld-back{background:linear-gradient(270deg,rgba(70,50,30,.18) 0,rgba(70,50,30,.05) 3.5%,rgba(70,50,30,0) 11%),var(--dots) .39em .39em/.78em .78em,var(--grain-soft),var(--paper-c);
-  box-shadow:inset 0 0 0 1px rgba(60,45,30,.1);border-radius:.42em .1em .1em .42em}
+  box-shadow:inset 0 0 0 1px rgba(60,45,30,.12),inset 1.5px -1.5px 0 rgba(60,45,30,.2);border-radius:.42em .1em .1em .42em}
 /* срез страниц у нижнего листа */
-.ld-base .ld-front{overflow:visible;box-shadow:inset 0 0 0 1px rgba(60,45,30,.1),1.5px 1px 0 -.5px #efe9d8,1.5px 1px 0 0 rgba(60,45,30,.22),3px 2px 0 -.5px #f4eedf,3px 2px 0 0 rgba(60,45,30,.18)}
+.ld-base .ld-front{overflow:visible}
 /* изнутри обложка — тот же картон, на него наклеен первый лист */
-.ld-cover .ld-back{background:var(--light),var(--grain),var(--c);box-shadow:var(--bevel);border-radius:.6em .2em .2em .6em}
-.ld-cover .ld-back::before{content:"";position:absolute;inset:1.3% 0 1.3% 1.7%;border-radius:.42em .1em .1em .42em;
+.ld-cover .ld-back{background:var(--grain),var(--c);box-shadow:inset 0 0 0 1px rgba(20,10,30,.1);border-radius:.75em .25em .25em .75em}
+.ld-cover .ld-back::before{content:"";position:absolute;inset:1.5% 0 2% 2.5%;border-radius:.42em .1em .1em .42em;
   background:linear-gradient(270deg,rgba(70,50,30,.18) 0,rgba(70,50,30,.05) 3.5%,rgba(70,50,30,0) 11%),var(--dots) .39em .39em/.78em .78em,var(--grain-soft),var(--paper-c);box-shadow:inset 0 0 0 1px rgba(60,45,30,.1)}
 .ld-cover .ld-back>*{position:relative;z-index:1}
-.ld-cover .ld-front{border-radius:.2em .6em .6em .2em}
+.ld-cover .ld-front{border-radius:.25em .75em .75em .25em}
 
-/* тень на столе: растет влево вместе с раскрытой обложкой */
-.ld-ground{position:absolute;top:0;bottom:0;right:0;left:calc(-100% * var(--open,0));z-index:0;border-radius:.6em;pointer-events:none;
-  box-shadow:0 1px 1px rgba(40,30,20,.2),.35em .6em 1.1em -.3em rgba(40,30,20,.3),.9em 1.6em 2.6em -1em rgba(40,30,20,.32)}
+/* Тень на столе. Под закрытой тетрадью одна, под правой половиной. Под раскрытой обложкой слева своя: появляется, когда
+   обложка почти легла, и уходит сразу, как только та пошла вверх. В полете обложка закрывает стол сама, поэтому тень
+   нигде не опережает ее и не отстает. Обе тени ведут стили без покадрового расчета, движение остается плавным. */
+.ld-ground{position:absolute;inset:0;z-index:0;border-radius:.6em;pointer-events:none;
+  box-shadow:0 1px 1px rgba(40,30,20,.22),.2em .34em .5em -.16em rgba(40,30,20,.34),.42em .7em .9em -.5em rgba(40,30,20,.26)}
+.ld-ground::before{content:"";position:absolute;inset:0 100% 0 -100%;border-radius:inherit;box-shadow:inherit;clip-path:inset(-3em -.4em -3em -3em);opacity:0;transition:opacity .12s var(--ease)}
+.ld-nb.open .ld-ground::before{opacity:1;transition:opacity .2s var(--ease) calc(var(--leaf-time) * .78)}
 /* лист темнеет, пока перелистывается */
-.ld-shade{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:var(--sh,0);background:linear-gradient(90deg,rgba(40,30,20,.55),rgba(40,30,20,.14) 55%,rgba(40,30,20,0))}
+.ld-shade{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;background:linear-gradient(90deg,rgba(40,30,20,.55),rgba(40,30,20,.14) 55%,rgba(40,30,20,0))}
 .ld-back .ld-shade{background:linear-gradient(270deg,rgba(40,30,20,.55),rgba(40,30,20,.14) 55%,rgba(40,30,20,0))}
-.ld-demo .wcard{background:#fffdf6;box-shadow:0 .5px 1px rgba(30,20,10,.26),0 0 0 .5px rgba(30,20,10,.1)}
+.ld-leaf.moving .ld-shade{animation:ld-shade var(--leaf-time) var(--leaf-ease)}
+@keyframes ld-shade{45%{opacity:.34}}
+.ld-demo .wcard{background:var(--paper-surface);box-shadow:0 .5px 1px rgba(30,20,10,.26),0 0 0 .5px rgba(30,20,10,.1)}
 
-/* тетради на полке лежат на столе */
-.ld-row .lp-sheet:not(.blank){border-radius:5px 14px 14px 5px;
-  box-shadow:var(--bevel),2px 2px 0 -.5px #efe9d8,2px 2px 0 0 rgba(60,45,30,.2),4px 3px 0 -.5px #f4eedf,4px 3px 0 0 rgba(60,45,30,.16),0 1px 1px rgba(40,30,20,.18),7px 12px 20px -8px rgba(40,30,20,.28),16px 28px 40px -22px rgba(40,30,20,.3)}
-.ld-row{padding-bottom:44px}
-@media (hover:hover){.ld-row .lp-card:hover .lp-sheet:not(.blank){translate:-2px -4px;
-  box-shadow:var(--bevel),2px 2px 0 -.5px #efe9d8,2px 2px 0 0 rgba(60,45,30,.2),4px 3px 0 -.5px #f4eedf,4px 3px 0 0 rgba(60,45,30,.16),0 1px 1px rgba(40,30,20,.18),10px 18px 26px -10px rgba(40,30,20,.3),22px 38px 50px -26px rgba(40,30,20,.32)}}
+/* тетради на полке: срез страниц справа и снизу, без теней-облаков */
+.ld-row .lp-sheet{border-radius:6px 18px 18px 6px;
+  box-shadow:inset 0 0 0 1px rgba(20,10,30,.1),2px 2px 0 -.5px #efe9d8,2px 2px 0 0 rgba(60,45,30,.22),4px 3px 0 -.5px #f4eedf,4px 3px 0 0 rgba(60,45,30,.18)}
+@media (hover:hover){.ld-row li .lp-card:hover .lp-sheet:not(.blank){translate:-2px -6px;
+  box-shadow:inset 0 0 0 1px rgba(20,10,30,.1),2px 2px 0 -.5px #efe9d8,2px 2px 0 0 rgba(60,45,30,.22),4px 3px 0 -.5px #f4eedf,4px 3px 0 0 rgba(60,45,30,.18)}}
 /* раскрытие тетради с полки: те же материалы */
 body.ld .nb-page{background:var(--dots) 7px 7px/14px 14px,var(--grain-soft),var(--paper-c)}
-body.ld .nb-inside{background:var(--light),var(--grain),var(--c);box-shadow:var(--bevel)}
+body.ld .nb-inside{background:var(--grain),var(--c);box-shadow:inset 0 0 0 1px rgba(20,10,30,.1)}
 
 /* ---------- переход к любому шагу: флажки-закладки на страницах ----------
    Флажок приклеен к странице своего шага и переворачивается вместе с ней: пройденные шаги оказываются слева,
@@ -225,6 +439,16 @@ body.ld .nb-inside{background:var(--light),var(--grain),var(--c);box-shadow:var(
 .ld-flag.cur{width:2.75em}
 .ld-flag:focus-visible{outline-offset:2px}
 .ld-flag::after{content:"";position:absolute;inset:-.45em -.6em -.45em 0}
+/* На страницах тетради закладки несут названия шагов, набранные вдоль края: сразу видно, куда ведет каждая.
+   Высота закладки по длине слова, текущая выдвинута сильнее. На телефоне остаются короткие закладки с цифрами. */
+/* Форма закладки — сама кнопка: вместе с листом она честно отражается, скругленный край остается снаружи.
+   Подпись одна и стоит по центру выступающей части; на перевернутом листе отражается обратно только она, чтобы читаться
+   так же, как справа (без опоры на оборотную сторону: Safari рисует ее иначе). Сторону листа отмечает скрипт классом .over */
+.ld-leaf .ld-flag{left:calc(100% - .5em);top:var(--ft);width:1.7em;height:var(--fh);transform-style:flat;border-radius:0 .5em .5em 0;background:var(--fc);box-shadow:inset 0 0 0 1px rgba(26,23,28,.1)}
+.ld-leaf .ld-flag span{inset:0 0 0 .5em;padding:0;border-radius:0;background:none;box-shadow:none;backface-visibility:visible;writing-mode:vertical-rl;font:600 max(.5em,12px)/1 var(--ui);letter-spacing:.01em}
+.ld-leaf.over .ld-flag span{transform:scaleX(-1)}
+.ld-leaf .ld-flag.cur{width:2.3em}
+@media (hover:hover){.ld-leaf .ld-flag:not(.cur):hover{width:2em}}
 /* набор для телефона: флажки стоят на правом краю и не перелистываются, пройденные утоплены */
 .ld-flags-side{display:none;position:absolute;inset:1.3% 1.7% 1.3% 0;pointer-events:none;transform:translateZ(1px)}
 @media (hover:hover){.ld-flag:not(.cur):hover{width:2.35em}}
@@ -240,7 +464,7 @@ button.ld-scroll{padding:8px 12px;border-radius:10px}
   background:linear-gradient(100deg,rgba(255,228,106,0) 2%,var(--marker) 9%,rgba(255,228,106,.88) 91%,rgba(255,228,106,0) 98%) no-repeat center/100% 1.45em}
 /* главное действие — две печатные наклейки: стрелка и подпись. При наведении стрелка перескакивает
    на другую сторону, подпись чуть наклоняется (прием подсмотрен у extrafazant.nl) */
-.split{display:inline-flex;gap:4px;height:54px;margin-top:30px;font:600 17px/1 var(--ui);color:#fff;cursor:pointer}
+.split{display:inline-flex;gap:4px;height:54px;margin-top:36px;font:600 17px/1 var(--ui);color:#fff;cursor:pointer}
 .split span{display:grid;place-items:center;height:100%;border-radius:11px;background:var(--grain),var(--purple);outline:1px solid rgba(255,255,255,.42);outline-offset:-5px;
   transition:translate .38s cubic-bezier(.3,1.35,.5,1),rotate .38s cubic-bezier(.3,1.35,.5,1),scale .15s var(--ease)}
 .split .s-ic{width:54px;font-size:20px}
@@ -251,19 +475,17 @@ button.ld-scroll{padding:8px 12px;border-radius:10px}
 }
 .split:active span{scale:.96}
 .split:focus-visible{outline:2px solid var(--purple);outline-offset:4px;border-radius:12px}
-.ld-form .split{margin-top:0;height:48px;font-size:16px}
-.ld-form .split .s-ic{width:48px}
-@media (hover:hover){.ld-form .split:hover .s-tx{translate:-52px 0}}
-/* лист для своей домашки: та же бумага в точку, подпись поля набрана как мелкая печать на наклейке */
-.ld-form{background:var(--dots) 7px 7px/14px 14px,var(--grain-soft),var(--paper-c);box-shadow:inset 0 0 0 1px rgba(60,45,30,.12),0 1px 1px rgba(40,30,20,.14),6px 10px 22px -12px rgba(40,30,20,.26);border-radius:6px 16px 16px 6px}
-.ld-form label{font:600 11px/1 var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
-.ld-form-foot{border-top:1px solid rgba(45,50,95,.28)}
-.ld-attach{padding:0 4px;border-radius:8px}
-@media (hover:hover){.ld-attach:hover{color:var(--purple)}}
-.ld-top .lp-nav a{position:relative}
-@media (hover:hover){.ld-top .lp-nav a:hover{color:var(--ink)}}
+/* «Кабинет» — второстепенная кнопка той же семьи: пара наклеек меньше и тише, светлая заливка цвета действия
+   с фиолетовой подписью. Насыщенная фиолетовая на первом экране одна — «Создать свой урок» */
+.split.sm{height:40px;margin:0 0 0 6px;font-size:15px;color:var(--purple)}
+.split.sm span{border-radius:9px;background:color-mix(in srgb,var(--purple) 10%,#fff);outline-color:color-mix(in srgb,var(--purple) 26%,transparent);outline-offset:-4px;transition:translate .38s cubic-bezier(.3,1.35,.5,1),rotate .38s cubic-bezier(.3,1.35,.5,1),scale .15s var(--ease),background-color .15s var(--ease)}
+@media (hover:hover){.split.sm:hover span{background-color:color-mix(in srgb,var(--purple) 16%,#fff)}}
+.split.sm .s-ic{width:40px;font-size:17px}
+.split.sm .s-tx{padding:0 16px}
+@media (hover:hover){.split.sm:hover .s-tx{translate:-44px 0}}
 @media (max-width:900px){
-  .ld-nb{--nbw:min(84vw,calc((72svh - 140px)/1.2));top:calc(16svh + 140px)}
+  /* под подписью шага оставлено место на самую длинную (три строки текста под двухстрочным заголовком), иначе ее хвост уходит под тетрадь */
+  .ld-nb{--nbw:min(84vw,calc((72svh - 172px)/1.2));top:calc(16svh + 172px)}
   .ld-leaf .ld-flag{display:none}
   .ld-flags-side{display:block}
   .ld-flag{width:1.75em}
@@ -275,21 +497,82 @@ button.ld-scroll{padding:8px 12px;border-radius:10px}
 }
 
 /* ---------- фон закрепленной сцены ----------
-   Первый экран остается на бумаге. Когда тетрадь выезжает в центр, под ней проявляется «стол»:
-   цветная поверхность с мягким светом сверху. К концу сцены фон снова уходит в бумагу.
+   Первый экран остается на бумаге. Когда тетрадь выезжает в центр, под ней проявляется «стол».
+   К концу сцены фон снова уходит в цвет страницы.
    Выбран вариант «по шагам»: у каждого шага свой цвет стола, он плавно сменяется при перелистывании. */
 .ld-pin::before{content:"";position:absolute;inset:0;z-index:0;opacity:var(--lit,0);pointer-events:none;
-  background:radial-gradient(ellipse 70% 60% at 50% 42%,rgba(255,255,255,.34),rgba(255,255,255,0) 70%),var(--stage,transparent);transition:background-color .6s var(--ease)}
+  background:radial-gradient(ellipse 70% 60% at 50% 42%,rgba(255,255,255,.34),rgba(255,255,255,0) 70%),var(--stage,transparent);transition:opacity .7s var(--ease) var(--lit-delay,0s),background-color .6s var(--ease)}
 .ld-pin[data-bg="paper"]{--stage:transparent}
 .ld-pin[data-bg="mint"]{--stage:#c4e4d3}
 .ld-pin[data-bg="night"]{--stage:#2a1c57}
 .ld-pin[data-bg="night"]::before{background:radial-gradient(ellipse 70% 60% at 50% 42%,rgba(140,110,255,.3),rgba(140,110,255,0) 70%),var(--stage)}
-.ld-pin[data-bg="steps"]{--stage:#f1e2a8}
-.ld-pin[data-bg="steps"][data-step="1"]{--stage:#c4e4d3}
-.ld-pin[data-bg="steps"][data-step="2"]{--stage:#f0cfd6}
-.ld-pin[data-bg="steps"][data-step="3"]{--stage:#cddcec}
-.ld-pin[data-bg="steps"][data-step="4"]{--stage:#d9d0f0}
+/* Стол по шагам — светлые чистые тона тех же пяти цветов. Громкий цвет на странице отдан картотеке уроков
+   и блоку «свой урок»; сцена с тетрадью остается спокойной, смена цвета по шагам читается тихо.
+   Без свечения и затемнения к краям: любой градиент на ярком цвете читается как грязь или рамка.
+   Подписи на столе темные. */
+/* цвет стола сменяется плавно, в середине переворота страницы; движущейся кромки нет: она спорила с листом */
+.ld-pin[data-bg="steps"]::before{background:var(--stage)}
+.ld-pin[data-bg="steps"]{--stage:#fbe8a6;--on-stage:#1a171c}
+.ld-pin[data-bg="steps"][data-step="1"]{--stage:#cdecd9}
+.ld-pin[data-bg="steps"][data-step="2"]{--stage:#f9d4e0}
+.ld-pin[data-bg="steps"][data-step="3"]{--stage:#d0e1fb}
+.ld-pin[data-bg="steps"][data-step="4"]{--stage:#ddd4fa}
+.ld-pin[data-bg="steps"].lit .ld-caps{color:var(--on-stage);transition:color .4s var(--ease)}
+.ld-pin[data-bg="steps"].lit .ld-caps :is(p,.ld-n){color:color-mix(in srgb,var(--on-stage) 80%,transparent)}
+/* тень тетради на цветном столе — короткая и в цвет стола (тот же тон, только глубже): черная тень на ярком поле дает грязь */
+/* при возврате на первый экран тень меняет цвет вместе со столом, не раньше */
+.ld-ground{transition:box-shadow .4s var(--ease) var(--lit-delay,0s)}
+.ld-pin[data-bg="steps"].lit .ld-ground{box-shadow:0 1px 1px color-mix(in srgb,var(--stage) 62%,#3a2c1c),.2em .34em .5em -.16em color-mix(in srgb,var(--stage) 62%,#3a2c1c),.42em .7em .9em -.5em color-mix(in srgb,var(--stage) 72%,#3a2c1c)}
 /* на темном столе подписи вокруг тетради светлеют вместе с фоном */
 .ld-pin[data-bg="night"].lit .ld-caps{color:#fffdf8}
 .ld-pin[data-bg="night"].lit .ld-caps :is(p,.ld-n){color:rgba(255,253,248,.72)}
 .ld-pin[data-bg="night"].lit .ld-scroll{color:#ffd9d0}
+
+/* ---------- темная тема ----------
+   Темнеет страница, бумага остается бумагой: тетради, наклейки и раскрытая тетрадь для своего урока светлые и лежат на ярких полях.
+   Цвета стола те же, что у темной темы приложения, чтобы переход в урок не менял температуру.
+   Тему ставит ранний скрипт в <head>: настройка приложения hw-theme, по умолчанию как в системе. */
+:root[data-theme="dark"]{color-scheme:dark}
+:root[data-theme="dark"] body.ld{--paper:#161311;--ink:#f5f0e8;--ink-2:#bfb6a9;--ink-3:#968b7c;--line:#3b332c;--pencil:#ff6f57;--pencil-ink:#ff9483;--paper-c:#f3edde;color:var(--ink)}
+/* бумажные поверхности возвращают себе темные чернила */
+:root[data-theme="dark"] :is(.ld-nb,.ld-row .lp-sheet,.nb-stage){--paper:#f6f4ec;--ink:#1a171c;--ink-2:#5b5660;--ink-3:#8d8892;--line:#e3e0d4;--pencil:#e0442e;--pencil-ink:#b3301d;color:var(--ink)}
+/* маркер остается желтым, слово под ним темное: как на бумаге */
+:root[data-theme="dark"] body.ld .mk{color:#1a171c}
+/* в заголовке на темном столе край маркера четкий и шире слова: иначе крайние буквы тонут в затухании */
+:root[data-theme="dark"] .ld-row .hl{background-image:linear-gradient(100deg,rgba(255,228,106,0) 1%,rgba(255,228,106,.96) 4%,rgba(255,228,106,.92) 95%,rgba(255,228,106,0) 99%);transition:background-size .3s var(--ease),color .2s var(--ease)}
+@media (hover:hover){:root[data-theme="dark"] .ld-row a:hover .hl{color:#1a171c}}
+/* пока стол не проявился, тетрадь лежит на темной странице: тень обычная темная */
+:root[data-theme="dark"] .ld-pin:not(.lit) .ld-ground{box-shadow:0 1px 1px rgba(0,0,0,.45),.22em .38em .6em -.2em rgba(0,0,0,.55)}
+:root[data-theme="dark"] .split:focus-visible{outline-color:#b7a1ff}
+:root[data-theme="dark"] :focus-visible{outline-color:#b7a1ff}
+
+/* Паузы прокрутки: картотека уроков и блок «свой урок» притягивают экран встроенным механизмом браузера.
+   Он работает в потоке прокрутки, поэтому не дергает страницу; на своем уроке инерция мимо не проносит. */
+html{scroll-snap-type:y proximity}
+/* картотека во весь экран: как и «свой урок», ее нельзя пролететь одним рывком — жест останавливается на ней, следующий листает дальше */
+.ld-shelf{scroll-snap-align:start;scroll-snap-stop:always}
+.ld-own{scroll-snap-align:start;scroll-snap-stop:always}
+
+/* закрытая тетрадь открывается и по нажатию на обложку */
+.ld-pin:not(.opened) .ld-nb{cursor:pointer}
+/* русские заголовки на страницах тетради длиннее английских */
+html[lang="ru"] .ld-back h3{max-width:10.5em;font-size:1.3em}
+html[lang="ru"] .nb-tag{width:62cqw}
+/* Кириллица в Literata плотнее и темнее латиницы, поэтому русские крупные строки уравновешены: начертание светлее,
+   разрядка свободнее, размер чуть меньше (подгонка по ширине берет не всю строку). */
+html[lang="ru"] :is(.ld-copy h1,.ld-own h2,.ld-foot-say){font-weight:500;letter-spacing:-.028em}
+html[lang="ru"] :is(.ld-shelf h2,.ld-nbbody b,.ld-back h3,.ld-caps h3){font-weight:500;letter-spacing:-.018em}
+@media (max-width:900px){
+  /* русские подписи шага длиннее: шрифт чуть мельче, фраза в футере тоже */
+  html[lang="ru"] .ld-caps h3{font-size:25px}
+  html[lang="ru"] .ld-caps p{font-size:15px}
+  html[lang="ru"] .ld-foot-say{font-size:calc((100vw - 40px) / 6.1)}
+}
+/* на самых узких экранах у «Кабинета» остается только подпись, иначе логотип упирается в язык */
+@media (max-width:360px){
+  html[lang="ru"] .ld-shelf h2{font-size:36px}
+  .ld-tools{padding:8px 8px 10px}
+  .ld-tool{gap:5px;padding:0 10px 0 9px;font-size:14px}
+  .split.sm .s-ic{display:none}
+  .split.sm .s-tx,.split.sm:hover .s-tx{translate:none}
+}

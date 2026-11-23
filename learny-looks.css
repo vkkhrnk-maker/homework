@@ -1,0 +1,396 @@
+/* Стилистика лендинга Learny — вид G, утвержден 23 ноября 2026. Правила и причины — DESIGN.md (шрифты, цвет, компоненты).
+   Файл подключен к лендингу всегда (атрибут data-look="g" на <html>); остальные атрибуты состояния ставит learny-looks.js.
+   Шрифты: Geist 400 — интерфейс и английский текст; Sofia Sans Extra Condensed 900 — все крупное, чистым черным или белым;
+   Caveat 600 — только пометки от руки. Литерата на лендинге больше не используется.
+   Цвет: глубокий зеленый #0e6b44, лайм #c8f26a с текстом #0b3a24, тетрадь розовая #f2619c, столы — цвета шагов.
+   Все нажимаемое — пилюли; размеры текста 12, 14, 16, 20, главные кнопки 24 (на телефоне 18). */
+
+html[data-look]{--ui:"Geist",system-ui,-apple-system,sans-serif;--disp:"Sofia Sans Extra Condensed","Arial Narrow",sans-serif}
+html[data-look] body.ld{letter-spacing:-.01em}
+
+/* ---------- интерфейсные строки, раньше набранные Литератой, — гротеском ---------- */
+html[data-look] .ld-nbtab{font:500 16px/1 var(--ui);letter-spacing:-.01em}
+html[data-look] .ld-nbmeta{font-weight:500;letter-spacing:.06em}
+html[data-look] .ld-foot ul{font:400 19px/1.2 var(--ui);letter-spacing:-.02em}
+html[data-look] :is(.ld-shelf-h p,.ld-nbbody small,.ld-back p,.ld-caps p){letter-spacing:-.015em}
+html[data-look] .lede{text-wrap:pretty}
+
+/* ---------- типографика (по мотивам bykins.com) ---------- */
+/* крупные фразы — узкий жирный, строка плотная; разрядка почти нулевая, как у Mānuka на bykins */
+html[data-look="g"] :is(.ld-copy h1,.ld-own h2,.ld-foot-say),
+html[data-look="g"][lang="ru"] :is(.ld-copy h1,.ld-own h2,.ld-foot-say){font-family:var(--disp);font-weight:900;letter-spacing:-.006em;line-height:.84}
+/* заголовки разделов и карточек — светлый гротеск крупно, как «Featured Projects» и названия проектов */
+html[data-look="g"] .ld-shelf h2{font:300 clamp(44px,5vw,76px)/1 var(--ui);letter-spacing:-.04em}
+html[data-look="g"] :is(.ld-nbbody b,.ld-back h3,.ld-caps h3),
+html[data-look="g"][lang="ru"] :is(.ld-shelf h2,.ld-nbbody b,.ld-back h3,.ld-caps h3){font-family:var(--ui);font-weight:300;letter-spacing:-.035em}
+/* описание под заголовком — светлый крупный текст основного цвета, с явным воздухом сверху и снизу */
+html[data-look="g"] .ld-copy .lede{margin-top:clamp(44px,5.2vw,76px);max-width:22.5em;font:300 clamp(19px,1.75vw,25px)/1.38 var(--ui);letter-spacing:-.022em;color:var(--ink)}
+html[data-look="g"] .ld-copy .split{margin-top:clamp(28px,2.8vw,40px)}
+
+/* слово на обложке — плакатом, узким жирным */
+html[data-look="g"] .nb-word{font-family:var(--disp);font-weight:900;letter-spacing:-.01em;line-height:.8}
+html[data-look="g"] .ld-nb .nb-word{font-size:41cqw}
+
+/* шапка-«челка»: ссылки и язык в плашке, которая свисает с верхнего края; вогнутые углы переходят в край экрана.
+   Плашка плоская, без размытия и тени (у Kins она серая полупрозрачная с размытием — у нас поверхности плоские) */
+.lk-notch{display:contents}
+@media (min-width:901px){
+  html[data-look="g"] .lk-notch{position:absolute;left:50%;top:0;translate:-50% 0;display:flex;align-items:center;gap:4px;height:58px;padding:0 18px;
+    border-radius:0 0 20px 20px;background:var(--lk-plate,#efedf1)}
+  html[data-look="g"] .lk-notch::before,
+  html[data-look="g"] .lk-notch::after{content:"";position:absolute;top:0;width:20px;height:20px}
+  html[data-look="g"] .lk-notch::before{right:100%;background:radial-gradient(circle at 0 100%,transparent 19.5px,var(--lk-plate,#efedf1) 20px)}
+  html[data-look="g"] .lk-notch::after{left:100%;background:radial-gradient(circle at 100% 100%,transparent 19.5px,var(--lk-plate,#efedf1) 20px)}
+  html[data-look="g"] .lk-notch :is(a,.ld-lang-b){position:relative;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 9px;border-radius:10px;
+    font:400 15px/1 var(--ui);letter-spacing:.005em;color:var(--ink);
+    transition:background-color .22s var(--ease),color .22s var(--ease),padding .32s var(--ease)}
+  html[data-look="g"] .lk-notch .ld-loop{display:none}
+  html[data-look="g"] .lk-notch :is(a,.ld-lang-b):focus-visible,
+  html[data-look="g"] .lk-notch .ld-lang-b[aria-expanded="true"]{background:var(--ink);color:#fff;padding:0 15px;outline:none}
+}
+@media (min-width:901px) and (hover:hover){
+  html[data-look="g"] .lk-notch :is(a,.ld-lang-b):hover{background:var(--ink);color:#fff;padding:0 15px}
+}
+
+/* «Кабинет» — тихая второстепенная кнопка: одна плашка цвета шапки, без стрелки, темная подпись;
+   под курсором черная, как пункты шапки. Пара наклеек со стрелкой остается только у главного действия */
+html[data-look="g"] .split.sm.ld-space{gap:0;height:40px;color:var(--ink)}
+html[data-look="g"] .split.sm.ld-space .s-ic{display:none}
+html[data-look="g"] .split.sm.ld-space .s-tx{padding:0 16px;border-radius:12px;background:var(--lk-plate,#efedf1);outline:none;font-weight:500;
+  transition:background-color .22s var(--ease),color .22s var(--ease),scale .15s var(--ease)}
+html[data-look="g"] .split.sm.ld-space:focus-visible{outline-color:var(--ink)}
+@media (hover:hover){
+  html[data-look="g"] .split.sm.ld-space:hover .s-tx{translate:none;rotate:none;background:var(--ink);color:#fff}
+}
+/* логотип, плашка шапки и «Кабинет» стоят на одной оси: шапка высотой с плашку */
+@media (min-width:901px){
+  html[data-look="g"] .ld-top{height:58px}
+}
+
+@media (max-width:900px){
+  html[data-look="g"] .ld-copy h1{font-size:clamp(50px,15vw,76px);line-height:.86}
+  html[data-look="g"] .ld-copy .lede{margin-top:28px;font-size:19px;line-height:1.36}
+  
+  
+  
+}
+
+/* ---------- без антиквы ---------- */
+/* Литерата уходит: английский текст на страницах тетради — тем же Geist, что и интерфейс */
+html[data-look="g"]{--read:var(--ui);--round:"M PLUS Rounded 1c",var(--ui)}
+html[data-look][lang][data-look="g"] :is(.ld-copy h1,.ld-own h2,.ld-foot-say){font-family:var(--round);font-weight:800;letter-spacing:-.03em;line-height:.98}
+html[data-look][lang][data-look="g"] .ld-copy h1{line-height:1}
+html[data-look][lang][data-look="g"] .ld-shelf h2{font:800 clamp(40px,5.2vw,80px)/1 var(--round);letter-spacing:-.03em}
+html[data-look][lang][data-look="g"] .ld-nbbody b{font-family:var(--round);font-weight:700;letter-spacing:.005em;line-height:1;text-transform:uppercase}
+html[data-look][lang][data-look="g"] :is(.ld-back h3,.ld-caps h3){font-family:var(--round);font-weight:700;letter-spacing:-.01em}
+html[data-look][lang][data-look="g"] .ld-demo .rule-h{font-family:var(--round);font-weight:800;letter-spacing:-.02em}
+/* слово на обложке */
+html[data-look][lang][data-look="g"] .nb-word{font-family:var(--ui);font-weight:800;letter-spacing:-.075em;line-height:.8}
+html[data-look][lang][data-look="g"] .ld-nb .nb-word{font-size:29cqw}
+/* крупные слова на карточках картотеки (must, roots…) — тем же округлым, что и названия уроков */
+html[data-look][lang][data-look="g"] .ld-nbclip .nb-word{font-family:var(--round);font-weight:800;letter-spacing:-.04em;line-height:.86}
+/* текст упражнений: Geist обычным начертанием, плотнее */
+html[data-look][lang][data-look="g"] :is(.sentence,.ld-demo .ex,.ld-demo .rep,.ld-answers,.ld-voice .ask,.wcard b){font-weight:400;letter-spacing:-.02em}
+
+   
+
+@media (max-width:900px){
+  html[data-look][lang][data-look="g"] .ld-copy h1{font-size:clamp(34px,10.2vw,52px);line-height:1}
+  html[data-look="g"] .ld-copy .lede{margin-top:22px}
+}
+
+/* ---------- первый экран: узкий шрифт для крупного, округлый — только картотека и подписи шагов ---------- */
+html[data-look][lang][data-look="g"] :is(.ld-copy h1,.ld-own h2,.ld-foot-say){font-family:var(--disp);font-weight:900;letter-spacing:-.006em;line-height:.84}
+
+html[data-look][lang][data-look="g"] .ld-shelf h2{font:900 clamp(52px,6.4vw,104px)/.88 var(--disp);letter-spacing:-.006em}
+/* слово на обложке тетради — узким */
+html[data-look][lang][data-look="g"] .ld-nb .nb-word{font-family:var(--disp);font-weight:900;font-size:41cqw;letter-spacing:-.01em;line-height:.8}
+/* округлый — голос урока: названия уроков в картотеке и заголовки шагов в тетради, оба заглавными;
+   правило «must» на странице теории — узким, как все крупные слова */
+html[data-look][lang][data-look="g"] :is(.ld-back h3,.ld-caps h3){font-family:var(--round);font-weight:700;letter-spacing:.005em;line-height:1;text-transform:uppercase;text-wrap:balance}
+html[data-look][lang][data-look="g"] .ld-demo .rule-h{font-family:var(--disp);font-weight:900;letter-spacing:-.006em}
+/* меньше начертаний. Четыре на всю страницу: Geist 400, узкий 900, округлый 700, Caveat 600.
+   Кнопки тоже Regular: их и так выделяют форма, заливка и стрелка; мелкие подписи держат размер, цвет и заглавные.
+   Других весов страница не загружает, поэтому 500–700 в общих стилях рисуются как 400; ложный жирный выключен */
+html[data-look="g"] body{font-synthesis:none}
+html[data-look][lang][data-look="g"] .ld-copy .lede{font-weight:400}
+html[data-look][lang][data-look="g"] .ld-nbclip .nb-word{font-weight:700}
+html[data-look="g"] :is(.gap .fixword,.fx-in ins,.ld-answers ins){font-weight:600}
+
+/* размеры текста Geist по одной шкале — 12, 14, 16, 20.
+   12 — заглавные метки; 14 — мелкая служебная строка; 16 — весь интерфейс и описания, включая описание под H1: огромный заголовок
+   и небольшой наборный текст дают плакатный контраст; 20 — текст в поле и печать «Create my lesson».
+   Значки и текст внутри тетради сюда не входят */
+html[data-look][lang][data-look="g"] .lk-notch :is(a,.ld-lang-b),
+html[data-look][lang][data-look="g"] :is(.ld-lang-b,.ld-lang-m button,.ld-tool,.ld-fill,.ld-shelf-h p,.ld-foot ul,.ld-foot-brand p,.split .s-tx,.split.sm .s-tx){font-size:16px}
+html[data-look][lang][data-look="g"] .split{font-size:16px}
+html[data-look][lang][data-look="g"] .ld-foot ul{line-height:1.3}
+html[data-look][lang][data-look="g"] .ld-foot-bot{font-size:14px}
+html[data-look][lang][data-look="g"] .ld-own textarea{font-size:20px}
+html[data-look][lang][data-look="g"] .ld-round{font-size:20px}
+html[data-look][lang][data-look="g"] .ld-copy .lede{max-width:26em;font-size:16px;line-height:1.45}
+
+@media (max-width:900px){
+  html[data-look][lang][data-look="g"] .ld-copy h1{font-size:clamp(50px,15vw,76px);line-height:.86}
+  
+  /* телефон: 12, 14, 16 — описание, поле и печать 16 (не меньше 16, иначе iPhone увеличивает страницу при вводе), чипы 14 */
+  html[data-look][lang][data-look="g"] .ld-copy .lede{font-size:16px;line-height:1.45}
+  html[data-look][lang][data-look="g"] :is(.ld-own textarea,.ld-round){font-size:16px}
+  html[data-look][lang][data-look="g"] .ld-fill{font-size:14px}
+}
+/* на самых узких экранах: инструменты поля мельче, как и было, иначе «Вставить» и «Фото или файл» не встают в строку */
+@media (max-width:360px){
+  html[data-look][lang][data-look="g"] .ld-tool{font-size:14px}
+}
+
+/* ---------- карточка слова на странице теории — карточка для слов на кольце (выбрана 23 ноября) ---------- */
+/* предмет, а не плашка интерфейса: толщину дает стопка карточек со сдвигом, тени нет */
+.ld-demo .lk-ring{position:absolute;right:1.6em;bottom:1.5em;rotate:-4deg}
+.ld-demo .lk-ring[data-q]{translate:0 .5em;transition:opacity .3s var(--ease),translate .3s var(--ease)}
+.ld-demo .lk-ring[data-q].on{translate:0 0}
+.ld-demo .lk-ring-card{position:relative;display:flex;flex-direction:column;justify-content:center;gap:.3em;width:6.4em;height:3.7em;padding:0 .7em 0 1.35em;border-radius:.28em;
+  background:#fff;box-shadow:0 0 0 1px rgba(26,23,28,.14),.14em .14em 0 0 #fbe8a6,.14em .14em 0 1px rgba(26,23,28,.12),.28em .28em 0 0 #d0e1fb,.28em .28em 0 1px rgba(26,23,28,.1)}
+.ld-demo .lk-ring-card::before{content:"";position:absolute;left:.42em;top:.42em;width:.36em;height:.36em;border-radius:50%;background:var(--paper-surface,#fff);box-shadow:inset 0 0 0 1px rgba(26,23,28,.25)}
+.ld-demo .lk-ring-card b{font:400 .8em/1 var(--ui);color:var(--ink)}
+.ld-demo .lk-ring-card i{font:600 .62em/1 var(--hand);font-style:normal;color:var(--ball)}
+.ld-demo .lk-ring-loop{position:absolute;left:.18em;top:-.42em;width:.85em;height:1.15em;border:.12em solid #a9a5ae;border-radius:50%;clip-path:inset(0 0 46% 0)}
+
+/* ---------- первый экран: надпись по центру, тетрадь лежит под второй строкой (только шире 900) ---------- */
+@media (min-width:901px){
+  
+  
+  
+  /* B: надпись по центру, тетрадь поверх букв, описание внизу слева, кнопка внизу справа */
+  /* между шапкой и заголовком воздух: заголовок, а за ним тетрадь опущены */
+  html[data-hero="b"] .ld-copy{top:124px;bottom:32px;text-align:center}
+  html[data-hero="b"] .ld-copy h1{text-align:center}
+  html[data-look][lang][data-hero="b"] .ld-copy .lede{position:absolute;left:0;bottom:0;margin:0;max-width:22em;text-align:left}
+  html[data-hero="b"] .ld-copy .split{position:absolute;right:0;bottom:0;margin:0}
+  /* тетрадь заходит за буквы: на первом экране текст лежит поверх нее (со сценой текст уходит, и тетрадь выезжает из-за него).
+     Заголовок не ловит нажатия, чтобы обложку можно было открыть и там, где ее перекрывают буквы */
+  html[data-hero="b"] .ld-pin:not(.lit) .ld-copy{z-index:3}
+  html[data-hero="b"] .ld-copy h1{pointer-events:none}
+  /* подсказка прокрутки уходит вправо, над кнопкой: по центру внизу лежит тетрадь */
+  html[data-hero="b"] .ld-pin:not(.lit) .ld-scroll{left:auto;right:32px;bottom:100px;translate:none}
+}
+
+/* ---------- цветная обложка (G): глубокий зеленый, акцент лайм ---------- */
+html[data-cover="green"]{--cover:#0e6b44;--acc:#c8f26a;--on-acc:#0b3a24}
+/* на первом экране поле видно сразу; со сценой оно переходит в цвет стола (переход цвета уже есть у фона сцены) */
+html[data-cover] .ld-pin:not(.lit)::before{opacity:1;background:var(--cover)}
+/* плашка шапки и «Кабинет» на цветном поле — полупрозрачный белый, чтобы не спорить с цветом */
+html[data-cover] .ld-pin:not(.lit){--lk-plate:rgba(255,255,255,.55)}
+/* зеленая: заголовок и описание белые, подсказка прокрутки тоже — красный карандаш на зеленом спорит */
+html[data-cover="green"] .ld-pin:not(.lit) :is(.ld-copy h1,.ld-copy .lede){color:#fff}
+html[data-cover="green"] .ld-pin:not(.lit) .ld-scroll{color:#fff}
+
+/* у H1 межстрочный плотнее, колонка описания уже (вес 1000 пробовали и отказались, остался 900) */
+html[data-look][lang][data-look="g"] .ld-copy h1{line-height:.76}
+
+html[data-look][lang][data-look="g"] .ld-copy .lede{max-width:20em}
+@media (min-width:901px){
+  html[data-look][lang][data-look="g"][data-hero="b"] .ld-copy .lede{max-width:18em}
+}
+/* крупные строки чистым черным, а не чернильным #1a171c: на белом и на желтом они так плотнее */
+html[data-look][lang][data-look="g"] :is(.ld-copy h1,.ld-shelf h2,.ld-foot-say){color:#000}
+
+/* «step by step» выделен маркером, мазок рукописный: неровные кромки, рваные концы, чуть наклонен.
+   Плашка со скругленными углами читалась как элемент интерфейса. На желтой обложке мазок белый */
+html[data-look][lang][data-look="g"] .ld-copy h1 .mk::before{top:.5em;height:.5em;left:-.12em;right:-.14em;border-radius:0;rotate:-1.2deg;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 62' preserveAspectRatio='none'%3E%3Cpath fill='%23ffe46a' d='M7 15C52 9 118 13 176 10S300 6 352 9C371 10 386 8 394 11L389 19L397 28L390 37L396 47C350 52 296 49 238 52S118 56 64 53C40 52 20 54 9 51L13 42L4 33L11 24Z'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+
+/* ---------- яркий стол в сцене ---------- */
+/* те же цвета шагов, что у закладок, только насыщенные; у «Итогов» лавандовый светлее фиолетовой тетради, иначе корешок пропадает */
+html[data-desk="bright"] .ld-pin[data-bg="steps"]{--stage:#ffe46a}
+html[data-desk="bright"] .ld-pin[data-bg="steps"][data-step="1"]{--stage:#4fc08d}
+html[data-desk="bright"] .ld-pin[data-bg="steps"][data-step="2"]{--stage:#f07fa0}
+html[data-desk="bright"] .ld-pin[data-bg="steps"][data-step="3"]{--stage:#5a9cf0}
+html[data-desk="bright"] .ld-pin[data-bg="steps"][data-step="4"]{--stage:#b7a2f8}
+
+/* зеленая обложка, доводка 23 ноября: весь текст белый, без маркера, тетрадь розовая (в скрипте), главная кнопка и наведение лаймом.
+   Все — только на первом экране: со сценой шапка и текст уходят, а стол меняется по шагам */
+html[data-cover="green"] .ld-pin:not(.lit){--lk-plate:rgba(255,255,255,.16)}
+html[data-cover="green"] .ld-pin:not(.lit) .ld-top .brand :is(img,svg){filter:brightness(0) invert(1)}
+html[data-look][lang][data-cover="green"] .ld-pin:not(.lit) :is(.lk-notch a,.ld-lang-b){color:#fff}
+html[data-look][lang][data-cover="green"] .ld-pin:not(.lit) .ld-space{color:#fff}
+@media (hover:hover){
+  html[data-look][lang][data-cover="green"] .ld-pin:not(.lit) :is(.lk-notch a,.ld-lang-b):hover,
+  html[data-look][lang][data-cover="green"] .ld-pin:not(.lit) .split.sm.ld-space:hover .s-tx{background:var(--acc);color:var(--on-acc)}
+}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-pin:not(.lit) :is(.ld-copy h1,.ld-copy .lede){color:#fff}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-copy h1 .mk::before{content:none}
+html[data-look][lang][data-cover="green"] .ld-pin:not(.lit) .ld-copy .split{color:var(--on-acc)}
+html[data-look][lang][data-cover="green"] .ld-pin:not(.lit) .ld-copy .split span{background:var(--acc);outline-color:color-mix(in srgb,var(--on-acc) 30%,transparent)}
+
+/* подсказки «scroll to open» на первом экране нет — что листать дальше, и так видно (тетрадь уходит за край).
+   В сцене та же кнопка остается: «skip to the lessons» пропускает длинную сцену */
+html[data-look="g"] .ld-pin:not(.lit) .ld-scroll{visibility:hidden}   /* прозрачность подсказки ставит скрипт, поэтому прячем видимостью */
+
+/* тень тетради на цветной обложке — мягкая и в цвет поля, как на цветном столе в сцене; темная тень на зеленом выглядела грубо */
+html[data-cover] .ld-pin:not(.lit) .ld-ground{box-shadow:0 1px 1px color-mix(in srgb,var(--cover) 55%,#071a10),.2em .34em .5em -.16em color-mix(in srgb,var(--cover) 60%,#071a10),.42em .7em .9em -.5em color-mix(in srgb,var(--cover) 72%,#071a10)}
+
+/* телефон, первый экран: заголовок сверху, тетрадь по центру под буквами, описание и кнопка прижаты к низу экрана */
+@media (max-width:900px){
+  html[data-hero="b"] .ld-copy{bottom:20px}
+  html[data-look][lang][data-hero="b"] .ld-copy .lede{position:absolute;left:0;right:0;bottom:66px;margin:0;max-width:none}
+  html[data-hero="b"] .ld-copy .split{position:absolute;left:0;right:0;bottom:0;margin:0}
+  html[data-hero="b"] .ld-copy h1{pointer-events:none}
+}
+
+/* «Sample lessons» по центру, на одной оси с первым экраном, и крупнее — но не во всю ширину:
+   во всю ширину уже стоят «What are we learning?» и фраза в футере, четвертая такая строка столкнет картотеку вниз */
+html[data-look][lang][data-look="g"] .ld-shelf-h{flex-direction:column;align-items:center;gap:14px;text-align:center}
+html[data-look][lang][data-look="g"] .ld-shelf h2{font-size:clamp(64px,9.6vw,150px);line-height:.86}
+html[data-look][lang][data-look="g"] .ld-shelf-h p{margin:0;max-width:24em}
+
+/* сцена после обложки идет по насыщенным цветам закладок, начиная с желтого «Теории».
+   Первый стол цветом обложки отклонили: глубокий зеленый, а за ним зеленый «Практики» читались как ошибка */
+html[data-desk="bright"][data-cover="green"] .ld-pin[data-bg="steps"]{--stage:#ffe46a;--on-stage:#1a171c}
+html[data-desk="bright"][data-cover="green"] .ld-pin[data-bg="steps"][data-step="1"]{--stage:#4fc08d;--on-stage:#1a171c}
+html[data-desk="bright"][data-cover="green"] .ld-pin[data-bg="steps"][data-step="2"]{--stage:#f07fa0;--on-stage:#1a171c}
+html[data-desk="bright"][data-cover="green"] .ld-pin[data-bg="steps"][data-step="3"]{--stage:#5a9cf0;--on-stage:#1a171c}
+html[data-desk="bright"][data-cover="green"] .ld-pin[data-bg="steps"][data-step="4"]{--stage:#b7a2f8;--on-stage:#1a171c}
+/* «skip to the lessons» на ярком столе — цветом подписей стола (белым на глубоком зеленом, черным на остальных): красный карандаш на зеленом и розовом пропадал */
+html[data-desk="bright"] .ld-pin.lit .ld-scroll{color:var(--on-stage,#1a171c)}
+/* этикетка на обложке: надпись от руки цветом синей шариковой ручки — как настоящая подпись на тетради;
+   фиолетовые чернила на первом экране смотрелись чужими, зеленые сливались с полем */
+html[data-cover="green"] .nb-tag b{color:#2340c0}
+
+/* ---------- G, блок «свой урок» на зеленой обложке ---------- */
+/* фон — глубокий зеленый обложки: страница начинается и заканчивается одним цветом, фиолетовый тут был гостем из прежней стилистики */
+html[data-cover="green"] .ld-own{background:var(--cover)}
+/* чипы с готовыми началами крупнее: места в блоке много, это основной способ начать */
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-fill{height:52px;padding:0 22px;border-radius:12px;font-size:20px;
+  background:color-mix(in srgb,#fff 12%,var(--cover));outline-color:rgba(255,255,255,.28)}
+@media (hover:hover){html[data-look][lang][data-look="g"][data-cover="green"] .ld-fill:hover{background:var(--acc);color:var(--on-acc);outline-color:color-mix(in srgb,var(--on-acc) 30%,transparent)}}
+html[data-cover="green"] .ld-starts{gap:10px}
+/* главное действие — та же лаймовая кнопка, что на первом экране, только крупнее; желтая печать отклонена: «слишком простая» */
+html[data-look][lang][data-cover="green"] .ld-round{display:inline-flex;align-items:center;gap:14px;width:auto;aspect-ratio:auto;height:64px;padding:0 26px 0 30px;
+  border-radius:14px;background:var(--acc);color:var(--on-acc);font:400 20px/1 var(--ui);letter-spacing:-.01em;rotate:0deg;
+  outline:1px solid color-mix(in srgb,var(--on-acc) 30%,transparent);outline-offset:-5px}
+html[data-cover="green"] .ld-round::before,html[data-cover="green"] .ld-round::after{content:none}
+html[data-cover="green"] .ld-round br{display:none}
+html[data-cover="green"] .ld-round [data-t="mk1"]::after{content:" "}
+html[data-cover="green"] .ld-round i{font-size:1em}
+@media (hover:hover){html[data-cover="green"] .ld-round:hover{rotate:0deg;scale:1.03}}
+@media (max-width:900px){
+  html[data-look][lang][data-look="g"][data-cover="green"] .ld-fill{height:46px;padding:0 16px;font-size:16px}
+  html[data-look][lang][data-cover="green"] .ld-round{height:56px;font-size:16px}
+}
+
+/* поле «свой урок» полупрозрачное, как плашка шапки: белый лист на зеленом спорил с заголовком.
+   Текст белый, «Paste» и «Photo or file» — та же полупрозрачная плашка; в фокусе — лаймовая кромка */
+html[data-cover="green"] .ld-paper{background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
+html[data-cover="green"] .ld-paper:focus-within{background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 2px var(--acc)}
+html[data-cover="green"] .ld-own textarea{color:#fff;caret-color:var(--acc)}
+html[data-cover="green"] .ld-own textarea::placeholder{color:rgba(255,255,255,.62)}
+html[data-cover="green"] .ld-tool{background:rgba(255,255,255,.14);color:#fff}
+@media (hover:hover){html[data-cover="green"] .ld-tool:hover{background:var(--acc);color:var(--on-acc)}}
+
+/* «What are we learning?» в две строки по центру, межстрочный плотный, как у H1; размер ставит скрипт */
+html[data-look][lang][data-look="g"] #own-h{white-space:nowrap;line-height:.76;text-align:center}
+html[data-look="g"] #own-h > span{display:block}
+
+/* главные кнопки нарочито крупные — текст 24, кнопка растет вместе с ним (на телефоне 18).
+   Кнопка на первом экране и «Create my lesson» — одна пара размеров; шапка остается 16 */
+html[data-look][lang][data-look="g"] .ld-copy .split{height:72px;font-size:24px}
+html[data-look][lang][data-look="g"] .ld-copy .split .s-ic{width:72px;font-size:26px}
+html[data-look][lang][data-look="g"] .ld-copy .split .s-tx{padding:0 30px;font-size:24px}
+@media (hover:hover){html[data-look][lang][data-look="g"] .ld-copy .split:hover .s-tx{translate:-76px 0}}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-round{height:72px;padding:0 30px 0 34px;font-size:24px}
+@media (max-width:900px){
+  html[data-look][lang][data-look="g"] .ld-copy .split{height:58px;font-size:18px}
+  html[data-look][lang][data-look="g"] .ld-copy .split .s-tx{font-size:18px}
+  html[data-look][lang][data-look="g"] .ld-copy .split .s-ic{width:58px;font-size:20px}
+  html[data-look][lang][data-look="g"][data-cover="green"] .ld-round{height:58px;font-size:18px}
+  html[data-look][lang][data-hero="b"] .ld-copy .lede{bottom:76px}
+}
+/* чипы «свой урок» 20 (на телефоне 16): правило шкалы с :is() весит больше, поэтому здесь селектор длиннее */
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-starts .ld-fill{font-size:20px}
+@media (max-width:900px){html[data-look][lang][data-look="g"][data-cover="green"] .ld-starts .ld-fill{font-size:16px}}
+
+/* межстрочный у описаний плотнее (по мотивам the-completist): 1.3 вместо 1.45 */
+html[data-look][lang][data-look="g"] :is(.ld-copy .lede,.ld-shelf-h p,.ld-nbbody small,.ld-back p,.ld-caps p,.ld-foot-brand p){line-height:1.3}
+
+/* ---------- облегченная картотека, 23 ноября ----------
+   Убрано: подпись «Grammar · B1–B2» на закрытых разделителях (видна только у раскрытого), строка «Five steps: …» (одинаковая у всех
+   уроков, теперь один раз в описании раздела), заглавные в названии. Название — легким гротеском, как описание на первом экране */
+html[data-look][lang][data-look="g"][data-shelf="b"] .ld-stack li:not(.open) .ld-nbmeta{opacity:0}
+html[data-look][lang][data-look="g"][data-shelf="b"] .ld-nbmeta{transition:opacity .2s var(--ease)}
+html[data-look][lang][data-look="g"][data-shelf="b"] .ld-nbbody small{display:none}
+html[data-look][lang][data-look="g"][data-shelf="b"] .ld-nbbody b{font:400 clamp(32px,3.4vw,52px)/1 var(--ui);letter-spacing:-.03em;text-transform:none;max-width:13em}
+html[data-look][lang][data-look="g"][data-shelf="b"] .ld-nbgo{margin-top:14px;font-weight:400}
+html[data-look][lang][data-look="g"][data-shelf="b"] .ld-shelf-h p{max-width:34em;text-wrap:balance}
+
+/* все нажимаемое — пилюли (кнопки, чипы, «Вставить», наведение в шапке); прямоугольники остаются у поверхностей:
+   поле, карточки, окна. Внутренняя печатная обводка у пилюль сохраняется */
+html[data-look][lang][data-look="g"] .ld-copy .split span{border-radius:999px}
+html[data-look][lang][data-look="g"] .split.sm.ld-space .s-tx{border-radius:999px;padding:0 20px}
+html[data-look][lang][data-look="g"] :is(.ld-starts .ld-fill,.ld-tool){border-radius:999px}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-round{border-radius:999px;padding:0 36px}
+@media (min-width:901px){html[data-look][lang][data-look="g"] .lk-notch :is(a,.ld-lang-b){border-radius:999px}}
+html[data-look][lang][data-look="g"] .ld-lang-m button{border-radius:999px}
+
+/* ---------- чистая тетрадь в сцене (23 ноября) ----------
+   Было грязно: лист темнел на перевороте, у закладок блик, тень под тетрадью размытая коричневая, у сгиба буроватая тень,
+   фактура на движущихся листах, по краю страниц полоски стопки. Оставлено только то, что объясняет предмет:
+   один срез страниц, кант картона, четкая тень в цвет стола на тон глубже */
+html[data-look="g"] .ld-shade{display:none}
+html[data-look="g"] .ld-flag span{background:var(--fc);box-shadow:inset 0 0 0 1px rgba(26,23,28,.1)}
+/* страницы: без фактуры, сгиб — легкая нейтральная тень, край — тонкий контур */
+html[data-look="g"] .ld-leaf:not(.ld-cover) .ld-front{background:linear-gradient(90deg,rgba(26,23,28,.07) 0,rgba(26,23,28,0) 7%),var(--dots) .39em .39em/.78em .78em,var(--paper-c);
+  box-shadow:inset 0 0 0 1px rgba(26,23,28,.09)}
+html[data-look="g"] .ld-leaf:not(.ld-cover) .ld-back{background:linear-gradient(270deg,rgba(26,23,28,.07) 0,rgba(26,23,28,0) 7%),var(--dots) .39em .39em/.78em .78em,var(--paper-c);
+  box-shadow:inset 0 0 0 1px rgba(26,23,28,.09)}
+html[data-look="g"] .ld-cover .ld-back::before{background:linear-gradient(270deg,rgba(26,23,28,.07) 0,rgba(26,23,28,0) 7%),var(--dots) .39em .39em/.78em .78em,var(--paper-c);box-shadow:inset 0 0 0 1px rgba(26,23,28,.09)}
+html[data-look="g"] :is(.ld-cover .ld-front,.ld-backcover,.ld-cover .ld-back){background:var(--c)}
+/* стопка: все листы одного размера, срез один — у нижнего листа */
+html[data-look="g"] .ld-leaf:not(.ld-cover):not(.ld-base),html[data-look="g"] .ld-leaf.over:not(.ld-cover){inset:1.5% 2.5% 2% 0}
+html[data-look="g"] .ld-leaf.ld-base{inset:1.5% calc(2.5% - .22em) calc(2% - .18em) 0}
+/* тень под тетрадью: четкая, без размытия, в цвет фона на тон глубже */
+html[data-look="g"] .ld-ground{box-shadow:.14em .18em 0 0 rgba(26,23,28,.14)}
+html[data-cover][data-look="g"] .ld-pin:not(.lit) .ld-ground,
+html[data-look="g"][data-cover] .ld-pin:not(.lit) .ld-ground{box-shadow:.14em .18em 0 0 color-mix(in oklab,var(--cover) 78%,#000)}
+html[data-look="g"] .ld-pin[data-bg="steps"].lit .ld-ground{box-shadow:.14em .18em 0 0 color-mix(in oklab,var(--desk-now,var(--stage)) 82%,#000)}
+/* стол меняет цвет через oklch (считает скрипт), а не через серо-бурую середину, как было при обычном переходе */
+html[data-look="g"] .ld-pin[data-bg="steps"]::before,html[data-look="g"][data-cover] .ld-pin:not(.lit)::before{background:var(--desk-now,var(--stage));transition:opacity .7s var(--ease) var(--lit-delay,0s)}
+
+/* у «своего урока» подпись «From anything» повторяла бы заголовок */
+html[data-look][lang][data-look="g"] #shelf > li.own .ld-nbmeta{display:none}
+
+/* футер — лаймовое поле (по мотивам крупных футеров HABITAT, AFTERFORM): после зеленого «своего урока» страница
+   заканчивается самым светлым цветом акцента; прощальная фраза глубоким зеленым во всю ширину, обводка карандашом остается */
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-foot{background:var(--acc);color:var(--on-acc)}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-foot h3{color:color-mix(in srgb,var(--on-acc) 62%,transparent)}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-foot ul a{color:var(--on-acc)}
+@media (hover:hover){html[data-look][lang][data-look="g"][data-cover="green"] .ld-foot ul a:hover{text-decoration:underline;text-underline-offset:.18em}}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-foot-brand p{color:var(--on-acc)}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-foot .brand :is(img,svg){filter:brightness(0) saturate(100%) invert(15%) sepia(30%) saturate(1500%) hue-rotate(110deg)}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-foot-say{color:var(--cover)}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-foot-bot{border-top-color:color-mix(in srgb,var(--on-acc) 24%,transparent);color:var(--on-acc)}
+
+/* картотека на лайме: ее разделители кончаются встык с краем блока, поэтому фон не может совпадать с зеленым «своим уроком».
+   Ритм страницы: зеленый, яркие столы, лайм, зеленый, лайм */
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-shelf{background:var(--acc)}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-shelf h2{color:var(--cover)}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-shelf-h p{color:var(--on-acc)}
+html[data-look][lang][data-look="g"][data-cover="green"] .ld-own{box-shadow:none}
+/* футер компактный: не во весь экран, фраза сразу под колонками */
+html[data-look][lang][data-look="g"] .ld-foot{min-height:0;padding-top:72px}
+html[data-look][lang][data-look="g"] .ld-foot-say{padding-top:88px}
+@media (max-width:900px){html[data-look][lang][data-look="g"] .ld-foot{padding-top:56px} html[data-look][lang][data-look="g"] .ld-foot-say{padding-top:48px}}
+/* полоса прокрутки: тонкая, глубокий зеленый ползунок на лаймовой дорожке */
+html[data-look="g"]{scrollbar-width:thin;scrollbar-color:var(--cover,#0e6b44) var(--acc,#c8f26a)}
+html[data-look="g"]::-webkit-scrollbar{width:10px}
+html[data-look="g"]::-webkit-scrollbar-track{background:var(--acc,#c8f26a)}
+html[data-look="g"]::-webkit-scrollbar-thumb{background:var(--cover,#0e6b44);border:2px solid var(--acc,#c8f26a);border-radius:999px}
+
+/* Округлого шрифта нет (23 ноября): названия уроков в картотеке легким Geist смотрелись лучше, и шрифтов стало три.
+   Крупное слово на карточке и заголовок шага в тетради — узким, как все крупное */
+html[data-look="g"]{--round:var(--disp)}
+html[data-look][lang][data-look="g"] .ld-nbclip .nb-word{font-family:var(--disp);font-weight:900;letter-spacing:-.01em;line-height:.8}
+html[data-look][lang][data-look="g"] :is(.ld-back h3,.ld-caps h3){font-family:var(--disp);font-weight:900;text-transform:none;letter-spacing:-.006em;line-height:.9;font-size:1.9em}
+@media (max-width:900px){html[data-look][lang][data-look="g"] .ld-caps h3{font-size:36px}}
+/* название урока в картотеке — узким, как заголовок шага в тетради: правило «все крупное — узким» без исключений */
+html[data-look][lang][data-look="g"][data-shelf="b"] .ld-nbbody b{font:900 clamp(44px,4.6vw,72px)/.9 var(--disp);letter-spacing:-.006em;text-transform:none;max-width:12em}
+@media (max-width:900px){html[data-look][lang][data-look="g"][data-shelf="b"] .ld-nbbody b{font-size:40px}}

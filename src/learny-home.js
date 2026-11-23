@@ -29,7 +29,7 @@
     how4p: { ru: "Читайте мини-истории и выбирайте форму, которая подходит по смыслу.", en: "Read short stories and choose the form that fits the meaning." },
     how5p: { ru: "Запишите ответ и получите подсказки, как сказать яснее.", en: "Record an answer and review suggestions for clearer English." },
     how6t: { ru: "Повторяйте и запоминайте", en: "Review & remember" },
-    how6p: { ru: "Повторите урок, вернитесь к сохранённым словам и поделитесь отчётом.", en: "Review your lesson, revisit saved words and share your report." }
+    how6p: { ru: "Повторите урок, вернитесь к сохраненным словам и поделитесь отчетом.", en: "Review your lesson, revisit saved words and share your report." }
   });
 
   function mascot(name, className) {
@@ -51,7 +51,7 @@
     return el;
   }
 
-  $("#brand-home i").append(mascot("brand-book", "learny-brand-mascot"));
+  $("#brand-home i")?.append(mascot("brand-book", "learny-brand-mascot"));
   const field = $("#paste-area");
   const composer = $("#material-composer");
   const create = translated("button", "learnyNew", "learny-new-lesson");

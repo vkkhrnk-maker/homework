@@ -730,3 +730,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   :root:is(#_#_,[data-calm]) :is(.sheet, .ask-box) { border-radius: var(--r-l); padding-top: 20px; }
   :root:is(#_#_,[data-calm]) .sheet .grab, :root:is(#_#_,[data-calm]) .ask-box::before { display: none; }
 }
+
+/* Первый экран теперь лендинг. Внутри приложения «welcome» остается только подложкой под окном создания урока,
+   куда приходят с формы лендинга: содержимое скрыто, чтобы за окном не просвечивал прежний экран. */
+:root:is(#_#_,[data-calm]) body[data-calm-page="welcome"] :is(#view-home > *, .app-footer) { display: none; }

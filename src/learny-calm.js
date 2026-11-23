@@ -598,9 +598,14 @@
         window.scrollTo({ top: returnScroll, behavior: "instant" });
       }
     }
+    // Окно открыто прямо с лендинга (форма «свой урок»): закрытие возвращает к этой форме, а не в начало страницы.
+    const fromLanding = (() => { try { return history.length > 1 && /landing\.html$/.test(new URL(document.referrer).pathname); } catch { return false; } })();
     function dismissComposer() {
       if (history.state?.composerBase) history.back();
-      else {
+      else if (page === "welcome") {
+        if (fromLanding) history.back();
+        else location.replace(window.learnyPaperURL?.("landing.html#own") || "landing.html#own");
+      } else {
         history.replaceState(null, "", "#" + page);
         route();
       }
@@ -646,7 +651,7 @@
       if (S.view !== "home") return;
       page = homePage();
       // Первого экрана внутри приложения больше нет: его роль играет лендинг. Окно создания урока поверх него остается.
-      if (page === "welcome" && (!location.hash || location.hash === "#welcome")) { location.replace("landing.html"); return; }
+      if (page === "welcome" && (!location.hash || location.hash === "#welcome")) { location.replace(window.learnyPaperURL?.("landing.html") || "landing.html"); return; }
       document.body.dataset.calmPage = page;
       const personal = page === "cabinet";
       const welcome = page === "welcome";

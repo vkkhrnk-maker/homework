@@ -3,8 +3,8 @@
    Фиолетовый — мой ответ и действие, красный карандаш — правка и слово преподавателя,
    желтый маркер — мои слова, зеленый — верно. Поверхности плоские: тонкий контур вместо тени. */
 :root{
-  --desk:#e9e6dc; --paper:#f6f4ec; --sheet:#fffdf8; --tint:#efede3;
-  --ink:#1a171c; --ink-2:#5b5660; --ink-3:#8d8892; --line:#e3e0d4;
+  --desk:#e9e6dc; --paper:var(--paper-canvas,#f6f4ec); --sheet:var(--paper-surface,#fffdf8); --tint:var(--paper-muted,#efede3);
+  --ink:#1a171c; --ink-2:#5b5660; --ink-3:#8d8892; --line:var(--paper-edge,#e3e0d4);
   --purple:#6824dd; --purple-hover:#5a1fc2; --purple-soft:#eee6fc; --ball:#4a1fbe;
   --marker:#ffe46a; --mint-soft:#e2f4ea; --green:#1f6a4d; --tick:#2e9a70;
   --pencil:#e0442e; --pencil-ink:#b3301d;

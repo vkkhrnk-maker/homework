@@ -27,7 +27,9 @@ window.openNotebook = function (sheet, href) {
 
   dim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 360, easing: ease, fill: "forwards" });
   leaf.animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(-180deg)" }], { duration: 520, delay: 300, easing: "cubic-bezier(.5,0,.2,1)", fill: "forwards" });
-  page.animate([{ backgroundColor: "#fffdf8" }, { backgroundColor: "#f6f4ec" }], { duration: 300, delay: 930, easing: ease, fill: "forwards" });
+  // к концу приближения страница принимает цвет фона приложения, чтобы урок открылся без вспышки
+  const dark = document.documentElement.dataset.theme === "dark";
+  page.animate([{ backgroundColor: "#fffdf8" }, { backgroundColor: dark ? "#161311" : "#f6f4ec" }], { duration: 300, delay: 930, easing: ease, fill: "forwards" });
   // разворот на мгновение замирает открытым, прежде чем камера уходит в страницу
   stage.animate([
     { transform: "translate(0,0) scale(1)", easing: ease },

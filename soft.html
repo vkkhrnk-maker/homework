@@ -6,8 +6,9 @@
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#080808" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/klyaksa-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="icons/klyaksa-16.svg" type="image/svg+xml" sizes="any">
+<link rel="apple-touch-icon" href="icons/klyaksa-touch.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -162,7 +163,7 @@ body:not(.home) .app-footer{display:none}
 
 /* ---------- home ---------- */
 /* главная как лендинг: крупный заголовок, подзаголовок, под ними поле во всю ширину, ниже три шага */
-/* Голубая обложка плавно уходит в белый фон; тёплые акценты остаются на карточках. */
+/* Голубая обложка плавно уходит в белый фон; теплые акценты остаются на карточках. */
 .intake{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(28px,4vw,48px);
   width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
   padding:clamp(28px,6vw,72px) max(16px,calc((100vw - 1200px) / 2)) 54px;
@@ -170,9 +171,9 @@ body:not(.home) .app-footer{display:none}
     radial-gradient(30% 26% at 10% 60%, rgba(255,255,255,.22), transparent 70%),
     radial-gradient(28% 24% at 92% 46%, rgba(190,226,255,.32), transparent 70%),
     linear-gradient(to bottom,var(--hero-top) 0%,#438AE8 52%,#5596EC 66%,#78ADEE 74%,#A1C6F4 82%,#D0E2FA 90%,#F0F6FE 96%,var(--bg) 100%)}
-/* «как пользоваться» — пастельные карточки на верёвочке, как на preplab.ru: булавка сверху, лёгкий наклон, тёмный заголовок и цветной текст */
+/* «как пользоваться» — пастельные карточки на веревочке, как на preplab.ru: булавка сверху, легкий наклон, темный заголовок и цветной текст */
 .intake .how-list{position:relative;display:block;overflow:hidden;margin-top:0;width:100vw;max-width:none;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:6px 0 28px}
-/* плитки как на slush.app: квадраты сочных цветов без наклона, крупная иконка, подпись внизу; лента плывёт по кругу, при наведении стоит */
+/* плитки как на slush.app: квадраты сочных цветов без наклона, крупная иконка, подпись внизу; лента плывет по кругу, при наведении стоит */
 .how-track{--how-cycle-width:1440px;display:flex;width:calc(var(--how-cycle-width) * 2);animation:how-marquee var(--how-duration,60s) linear infinite}
 .how-group{display:flex;flex:0 0 var(--how-cycle-width);width:var(--how-cycle-width)}
 @media (hover:hover) and (pointer:fine){.intake .how-list:hover .how-track{animation-play-state:paused}}
@@ -187,9 +188,9 @@ body:not(.home) .app-footer{display:none}
 .intake .how-item p{color:var(--ink);font-size:15px;line-height:1.35;margin:0}
 @media (prefers-reduced-motion:reduce){.how-track{animation:none}.intake .how-list{overflow-x:auto}}
 @media (min-width:700px) and (max-width:1279px){.intake{padding-left:40px;padding-right:40px}}
-/* В тёмной теме голубая обложка затухает в тёмный фон. */
+/* В темной теме голубая обложка затухает в темный фон. */
 :root[data-theme="dark"]{--hero-top:#3269C3}
-/* в тёмной теме всё стекло на обложке (поле, переключатели, подсказки) — белое матовое, одного цвета */
+/* в темной теме все стекло на обложке (поле, переключатели, подсказки) — белое матовое, одного цвета */
 :root[data-theme="dark"] .intake{--glass:rgba(255,255,255,.12)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .intake{--glass:rgba(255,255,255,.12)}}
 :root[data-theme="dark"] .intake{background:radial-gradient(30% 26% at 10% 60%,rgba(148,187,255,.16),transparent 70%),linear-gradient(to bottom,var(--hero-top) 0%,#2858A7 50%,#1B3565 80%,var(--bg) 100%)}
@@ -202,12 +203,12 @@ body:not(.home) .app-footer{display:none}
 .intake-copy h1{font-size:clamp(36px,4.6vw,64px);line-height:1.0;font-weight:600;letter-spacing:-.02em;margin:20px 0 16px;max-width:24ch;text-wrap:balance;color:#fff}
 .intake-copy .lede{color:rgba(255,255,255,.88);margin:0;max-width:31.5rem;font-size:clamp(16px,1.3vw,18px);font-weight:500;letter-spacing:-.01em;line-height:1.35;text-wrap:balance}
 /* блок загрузки — «стекло», как в интерфейсе walt.io: полупрозрачная подложка с размытием и тонкой светлой обводкой,
-   внутри светлый переключатель, сплошное поле ввода для читаемости и белая кнопка-пилюля с тёмным текстом */
-/* всё на главной — блок загрузки, шаги, «Мои уроки», словарь — по одной колонке шириной 880px (уроки внутри — в 1200) */
+   внутри светлый переключатель, сплошное поле ввода для читаемости и белая кнопка-пилюля с темным текстом */
+/* все на главной — блок загрузки, шаги, «Мои уроки», словарь — по одной колонке шириной 880px (уроки внутри — в 1200) */
 #lesson-list,#vocab-box{max-width:880px;width:100%;margin-left:auto;margin-right:auto;justify-self:center}
 /* без отдельной плашки: переключатель, поле и кнопка лежат прямо на градиенте; стеклом стало само поле ввода */
 .intake .drop-card{max-width:880px;width:100%;justify-self:center;padding:0;border-radius:0;background:none;border:0;box-shadow:none}
-/* Нейтральное прозрачное стекло сохраняет приглушённый оттенок обложки. */
+/* Нейтральное прозрачное стекло сохраняет приглушенный оттенок обложки. */
 .intake{--glass:rgba(27,51,92,.16)}
 .intake .drop-card .seg{background:var(--glass);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
 .intake .drop-card .seg button{color:#fff}
@@ -230,7 +231,7 @@ body:not(.home) .app-footer{display:none}
 body.home.scrolled header.top,body.home.scrolled::before{background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);color:var(--fg)}
 body.home.scrolled header.top .brand i img{filter:var(--brand-mark-filter)}
 /* шапка на главной сливается с обложкой */
-/* шапка без заливки: обложка заходит под неё, а матовое стекло появляется, только когда обложка уехала вверх */
+/* шапка без заливки: обложка заходит под нее, а матовое стекло появляется, только когда обложка уехала вверх */
 body.home header.top,body.home::before{background:transparent;color:#fff}
 body.home .intake{margin-top:-64px;padding-top:calc(64px + clamp(28px,6vw,72px))}
 body.home header.top .brand i img{filter:brightness(0) invert(1)}
@@ -310,7 +311,7 @@ body.home main{padding-top:0}
 .lc-step b{color:inherit;font-weight:600}
 .lc-step i{color:inherit;font-style:normal;font-weight:700}
 .lc-step.cur{background:var(--bg);font-weight:600;box-shadow:0 6px 18px rgba(0,60,140,.12)}
-/* Пройденный шаг поддерживает тёплый акцент обложки. */
+/* Пройденный шаг поддерживает теплый акцент обложки. */
 .lc-step.done{background:linear-gradient(120deg,#FFE6CC,#FFD8B0);color:var(--warm-ink);box-shadow:none}
 .lc-step.done b,.lc-step.done i{color:inherit}
 .lc-step.todo{opacity:.45}
@@ -1061,14 +1062,14 @@ const UI = {
   brandName:    { ru: "Домашка", en: "Homework" },
   brandDot:     { ru: "Д", en: "H" },
   resetBtn:     { ru: "Сбросить урок", en: "Reset lesson" },
-  restartDrill: { ru: "Пройти тренажёр заново", en: "Restart the practice" },
+  restartDrill: { ru: "Пройти тренажер заново", en: "Restart the practice" },
   restartMatch: { ru: "Пройти заново", en: "Start over" },
   restartLesson:{ ru: "Пройти урок заново", en: "Restart the lesson" },
-  confirmRestartDrill: { ru: "Начать тренажёр заново? Ответы по нему сотрутся.", en: "Restart the practice? Your answers here will be cleared." },
+  confirmRestartDrill: { ru: "Начать тренажер заново? Ответы по нему сотрутся.", en: "Restart the practice? Your answers here will be cleared." },
   confirmRestartMatch: { ru: "Начать этот блок заново?", en: "Start this block over?" },
   navHome:      { ru: "Мои уроки", en: "My lessons" },
   navTheory:    { ru: "Теория", en: "Theory" },
-  navDrill:     { ru: "Тренажёр", en: "Practice" },
+  navDrill:     { ru: "Тренажер", en: "Practice" },
   navMatch:     { ru: "Значения", en: "Meanings" },
   navSpeak:     { ru: "Говорение", en: "Speaking" },
   cardProgress: { ru: "Прогресс урока", en: "Lesson progress" },
@@ -1085,7 +1086,7 @@ const UI = {
                   en: "Paste your teacher's notes or pick a topic. Get clear explanations, practise step by step and receive feedback on your answers." },
   /* шаги «как это работает» — путь по уроку: что человек делает и что получает на каждом шаге */
   how1t:        { ru: "Вставьте домашку", en: "Paste your homework" },
-  how1p:        { ru: "Текст от учителя или любая тема — урок соберётся за пару минут.", en: "Your teacher's text or any topic — the lesson is ready in a couple of minutes." },
+  how1p:        { ru: "Текст от учителя или любая тема — урок соберется за пару минут.", en: "Your teacher's text or any topic — the lesson is ready in a couple of minutes." },
   how2t:        { ru: "Читайте теорию", en: "Read the theory" },
   how2p:        { ru: "Тап по фразе — перевод, по слову — разбор и словарь.", en: "Tap a phrase for a translation, a word to look it up and save it." },
   how3t:        { ru: "Тренируйтесь", en: "Practise" },
@@ -1093,9 +1094,9 @@ const UI = {
   how4t:        { ru: "Выбирайте по смыслу", en: "Choose by meaning" },
   how4p:        { ru: "Мини-истории: форма выбирается по всему рассказу, а не по названию.", en: "Mini-stories: you pick the form from the whole story, not by its name." },
   how5t:        { ru: "Говорите", en: "Speak" },
-  how5p:        { ru: "Запишите голос — ИИ найдёт ошибки и покажет, как сказать лучше.", en: "Record your voice — AI finds the mistakes and shows a better way to say it." },
+  how5p:        { ru: "Запишите голос — ИИ найдет ошибки и покажет, как сказать лучше.", en: "Record your voice — AI finds the mistakes and shows a better way to say it." },
   how6t:        { ru: "Закрепляйте", en: "Lock it in" },
-  how6p:        { ru: "Итог урока, слова в карточки и отчёт учителю.", en: "A lesson summary, words into flashcards and a report for your teacher." },
+  how6p:        { ru: "Итог урока, слова в карточки и отчет учителю.", en: "A lesson summary, words into flashcards and a report for your teacher." },
   pastePh:      { ru: "Вставьте текст урока сюда…\n\nAll the Future Tenses in English\n1. Future Simple (WILL)\n…",
                   en: "Paste the lesson text here…\n\nAll the Future Tenses in English\n1. Future Simple (WILL)\n…" },
   parseBtn:     { ru: "Разобрать урок", en: "Break down the lesson" },
@@ -1116,21 +1117,21 @@ const UI = {
   fileType:     { ru: "Этот формат пока не поддерживается. Выберите PNG, JPG, WebP или PDF.", en: "This format is not supported yet. Choose PNG, JPG, WebP or PDF." },
   fileSize:     { ru: "Файлы занимают больше 10 МБ. Выберите меньшие файлы или добавляйте материал частями.", en: "The files exceed 10 MB. Choose smaller files or add the material in parts." },
   fileCount:    { ru: "Можно добавить до пяти изображений или один PDF за раз.", en: "Add up to five images or one PDF at a time." },
-  fileDuplicate:{ ru: "Этот файл уже прикреплён.", en: "This file is already attached." },
+  fileDuplicate:{ ru: "Этот файл уже прикреплен.", en: "This file is already attached." },
   fileImageBad: { ru: "Не получилось открыть изображение. Сохраните его заново как PNG или JPG.", en: "Couldn't open this image. Save it again as PNG or JPG." },
   fileImageLarge:{ ru: "Изображение слишком большое. Уменьшите его до 8000 пикселей по каждой стороне.", en: "This image is too large. Resize it to at most 8000 pixels on each side." },
   filePdfBad:   { ru: "Не получилось открыть PDF. Проверьте файл или сохраните нужные страницы как изображения.", en: "Couldn't open this PDF. Check the file or save the pages as images." },
-  filePdfLocked:{ ru: "PDF защищён паролем. Сохраните копию без пароля или добавьте скриншоты страниц.", en: "This PDF is password-protected. Save an unlocked copy or attach screenshots of its pages." },
+  filePdfLocked:{ ru: "PDF защищен паролем. Сохраните копию без пароля или добавьте скриншоты страниц.", en: "This PDF is password-protected. Save an unlocked copy or attach screenshots of its pages." },
   filePdfPages: { ru: "В PDF больше десяти страниц. Сохраните нужные страницы отдельным файлом.", en: "This PDF has more than ten pages. Save the pages you need in a separate file." },
-  filePdfUnavailable:{ ru: "Не получилось загрузить проверку PDF. Проверьте интернет и добавьте файл ещё раз.", en: "Couldn't load the PDF reader. Check your connection and attach the file again." },
-  fileNeedKey:  { ru: "Для распознавания файлов нужен ключ Gemini или Claude на этом устройстве. Подключите ИИ — прикреплённые файлы останутся здесь.", en: "Reading files needs a Gemini or Claude API key on this device. Connect AI — your attachments will stay here." },
-  fileNoText:   { ru: "В файле не найден читаемый текст. Попробуйте более чёткое изображение или другую страницу.", en: "No readable text was found. Try a clearer image or another page." },
+  filePdfUnavailable:{ ru: "Не получилось загрузить проверку PDF. Проверьте интернет и добавьте файл еще раз.", en: "Couldn't load the PDF reader. Check your connection and attach the file again." },
+  fileNeedKey:  { ru: "Для распознавания файлов нужен ключ Gemini или Claude на этом устройстве. Подключите ИИ — прикрепленные файлы останутся здесь.", en: "Reading files needs a Gemini or Claude API key on this device. Connect AI — your attachments will stay here." },
+  fileNoText:   { ru: "В файле не найден читаемый текст. Попробуйте более четкое изображение или другую страницу.", en: "No readable text was found. Try a clearer image or another page." },
   fileTooLong:  { ru: "Получилось больше 60 000 символов. Уберите часть текста из поля или распознавайте материал частями.", en: "The result exceeds 60,000 characters. Remove some text from the box or read the material in parts." },
   fileStopped:  { ru: "Остановлено. Файлы и текст остались на месте.", en: "Stopped. Your files and text are still here." },
-  fileFailed:   { ru: "Не получилось распознать текст. Файлы сохранены здесь — попробуйте ещё раз.", en: "Couldn't extract the text. Your files are still here — try again." },
-  fileOffline:  { ru: "Нет связи с интернетом. Файлы и текст остались на месте — попробуйте ещё раз после подключения.", en: "No internet connection. Your files and text are still here — reconnect and try again." },
+  fileFailed:   { ru: "Не получилось распознать текст. Файлы сохранены здесь — попробуйте еще раз.", en: "Couldn't extract the text. Your files are still here — try again." },
+  fileOffline:  { ru: "Нет связи с интернетом. Файлы и текст остались на месте — попробуйте еще раз после подключения.", en: "No internet connection. Your files and text are still here — reconnect and try again." },
   fileHeading:  { ru: name => `Материал из файла: ${name}`, en: name => `Material from: ${name}` },
-  parseHint:    { ru: "ИИ разложит текст на теорию, тренажёр и говорение. Обычно это занимает одну-две минуты.",
+  parseHint:    { ru: "ИИ разложит текст на теорию, тренажер и говорение. Обычно это занимает одну-две минуты.",
                   en: "AI splits the text into theory, practice and speaking. It usually takes a minute or two." },
   parseHintEmpty:{ ru: "Сначала вставьте текст урока.", en: "Paste the lesson text first." },
   parseNoClaude:{ ru: "Разбор работает в версии на claude.ai: откройте «Домашку» там.",
@@ -1139,7 +1140,7 @@ const UI = {
   parseWriting: { ru: n => `Собираю урок… ${n} КБ`, en: n => `Building the lesson… ${n} KB` },
   parseStop:    { ru: "Остановить", en: "Stop" },
   parseStopped: { ru: "Остановлено. Текст остался в поле.", en: "Stopped. Your text is still in the box." },
-  parseDenied:  { ru: "Странице не разрешено обращаться к Claude. Разрешите это в меню страницы и нажмите ещё раз.",
+  parseDenied:  { ru: "Странице не разрешено обращаться к Claude. Разрешите это в меню страницы и нажмите еще раз.",
                   en: "This page isn't allowed to use Claude. Allow it in the page menu and try again." },
   parseBusy:    { ru: (n = AI_NAMES[aiProvider()]) => `Слишком много запросов к ${n}. Подождите пару минут и попробуйте снова.`,
                   en: (n = AI_NAMES[aiProvider()]) => `Too many requests to ${n}. Wait a couple of minutes and try again.` },
@@ -1156,9 +1157,9 @@ const UI = {
   fixOffline:   { ru: "Нет связи с интернетом.", en: "No internet connection." },
   fixBusy:      { ru: "Слишком много запросов к ИИ. Подождите немного и попробуйте снова.",
                   en: "Too many requests to the AI. Wait a bit and try again." },
-  fixFailed:    { ru: "Не получилось переписать. Попробуйте ещё раз или переформулируйте просьбу.",
+  fixFailed:    { ru: "Не получилось переписать. Попробуйте еще раз или переформулируйте просьбу.",
                   en: "Couldn't rewrite it. Try again or rephrase your note." },
-  fixEdited:    { ru: "Здесь уже есть правка. «Вернуть как было» вернёт исходный текст.", en: "This part was already edited. “Restore original” brings back the original text." },
+  fixEdited:    { ru: "Здесь уже есть правка. «Вернуть как было» вернет исходный текст.", en: "This part was already edited. “Restore original” brings back the original text." },
   fixRevert:    { ru: "Вернуть как было", en: "Restore original" },
   fixReverted:  { ru: "Вернула как было.", en: "Restored the original." },
   fixPreviewTitle:{ ru: "Проверьте правку", en: "Check the change" },
@@ -1171,18 +1172,18 @@ const UI = {
                   en: { s: "Sentence", verb: "Verb cue", a: "Answer", also: "Other answers", why: "Explanation", hint: "Hint", name: "Heading", note: "Note", forms: "Formulas", ex: "Examples", wrong: "Mistakes", summary: "Table", callout: "Callout", q: "Question", starter: "Sentence opener" } },
   extendBtn:    { ru: "Дополнить урок", en: "Extend the lesson" },
   trBtn:        { ru: m => `Перевод теории: ${m === "show" ? "сразу" : "по тапу"}`, en: m => `Theory translation: ${m === "show" ? "always shown" : "on tap"}` },
-  reportWarn:   { ru: (list, hides) => `Вы ещё не закончили:\n${list}\n\n${hides ? "Разделы, где нет ни одного ответа, в отчёт учителю не попадут.\n\n" : ""}Перейти к отчёту?`,
+  reportWarn:   { ru: (list, hides) => `Вы еще не закончили:\n${list}\n\n${hides ? "Разделы, где нет ни одного ответа, в отчет учителю не попадут.\n\n" : ""}Перейти к отчету?`,
                   en: (list, hides) => `Not finished yet:\n${list}\n\n${hides ? "Sections with no answers at all will be left out of the report.\n\n" : ""}Go to the report?` },
-  reportWarnYes:{ ru: "Да, к отчёту", en: "Yes, go to report" },
+  reportWarnYes:{ ru: "Да, к отчету", en: "Yes, go to report" },
   gapNone:      { ru: "не начато", en: "not started" },
   gapPart:      { ru: (d, n) => `${d} из ${n}`, en: (d, n) => `${d} of ${n}` },
   speakVoiceLead:{ ru: "Голос проверяет Gemini: он умеет слушать аудио, а Claude нет. Ключ бесплатный — вставьте его ниже, и запись заработает.", en: "Gemini checks voice answers: it can listen to audio, Claude can't. The key is free — paste it below and recording will work." },
   ruleBtn:      { ru: "Правило", en: "Rule" },
   ruleAll:      { ru: "Все формы урока", en: "All forms from the lesson" },
   ruleLoading:  { ru: "Подбираю правило…", en: "Finding the rule…" },
-  trNoAI:       { ru: "Перевода этого текста нет в уроке. Подключите ИИ, и он переведёт.", en: "This text has no stored translation. Connect AI and it will translate it." },
+  trNoAI:       { ru: "Перевода этого текста нет в уроке. Подключите ИИ, и он переведет.", en: "This text has no stored translation. Connect AI and it will translate it." },
   connectAI:    { ru: "Подключить ИИ →", en: "Connect AI →" },
-  trFail:       { ru: "Не получилось перевести. Нажмите на текст ещё раз.", en: "Couldn't translate. Tap the text again." },
+  trFail:       { ru: "Не получилось перевести. Нажмите на текст еще раз.", en: "Couldn't translate. Tap the text again." },
   trLoading:    { ru: "Перевожу…", en: "Translating…" },
   syncBtn:      { ru: "Синхронизация устройств", en: "Sync devices" },
   syncOn:       { ru: "включена", en: "on" },
@@ -1193,12 +1194,12 @@ const UI = {
   syncMake:     { ru: "Создать код", en: "Generate code" },
   syncGo:       { ru: "Сохранить и синхронизировать", en: "Save and sync" },
   syncOffBtn:   { ru: "Отключить", en: "Turn off" },
-  syncKeep:     { ru: "Храните код в надёжном месте: по нему сервер находит ваши данные. Кому-то его лучше не показывать.", en: "Keep the code safe: it is how the server finds your data. Don't share it." },
+  syncKeep:     { ru: "Храните код в надежном месте: по нему сервер находит ваши данные. Кому-то его лучше не показывать.", en: "Keep the code safe: it is how the server finds your data. Don't share it." },
   syncShort:    { ru: "Код должен быть не короче 16 символов.", en: "The code must be at least 16 characters." },
-  syncBusyMsg:  { ru: "Синхронизирую… сервер мог уснуть, первый запрос иногда идёт до полминуты.", en: "Syncing… the server may have been asleep; the first request can take up to 30 seconds." },
+  syncBusyMsg:  { ru: "Синхронизирую… сервер мог уснуть, первый запрос иногда идет до полминуты.", en: "Syncing… the server may have been asleep; the first request can take up to 30 seconds." },
   syncDone:     { ru: (w, l) => `Готово: слов ${w}, уроков ${l}.`, en: (w, l) => `Done: ${w} words, ${l} lessons.` },
-  syncFail:     { ru: "Не получилось связаться с сервером. Проверьте адрес и интернет и попробуйте ещё раз.", en: "Couldn't reach the server. Check the address and your connection and try again." },
-  syncBadCode:  { ru: "Сервер не принял код. Проверьте, что он введён без ошибок.", en: "The server rejected the code. Check it for typos." },
+  syncFail:     { ru: "Не получилось связаться с сервером. Проверьте адрес и интернет и попробуйте еще раз.", en: "Couldn't reach the server. Check the address and your connection and try again." },
+  syncBadCode:  { ru: "Сервер не принял код. Проверьте, что он введен без ошибок.", en: "The server rejected the code. Check it for typos." },
   outTitle:     { ru: "Итог урока", en: "Lesson summary" },
   outLoading:   { ru: "Собираю итог по вашим ответам…", en: "Putting your summary together…" },
   outStrong:    { ru: "Получается", en: "Going well" },
@@ -1217,13 +1218,13 @@ const UI = {
   czYouPicked:  { ru: w => `Вы выбрали: ${w}`, en: w => `You picked: ${w}` },
   vbTitle:      { ru: "Словарь", en: "Vocabulary" },
   vbCount:      { ru: n => `${n} ${plural(n, "слово", "слова", "слов")}`, en: n => `${n} ${n === 1 ? "word" : "words"}` },
-  vbEmpty:      { ru: "Нажмите на предложение в теории, затем на слово в нём — и сохраните его сюда. Из слов получатся карточки для повторения.", en: "Tap a sentence in the theory, then a word in it, and save it here. Saved words become review cards." },
-  vbReview:     { ru: n => n ? `Повторить · ${n}` : "Всё повторено", en: n => n ? `Review · ${n}` : "All reviewed" },
+  vbEmpty:      { ru: "Нажмите на предложение в теории, затем на слово в нем — и сохраните его сюда. Из слов получатся карточки для повторения.", en: "Tap a sentence in the theory, then a word in it, and save it here. Saved words become review cards." },
+  vbReview:     { ru: n => n ? `Повторить · ${n}` : "Все повторено", en: n => n ? `Review · ${n}` : "All reviewed" },
   vbRemove:     { ru: "Убрать из словаря", en: "Remove" },
   wdHint:       { ru: "Нажмите на слово, чтобы разобрать и сохранить его", en: "Tap a word to look it up and save it" },
   wdLoading:    { ru: "Разбираю слово…", en: "Looking it up…" },
-  wdNoAI:       { ru: "Чтобы получить перевод, подключите ИИ. Слово всё равно можно сохранить.", en: "Connect AI to get a translation. You can still save the word." },
-  wdFail:       { ru: "Не получилось разобрать слово. Его всё равно можно сохранить.", en: "Couldn't look the word up. You can still save it." },
+  wdNoAI:       { ru: "Чтобы получить перевод, подключите ИИ. Слово все равно можно сохранить.", en: "Connect AI to get a translation. You can still save the word." },
+  wdFail:       { ru: "Не получилось разобрать слово. Его все равно можно сохранить.", en: "Couldn't look the word up. You can still save it." },
   wdSave:       { ru: "Сохранить в словарь", en: "Save to vocabulary" },
   wdSaved:      { ru: "Сохранено", en: "Saved" },
   wdClose:      { ru: "Закрыть", en: "Close" },
@@ -1232,14 +1233,14 @@ const UI = {
   cardAgain:    { ru: "Не помню", en: "Forgot" },
   cardHard:     { ru: "Сложно", en: "Hard" },
   cardGood:     { ru: "Помню", en: "Got it" },
-  cardsDone:    { ru: "На сегодня всё повторено. Возвращайтесь позже.", en: "All reviewed for today. Come back later." },
+  cardsDone:    { ru: "На сегодня все повторено. Возвращайтесь позже.", en: "All reviewed for today. Come back later." },
   moveqBtn:     { ru: "Вопросы из теории — в говорение", en: "Move questions to speaking" },
   moveqAsk:     { ru: n => `Перенести вопросы из теории в говорение: ${n}? Из теории они пропадут.`, en: n => `Move ${n} question(s) from theory to speaking? They will be removed from theory.` },
   moveqDone:    { ru: "Готово, вопросы теперь в говорении.", en: "Done, the questions are now in speaking." },
   extendLead:   { ru: "Опишите, что добавить или изменить. ИИ покажет, что получится, и ничего не поменяет без вашего подтверждения.",
                   en: "Describe what to add or change. The AI shows the result first and changes nothing until you confirm." },
   extendPh:     { ru: "Например: добавь 15 слов уровня B2 по теме «путешествия»", en: "For example: add 15 B2 words about travel" },
-  extendIdeas:  { ru: ["Добавь 15 слов уровня B2 по теме «путешествия»", "Ещё 10 предложений в тренажёр", "Упрости говорение", "Добавь ещё одно правило с примерами"],
+  extendIdeas:  { ru: ["Добавь 15 слов уровня B2 по теме «путешествия»", "Еще 10 предложений в тренажер", "Упрости говорение", "Добавь еще одно правило с примерами"],
                   en: ["Add 15 B2 words about travel", "10 more sentences for practice", "Make speaking simpler", "Add one more rule with examples"] },
   extendCopyNote:{ ru: "Это встроенный урок: он останется как есть, а изменения попадут в вашу копию.", en: "This is a built-in lesson: it stays as it is, and the changes go into your own copy." },
   extendGo:     { ru: "Дополнить", en: "Extend" },
@@ -1249,21 +1250,21 @@ const UI = {
   extendPreviewTitle:{ ru: "Что изменится", en: "What will change" },
   extendAdd:    { ru: (b, n) => `${b}: добавится ${n}`, en: (b, n) => `${b}: ${n} will be added` },
   extendReplace:{ ru: (b, a, n) => `${b}: заменится целиком (было ${a}, станет ${n})`, en: (b, a, n) => `${b}: will be replaced (was ${a}, will be ${n})` },
-  extendMore:   { ru: n => `…и ещё ${n}`, en: n => `…and ${n} more` },
+  extendMore:   { ru: n => `…и еще ${n}`, en: n => `…and ${n} more` },
   extendDone:   { ru: "Готово, урок дополнен.", en: "Done, the lesson is extended." },
   extendDoneCopy:{ ru: "Готово. Изменения — в вашей копии урока.", en: "Done. The changes are in your own copy of the lesson." },
   extendCopySuffix:{ ru: " (копия)", en: " (copy)" },
   extendTheory: { ru: "Теория", en: "Theory" },
-  extendDrill:  { ru: "Тренажёр", en: "Practice" },
+  extendDrill:  { ru: "Тренажер", en: "Practice" },
   extendSpeak:  { ru: "Говорение", en: "Speaking" },
-  parseBad:     { ru: "ИИ вернул урок в неподходящем формате. Попробуйте ещё раз.",
+  parseBad:     { ru: "ИИ вернул урок в неподходящем формате. Попробуйте еще раз.",
                   en: "The AI returned the lesson in an unusable format. Try again." },
   parseRefused: { ru: "ИИ не стал разбирать этот текст. Проверьте, что вставлен именно урок.",
                   en: "The AI declined this text. Check that it's the lesson you pasted." },
   parseSignIn:  { ru: "Сессия истекла. Войдите в claude.ai заново и повторите.", en: "Your session expired. Sign in to claude.ai again and retry." },
-  parseFailed:  { ru: "Не получилось связаться с ИИ. Попробуйте ещё раз.", en: "Couldn't reach the AI. Try again." },
+  parseFailed:  { ru: "Не получилось связаться с ИИ. Попробуйте еще раз.", en: "Couldn't reach the AI. Try again." },
   parseOffline: { ru: "Нет связи с интернетом. Разбор работает только онлайн.", en: "No internet connection. Breaking down needs to be online." },
-  parseBadKey:  { ru: "Ключ ИИ не подошёл. Проверьте его: меню → «ИИ для разбора уроков».", en: "The AI key didn't work. Check it: menu → \"AI for lessons\"." },
+  parseBadKey:  { ru: "Ключ ИИ не подошел. Проверьте его: меню → «ИИ для разбора уроков».", en: "The AI key didn't work. Check it: menu → \"AI for lessons\"." },
   aiQuotaDevice:{ ru: "На сегодня бесплатный лимит на этом устройстве исчерпан. Текст и файлы остались на месте, завтра можно продолжить.",
                   en: "Today's free limit on this device is used up. Your text and files are still here; you can continue tomorrow." },
   aiQuotaDay:   { ru: "На сегодня общий бесплатный лимит Learny исчерпан. Текст и файлы остались на месте, завтра можно продолжить.",
@@ -1304,7 +1305,7 @@ const UI = {
   intakeLevelUnsure: { ru: "Не знаю", en: "Not sure" },
   topicIdeas:   { ru: ["Все времена в английском", "Present perfect или past simple", "Артикли a и the", "Условные предложения", "Фразовые глаголы с get"],
                   en: ["All English tenses", "Present perfect or past simple", "Articles a and the", "Conditionals", "Phrasal verbs with get"] },
-  howToWrite:   { ru: "Это письменное задание: напишите связный текст по пунктам задания. Таймера нет, пишите в своём темпе и следите за длиной.", en: "This is a written task: write a connected text covering every point. There is no timer; take your time and watch the length." },
+  howToWrite:   { ru: "Это письменное задание: напишите связный текст по пунктам задания. Таймера нет, пишите в своем темпе и следите за длиной.", en: "This is a written task: write a connected text covering every point. There is no timer; take your time and watch the length." },
   wordCount:    { ru: (n, range) => `Слов: ${n}${range ? ` из ${range}` : ""}`, en: (n, range) => `Words: ${n}${range ? ` of ${range}` : ""}` },
   writeAgain:   { ru: "Переписать ответ", en: "Rewrite the answer" },
   speakRecord:  { ru: "Записать ответ", en: "Record the answer" },
@@ -1312,7 +1313,7 @@ const UI = {
   speakAgain:   { ru: "Записать заново", en: "Record again" },
   speakStopCheck:{ ru: "Готово, проверить", en: "Done, check it" },
   speakCancel:  { ru: "Отменить", en: "Cancel" },
-  speakRecording:{ ru: "Идёт запись. Говорите", en: "Recording. Speak now" },
+  speakRecording:{ ru: "Идет запись. Говорите", en: "Recording. Speak now" },
   speakChecking:{ ru: "Слушаю и проверяю ответ…", en: "Listening and checking…" },
   secShort:     { ru: "с", en: "s" },
   speakSlow:    { ru: "Gemini отвечает медленно, пробую запасную модель или нажмите «Стоп»", en: "Gemini is slow, trying a backup model — or press Stop" },
@@ -1326,7 +1327,7 @@ const UI = {
   speakFixes:   { ru: "Исправления", en: "Corrections" },
   speakNoFixes: { ru: "Ошибок не нашлось.", en: "No mistakes found." },
   speakBetter:  { ru: "Как сказать лучше", en: "A better way to say it" },
-  speakEmpty:   { ru: "Ответ не расслышан. Попробуйте ещё раз, ближе к микрофону.", en: "The answer wasn't heard. Try again, closer to the microphone." },
+  speakEmpty:   { ru: "Ответ не расслышан. Попробуйте еще раз, ближе к микрофону.", en: "The answer wasn't heard. Try again, closer to the microphone." },
   speakNeedKey: { ru: "Чтобы ИИ проверял ответы, подключите бесплатный Gemini.", en: "Connect free Gemini to get your answers checked." },
   speakNeedGemini:{ ru: "Claude не умеет слушать аудио, поэтому голос проверяет бесплатный Gemini. Подключите его в меню — или напишите ответ, его проверит и Claude.", en: "Claude can't listen to audio, so voice answers are checked by free Gemini. Connect it in the menu, or type the answer and Claude will check it." },
   micDenied:    { ru: "Нет доступа к микрофону. Разрешите его в настройках телефона и попробуйте снова.", en: "No microphone access. Allow it in your phone settings and try again." },
@@ -1334,7 +1335,7 @@ const UI = {
   reportAnswer: { ru: "Ответ", en: "Answer" },
   reportFixes:  { ru: "Исправления", en: "Corrections" },
   reportBetter: { ru: "Лучше", en: "Better" },
-  parseNeedKey: { ru: "Чтобы разбирать уроки, подключите ИИ: подойдёт бесплатный Gemini.", en: "Connect an AI to break down lessons: free Gemini works." },
+  parseNeedKey: { ru: "Чтобы разбирать уроки, подключите ИИ: подойдет бесплатный Gemini.", en: "Connect an AI to break down lessons: free Gemini works." },
   parseReady:   { ru: "Готово. Нажмите «Разобрать урок».", en: "Done. Press \"Break down the lesson\"." },
   menuTitle:    { ru: "Домашка", en: "Homework" },
   langLabel:    { ru: "Язык подсказок", en: "Hint language" },
@@ -1345,32 +1346,32 @@ const UI = {
   gapLabel:     { ru: (n, w) => w ? `Пропуск ${n}: ${w}` : `Пропуск ${n}`, en: (n, w) => w ? `Gap ${n}: ${w}` : `Gap ${n}` },
   themeLabel:   { ru: "Тема", en: "Theme" },
   themeLight:   { ru: "Светлая", en: "Light" },
-  themeDark:    { ru: "Тёмная", en: "Dark" },
+  themeDark:    { ru: "Темная", en: "Dark" },
   themeAuto:    { ru: "Авто", en: "Auto" },
   aiBtn:        { ru: "ИИ для разбора уроков", en: "AI for lessons" },
   aiBuiltIn:    { ru: "Claude на claude.ai", en: "Claude on claude.ai" },
-  aiNone:       { ru: "не подключён", en: "not connected" },
+  aiNone:       { ru: "не подключен", en: "not connected" },
   aiSheetTitle: { ru: "ИИ для разбора уроков", en: "AI for lessons" },
-  aiSheetLead:  { ru: "ИИ раскладывает текст от учителя на теорию, тренажёр и говорение. Ключ хранится только на этом устройстве.",
+  aiSheetLead:  { ru: "ИИ раскладывает текст от учителя на теорию, тренажер и говорение. Ключ хранится только на этом устройстве.",
                   en: "The AI turns your teacher's text into theory, practice and speaking. The key stays on this device." },
   aiGemini:     { ru: "Gemini · бесплатно", en: "Gemini · free" },
   aiGeminiHow:  { ru: 'Ключ выдают бесплатно в <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>. На бесплатном тарифе Google может использовать запросы для улучшения своих продуктов.',
                   en: 'Get a free key in <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>. On the free tier Google may use requests to improve its products.' },
-  aiClaudeHow:  { ru: 'Оплата по факту с аккаунта Anthropic: разбор одного урока стоит несколько центов (модель Sonnet). Голосовые ответы Claude не слушает, их проверяет только Gemini. Ключ создаётся на <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.',
+  aiClaudeHow:  { ru: 'Оплата по факту с аккаунта Anthropic: разбор одного урока стоит несколько центов (модель Sonnet). Голосовые ответы Claude не слушает, их проверяет только Gemini. Ключ создается на <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.',
                   en: 'Pay as you go from your Anthropic account: one lesson costs a few cents (Sonnet model). Create a key at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.' },
   aiKeyLabel:   { ru: n => `Ключ API ${n}`, en: n => `${n} API key` },
   aiSave:       { ru: "Сохранить", en: "Save" },
   aiOff:        { ru: "Отключить", en: "Disconnect" },
-  aiConnected:  { ru: n => `${n} подключён`, en: n => `${n} connected` },
-  aiDisconnected:{ ru: n => `${n} отключён`, en: n => `${n} disconnected` },
+  aiConnected:  { ru: n => `${n} подключен`, en: n => `${n} connected` },
+  aiDisconnected:{ ru: n => `${n} отключен`, en: n => `${n} disconnected` },
   aiChecking:   { ru: "Проверяю ключ…", en: "Checking the key…" },
   aiKeyShort:   { ru: "Ключ слишком короткий. Скопируйте его целиком.", en: "The key is too short. Copy it in full." },
   aiLooksClaude:{ ru: "Это ключ Claude. Переключитесь сверху на Claude.", en: "This is a Claude key. Switch to Claude above." },
   aiLooksGemini:{ ru: "Это ключ Gemini. Переключитесь сверху на Gemini.", en: "This is a Gemini key. Switch to Gemini above." },
   aiKeyBadGemini:{ ru: "Gemini не принял ключ. Скопируйте его заново в Google AI Studio: кнопка «Copy» рядом с ключом.", en: "Gemini rejected the key. Copy it again in Google AI Studio with the Copy button." },
   aiKeyBadClaude:{ ru: "Claude не принял ключ. Проверьте его на console.anthropic.com.", en: "Claude rejected the key. Check it at console.anthropic.com." },
-  aiKeyUnchecked:{ ru: "Ключ сохранён, но проверить его не вышло: нет связи. Если разбор не пойдёт, введите ключ заново.", en: "Key saved but couldn't be checked: no connection. If lessons fail, enter it again." },
-  parseLocal:   { ru: "Урок сохранён только в этом браузере: база страницы сейчас недоступна.",
+  aiKeyUnchecked:{ ru: "Ключ сохранен, но проверить его не вышло: нет связи. Если разбор не пойдет, введите ключ заново.", en: "Key saved but couldn't be checked: no connection. If lessons fail, enter it again." },
+  parseLocal:   { ru: "Урок сохранен только в этом браузере: база страницы сейчас недоступна.",
                   en: "The lesson is saved in this browser only: the page's storage is unavailable right now." },
   deleteBtn:    { ru: "Удалить урок", en: "Delete lesson" },
   confirmDelete:{ ru: "Удалить этот урок и прогресс по нему?", en: "Delete this lesson and its progress?" },
@@ -1383,9 +1384,9 @@ const UI = {
   lessonsLabel: { ru: "Мои уроки", en: "My lessons" },
 
   tocLabel:     { ru: "Правила", en: "Rules" },
-  toDrill:      { ru: "Перейти к тренажёру →", en: "Go to practice →" },
+  toDrill:      { ru: "Перейти к тренажеру →", en: "Go to practice →" },
 
-  drillTitle:   { ru: "Тренажёр", en: "Practice" },
+  drillTitle:   { ru: "Тренажер", en: "Practice" },
   drillInstruction: { ru: "Заполните пропуск подходящим словом или формой", en: "Fill the gap with the right word or form" },
   drillScore:   { ru: (ok, done) => `Верно: ${ok} из ${done}`, en: (ok, done) => `${ok} of ${done} correct` },
   answerLabel:  { ru: "Ваш ответ", en: "Your answer" },
@@ -1420,10 +1421,10 @@ const UI = {
   askPh:        { ru: "Например: почему не так-то?", en: "For example: why not …?" },
   askSend:      { ru: "Спросить", en: "Ask" },
   askThinking:  { ru: "Думаю…", en: "Thinking…" },
-  askFail:      { ru: "Не получилось ответить. Попробуйте ещё раз.", en: "Couldn't answer. Please try again." },
+  askFail:      { ru: "Не получилось ответить. Попробуйте еще раз.", en: "Couldn't answer. Please try again." },
   askChipWhy:   { ru: w => `Почему не «${w}»?`, en: w => `Why not "${w}"?` },
   askChipSimple:{ ru: "Объясни проще", en: "Explain it more simply" },
-  askChipMore:  { ru: "Приведи ещё примеры", en: "Give me more examples" },
+  askChipMore:  { ru: "Приведи еще примеры", en: "Give me more examples" },
   wrongWhy:     { ru: w => `Почему не «${w}»:`, en: w => `Why not "${w}":` },
   wrongWhyLoading: { ru: "Разбираю ваш ответ…", en: "Looking at your answer…" },
   verdictTypo:  { ru: "Опечатка — засчитано", en: "Typo — counted" },
@@ -1434,12 +1435,12 @@ const UI = {
                   en: (raw, best) => `"${raw}" is grammatically possible, but <b>${best}</b> fits the context better.` },
   badLead:      { ru: raw => `Вы написали «${raw}».`, en: raw => `You wrote "${raw}".` },
   alsoLine:     { ru: list => `Также возможно: ${list}.`, en: list => `Also possible: ${list}.` },
-  drillDone:    { ru: "Тренажёр пройден", en: "Practice complete" },
+  drillDone:    { ru: "Тренажер пройден", en: "Practice complete" },
   perfect:      { ru: "Без единой ошибки", en: "Not a single mistake" },
-  reviewTitle:  { ru: "Разберём, где не сошлось", en: "Let's look at what didn't fit" },
+  reviewTitle:  { ru: "Разберем, где не сошлось", en: "Let's look at what didn't fit" },
   perfectSubMore:{ ru: "Можно идти дальше.", en: "On to the next step." },
   perfectSubEnd: { ru: "Урок пройден полностью.", en: "The lesson is complete." },
-  reviewSub:    { ru: n => `Ошибок: ${n}. Их стоит прорешать ещё раз.`, en: n => `Mistakes: ${n}. Worth doing them again.` },
+  reviewSub:    { ru: n => `Ошибок: ${n}. Их стоит прорешать еще раз.`, en: n => `Mistakes: ${n}. Worth doing them again.` },
   reviewSubSkipped: { ru: n => `Пропущено: ${n}. Вернитесь к ним, когда будет настроение.`, en: n => `Skipped: ${n}. Come back to them when you're ready.` },
   reviewSubBoth: { ru: (w, s) => `Ошибок: ${w}, пропущено: ${s}.`, en: (w, s) => `Mistakes: ${w}, skipped: ${s}.` },
   wasSkipped:   { ru: "пропущен", en: "skipped" },
@@ -1471,13 +1472,13 @@ const UI = {
   lessonSummaryEyebrow: { ru: "Итоги урока", en: "Lesson summary" },
   starterLead:  { ru: "Начните так:", en: "Start like this:" },
   confirmReset: { ru: "Сбросить весь прогресс по этому уроку?", en: "Reset all progress on this lesson?" },
-  reportBtn:    { ru: "Отчёт учителю", en: "Report for teacher" },
+  reportBtn:    { ru: "Отчет учителю", en: "Report for teacher" },
   reportEyebrow:{ ru: "Что показать учителю", en: "What to show your teacher" },
   reportTitle:  { ru: "Результаты", en: "Results" },
   reportBack:   { ru: "← Вернуться к уроку", en: "← Back to the lesson" },
-  nameLabel:    { ru: "Имя для отчёта:", en: "Name on the report:" },
+  nameLabel:    { ru: "Имя для отчета:", en: "Name on the report:" },
   namePh:       { ru: "как вас подписать", en: "how to sign it" },
-  tileDrill:    { ru: "Тренажёр", en: "Practice" },
+  tileDrill:    { ru: "Тренажер", en: "Practice" },
   tileMatch:    { ru: "Значения", en: "Meanings" },
   tileWords:    { ru: "Слова", en: "Words" },
   groupWords:   { ru: "Словарь урока", en: "Lesson vocabulary" },
@@ -1501,15 +1502,15 @@ const UI = {
                        en: "Copy the text and paste it to your teacher in a messenger." },
   copyBtn:      { ru: "Скопировать текст", en: "Copy as text" },
   downloadBtn:  { ru: "Скачать страницей", en: "Download as a page" },
-  showTextBtn:  { ru: "Показать текст отчёта", en: "Show the report text" },
+  showTextBtn:  { ru: "Показать текст отчета", en: "Show the report text" },
   hideTextBtn:  { ru: "Свернуть текст", en: "Hide the text" },
   selectHint:   { ru: "Выделите и скопируйте вручную", en: "Select and copy by hand" },
   copied:       { ru: "Скопировано ✓", en: "Copied ✓" },
   copyFailed:   { ru: "Не удалось скопировать — выделите текст вручную", en: "Copy failed — select the text manually" },
-  downloaded:   { ru: "Файл сохранён ✓", en: "File saved ✓" },
-  reportNote:   { ru: "Ссылку, которую учитель просто открывает, приложение сможет выдавать, когда отчёт будет куда-то выкладываться. В прототипе всё живёт на вашем компьютере, поэтому — текст или файл.",
+  downloaded:   { ru: "Файл сохранен ✓", en: "File saved ✓" },
+  reportNote:   { ru: "Ссылку, которую учитель просто открывает, приложение сможет выдавать, когда отчет будет куда-то выкладываться. В прототипе все живет на вашем компьютере, поэтому — текст или файл.",
                   en: "A link your teacher can just open needs somewhere to publish the report. In this prototype everything lives on your computer, so: text or file." },
-  reportFor:    { ru: "Отчёт по домашке", en: "Homework report" },
+  reportFor:    { ru: "Отчет по домашке", en: "Homework report" },
   reportStudent:{ ru: "Ученик", en: "Student" },
   stepN:        { ru: n => `Шаг ${n}`, en: n => `Step ${n}` },
   countRules:   { ru: n => `${n} ${plural(n, "правило", "правила", "правил")}`, en: n => `${n} ${n === 1 ? "rule" : "rules"}` },
@@ -1620,7 +1621,7 @@ const MODALS_DRILL = [
   { s: ["You ", " smoke inside the hospital. It's prohibited."], a: ["mustn't"],
     why: { ru: "Запрет. mustn't, а не «don't have to» — это разные вещи.", en: "Prohibition. mustn't — not \"don't have to\", which means something quite different." }, hint: { ru: "Запрещено или необязательно?", en: "Forbidden or just unnecessary?" } },
   { s: ["I haven't decided yet, but I ", " go to Japan next year."], a: ["might"], also: ["may"],
-    why: { ru: "Ещё не решено — низкая уверенность. might.", en: "Nothing is decided yet — low certainty. might." }, hint: { ru: "Решение не принято.", en: "No decision yet." } },
+    why: { ru: "Еще не решено — низкая уверенность. might.", en: "Nothing is decided yet — low certainty. might." }, hint: { ru: "Решение не принято.", en: "No decision yet." } },
   { s: ["", " we order a pizza tonight?"], a: ["shall"],
     why: { ru: "Предложение с we. Shall we…?", en: "A suggestion with we. Shall we…?" }, hint: { ru: "Предложение, а не вопрос о разрешении.", en: "A suggestion, not a request for permission." } },
   { s: ["You ", " bring any food. We've already prepared everything."], a: ["don't have to"], also: ["don't need to"],
@@ -1634,7 +1635,7 @@ const MODALS_DRILL = [
   { s: ["", " I borrow your pen for a moment?"], a: ["may"], also: ["can", "could"],
     why: { ru: "Просьба о разрешении. May — самый вежливый вариант.", en: "Asking for permission. May is the most polite option." }, hint: { ru: "Разрешение.", en: "Permission." } },
   { s: ["You ", " be more careful when you're driving. That was dangerous."], a: ["should"], also: ["must", "ought to"],
-    why: { ru: "Совет после опасной ситуации. should.", en: "Advice after something dangerous happened. should." }, hint: { ru: "Совет с упрёком.", en: "Advice with a note of reproach." } },
+    why: { ru: "Совет после опасной ситуации. should.", en: "Advice after something dangerous happened. should." }, hint: { ru: "Совет с упреком.", en: "Advice with a note of reproach." } },
   { s: ["We ", " leave now if we want to catch the train."], a: ["have to"], also: ["must", "need to"],
     why: { ru: "Необходимость от обстоятельств — поезд не будет ждать.", en: "Necessity from circumstances — the train won't wait." }, hint: { ru: "Необходимость.", en: "Necessity." } },
   { s: ["She ", " speak four languages when she was only ten."], a: ["could"], also: ["was able to"],
@@ -1736,7 +1737,7 @@ const FUTURE_THEORY = [
     { name: { ru: "Обещания", en: "Promises" }, ex: ["I<b>'ll</b> call you.", "I <b>won't</b> tell anyone.", "We<b>'ll</b> always support you."] },
     { name: { ru: "Предложение помощи", en: "Offers" }, ex: ["I<b>'ll</b> carry your bag.", "<b>Shall</b> I help?", "I<b>'ll</b> cook dinner tonight."] }
   ]},
-  { modal: "be going to", gloss: { ru: "решённые планы · прогноз по признакам", en: "decided plans · predictions with evidence" }, uses: [
+  { modal: "be going to", gloss: { ru: "решенные планы · прогноз по признакам", en: "decided plans · predictions with evidence" }, uses: [
     { name: { ru: "Форма", en: "Structure" }, forms: [["", "Subject + be + going to + verb"]] },
     { name: { ru: "Планы и намерения", en: "Plans and intentions" }, note: { ru: "Решение принято заранее.", en: "Already decided." },
       ex: ["I<b>'m going to</b> study medicine.", "They<b>'re going to</b> move house.", "She<b>'s going to</b> learn Japanese."] },
@@ -1745,17 +1746,17 @@ const FUTURE_THEORY = [
       callout: { ru: "«I think it <b>will</b> rain» — мнение. <br>«Look at those clouds. It<b>'s going to</b> rain» — доказательство.",
                  en: "\"I think it <b>will</b> rain\" — opinion. <br>\"Look at those clouds. It<b>'s going to</b> rain\" — evidence." } }
   ]},
-  { modal: { ru: "Present Continuous о будущем", en: "Present Continuous for the future" }, gloss: { ru: "договорённости с людьми", en: "fixed arrangements with other people" }, uses: [
+  { modal: { ru: "Present Continuous о будущем", en: "Present Continuous for the future" }, gloss: { ru: "договоренности с людьми", en: "fixed arrangements with other people" }, uses: [
     { name: { ru: "Форма", en: "Structure" }, forms: [["", "Subject + am/is/are + verb-ing"]] },
-    { name: { ru: "Договорённость", en: "Arrangement" }, note: { ru: "Есть конкретная договорённость с другим человеком: бронь, запись, встреча, приглашение.", en: "There's a concrete arrangement with someone else: a booking, appointment, meeting or invitation." },
+    { name: { ru: "Договоренность", en: "Arrangement" }, note: { ru: "Есть конкретная договоренность с другим человеком: бронь, запись, встреча, приглашение.", en: "There's a concrete arrangement with someone else: a booking, appointment, meeting or invitation." },
       ex: ["I<b>'m meeting</b> John tomorrow.", "We<b>'re flying</b> on Friday.", "She<b>'s seeing</b> the dentist next week.", "They<b>'re having</b> dinner with us tonight."] }
   ]},
   { modal: { ru: "Present Simple о будущем", en: "Present Simple for the future" }, gloss: { ru: "расписания", en: "timetables" }, uses: [
     { name: { ru: "Форма", en: "Structure" }, forms: [["", "Subject + present simple"]] },
-    { name: { ru: "Расписание", en: "Timetable" }, note: { ru: "Поезда, самолёты, автобусы, официальные расписания, телепрограмма.", en: "Trains, planes, buses, official schedules, TV programmes." },
+    { name: { ru: "Расписание", en: "Timetable" }, note: { ru: "Поезда, самолеты, автобусы, официальные расписания, телепрограмма.", en: "Trains, planes, buses, official schedules, TV programmes." },
       ex: ["The train <b>leaves</b> at 8:00.", "School <b>starts</b> in September.", "My flight <b>lands</b> at 5 pm.", "The meeting <b>begins</b> at noon."] }
   ]},
-  { modal: "Future Continuous", gloss: { ru: "будет происходить в определённый момент", en: "in progress at a future moment" }, uses: [
+  { modal: "Future Continuous", gloss: { ru: "будет происходить в определенный момент", en: "in progress at a future moment" }, uses: [
     { name: { ru: "Форма", en: "Structure" }, forms: [["", "Subject + will + be + verb-ing"]] },
     { name: { ru: "Действие в процессе", en: "Action in progress" }, ex: ["At 9 pm I<b>'ll be studying</b>.", "Tomorrow afternoon she<b>'ll be flying</b>.", "This time next week we<b>'ll be relaxing</b>."] },
     { name: { ru: "Вежливый вопрос", en: "Polite questions" }, note: { ru: "Звучит мягче, чем «Will you use the printer?»", en: "Sounds softer than \"Will you use the printer?\"" },
@@ -1777,7 +1778,7 @@ const FUTURE_THEORY = [
       callout: { ru: "By 6 pm I<b>'ll have written</b> the report — закончено. <br>By 6 pm I<b>'ll have been writing</b> for four hours — длительность.",
                  en: "By 6 pm I<b>'ll have written</b> the report — finished. <br>By 6 pm I<b>'ll have been writing</b> for four hours — duration." } }
   ]},
-  { modal: "be about to", gloss: { ru: "вот-вот произойдёт", en: "about to happen any moment" }, uses: [
+  { modal: "be about to", gloss: { ru: "вот-вот произойдет", en: "about to happen any moment" }, uses: [
     { name: { ru: "Форма", en: "Structure" }, forms: [["", "Subject + be about to + verb"]] },
     { name: { ru: "Совсем скоро", en: "Very soon" }, ex: ["The film <b>is about to</b> begin.", "Hurry! The train <b>is about to</b> leave.", "I <b>was about to</b> call you."] }
   ]},
@@ -1794,7 +1795,7 @@ const FUTURE_THEORY = [
     { name: { ru: "Что когда", en: "What to use when" }, summary: [
       ["will", { ru: "решения, обещания, прогнозы", en: "decisions, promises, predictions" }, "I'll help."],
       ["going to", { ru: "планы, признаки", en: "plans, evidence" }, "I'm going to study."],
-      ["Present Continuous", { ru: "договорённости", en: "arrangements" }, "I'm meeting Tom tomorrow."],
+      ["Present Continuous", { ru: "договоренности", en: "arrangements" }, "I'm meeting Tom tomorrow."],
       ["Present Simple", { ru: "расписания", en: "timetables" }, "The train leaves at six."],
       ["Future Continuous", { ru: "в процессе в будущем", en: "ongoing future action" }, "I'll be working."],
       ["Future Perfect", { ru: "закончено к сроку", en: "finished before future time" }, "I'll have finished."],
@@ -1809,7 +1810,7 @@ const FUTURE_THEORY = [
 const FUTURE_FORMS_CHEATSHEET = [
   ["will", { ru: "решение, обещание, мнение", en: "decision, promise, opinion" }],
   ["going to", { ru: "план или видимый признак", en: "plan or visible evidence" }],
-  ["am/is/are + -ing", { ru: "договорённость", en: "arrangement" }],
+  ["am/is/are + -ing", { ru: "договоренность", en: "arrangement" }],
   ["present simple", { ru: "расписание", en: "timetable" }],
   ["will be + -ing", { ru: "в процессе", en: "in progress" }],
   ["will have + V3", { ru: "закончено к сроку", en: "done by then" }],
@@ -1825,7 +1826,7 @@ const FUTURE_DRILL = [
   { part: 1, s: ["Look at those clouds! It ", "."], verb: "rain", a: ["is going to rain"],
     why: { ru: "Тучи видно прямо сейчас — прогноз по очевидным признакам. going to.", en: "The clouds are right there — a prediction based on evidence. going to." }, hint: { ru: "Доказательство перед глазами.", en: "Evidence right in front of you." } },
   { part: 1, s: ["We ", " the client at 3 pm tomorrow."], verb: "meet", a: ["are meeting"], also: ["'re meeting"],
-    why: { ru: "Договорённость с другим человеком на конкретное время. Present Continuous.", en: "A fixed arrangement with another person at a set time. Present Continuous." }, hint: { ru: "Договорённость с людьми.", en: "An arrangement with other people." } },
+    why: { ru: "Договоренность с другим человеком на конкретное время. Present Continuous.", en: "A fixed arrangement with another person at a set time. Present Continuous." }, hint: { ru: "Договоренность с людьми.", en: "An arrangement with other people." } },
   { part: 1, s: ["The train ", " at 7:15."], verb: "leave", a: ["leaves"],
     why: { ru: "Расписание поезда — Present Simple.", en: "A train timetable — Present Simple." }, hint: { ru: "Расписание.", en: "A timetable." } },
   { part: 1, s: ["This time tomorrow I ", " over the Atlantic."], verb: "fly", a: ["will be flying"],
@@ -1835,7 +1836,7 @@ const FUTURE_DRILL = [
   { part: 1, s: ["Next year he ", " here for twenty years."], verb: "work", a: ["will have been working"],
     why: { ru: "«for twenty years» — длительность к будущему моменту. Future Perfect Continuous.", en: "\"for twenty years\" — duration up to a future point. Future Perfect Continuous." }, hint: { ru: "Сколько времени длится.", en: "How long it has been going on." } },
   { part: 1, s: ["The concert ", " in five minutes."], verb: "start", a: ["is about to start"],
-    why: { ru: "Через пять минут — вот-вот начнётся. be about to.", en: "Five minutes away — it's on the point of starting. be about to." }, hint: { ru: "Совсем скоро.", en: "Any moment now." } },
+    why: { ru: "Через пять минут — вот-вот начнется. be about to.", en: "Five minutes away — it's on the point of starting. be about to." }, hint: { ru: "Совсем скоро.", en: "Any moment now." } },
   { part: 1, s: ["The President ", " Japan next month."], verb: "visit", a: ["is to visit"], also: ["will visit", "is going to visit"],
     why: { ru: "Официальное сообщение о планах первого лица. be to.", en: "A formal announcement about a head of state's plans. be to." }, hint: { ru: "Официально и формально.", en: "Official and formal." } },
   { part: 1, s: ["My package ", " tomorrow morning."], verb: "arrive", a: ["is due to arrive"], also: ["is arriving"],
@@ -1844,7 +1845,7 @@ const FUTURE_DRILL = [
   { part: 2, s: ["Don't worry — I ", " you."], verb: "help", a: ["will help"],
     why: { ru: "Решение в момент речи, предложение помощи. will.", en: "A decision made at the moment of speaking — an offer. will." }, hint: { ru: "Решаете прямо сейчас.", en: "You're deciding right now." } },
   { part: 2, s: ["They're ", " a new house next year."], verb: "buy", a: ["going to buy"],
-    why: { ru: "«They're» уже стоит в предложении — остаётся going to. Решённый план.", en: "\"They're\" is already in the sentence — going to completes it. A decided plan." }, hint: { ru: "Начало формы уже дано.", en: "The start of the form is already given." } },
+    why: { ru: "«They're» уже стоит в предложении — остается going to. Решенный план.", en: "\"They're\" is already in the sentence — going to completes it. A decided plan." }, hint: { ru: "Начало формы уже дано.", en: "The start of the form is already given." } },
   { part: 2, s: ["By the time you arrive we ", "."], verb: "eat", a: ["will have eaten"],
     why: { ru: "Успеем закончить до твоего прихода. Future Perfect.", en: "Finished before you get here. Future Perfect." }, hint: { ru: "Закончим раньше этого момента.", en: "Finished before that moment." } },
   { part: 2, s: ["At 8 tonight she ", "."], verb: "study", a: ["will be studying"],
@@ -1860,12 +1861,12 @@ const FUTURE_DRILL = [
   { part: 2, s: ["The train ", " at exactly 11:45."], verb: "depart", a: ["departs"],
     why: { ru: "Точное расписание. Present Simple.", en: "An exact timetable. Present Simple." }, hint: { ru: "Расписание.", en: "A timetable." } },
   { part: 2, s: ["By midnight they ", " for twelve hours."], verb: "drive", a: ["will have been driving"],
-    why: { ru: "«for twelve hours» к полуночи — длительность. Future Perfect Continuous.", en: "\"for twelve hours\" by midnight — duration. Future Perfect Continuous." }, hint: { ru: "Сколько времени за рулём.", en: "How long they'll have been driving." } },
+    why: { ru: "«for twelve hours» к полуночи — длительность. Future Perfect Continuous.", en: "\"for twelve hours\" by midnight — duration. Future Perfect Continuous." }, hint: { ru: "Сколько времени за рулем.", en: "How long they'll have been driving." } },
 
   { part: 3, s: ["I promise I ", " your birthday."], verb: "never forget", a: ["will never forget"],
-    why: { ru: "Обещание. will, а never встаёт между will и глаголом.", en: "A promise. will — and never sits between will and the verb." }, hint: { ru: "Обещание.", en: "A promise." } },
+    why: { ru: "Обещание. will, а never встает между will и глаголом.", en: "A promise. will — and never sits between will and the verb." }, hint: { ru: "Обещание.", en: "A promise." } },
   { part: 3, s: ["She ", " the dentist tomorrow afternoon."], verb: "see", a: ["is seeing"], also: ["'s seeing"],
-    why: { ru: "Запись к врачу — договорённость. Present Continuous.", en: "A dentist appointment — an arrangement. Present Continuous." }, hint: { ru: "Запись, приём.", en: "An appointment." } },
+    why: { ru: "Запись к врачу — договоренность. Present Continuous.", en: "A dentist appointment — an arrangement. Present Continuous." }, hint: { ru: "Запись, прием.", en: "An appointment." } },
   { part: 3, s: ["We ", " the report before Monday."], verb: "complete", a: ["will have completed"],
     why: { ru: "«before Monday» — срок. Future Perfect.", en: "\"before Monday\" — a deadline. Future Perfect." }, hint: { ru: "Дедлайн.", en: "A deadline." } },
   { part: 3, s: ["At this time next week they ", " in Greece."], verb: "sunbathe", a: ["will be sunbathing"],
@@ -1881,7 +1882,7 @@ const FUTURE_DRILL = [
   { part: 3, s: ["The CEO ", " the results tomorrow morning."], verb: "announce · formal", a: ["is to announce"], also: ["will announce"],
     why: { ru: "В задании помечено «formal» — это подсказка на be to.", en: "The task is marked \"formal\" — that points to be to." }, hint: { ru: "В скобках сказано: формально.", en: "The brackets say: formal." } },
   { part: 3, s: ["I think people ", " on Mars one day."], verb: "live", a: ["will live"], also: ["will be living"],
-    why: { ru: "«I think» + отдалённое будущее — мнение. will.", en: "\"I think\" plus a distant future — an opinion. will." }, hint: { ru: "Мнение о будущем.", en: "An opinion about the future." } }
+    why: { ru: "«I think» + отдаленное будущее — мнение. will.", en: "\"I think\" plus a distant future — an opinion. will." }, hint: { ru: "Мнение о будущем.", en: "An opinion about the future." } }
 ];
 
 /* ============================================================
@@ -1903,7 +1904,7 @@ const B1_WORDS = [
   ["humorous", { ru: "умеет рассмешить", en: "good at making people laugh" }],
   ["traditional", { ru: "следует старым обычаям", en: "following old customs and ideas" }],
   ["modern", { ru: "следует новым взглядам и укладу", en: "following newer ideas and lifestyles" }],
-  ["family-oriented", { ru: "придаёт большое значение семье", en: "giving a lot of importance to family" }],
+  ["family-oriented", { ru: "придает большое значение семье", en: "giving a lot of importance to family" }],
   ["independent", { ru: "справляется без чужой помощи", en: "able to do things without help" }],
   ["respect", { ru: "хорошее отношение к тому, кто важен", en: "treating someone well because they are important" }],
   ["stereotype", { ru: "расхожее и часто несправедливое представление о группе", en: "a common but often unfair idea about a group" }],
@@ -1911,14 +1912,14 @@ const B1_WORDS = [
   ["religion", { ru: "система верований о Боге и жизни", en: "a system of beliefs about God or life" }],
   ["celebration", { ru: "торжество по важному поводу", en: "a special event for something important" }],
   ["generation", { ru: "люди примерно одного возраста", en: "people of a similar age" }],
-  ["lifestyle", { ru: "то, как человек живёт", en: "the way someone lives" }]
+  ["lifestyle", { ru: "то, как человек живет", en: "the way someone lives" }]
 ];
 
 const C1_WORDS = [
   ["reserved", { ru: "сдержанный, не показывает чувств и мнений", en: "not showing emotions or opinions easily" }],
   ["outgoing", { ru: "общительный и дружелюбный", en: "friendly and sociable" }],
-  ["laid-back", { ru: "расслабленный, лёгкий в общении", en: "relaxed and easy-going" }],
-  ["assertive", { ru: "уверенно отстаивает своё мнение", en: "confident when expressing opinions" }],
+  ["laid-back", { ru: "расслабленный, легкий в общении", en: "relaxed and easy-going" }],
+  ["assertive", { ru: "уверенно отстаивает свое мнение", en: "confident when expressing opinions" }],
   ["conservative", { ru: "предпочитает традиционные взгляды", en: "preferring traditional ideas and customs" }],
   ["progressive", { ru: "открыт переменам и новым идеям", en: "open to social change and new ideas" }],
   ["individualistic", { ru: "ставит на первое место независимость", en: "prioritising personal independence" }],
@@ -1926,15 +1927,15 @@ const C1_WORDS = [
   ["hospitable", { ru: "радушный и щедрый к гостям", en: "welcoming and generous to guests" }],
   ["direct", { ru: "говорит прямо то, что думает", en: "saying exactly what you mean" }],
   ["indirect", { ru: "выражается обиняками", en: "expressing things less explicitly" }],
-  ["hierarchical", { ru: "придаёт значение статусу и власти", en: "placing importance on status and authority" }],
+  ["hierarchical", { ru: "придает значение статусу и власти", en: "placing importance on status and authority" }],
   ["egalitarian", { ru: "считает, что все равны", en: "believing people should be treated as equals" }],
   ["conformist", { ru: "следует принятому поведению", en: "tending to follow accepted social behaviour" }],
   ["non-conformist", { ru: "готов отвергнуть общепринятое", en: "willing to reject traditional expectations" }],
-  ["family-oriented", { ru: "придаёт большое значение семье", en: "placing strong importance on family" }],
+  ["family-oriented", { ru: "придает большое значение семье", en: "placing strong importance on family" }],
   ["open-minded", { ru: "готов рассматривать чужие взгляды", en: "willing to consider different ideas" }],
   ["status-conscious", { ru: "особенно чувствителен к социальному положению", en: "particularly aware of social position" }],
   ["self-deprecating", { ru: "подшучивает над собой", en: "making jokes or critical comments about yourself" }],
-  ["stereotype", { ru: "устойчивое упрощённое представление о группе", en: "a fixed, oversimplified idea about a group" }],
+  ["stereotype", { ru: "устойчивое упрощенное представление о группе", en: "a fixed, oversimplified idea about a group" }],
   ["cultural norm", { ru: "поведение, ожидаемое внутри культуры", en: "behaviour generally expected within a culture" }],
   ["social convention", { ru: "принятый способ вести себя", en: "an accepted way of behaving" }],
   ["cultural identity", { ru: "чувство принадлежности к культуре", en: "the sense of belonging to a particular culture" }],
@@ -1956,12 +1957,12 @@ const C1_FOLLOWUPS = ["Could you elaborate on that?", "What makes you say that?"
   "Do you think this is a strength or a weakness of your culture?", "To what extent do you personally identify with this aspect of your culture?"];
 
 const B1_THEORY = [
-  { modal: { ru: "О чём урок", en: "What this lesson is about" }, gloss: { ru: "рассказать о своей культуре и своих людях", en: "describing your culture and your people" }, uses: [
+  { modal: { ru: "О чем урок", en: "What this lesson is about" }, gloss: { ru: "рассказать о своей культуре и своих людях", en: "describing your culture and your people" }, uses: [
     { name: { ru: "Что тренируем", en: "Focus" }, note: { ru: "Говорение: культура, люди, традиции и повседневная жизнь.", en: "Speaking: culture, people, traditions and everyday life." },
       ex: ["Grammar: comparatives", "usually / often / sometimes", "giving opinions and reasons"] }
   ]},
   { modal: { ru: "Начала фраз", en: "Sentence starters" }, gloss: { ru: "чтобы ответ не сводился к «yes»", en: "so answers don't shrink to \"yes\"" }, uses: [
-    { name: { ru: "Пятнадцать заготовок", en: "Fifteen openers" }, note: { ru: "Начните ответ с любой из них — дальше речь идёт сама.", en: "Start an answer with any of these and the rest follows." },
+    { name: { ru: "Пятнадцать заготовок", en: "Fifteen openers" }, note: { ru: "Начните ответ с любой из них — дальше речь идет сама.", en: "Start an answer with any of these and the rest follows." },
       ex: B1_STARTERS.map(s => `<b>${s}</b>`) }
   ]},
   { modal: { ru: "Правило ответа", en: "The answer rule" }, gloss: { ru: "один пример и одна причина", en: "one example and one reason" }, uses: [
@@ -1972,7 +1973,7 @@ const B1_THEORY = [
 ];
 
 const C1_THEORY = [
-  { modal: { ru: "О чём урок", en: "What this lesson is about" }, gloss: { ru: "культура, идентичность, стереотипы, ценности", en: "culture, identity, stereotypes, values" }, uses: [
+  { modal: { ru: "О чем урок", en: "What this lesson is about" }, gloss: { ru: "культура, идентичность, стереотипы, ценности", en: "culture, identity, stereotypes, values" }, uses: [
     { name: { ru: "Что тренируем", en: "Focus" }, note: { ru: "Социальное поведение и национальные черты — на уровне C1, с оговорками и оттенками.", en: "Social behaviour and national characteristics at C1 — with hedging and nuance." },
       ex: ["culture &amp; identity", "stereotypes", "values and social expectations", "cultural change"] }
   ]},
@@ -2080,12 +2081,12 @@ const PAST_THEORY = [
     { name: { ru: "Кто за что отвечает", en: "Who does what" }, note: { ru: "В рассказе почти никогда не бывает одного времени: одно объясняет, что случилось, другое — какая была обстановка, третье — что было до этого.",
                                                                      en: "A story almost never uses just one tense: one says what happened, another sets the scene, a third explains what came before." },
       summary: [
-        ["Past simple",             { ru: "двигает действие вперёд", en: "moves the action forward" },                  "The phone <b>rang</b>."],
+        ["Past simple",             { ru: "двигает действие вперед", en: "moves the action forward" },                  "The phone <b>rang</b>."],
         ["Past continuous",         { ru: "сцена и действие в процессе", en: "the scene, an action in progress" },        "It <b>was raining</b>."],
         ["Past perfect",            { ru: "что случилось раньше", en: "what happened earlier" },                         "The train <b>had left</b>."],
         ["Past perfect continuous", { ru: "что длилось до события", en: "what had been going on before" },               "I <b>had been driving</b> for hours."]
       ],
-      callout: { ru: "Не нужно втискивать все четыре времени в каждый абзац. Берите то, которое яснее передаёт смысл.",
+      callout: { ru: "Не нужно втискивать все четыре времени в каждый абзац. Берите то, которое яснее передает смысл.",
                  en: "You don't need all four tenses in every paragraph. Choose the one that makes your meaning clearest." } }
   ]},
   { modal: "Past simple", gloss: { ru: "главные события", en: "the main events" }, uses: [
@@ -2095,14 +2096,14 @@ const PAST_THEORY = [
   ]},
   { modal: "Past continuous", gloss: { ru: "фон и атмосфера", en: "background and atmosphere" }, uses: [
     { name: { ru: "Форма", en: "Structure" }, forms: [["", "Subject + was / were + verb-ing"]] },
-    { name: { ru: "Сцена", en: "Setting the scene" }, note: { ru: "Что происходило в определённый момент в прошлом.", en: "What was happening at a particular moment in the past." },
+    { name: { ru: "Сцена", en: "Setting the scene" }, note: { ru: "Что происходило в определенный момент в прошлом.", en: "What was happening at a particular moment in the past." },
       ex: ["It <b>was raining</b> heavily.", "The children <b>were sleeping</b> when somebody knocked on the door."] },
     { name: { ru: "Действие, которое прервали", en: "An interrupted action" }, note: { ru: "Длинное действие в continuous, короткое событие, которое его прерывает, — в past simple.", en: "The long action is continuous; the short event that interrupts it is past simple." },
       ex: ["I <b>was walking</b> home when I heard a strange noise.", "While we <b>were eating</b> dinner, the lights went out."],
       callout: { ru: "I <b>drove</b> down the road. — законченное событие. <br>I <b>was driving</b> down the road when I saw a man standing in the middle of it. — действие в процессе, которое прервало важное событие.",
                  en: "I <b>drove</b> down the road. — a completed event. <br>I <b>was driving</b> down the road when I saw a man standing in the middle of it. — an ongoing action interrupted by an important event." } }
   ]},
-  { modal: "Past perfect", gloss: { ru: "что случилось ещё раньше", en: "what happened before the main events" }, uses: [
+  { modal: "Past perfect", gloss: { ru: "что случилось еще раньше", en: "what happened before the main events" }, uses: [
     { name: { ru: "Форма", en: "Structure" }, forms: [["", "Subject + had + past participle (V3)"]] },
     { name: { ru: "Предыстория", en: "The history behind the events" }, note: { ru: "Действие произошло до другого момента в прошлом.", en: "An action that happened before another point in the past." },
       ex: ["I arrived at the station, but the train <b>had</b> already <b>left</b>.", "She was nervous because she <b>had never flown</b> before.",
@@ -2110,7 +2111,7 @@ const PAST_THEORY = [
   ]},
   { modal: "Past perfect continuous", gloss: { ru: "что длилось до события", en: "what had been going on for some time" }, uses: [
     { name: { ru: "Форма", en: "Structure" }, forms: [["", "Subject + had been + verb-ing"]] },
-    { name: { ru: "Длительность и причина", en: "Duration and cause" }, note: { ru: "Подчёркивает, как долго что-то длилось до другого события, или объясняет, откуда взялась ситуация.", en: "Stresses how long something had been going on before another past event, or explains the cause of a situation." },
+    { name: { ru: "Длительность и причина", en: "Duration and cause" }, note: { ru: "Подчеркивает, как долго что-то длилось до другого события, или объясняет, откуда взялась ситуация.", en: "Stresses how long something had been going on before another past event, or explains the cause of a situation." },
       ex: ["I <b>had been driving</b> for six hours when the car broke down.", "She <b>had been working</b> all day, so she was exhausted.",
            "They <b>had been waiting</b> for an hour when the doctor finally arrived.", "It <b>had been raining</b> for days, and the river was beginning to flood."] }
   ]},
@@ -2137,7 +2138,7 @@ const PAST_THEORY = [
       ex: ["I <b>had taken</b> the wrong path, and I <b>had been walking</b> in the wrong direction for over an hour."] },
     { name: { ru: "4. Развитие", en: "4. Develop the action" }, note: { ru: "Past simple и past continuous: что вы сделали и что происходило вокруг.", en: "Past simple and past continuous: what you did and what was going on around you." },
       ex: ["I <b>started</b> running while the sound <b>grew</b> louder behind me."] },
-    { name: { ru: "5. Финал", en: "5. Finish the story" }, note: { ru: "Любое подходящее время: чем всё кончилось и что вы почувствовали.", en: "Any tense that fits: how it ended and how you felt." },
+    { name: { ru: "5. Финал", en: "5. Finish the story" }, note: { ru: "Любое подходящее время: чем все кончилось и что вы почувствовали.", en: "Any tense that fits: how it ended and how you felt." },
       ex: ["When I finally <b>reached</b> the village, I <b>realised</b> that the screaming <b>had come</b> from a fox."] }
   ]},
   { modal: { ru: "Связки", en: "Linking words" }, gloss: { ru: "чтобы события шли одно за другим", en: "to connect events naturally" }, uses: [
@@ -2164,11 +2165,11 @@ const PAST_DRILL = [
   { part: 1, s: ["Suddenly, my phone ", "."], verb: "ring", a: ["rang"],
     why: { ru: "Главное событие, которое двигает сюжет. Past simple.", en: "The main event that moves the story. Past simple." }, hint: { ru: "Что вдруг случилось.", en: "What suddenly happened." } },
   { part: 1, s: ["The caller ", " to contact me several times before, but I hadn't answered."], verb: "try", a: ["had tried"],
-    why: { ru: "Звонки были раньше главного события. Past perfect.", en: "The calls came before the main event. Past perfect." }, hint: { ru: "Это было ещё раньше.", en: "This happened even earlier." } },
+    why: { ru: "Звонки были раньше главного события. Past perfect.", en: "The calls came before the main event. Past perfect." }, hint: { ru: "Это было еще раньше.", en: "This happened even earlier." } },
   { part: 1, s: ["The caller had tried several times before, but I ", "."], verb: "not answer", a: ["hadn't answered"],
     why: { ru: "Тоже раньше главного события, только с отрицанием. Past perfect.", en: "Also before the main event, just negative. Past perfect." }, hint: { ru: "Раньше — и с отрицанием.", en: "Earlier — and negative." } },
   { part: 1, s: ["I ", " up the phone and heard a woman's voice."], verb: "pick", a: ["picked"],
-    why: { ru: "Следующее действие по порядку. Past simple.", en: "The next action in sequence. Past simple." }, hint: { ru: "Сюжет идёт дальше.", en: "The story moves on." } },
+    why: { ru: "Следующее действие по порядку. Past simple.", en: "The next action in sequence. Past simple." }, hint: { ru: "Сюжет идет дальше.", en: "The story moves on." } },
   { part: 1, s: ["She ", ", and somebody was shouting in the background."], verb: "cry", a: ["was crying"],
     why: { ru: "Что происходило, пока вы слушали. Past continuous.", en: "What was going on while you listened. Past continuous." }, hint: { ru: "Действие в процессе.", en: "An action in progress." } },
   { part: 1, s: ["She told me that her car ", " down."], verb: "break", a: ["had broken"],
@@ -2179,13 +2180,13 @@ const PAST_DRILL = [
     why: { ru: "While + процесс, который прерывает внезапное событие. Past continuous.", en: "While + an action in progress interrupted by a sudden event. Past continuous." }, hint: { ru: "While…", en: "While…" } },
 
   { part: 2, s: ["I arrived at the station, but the train ", "."], verb: "already leave", a: ["had already left"],
-    why: { ru: "Поезд ушёл до того, как вы пришли. Past perfect.", en: "The train left before you arrived. Past perfect." }, hint: { ru: "Что из двух было раньше?", en: "Which of the two came first?" } },
+    why: { ru: "Поезд ушел до того, как вы пришли. Past perfect.", en: "The train left before you arrived. Past perfect." }, hint: { ru: "Что из двух было раньше?", en: "Which of the two came first?" } },
   { part: 2, s: ["We ", " dinner when the lights went out."], verb: "eat", a: ["were eating"],
-    why: { ru: "Ужин шёл, и его прервало событие. Past continuous.", en: "Dinner was in progress and an event interrupted it. Past continuous." }, hint: { ru: "Что прервали?", en: "What was interrupted?" } },
+    why: { ru: "Ужин шел, и его прервало событие. Past continuous.", en: "Dinner was in progress and an event interrupted it. Past continuous." }, hint: { ru: "Что прервали?", en: "What was interrupted?" } },
   { part: 2, s: ["She was exhausted because she ", " all day."], verb: "work", a: ["had been working"], also: ["had worked"],
     why: { ru: "Причина усталости — долгое занятие до этого. Past perfect continuous.", en: "The cause of the tiredness is a long activity before it. Past perfect continuous." }, hint: { ru: "Почему устала — что долго делала?", en: "Why tired — what had she been doing?" } },
   { part: 2, s: ["By the time we arrived, everyone ", "."], verb: "leave", a: ["had left"], also: ["had already left"],
-    why: { ru: "«By the time» — к этому моменту всё уже случилось. Past perfect.", en: "\"By the time\" — it had already happened by then. Past perfect." }, hint: { ru: "By the time…", en: "By the time…" } },
+    why: { ru: "«By the time» — к этому моменту все уже случилось. Past perfect.", en: "\"By the time\" — it had already happened by then. Past perfect." }, hint: { ru: "By the time…", en: "By the time…" } },
   { part: 2, s: ["They ", " for an hour when the doctor finally arrived."], verb: "wait", a: ["had been waiting"],
     why: { ru: "«for an hour» до прихода врача. Past perfect continuous.", en: "\"for an hour\" before the doctor came. Past perfect continuous." }, hint: { ru: "Как долго — до прихода врача.", en: "How long — before the doctor came." } },
   { part: 2, s: ["He couldn't get into the house because he ", " his keys."], verb: "lose", a: ["had lost"],
@@ -2197,11 +2198,11 @@ const PAST_DRILL = [
   { part: 2, s: ["The children ", " when somebody knocked on the door."], verb: "sleep", a: ["were sleeping"],
     why: { ru: "Дети спали — это фон, стук прервал его. Past continuous.", en: "The children sleeping is the background; the knock interrupts it. Past continuous." }, hint: { ru: "Фон, который прервали.", en: "A background that was interrupted." } },
   { part: 2, s: ["It ", " for days, and the river was beginning to flood."], verb: "rain", a: ["had been raining"],
-    why: { ru: "«for days» — дождь шёл долго и стал причиной. Past perfect continuous.", en: "\"for days\" — the rain had gone on for a long time and caused the flood. Past perfect continuous." }, hint: { ru: "Долго — и стало причиной.", en: "For a long time — and it caused something." } },
+    why: { ru: "«for days» — дождь шел долго и стал причиной. Past perfect continuous.", en: "\"for days\" — the rain had gone on for a long time and caused the flood. Past perfect continuous." }, hint: { ru: "Долго — и стало причиной.", en: "For a long time — and it caused something." } },
   { part: 2, s: ["Without realising it, I ", " into the wrong building."], verb: "walk", a: ["had walked"], also: ["walked"],
-    why: { ru: "Ошибка случилась раньше, чем вы её заметили. Past perfect.", en: "The mistake happened before you noticed it. Past perfect." }, hint: { ru: "Заметили потом.", en: "You noticed later." } },
+    why: { ru: "Ошибка случилась раньше, чем вы ее заметили. Past perfect.", en: "The mistake happened before you noticed it. Past perfect." }, hint: { ru: "Заметили потом.", en: "You noticed later." } },
   { part: 2, s: ["Eventually, we ", " our way home."], verb: "find", a: ["found"],
-    why: { ru: "Финальное событие истории. Past simple.", en: "The final event of the story. Past simple." }, hint: { ru: "Чем всё кончилось.", en: "How it ended." } }
+    why: { ru: "Финальное событие истории. Past simple.", en: "The final event of the story. Past simple." }, hint: { ru: "Чем все кончилось.", en: "How it ended." } }
 ];
 
 /* мини-истории: время выбирается по смыслу всего абзаца, а не по названию; в тексте {1}, {2}, {3} — места выбора */
@@ -2214,9 +2215,9 @@ const PAST_STORIES = [
     ] },
   { s: "When I got to the station, the train {1}. I {2} my ticket on the kitchen table, so I had to buy a new one. Luckily, the next train {3} ten minutes later.",
     gaps: [
-      { options: ["had already left", "was already leaving"], a: "had already left", why: { ru: "Поезд ушёл раньше, чем я пришёл: «Past perfect» показывает, что это было до момента в истории.", en: "The train left before I arrived: Past perfect shows it happened before that point in the story." } },
-      { options: ["had left", "was leaving"], a: "had left", why: { ru: "Билет остался дома ещё до поездки на станцию, это более раннее событие.", en: "The ticket was left at home before the trip to the station, an earlier event." } },
-      { options: ["arrived", "had arrived"], a: "arrived", why: { ru: "Новое событие, которое снова движет историю вперёд: «Past simple».", en: "A new event that moves the story forward again: Past simple." } }
+      { options: ["had already left", "was already leaving"], a: "had already left", why: { ru: "Поезд ушел раньше, чем я пришел: «Past perfect» показывает, что это было до момента в истории.", en: "The train left before I arrived: Past perfect shows it happened before that point in the story." } },
+      { options: ["had left", "was leaving"], a: "had left", why: { ru: "Билет остался дома еще до поездки на станцию, это более раннее событие.", en: "The ticket was left at home before the trip to the station, an earlier event." } },
+      { options: ["arrived", "had arrived"], a: "arrived", why: { ru: "Новое событие, которое снова движет историю вперед: «Past simple».", en: "A new event that moves the story forward again: Past simple." } }
     ] },
   { s: "Anna was exhausted when she finally got home. She {1} on the project since six in the morning, and she {2} nothing but a sandwich all day. She {3} straight to bed.",
     gaps: [
@@ -2255,7 +2256,7 @@ function flattenSpeak(groups) {
   groups.forEach(g => g.items.forEach(q => out.push(typeof q === "string" ? { q, group: g.group } : { ...q, group: g.group })));
   return out;
 }
-/* словарь → вопросы «определение → слово» (значение остаётся двуязычным) */
+/* словарь → вопросы «определение → слово» (значение остается двуязычным) */
 function vocabItems(words) {
   return words.map(([word, meaning]) => ({ s: meaning, a: word }));
 }
@@ -2263,18 +2264,18 @@ function vocabItems(words) {
 /* ============================================================
    УРОКИ
    ============================================================ */
-/* Future: мини-истории — какую форму будущего выбрать по смыслу (решение сейчас, план, договорённость, расписание, процесс, срок) */
+/* Future: мини-истории — какую форму будущего выбрать по смыслу (решение сейчас, план, договоренность, расписание, процесс, срок) */
 const FUTURE_STORIES = [
   { s: "A: The phone's ringing! B: Don't worry, I {1} it. By the way, I {2} lunch with Anna tomorrow — we booked a table last week. A: Nice. Take an umbrella, though: look at those clouds, it {3} rain.",
     gaps: [
       { options: ["will get", "am going to get"], a: "will get", why: { ru: "Решение принято прямо сейчас, в момент речи: will.", en: "A decision made right now, at the moment of speaking: will." } },
-      { options: ["am having", "will have"], a: "am having", why: { ru: "Договорённость с другим человеком, столик уже заказан: Present Continuous.", en: "An arrangement with another person, the table is booked: Present Continuous." } },
+      { options: ["am having", "will have"], a: "am having", why: { ru: "Договоренность с другим человеком, столик уже заказан: Present Continuous.", en: "An arrangement with another person, the table is booked: Present Continuous." } },
       { options: ["is going to", "will"], a: "is going to", why: { ru: "Прогноз по видимым признакам (тучи): be going to.", en: "A prediction based on what we can see (the clouds): be going to." } }
     ] },
   { s: "Our train {1} at 7:15 tomorrow morning, so please don't call me then — at that time I {2} on the train with my laptop. Text me instead, and I {3} you back as soon as I arrive.",
     gaps: [
       { options: ["leaves", "is going to leave"], a: "leaves", why: { ru: "Расписание транспорта: Present Simple.", en: "A transport timetable: Present Simple." } },
-      { options: ["will be sitting", "will sit"], a: "will be sitting", why: { ru: "Действие будет идти в определённый момент будущего: Future Continuous.", en: "An action in progress at a particular future moment: Future Continuous." } },
+      { options: ["will be sitting", "will sit"], a: "will be sitting", why: { ru: "Действие будет идти в определенный момент будущего: Future Continuous.", en: "An action in progress at a particular future moment: Future Continuous." } },
       { options: ["will call", "am calling"], a: "will call", why: { ru: "Обещание: will.", en: "A promise: will." } }
     ] },
   { s: "Don't worry about the report: by Friday I {1} it, I promise. And next month I {2} at this company for exactly five years! I hope that by then they {3} me a bigger desk.",
@@ -2303,7 +2304,7 @@ const FUTURE_SPEAK = [
   { q: "What are you about to do right after this lesson?", starter: "I'm about to…" },
   { q: "Make one promise to yourself about your English.", starter: "I promise I will…" }
 ];
-const FUTURE_TIPS = ["I'm going to… — план", "I'm meeting… — договорённость", "The train leaves at… — расписание", "I think … will… — мнение, прогноз",
+const FUTURE_TIPS = ["I'm going to… — план", "I'm meeting… — договоренность", "The train leaves at… — расписание", "I think … will… — мнение, прогноз",
   "I'll… — решение сейчас, обещание", "This time tomorrow I'll be…", "By … I'll have…", "I'm about to…"];
 
 /* Modals: мини-диалоги — модальный глагол выбирается по ситуации, а не по названию значения */
@@ -2357,7 +2358,7 @@ const BUILTIN_LESSONS = [
       items: flattenSpeak(PAST_SPEAK),
       seconds: 120,
       eyebrow: { ru: "11 заданий · своя история вслух", en: "11 tasks · your own story, out loud" },
-      howTo: { ru: "Отвечайте по одному шагу за раз — история соберётся постепенно, не нужно сразу рассказывать её целиком. Тему придумайте сами: поездка, которая пошла не так · таинственный незнакомец · неловкий момент · неожиданная находка · опасная ситуация.",
+      howTo: { ru: "Отвечайте по одному шагу за раз — история соберется постепенно, не нужно сразу рассказывать ее целиком. Тему придумайте сами: поездка, которая пошла не так · таинственный незнакомец · неловкий момент · неожиданная находка · опасная ситуация.",
                en: "Answer one step at a time — the story builds up gradually, you don't need to tell it all at once. Pick any topic: a journey that went wrong · a mysterious stranger · an embarrassing experience · a surprising discovery · a dangerous situation." },
       tips: PAST_LINKERS,
       tipsLabel: { ru: "Связки", en: "Linking words" }
@@ -2393,7 +2394,7 @@ const BUILTIN_LESSONS = [
     date: { ru: "Грамматика · B1–B2", en: "Grammar · B1–B2" },
     theoryTitle: { ru: "Формы будущего времени", en: "Future forms" },
     theory: FUTURE_THEORY,
-    drill: { mode: "form", items: FUTURE_DRILL, cheatsheet: FUTURE_FORMS_CHEATSHEET, eyebrow: { ru: "30 предложений в трёх частях", en: "30 sentences in three parts" } },
+    drill: { mode: "form", items: FUTURE_DRILL, cheatsheet: FUTURE_FORMS_CHEATSHEET, eyebrow: { ru: "30 предложений в трех частях", en: "30 sentences in three parts" } },
     match: {
       kind: "cloze",
       navLabel: { ru: "Мини-истории", en: "Mini-stories" },
@@ -2491,7 +2492,7 @@ function safe(s) {
 const bi = v => (v && typeof v === "object" && !Array.isArray(v)) ? { ru: safe(v.ru ?? v.en), en: safe(v.en ?? v.ru) } : safe(v);
 const arr = v => Array.isArray(v) ? v : [];
 const countRu = (n, one, few, many) => `${n} ${plural(n, one, few, many)}`;
-/* модель иногда отдаёт текст до и после пропуска без пробелов: тогда слова слипаются с ответом («My familyused tolive») */
+/* модель иногда отдает текст до и после пропуска без пробелов: тогда слова слипаются с ответом («My familyused tolive») */
 function gapSpaces([before, after]) {
   if (before && !/[\s(\[“"'‘«\/-]$/.test(before)) before += " ";
   if (after && !/^(?:[\s.,!?;:)\]”"’'»…%\/-]|n['’]t\b)/.test(after)) after = " " + after;
@@ -2670,7 +2671,7 @@ function queueStateSync() {
   }, 1500);
 }
 const answeredCount = p => p ? Object.keys(p.drill?.answered || {}).length + Object.keys(p.match?.answered || {}).length + Object.keys(p.speak?.seen || {}).length : 0;
-/* прогресс с другого устройства: по каждому уроку берём ту версию, где отвечено больше */
+/* прогресс с другого устройства: по каждому уроку берем ту версию, где отвечено больше */
 function mergeState(d) {
   const before = JSON.stringify(S);
   if (d.lang === "ru" || d.lang === "en") S.lang = d.lang;
@@ -2682,7 +2683,7 @@ function mergeState(d) {
 function onLessonsSnapshot(snap) {
   const fromDb = snap.docs.map(d => ({ id: d.id, ...d.data(), synced: true })).filter(r => r.lesson);
   const ids = new Set(fromDb.map(r => r.id));
-  /* уроки, собранные, пока база была недоступна, догружаем; удалённые на другом устройстве не возвращаем */
+  /* уроки, собранные, пока база была недоступна, догружаем; удаленные на другом устройстве не возвращаем */
   const localOnly = dbFirstSnap ? customRaw.filter(r => !r.synced && !ids.has(r.id)) : customRaw.filter(r => !r.synced && !ids.has(r.id) && r.pending);
   dbFirstSnap = false;
   localOnly.forEach(r => { r.pending = true; myCol().doc(r.id).set({ kind: "lesson", createdAt: r.createdAt, lesson: r.lesson }).catch(() => {}); });
@@ -2865,7 +2866,7 @@ const aiKey = () => lsGet(aiProvider() === "claude" ? KEY_CLAUDE : KEY_GEMINI);
 const SDK_URL = "https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.131.0/+esm";
 let claudeP = null;
 function claudeClient() {
-  /* maxRetries: 0 — иначе при «слишком много запросов» библиотека молча ждёт и повторяет, и страница крутится минутами */
+  /* maxRetries: 0 — иначе при «слишком много запросов» библиотека молча ждет и повторяет, и страница крутится минутами */
   if (!claudeP) claudeP = import(SDK_URL).then(m => new m.default({ apiKey: lsGet(KEY_CLAUDE), dangerouslyAllowBrowser: true, maxRetries: 0 }))
     .catch(() => { claudeP = null; throw { code: "offline" }; });
   return claudeP;
@@ -2914,9 +2915,9 @@ async function geminiJSON(prompt, { signal, audio, quick, media } = {}) {
   const body = JSON.stringify({ contents: [{ role: "user", parts: geminiParts(prompt, { audio, media }) }], generationConfig: { responseMimeType: "application/json", maxOutputTokens: 32768 } });
   const RETRYABLE = new Set([404, 429, 500, 502, 503, 504]);   // перегрузка модели или сеть — есть смысл повторить
   let lastErr;
-  /* если «последняя» модель тормозит или недоступна, следующая попытка идёт на запасной — запасные живут дольше */
+  /* если «последняя» модель тормозит или недоступна, следующая попытка идет на запасной — запасные живут дольше */
   /* gemini-2.5-* закрыт для новых ключей (404). Голос и короткие задачи: сначала быстрая lite-модель;
-     разбор, создание и дополнение урока: сначала полная 3.5 — облегчённая собирает уроки заметно хуже */
+     разбор, создание и дополнение урока: сначала полная 3.5 — облегченная собирает уроки заметно хуже */
   const MODELS = light ? ["gemini-3.5-flash-lite", "gemini-flash-latest", "gemini-3.5-flash"]
                        : ["gemini-3.5-flash", "gemini-flash-latest", "gemini-3.5-flash-lite"];
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -2961,7 +2962,7 @@ async function geminiJSON(prompt, { signal, audio, quick, media } = {}) {
   throw lastErr;
 }
 /* null — разбирать некому: так бывает только там, где серверного пути нет */
-/* SERVER_AI_START — без своего ключа запрос идёт на сервер Learny: ключ ИИ живёт только там, в страницу не попадает */
+/* SERVER_AI_START — без своего ключа запрос идет на сервер Learny: ключ ИИ живет только там, в страницу не попадает */
 const AI_SERVER_DEFAULT = "https://homework-sync-vika.fly.dev", DEVICE_KEY = "et-device";
 const SERVER_ERRORS = { device_limit: "quota_device", daily_limit: "quota_day", busy: "server_busy", no_key: "server_down", origin: "server_down",
   too_large: "prompt_too_large", refused: "refused", bad_answer: "invalid_json", timeout: "upstream_error", upstream: "upstream_error", bad_request: "upstream_error" };
@@ -2992,7 +2993,7 @@ async function serverJSON(prompt, { signal, media, task = "quick" } = {}) {
         body: JSON.stringify({ task, device: deviceId(), prompt, media: (media || []).map(file => ({ mime: file.mime, data: file.data })) })
       });
       status = r.status;
-      /* пока ИИ думает, сервер шлёт строки-пульсы; результат или ошибка — в последней строке */
+      /* пока ИИ думает, сервер шлет строки-пульсы; результат или ошибка — в последней строке */
       const lines = (await r.text()).trim().split("\n");
       try { last = JSON.parse(lines[lines.length - 1]); } catch (e) {}
     } catch (e) {
@@ -3006,7 +3007,7 @@ async function serverJSON(prompt, { signal, media, task = "quick" } = {}) {
   } finally { clearTimeout(timer); signal?.removeEventListener("abort", onAbort); }
 }
 /* SERVER_AI_END */
-/* кто разбирает: Claude на claude.ai; свой ключ, если он подключён; иначе сервер Learny. task — вид задачи для лимитов сервера */
+/* кто разбирает: Claude на claude.ai; свой ключ, если он подключен; иначе сервер Learny. task — вид задачи для лимитов сервера */
 async function lessonAI({ requireMedia = false, task = "quick" } = {}) {
   const sample = requireMedia ? null : await claudeCap("sample");
   if (sample) return { builtIn: true, json: (prompt, opts) => sample.json(prompt, { ...opts, cache: false }) };
@@ -3764,7 +3765,7 @@ function extendPreview(l, ex, request) {
 }
 $("#extend-btn").addEventListener("click", () => extendSheet());
 
-/* вопросы для обсуждения, попавшие в теорию как «Вопрос: …», переезжают в тренажёр говорения */
+/* вопросы для обсуждения, попавшие в теорию как «Вопрос: …», переезжают в тренажер говорения */
 const QUESTION_RE = /^\s*(вопрос|question)\s*[:：]\s*/i;
 const isQuestionCallout = c => c && (QUESTION_RE.test(stripTags(c.ru)) || QUESTION_RE.test(stripTags(c.en)));
 const questionCallouts = l => (l.theory || []).flatMap(r => (r.uses || []).filter(u => isQuestionCallout(u.callout)));
@@ -3847,7 +3848,7 @@ function prog() {
   p.drill ??= { i: 0, answered: {}, lastInput: {} };
   p.match ??= { i: 0, answered: {}, chosen: {} };
   p.speak ??= { i: 0, seen: {} };
-  /* урок перешёл на мини-истории: старые ответы на 12 отдельных предложений к ним не относятся */
+  /* урок перешел на мини-истории: старые ответы на 12 отдельных предложений к ним не относятся */
   const ml = LESSONS.find(x => x.id === S.lessonId)?.match;
   if (ml?.kind === "cloze" && p.match.kind !== "cloze") p.match = { i: 0, answered: {}, chosen: {}, kind: "cloze" };
   return p;
@@ -3862,7 +3863,7 @@ function lessonSteps(l) {
 }
 const matchItems = l => l.match ? (l.match.items || l.match) : null;
 const speakItems = l => l.speak ? (l.speak.items || l.speak) : null;
-/* подпись блока «значения» в итогах и отчёте: слова, своё название урока или значения модальных */
+/* подпись блока «значения» в итогах и отчете: слова, свое название урока или значения модальных */
 function matchLabels(l) {
   const M = l.match;
   if (M.kind === "vocab") return { tile: t("tileWords"), group: t("groupWords") };
@@ -3882,7 +3883,7 @@ function renderHowMarquee(howSet) {
     if (!width || width === lastWidth) return;
     lastWidth = width;
     group.innerHTML = howSet(false);
-    // WebKit может растянуть max-content flex-группу шире её карточек.
+    // WebKit может растянуть max-content flex-группу шире ее карточек.
     // Считаем период по самим карточкам, без размеров анимированного контейнера.
     const cards = [...group.children];
     const setWidth = cards.reduce((sum, card) => sum + card.offsetWidth + (parseFloat(getComputedStyle(card).marginRight) || 0), 0);
@@ -3981,7 +3982,7 @@ function stepProgress(l) {
     return { key, label, total, n: Math.min(n, total), done: total > 0 && n >= total };
   });
 }
-/* Общий прогресс — выполненные задания. Открытие теории не считается её прочтением. */
+/* Общий прогресс — выполненные задания. Открытие теории не считается ее прочтением. */
 function lessonCompletion(steps) {
   const tasks = steps.filter(s => s.total > 0);
   const total = tasks.reduce((sum, s) => sum + s.total, 0);
@@ -4152,7 +4153,7 @@ $("#delete-btn").addEventListener("click", async () => {
   const id = S.lessonId;
   if (!(await ask(t("confirmDelete"), "deleteBtn"))) return;
   customRaw = customRaw.filter(r => r.id !== id);
-  const gone = readJSON(VOCAB_DEL_KEY, {}); gone[id] = Date.now(); lsSet(VOCAB_DEL_KEY, JSON.stringify(gone));   // «надгробие»: удаление дойдёт и до других устройств
+  const gone = readJSON(VOCAB_DEL_KEY, {}); gone[id] = Date.now(); lsSet(VOCAB_DEL_KEY, JSON.stringify(gone));   // «надгробие»: удаление дойдет и до других устройств
   cacheCustom(); rebuildLessons();
   delete S.progress[id];
   S.lessonId = null; save(); show("home");
@@ -4187,7 +4188,7 @@ function biParts(v) {
   const m = typeof v === "string" && SPLIT_RE.exec(v);
   return m ? { en: m[1], ru: m[2] } : null;
 }
-/* любой английский текст кликабелен: если русская версия хранится — берём её, если нет — переведёт ИИ и запомнит */
+/* любой английский текст кликабелен: если русская версия хранится — берем ее, если нет — переведет ИИ и запомнит */
 const CYR = /[А-Яа-яЁё]/;
 /* вместо «подключите ИИ в меню» — кнопка, которая сразу открывает окно подключения */
 const connectBtn = () => `<button class="link-btn" data-connect style="padding:6px 0">${t("connectAI")}</button>`;
@@ -4383,7 +4384,7 @@ function gradeWord(v, g) {
 /* ============ слова урока: что посоветовать добавить в словарь ============
    в конце урока показываем список; часть можно убрать, остальное добавить одной кнопкой.
    Кандидаты: термины из таблиц теории, правильные формы из ошибок, исправления в говорении;
-   если подключён ИИ, он выбирает лучшие 8–12 и переводит их */
+   если подключен ИИ, он выбирает лучшие 8–12 и переводит их */
 const SUG_KEY = "et-suggest-v1";
 function localWordCandidates(l) {
   const out = [], seen = new Set(getVocab().map(v => v.key));
@@ -4695,7 +4696,7 @@ function syncToc() {
 }
 window.addEventListener("scroll", () => { if (S.view === "theory") syncToc(); }, { passive: true });
 
-/* ============ тренажёр ============ */
+/* ============ тренажер ============ */
 /* «Правило»: кнопка под подсказкой открывает только ту строку шпаргалки урока, которая относится к вопросу
    (подбирает ИИ один раз и запоминает); без ИИ показываются все формы */
 const RULE_CACHE_KEY = "et-rule-cache-v1";
@@ -5032,7 +5033,7 @@ function renderDrillDone() {
   if (!hasNext) renderLessonEnd();
   $("#redo-wrong")?.addEventListener("click", () => {
     wrong.forEach(i => { delete p.answered[i]; delete p.lastInput[i]; delete p.tries?.[i]; });
-    p.redo = open.slice();   // повтор идёт только по тому, что не получилось, а не по всем вопросам подряд
+    p.redo = open.slice();   // повтор идет только по тому, что не получилось, а не по всем вопросам подряд
     p.i = open[0]; save(); renderDrill(); updateProgress();
   });
   $("#done-report")?.addEventListener("click", () => openReport("drill"));
@@ -5182,7 +5183,7 @@ ${q.why ? `Official explanation: ${stripTags(plainEn(q.why))}` : ""}`, mine && c
 
 /* ============ говорение ============ */
 /* Говорение: ответ голосом (Gemini слышит запись) или текстом (любой ИИ), разбор ошибок и вариант лучше.
-   Разбор хранится в прогрессе урока и попадает в отчёт учителю. */
+   Разбор хранится в прогрессе урока и попадает в отчет учителю. */
 let timerId = null, timerLeft = 60;
 const speakUI = { i: -1, mode: "idle", err: "" };   // mode: idle | rec | checking | typing
 let rec = null, recStream = null, recChunks = [], speakCtl = null;
@@ -5457,9 +5458,7 @@ function renderLessonDone() {
   if (st.drill) tiles.push(`${t("tileDrill")} ${st.drill.ok}/${st.drill.total}`);
   if (st.match) tiles.push(`${matchLabels(l).tile} ${st.match.ok}/${st.match.total}`);
   if (st.speak) tiles.push(`${t("tileSpeak")} ${st.speak.done}/${st.speak.total}`);
-  const allDone = (!st.drill || st.drill.done === st.drill.total)
-    && (!st.match || st.match.done === st.match.total)
-    && (!st.speak || st.speak.done === st.speak.total);
+  const allDone = lessonCompletion(stepProgress(l)).complete;
   $("#speak-card").innerHTML = `
     <div class="done-card">
       <div class="eyebrow">${allDone ? t("lessonDoneEyebrow") : t("lessonSummaryEyebrow")}</div>
@@ -5495,11 +5494,11 @@ function startTimer(onEnd) {
 }
 function stopTimer() { if (timerId) clearInterval(timerId); timerId = null; $("#timer").classList.remove("run"); $("#timer").textContent = fmtTime(timerSeconds()); }
 
-/* ============ отчёт учителю ============ */
+/* ============ отчет учителю ============ */
 function plainSentence(q, filler) {
   return (q.s[0] + filler + (q.verb ? ` (${q.verb})` : "") + q.s[1]).replace(/\s+/g, " ").trim();
 }
-/* перед отчётом: если что-то не закончено, спрашиваем; «да» скрывает из отчёта разделы, где нет ни одного ответа */
+/* перед отчетом: если что-то не закончено, спрашиваем; «да» скрывает из отчета разделы, где нет ни одного ответа */
 const reportHidden = () => prog().reportHide || {};
 function reportGaps() {
   const l = lesson(), p = prog(), out = [];
@@ -5539,7 +5538,7 @@ function reportRows() {
   });
   (hide.match ? [] : matchItems(l) || []).forEach((q, i) => {
     const done = i in p.match.answered;
-    if (l.match.kind === "cloze") {   // мини-история: в отчёте — текст с выбором ученика и верные формы
+    if (l.match.kind === "cloze") {   // мини-история: в отчете — текст с выбором ученика и верные формы
       const picks = p.match.chosen?.[i] || [];
       rows.match.push({ n: i + 1, sentence: stripTags(clozeText(q, picks, true)), given: done ? picks.join(" / ") : null, correct: q.gaps.map(g => g.a).join(" / "), ok: p.match.answered[i] === true });
       return;
@@ -5714,7 +5713,7 @@ $("#copy-report").addEventListener("click", async () => {
     $("#copy-status").textContent = ok ? t("copied") : t("copyFailed");
   }
 });
-/* В опубликованной версии страница живёт в песочнице, где браузер
+/* В опубликованной версии страница живет в песочнице, где браузер
    блокирует скачивание. Там вместо файла показываем текст для копирования. */
 const canDownload = window.self === window.top;
 $("#download-report").addEventListener("click", () => {
@@ -5751,7 +5750,7 @@ function renderDots(sel, n, cur, answered, onClick) {
     if (!current) return;
     const area = host.getBoundingClientRect(), item = current.getBoundingClientRect();
     if (item.left < area.left || item.right > area.right) {
-      // Прокручиваем только номера: само задание остаётся на месте по вертикали.
+      // Прокручиваем только номера: само задание остается на месте по вертикали.
       host.scrollTo({ left: host.scrollLeft + item.left - area.left - (host.clientWidth - item.width) / 2, behavior: "instant" });
     }
   });

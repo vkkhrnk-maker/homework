@@ -4,131 +4,217 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Learny — English homework, step by step</title>
-<meta name="description" content="Learny turns your teacher's notes into a lesson: theory, exercises and speaking practice, with a report for your teacher.">
-<meta name="theme-color" content="#f6f4ec">
-<link rel="icon" href="icons/icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="description" content="Learny turns homework, a topic or any text into a lesson: theory, exercises and speaking practice, with a report for your teacher.">
+<meta name="theme-color" content="#ffffff">
+<script src="learny-paper.js?v=e737ea0211"></script>
+<script>document.documentElement.dataset.theme = "light";</script>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/klyaksa-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="icons/klyaksa-16.svg" type="image/svg+xml" sizes="any">
+<link rel="apple-touch-icon" href="icons/klyaksa-touch.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Golos+Text:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="learny-notebook.css?v=a9a77eec6f">
-<link rel="stylesheet" href="learny-notebook-landing.css?v=a9a77eec6f">
+<link rel="stylesheet" href="learny-paper.css?v=e737ea0211">
+<link rel="stylesheet" href="learny-notebook.css?v=e737ea0211">
+<link rel="stylesheet" href="learny-notebook-landing.css?v=e737ea0211">
+<!-- стилистика лендинга, вид G (23 ноября 2026): Geist, Sofia Sans Extra Condensed, Caveat -->
+<script>document.documentElement.dataset.look = "g";</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Sofia+Sans+Extra+Condensed:wght@900&display=swap">
+<link rel="stylesheet" href="learny-looks.css?v=e737ea0211">
+<script src="learny-looks.js?v=e737ea0211"></script>
 </head>
 <body class="ld">
 
-<header class="ld-top">
-  <a class="brand" href="landing.html" aria-label="Learny">Learn<i>y</i></a>
-  <nav class="lp-nav" aria-label="Main">
-    <a href="index.html#cabinet">My space</a>
-  </nav>
-</header>
 
 <main>
   <!-- одна тетрадь на всю историю: прокрутка открывает обложку и перелистывает страницы -->
   <section class="ld-book" id="book">
     <div class="ld-pin" id="pin" data-bg="steps">
+      <!-- шапка — часть первого экрана: стоит вместе с заголовком и уходит вместе с ним, когда тетрадь выезжает в центр -->
+      <header class="ld-top" role="banner">
+        <a class="brand" href="landing.html" aria-label="Learny"><svg xmlns="http://www.w3.org/2000/svg" viewBox="33 -665 2459 675" class="learny-logo" fill="#1a171c" aria-hidden="true" focusable="false">
+  <title>Learny</title>
+  <path d="M52.8 0Q43.4 0 43.4 -10.9V-644.1Q43.4 -655 52.8 -655H138.4Q147.8 -655 147.8 -644.1V-95.3H307Q317 -95.3 317 -84.4V-10.9Q317 0 307.4 0ZM412.9 0Q403.4 0 403.4 -10.9V-644.1Q403.4 -655 412.4 -655H678.5Q687.4 -655 687.4 -644.1V-570.6Q687.4 -559.7 678.5 -559.7H507.8V-377.6H663.3Q672.3 -377.6 672.3 -366.7V-297.8Q672.3 -286.9 663.3 -286.9H507.8V-95.3H678.5Q687.4 -95.3 687.4 -84.4V-10.9Q687.4 0 678.5 0ZM757.5 0Q748.2 0 749.9 -11.9L883.1 -646.4Q884.8 -655 894 -655H1006.9Q1016 -655 1017.8 -646.4L1151.1 -12.3Q1153.3 0 1144 0H1048.9Q1040.9 0 1038.9 -7.9L971.9 -411.3Q966.1 -446 960.8 -480.3Q955.4 -514.6 950.8 -549.2H948.8Q944.2 -514.6 939.5 -480.3Q934.8 -446 928.5 -410.7L860.4 -8.3Q859.4 0 850.7 0ZM867.5 -143.9 883 -232.6H1014.7L1032.2 -143.9ZM1233.4 0Q1224.4 0 1224.4 -10.9V-644.1Q1224.4 -655 1233.4 -655H1369.1Q1463.8 -655 1507.7 -609.4Q1551.7 -563.9 1551.7 -466.5Q1551.7 -393.4 1531.5 -349.7Q1511.4 -306 1472.6 -288.3L1472.2 -286.9L1575.6 -13.3Q1579.2 0 1568.2 0H1474.3Q1466.6 0 1463.6 -7.2L1373.6 -267.1H1328.8V-10.9Q1328.8 0 1319.8 0ZM1328.8 -356.3H1370.3Q1411.3 -356.3 1429.3 -382.1Q1447.3 -408 1447.3 -460.7Q1447.3 -513.2 1428.1 -536.5Q1408.9 -559.7 1368.5 -559.7H1328.8ZM1673.2 0Q1664.4 0 1664.4 -10.9V-644.1Q1664.4 -655 1673.4 -655H1788.1Q1796.3 -655 1798 -647.4L1888.9 -317.2Q1896.1 -292.4 1903.7 -261Q1911.3 -229.7 1918.5 -198.4Q1925.6 -167 1930.2 -142.6H1932.2Q1930.8 -162.6 1929.2 -189.3Q1927.6 -216 1926.5 -244.4Q1925.5 -272.7 1924.8 -299.4Q1924.1 -326.1 1924.1 -346.1V-644.7Q1924.1 -655 1933.4 -655H2013.6Q2022.9 -655 2022.9 -644.7V-10.9Q2022.9 0 2013.9 0H1899.6Q1892.7 0 1890.3 -6.9L1799.3 -329.9Q1786.3 -377 1776.2 -423.6Q1766.2 -470.2 1758.4 -509.7H1756.4Q1758.1 -480.7 1759.6 -442.1Q1761.1 -403.5 1762.2 -364.6Q1763.3 -325.8 1763.3 -296.8V-10.9Q1763.3 0 1754.5 0ZM2248.6 0Q2239.7 0 2239.7 -10.9V-225.2L2102.3 -641.7Q2097.7 -655 2108.8 -655H2206Q2214.3 -655 2215.3 -647.4L2265 -449.5Q2272.3 -421.1 2279 -391.6Q2285.7 -362.1 2291.5 -333.1H2292.9Q2299.8 -362.1 2306.6 -391.4Q2313.4 -420.7 2320 -449.7L2369.7 -647.4Q2371.3 -655 2378.7 -655H2474.2Q2485.4 -655 2481.4 -641.7L2344 -225.8V-10.9Q2344 0 2336.1 0Z"/>
+</svg></a>
+        <nav class="ld-nav" aria-label="Main">
+          <a href="#lessons"><span data-t="navLessons">Sample lessons</span></a>
+          <a href="#own"><span data-t="navOwn">Your own lesson</span></a>
+          <!-- язык: одна кнопка с выпадающим списком (на вырост, под будущие языки); настройка общая с приложением -->
+          <div class="ld-lang" id="lang">
+            <button type="button" class="ld-lang-b" id="lang-b" aria-haspopup="true" aria-expanded="false" aria-controls="lang-m" aria-label="Language"><span id="lang-code">EN</span><svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1.5 1.5 6 6l4.5-4.5"/></svg></button>
+            <div class="ld-lang-m" id="lang-m" hidden>
+              <button type="button" data-lang="en" aria-pressed="true">English</button>
+              <button type="button" data-lang="ru" aria-pressed="false">Русский</button>
+            </div>
+          </div>
+          <a class="split sm ld-space" href="index.html#cabinet"><span class="s-ic" aria-hidden="true">→</span><span class="s-tx" data-t="navSpace">My space</span></a>
+        </nav>
+      </header>
       <div class="ld-copy" id="copy">
-        <h1>English homework, <span class="mk">step by step</span></h1>
-        <p class="lede">Learny turns your teacher's notes into a lesson: theory, exercises and speaking practice.</p>
-        <a class="split" href="#own"><span class="s-ic" aria-hidden="true">→</span><span class="s-tx">Create my own lesson</span></a>
+        <h1 data-fit="1"><span data-t="h1a">English homework,</span><br><span class="mk" data-t="h1b">step by step</span></h1>
+        <p class="lede" data-t="lede">Learny turns homework, a topic or any text into a lesson. Do one step now, the next one tomorrow: it remembers where you stopped</p>
+        <a class="split" href="#own"><span class="s-ic" aria-hidden="true">→</span><span class="s-tx" data-t="cta">Create my own lesson</span></a>
       </div>
       <ol class="ld-caps" id="caps" aria-hidden="true">
-      <li><span class="ld-n">1 of 5</span><h3>Theory</h3><p>Explore explanations, translate phrases and save new words</p></li>
-      <li><span class="ld-n">2 of 5</span><h3>Practice</h3><p>Try exercises, check your answers and learn from feedback</p></li>
-      <li><span class="ld-n">3 of 5</span><h3>Mini-stories</h3><p>Read short stories and choose the form that fits the meaning</p></li>
-      <li><span class="ld-n">4 of 5</span><h3>Speaking</h3><p>Record an answer and review suggestions for clearer English</p></li>
-      <li><span class="ld-n">5 of 5</span><h3>Results</h3><p>Review your lesson, revisit saved words and share your report</p></li>
+      <li><span class="ld-n" data-t="s1n">1 of 5 · Theory</span><h3 data-t="s1h">Your teacher's notes, made clear</h3><p data-t="s1p">The rule in plain words, with examples. Translate any phrase and save new words</p></li>
+      <li><span class="ld-n" data-t="s2n">2 of 5 · Practice</span><h3 data-t="s2h">A mistake is part of the page</h3><p data-t="s2p">Check every answer at once. Not right? Try again and see why</p></li>
+      <li><span class="ld-n" data-t="s3n">3 of 5 · Mini-dialogues</span><h3 data-t="s3h">The same rule in conversation</h3><p data-t="s3p">Read a short dialogue and choose the modal that fits the situation</p></li>
+      <li><span class="ld-n" data-t="s4n">4 of 5 · Speaking</span><h3 data-t="s4h">Say it before the lesson</h3><p data-t="s4p">Record your answer and get suggestions for clearer English</p></li>
+      <li><span class="ld-n" data-t="s5n">5 of 5 · Results</span><h3 data-t="s5h">Bring this to your lesson</h3><p data-t="s5p">A short report for your teacher: what went well, what you fixed, your new words</p></li>
       </ol>
-      <div class="ld-nb" id="nb" style="--c:#6f45e8">
+      <div class="ld-nb" id="nb" style="--c:#6f45e8;--band:#ffc533">
       <div class="ld-ground" aria-hidden="true"></div>
       <div class="ld-backcover" aria-hidden="true"></div>
-      <div class="ld-leaf ld-base"><div aria-hidden="true" class="ld-face ld-front"><div class="ld-demo"><p class="print">Report for your teacher</p>
-          <p class="rep" data-q=".1">Set three: 8 tasks in 9 minutes</p>
-          <p class="pills" data-q=".28"><span class="pill ok">6 right first time</span><span class="pill fx">2 fixed</span><span class="mk">3 new words</span></p>
-          <div class="note" data-q=".58"><svg class="ok" data-q=".5" viewBox="0 0 40 30"><path pathLength="1" d="M4 15c4 3 7 7 9 11C18 15 26 7 37 3"/></svg><span>Well done! See you on Thursday</span></div></div></div><button type="button" class="ld-flag" data-s="4" aria-label="Step 5: Results" style="--fc:#9a7bf0;--fy:60%"><span>5</span><span>5</span></button></div>
-      <div class="ld-leaf" data-i="4"><div aria-hidden="true" class="ld-face ld-front"><div class="ld-demo"><p class="sentence"><span class="ask">What can you do that many people can't?</span><span class="hand" data-q=".12">I can cook very</span> <span class="gap"><span class="ans wrong" data-q=".28">good<svg class="strike" data-q=".48" viewBox="0 0 100 12" preserveAspectRatio="none"><path pathLength="1" d="M2 7C20 3 38 9 55 5s33-1 43 1"/></svg></span><span class="fixword" data-q=".58">well</span><svg class="uline" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M1 4C18 2 34 6 52 4s32-2 47 0"/></svg></span></p>
-          <div class="note" data-q=".78"><span>Nice! An adverb goes here</span></div></div></div><div aria-hidden="true" class="ld-face ld-back"><span class="ld-n">5 of 5</span><h3>Results</h3><p>Review your lesson, revisit saved words and share your report</p></div><button type="button" class="ld-flag" data-s="3" aria-label="Step 4: Speaking" style="--fc:#5a9cf0;--fy:47%"><span>4</span><span>4</span></button></div>
-      <div class="ld-leaf" data-i="3"><div aria-hidden="true" class="ld-face ld-front"><div class="ld-demo"><p class="sentence">It was a rainy evening. I <span class="gap"><span class="ans" data-q=".14">was walking</span><svg class="uline" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M1 4C18 2 34 6 52 4s32-2 47 0"/></svg><svg class="tick" data-q=".3" viewBox="0 0 40 30"><path pathLength="1" d="M4 15c4 3 7 7 9 11C18 15 26 7 37 3"/></svg></span> through the old town when I <span class="gap"><span class="ans" data-q=".5">heard</span><svg class="uline" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M1 4C18 2 34 6 52 4s32-2 47 0"/></svg><svg class="tick" data-q=".66" viewBox="0 0 40 30"><path pathLength="1" d="M4 15c4 3 7 7 9 11C18 15 26 7 37 3"/></svg></span> a strange noise.</p></div></div><div aria-hidden="true" class="ld-face ld-back"><span class="ld-n">4 of 5</span><h3>Speaking</h3><p>Record an answer and review suggestions for clearer English</p></div><button type="button" class="ld-flag" data-s="2" aria-label="Step 3: Mini-stories" style="--fc:#f07fa0;--fy:34%"><span>3</span><span>3</span></button></div>
-      <div class="ld-leaf" data-i="2"><div aria-hidden="true" class="ld-face ld-front"><div class="ld-demo"><p class="sentence">You <span class="gap"><span class="ans wrong" data-q=".12">don't have to<svg class="strike" data-q=".4" viewBox="0 0 100 12" preserveAspectRatio="none"><path pathLength="1" d="M2 7C20 3 38 9 55 5s33-1 43 1"/></svg></span><span class="fixword" data-q=".52">mustn't</span><svg class="uline" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M1 4C18 2 34 6 52 4s32-2 47 0"/></svg></span> smoke inside the hospital.</p>
-          <div class="note" data-q=".74"><span>Forbidden, not just unnecessary</span></div></div></div><div aria-hidden="true" class="ld-face ld-back"><span class="ld-n">3 of 5</span><h3>Mini-stories</h3><p>Read short stories and choose the form that fits the meaning</p></div><button type="button" class="ld-flag" data-s="1" aria-label="Step 2: Practice" style="--fc:#4fc08d;--fy:21%"><span>2</span><span>2</span></button></div>
+      <div class="ld-leaf ld-base"><div aria-hidden="true" class="ld-face ld-front"><div class="ld-demo ld-report"><p class="print" data-t="repK">Report for your teacher</p>
+          <p class="rep"><b>Modal verbs</b> <span data-t="repSum">8 tasks in 9 minutes</span></p>
+          <ol class="ld-answers">
+            <li data-q=".06"><span>You <i>must</i> wear a seatbelt</span><svg class="tick" data-q=".12" viewBox="0 0 40 30"><path pathLength="1" d="M4 15c4 3 7 7 9 11C18 15 26 7 37 3"/></svg></li>
+            <li data-q=".2"><span>You <s>don't have to<svg data-q=".28" viewBox="0 0 100 12" preserveAspectRatio="none"><path pathLength="1" d="M2 7C20 3 38 9 55 5s33-1 43 1"/></svg></s> <ins data-q=".34">mustn't</ins> smoke here</span></li>
+            <li data-q=".42"><span>We <i>should</i> leave now</span><svg class="tick" data-q=".48" viewBox="0 0 40 30"><path pathLength="1" d="M4 15c4 3 7 7 9 11C18 15 26 7 37 3"/></svg></li>
+          </ol>
+          <p class="tally" data-q=".58"><b>6</b> <span data-t="rep1">right first time</span> · <b>2</b> <span data-t="rep2">fixed</span> · <b>3</b> <span data-t="rep3">new words</span></p>
+          <div class="note" data-q=".72"><span>Well done! See you on Thursday</span></div></div></div><button type="button" class="ld-flag" data-s="4" aria-label="Step 5: Results" data-t-aria="s5aria" style="--fc:#9a7bf0;--fy:60%;--ft:17.58em;--fh:3.3em"><span data-t="s5name">Results</span></button></div>
+      <div class="ld-leaf" data-i="4"><div aria-hidden="true" class="ld-face ld-front"><div class="ld-demo ld-voice"><p class="ask">What can you do that many people can't?</p><div class="rec" data-q=".1"><span class="rec-play"></span><svg class="rec-wave" viewBox="0 0 120 24"><path d="M2 10.5V13.5M6 9V15M10 7V17M14 8.5V15.5M18 10V14M22 7.5V16.5M26 4.5V19.5M30 6V18M34 9V15M38 10.5V13.5M42 8V16M46 4V20M50 2V22M54 5V19M58 8.5V15.5M62 10V14M66 7V17M70 3.5V20.5M74 5.5V18.5M78 8V16M82 9.5V14.5M86 6.5V17.5M90 3V21M94 1.5V22.5M98 4.5V19.5M102 7.5V16.5M106 9.5V14.5M110 8.5V15.5M114 10V14M118 11V13"/></svg><span class="rec-time">0:07</span></div><p class="sentence said" data-q=".3">“I can cook very <span class="gap"><span class="ans wrong">good<svg class="strike" data-q=".46" viewBox="0 0 100 12" preserveAspectRatio="none"><path pathLength="1" d="M2 7C20 3 38 9 55 5s33-1 43 1"/></svg></span><span class="fixword" data-q=".56">well</span></span>”</p>
+          <div class="note" data-q=".76"><span>Nice! An adverb goes here</span></div></div></div><div aria-hidden="true" class="ld-face ld-back"><span class="ld-n" data-t="s5n">5 of 5 · Results</span><h3 data-t="s5h">Bring this to your lesson</h3><p data-t="s5p">A short report for your teacher: what went well, what you fixed, your new words</p></div><button type="button" class="ld-flag" data-s="3" aria-label="Step 4: Speaking" data-t-aria="s4aria" style="--fc:#5a9cf0;--fy:47%;--ft:13.56em;--fh:3.8em"><span data-t="s4name">Speaking</span></button></div>
+      <div class="ld-leaf" data-i="3"><div aria-hidden="true" class="ld-face ld-front"><div class="ld-demo"><p class="sentence">“Do I <span class="gap"><span class="ans" data-q=".14">have to</span><svg class="uline" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M1 4C18 2 34 6 52 4s32-2 47 0"/></svg><svg class="tick" data-q=".3" viewBox="0 0 40 30"><path pathLength="1" d="M4 15c4 3 7 7 9 11C18 15 26 7 37 3"/></svg></span> wear a suit?”<br>“No, you <span class="gap"><span class="ans" data-q=".5">don’t have to</span><svg class="uline" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M1 4C18 2 34 6 52 4s32-2 47 0"/></svg><svg class="tick" data-q=".66" viewBox="0 0 40 30"><path pathLength="1" d="M4 15c4 3 7 7 9 11C18 15 26 7 37 3"/></svg></span><span class="stop">.</span> It’s a casual company”</p></div></div><div aria-hidden="true" class="ld-face ld-back"><span class="ld-n" data-t="s4n">4 of 5 · Speaking</span><h3 data-t="s4h">Say it before the lesson</h3><p data-t="s4p">Record your answer and get suggestions for clearer English</p></div><button type="button" class="ld-flag" data-s="2" aria-label="Step 3: Mini-dialogues" data-t-aria="s3aria" style="--fc:#f07fa0;--fy:34%;--ft:8.44em;--fh:4.9em"><span data-t="s3name">Mini-dialogues</span></button></div>
+      <div class="ld-leaf" data-i="2"><div aria-hidden="true" class="ld-face ld-front"><div class="ld-demo"><p class="sentence">You <span class="gap"><span class="ans wrong" data-q=".12">don't have to<svg class="strike" data-q=".4" viewBox="0 0 100 12" preserveAspectRatio="none"><path pathLength="1" d="M2 7C20 3 38 9 55 5s33-1 43 1"/></svg></span><span class="fixword" data-q=".52">mustn't</span><svg class="uline" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M1 4C18 2 34 6 52 4s32-2 47 0"/></svg></span> smoke inside the hospital</p>
+          <div class="note" data-q=".74"><span>Forbidden, not just unnecessary</span></div></div></div><div aria-hidden="true" class="ld-face ld-back"><span class="ld-n" data-t="s3n">3 of 5 · Mini-dialogues</span><h3 data-t="s3h">The same rule in conversation</h3><p data-t="s3p">Read a short dialogue and choose the modal that fits the situation</p></div><button type="button" class="ld-flag" data-s="1" aria-label="Step 2: Practice" data-t-aria="s2aria" style="--fc:#4fc08d;--fy:21%;--ft:4.52em;--fh:3.7em"><span data-t="s2name">Practice</span></button></div>
       <div class="ld-leaf" data-i="1"><div aria-hidden="true" class="ld-face ld-front"><div class="ld-demo"><p class="rule-h">must</p><p class="rule-g">strong obligation: it is the rule</p>
-          <p class="ex">You <span class="w" data-q=".18">must wear</span> a <span class="w" data-q=".5">seatbelt</span>.<br>Employees must follow the rules.</p>
-          <div class="wcard" data-q=".64"><b><span class="mk">seatbelt</span></b><span>ремень безопасности</span></div></div></div><div aria-hidden="true" class="ld-face ld-back"><span class="ld-n">2 of 5</span><h3>Practice</h3><p>Try exercises, check your answers and learn from feedback</p></div><button type="button" class="ld-flag" data-s="0" aria-label="Step 1: Theory" style="--fc:#f6cf3a;--fy:8%"><span>1</span><span>1</span></button></div>
-      <div class="ld-leaf ld-cover" data-i="0"><div aria-hidden="true" class="ld-face ld-front"><div class="ld-label"><small>Homework for Thursday</small><b>Modal verbs</b></div></div><div aria-hidden="true" class="ld-face ld-back"><span class="ld-n">1 of 5</span><h3>Theory</h3><p>Explore explanations, translate phrases and save new words</p></div></div>
+          <p class="ex">You <span class="w" data-q=".18">must wear</span> a <span class="w" data-q=".5">seatbelt</span><br>Employees must follow the rules</p>
+          <div class="wcard" data-q=".64"><b><span class="mk">seatbelt</span></b><span>ремень безопасности</span></div></div></div><div aria-hidden="true" class="ld-face ld-back"><span class="ld-n" data-t="s2n">2 of 5 · Practice</span><h3 data-t="s2h">A mistake is part of the page</h3><p data-t="s2p">Check every answer at once. Not right? Try again and see why</p></div><button type="button" class="ld-flag" data-s="0" aria-label="Step 1: Theory" data-t-aria="s1aria" style="--fc:#f6cf3a;--fy:8%;--ft:1.2em;--fh:3.1em"><span data-t="s1name">Theory</span></button></div>
+      <div class="ld-leaf ld-cover" data-i="0"><div aria-hidden="true" class="ld-face ld-front"><span class="nb-word">must</span><span class="nb-tag"><small data-t="tagSubject">Subject</small><b>Modal verbs</b><small data-t="tagFor">For</small><b data-t="tagDay">Thursday</b></span><span class="nb-band"></span></div><div aria-hidden="true" class="ld-face ld-back"><span class="ld-n" data-t="s1n">1 of 5 · Theory</span><h3 data-t="s1h">Your teacher's notes, made clear</h3><p data-t="s1p">The rule in plain words, with examples. Translate any phrase and save new words</p></div></div>
       <!-- на телефоне виден только правый лист, перевернутые флажки уезжают за край: там свой набор, стоящий на месте -->
-      <div class="ld-flags-side"><button type="button" class="ld-flag" data-s="0" aria-label="Step 1: Theory" style="--fc:#f6cf3a;--fy:8%"><span>1</span></button><button type="button" class="ld-flag" data-s="1" aria-label="Step 2: Practice" style="--fc:#4fc08d;--fy:21%"><span>2</span></button><button type="button" class="ld-flag" data-s="2" aria-label="Step 3: Mini-stories" style="--fc:#f07fa0;--fy:34%"><span>3</span></button><button type="button" class="ld-flag" data-s="3" aria-label="Step 4: Speaking" style="--fc:#5a9cf0;--fy:47%"><span>4</span></button><button type="button" class="ld-flag" data-s="4" aria-label="Step 5: Results" style="--fc:#9a7bf0;--fy:60%"><span>5</span></button></div>
+      <div class="ld-flags-side"><button type="button" class="ld-flag" data-s="0" aria-label="Step 1: Theory" data-t-aria="s1aria" style="--fc:#f6cf3a;--fy:8%"><span>1</span></button><button type="button" class="ld-flag" data-s="1" aria-label="Step 2: Practice" data-t-aria="s2aria" style="--fc:#4fc08d;--fy:21%"><span>2</span></button><button type="button" class="ld-flag" data-s="2" aria-label="Step 3: Mini-dialogues" data-t-aria="s3aria" style="--fc:#f07fa0;--fy:34%"><span>3</span></button><button type="button" class="ld-flag" data-s="3" aria-label="Step 4: Speaking" data-t-aria="s4aria" style="--fc:#5a9cf0;--fy:47%"><span>4</span></button><button type="button" class="ld-flag" data-s="4" aria-label="Step 5: Results" data-t-aria="s5aria" style="--fc:#9a7bf0;--fy:60%"><span>5</span></button></div>
       </div>
       <button type="button" class="ld-scroll" id="hint">scroll to open ↓</button>
     </div>
     <ol class="ld-steps">
-      <li><h3>Theory</h3><p>Explore explanations, translate phrases and save new words</p></li>
-      <li><h3>Practice</h3><p>Try exercises, check your answers and learn from feedback</p></li>
-      <li><h3>Mini-stories</h3><p>Read short stories and choose the form that fits the meaning</p></li>
-      <li><h3>Speaking</h3><p>Record an answer and review suggestions for clearer English</p></li>
-      <li><h3>Results</h3><p>Review your lesson, revisit saved words and share your report</p></li>
+      <li><h3 data-t="s1name">Theory</h3><p data-t="s1full">Your teacher's notes, made clear. The rule in plain words, with examples. Translate any phrase and save new words</p></li>
+      <li><h3 data-t="s2name">Practice</h3><p data-t="s2full">A mistake is part of the page. Check every answer at once. Not right? Try again and see why</p></li>
+      <li><h3 data-t="s3name">Mini-dialogues</h3><p data-t="s3full">The same rule in conversation. Read a short dialogue and choose the modal that fits the situation</p></li>
+      <li><h3 data-t="s4name">Speaking</h3><p data-t="s4full">Say it before the lesson. Record your answer and get suggestions for clearer English</p></li>
+      <li><h3 data-t="s5name">Results</h3><p data-t="s5full">Bring this to your lesson. A short report for your teacher: what went well, what you fixed, your new words</p></li>
     </ol>
   </section>
 
-  <!-- полка: тетради уходят за правый край, нажатие раскрывает тетрадь в урок -->
-  <section class="ld-shelf">
+  <!-- уроки картотекой: цветные разделители во всю ширину стоят один за другим, у каждого ярлычок с названием.
+       Под курсором разделитель раскрывается и показывает, что внутри; нажатие открывает урок -->
+  <section class="ld-shelf" id="lessons">
     <div class="ld-shelf-h">
-      <h2>Sample lessons</h2>
-      <p>Open any notebook. Each one is a complete lesson.</p>
+      <h2 data-t="navLessons">Sample lessons</h2>
+      <p data-t="lessonsP">Open any notebook. Each one is a complete lesson</p>
     </div>
-    <ul class="ld-row" id="shelf" data-look="cover">
-        <li style="--c:#6f45e8" data-kind="grammar"><a class="lp-card" href="index.html#lesson/past-stories/theory">
-          <span class="lp-sheet" aria-hidden="true"><span class="lp-mark"><small class="lp-print">Grammar · B1–B2</small><span class="gap"><span class="ans">was driving</span><svg class="uline" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M1 4C18 2 34 6 52 4s32-2 47 0"/></svg><svg class="tick" viewBox="0 0 40 30"><path d="M4 15c4 3 7 7 9 11C18 15 26 7 37 3"/></svg></span></span></span>
-          <span class="t"><span class="hl">Creating Stories Using Different Past Tenses</span></span>
-          <span class="lp-meta">Grammar · B1–B2</span>
-        </a></li>
-        <li style="--c:#25a873" data-kind="grammar"><a class="lp-card" href="index.html#lesson/modals/theory">
-          <span class="lp-sheet" aria-hidden="true"><span class="lp-mark up"><small class="lp-print">Grammar · B1–B2</small><span class="gap"><span class="ans wrong">have to<svg class="strike" viewBox="0 0 100 12" preserveAspectRatio="none"><path d="M2 7C20 3 38 9 55 5s33-1 43 1"/></svg></span><span class="fixword">must</span><svg class="uline" viewBox="0 0 100 8" preserveAspectRatio="none"><path d="M1 4C18 2 34 6 52 4s32-2 47 0"/></svg></span></span></span>
-          <span class="t"><span class="hl">Modal Verbs: Uses, Rules &amp; Examples</span></span>
-          <span class="lp-meta">Grammar · B1–B2</span>
-        </a></li>
-        <li style="--c:#ffc533" data-kind="grammar"><a class="lp-card" href="index.html#lesson/future/theory">
-          <span class="lp-sheet" aria-hidden="true"><span class="lp-mark"><small class="lp-print">Grammar · B1–B2</small><span class="mk">going to</span></span></span>
-          <span class="t"><span class="hl">All the Future Tenses in English</span></span>
-          <span class="lp-meta">Grammar · B1–B2</span>
-        </a></li>
-        <li style="--c:#f2619c" data-kind="speaking"><a class="lp-card" href="index.html#lesson/culture-b1/theory">
-          <span class="lp-sheet" aria-hidden="true"><span class="lp-mark"><small class="lp-print">Speaking · B1</small><span class="hand">In my country…</span></span></span>
-          <span class="t"><span class="hl">Describing My Culture &amp; My People</span></span>
-          <span class="lp-meta">Speaking · B1</span>
-        </a></li>
-        <li style="--c:#2f6df6" data-kind="speaking"><a class="lp-card" href="index.html#lesson/culture-c1/theory">
-          <span class="lp-sheet" aria-hidden="true"><span class="lp-mark"><small class="lp-print">Speaking · C1</small><span class="fx-in"><s>nice<svg class="strike" viewBox="0 0 100 12" preserveAspectRatio="none"><path d="M2 7C20 3 38 9 55 5s33-1 43 1"/></svg></s><ins>welcoming</ins></span></span></span>
-          <span class="t"><span class="hl">Describing My Own Culture &amp; People</span></span>
-          <span class="lp-meta">Speaking · C1</span>
-        </a></li>
-        <li data-kind="own"><a class="lp-card" href="#own">
-          <span class="lp-sheet blank" aria-hidden="true"><span class="lp-mark"><svg class="plus" viewBox="0 0 40 40"><path d="M20 6c.7 9 .3 19-.5 28M6 20.4c9-.9 19-.6 28 .3"/></svg></span></span>
-          <span class="t"><span class="hl">Your own lesson</span></span>
-          <span class="lp-meta">From your teacher's notes</span>
-        </a></li>
-    </ul>
+    <ol class="ld-stack" id="shelf">
+      <li class="open" style="--c:#6f45e8;--tx:0"><a class="ld-nbrow" href="index.html#lesson/modals/theory">
+        <span class="ld-nbtab">Modal verbs</span>
+        <span class="ld-nbmeta" data-t="metaG">Grammar · B1–B2</span>
+        <span class="ld-nbbody"><b>Modal Verbs: Uses, Rules &amp; Examples</b><small data-t="rowDialogues">Five steps: theory, practice, mini-dialogues, speaking, results</small><span class="ld-nbgo" aria-hidden="true" data-t="rowGo">Open the notebook →</span></span>
+        <span class="ld-nbclip" aria-hidden="true"><span class="nb-word">must</span></span>
+      </a></li>
+      <li style="--c:#25a873;--tx:1"><a class="ld-nbrow" href="index.html#lesson/past-stories/theory">
+        <span class="ld-nbtab">Past tenses</span>
+        <span class="ld-nbmeta" data-t="metaG">Grammar · B1–B2</span>
+        <span class="ld-nbbody"><b>Creating Stories Using Different Past Tenses</b><small data-t="rowSteps">Five steps: theory, practice, mini-stories, speaking, results</small><span class="ld-nbgo" aria-hidden="true" data-t="rowGo">Open the notebook →</span></span>
+        <span class="ld-nbclip" aria-hidden="true"><span class="nb-word">once</span></span>
+      </a></li>
+      <li style="--c:#ffc533;--tx:2;--on:#1a171c;--wc:#f3a81c"><a class="ld-nbrow" href="index.html#lesson/future/theory">
+        <span class="ld-nbtab">Future tenses</span>
+        <span class="ld-nbmeta" data-t="metaG">Grammar · B1–B2</span>
+        <span class="ld-nbbody"><b>All the Future Tenses in English</b><small data-t="rowSteps">Five steps: theory, practice, mini-stories, speaking, results</small><span class="ld-nbgo" aria-hidden="true" data-t="rowGo">Open the notebook →</span></span>
+        <span class="ld-nbclip" aria-hidden="true"><span class="nb-word">will</span></span>
+      </a></li>
+      <li style="--c:#f2619c;--tx:3"><a class="ld-nbrow" href="index.html#lesson/culture-b1/theory">
+        <span class="ld-nbtab">My culture, B1</span>
+        <span class="ld-nbmeta" data-t="metaS1">Speaking · B1</span>
+        <span class="ld-nbbody"><b>Describing My Culture &amp; My People</b><small data-t="rowWords">Five steps: theory, practice, words, speaking, results</small><span class="ld-nbgo" aria-hidden="true" data-t="rowGo">Open the notebook →</span></span>
+        <span class="ld-nbclip" aria-hidden="true"><span class="nb-word">home</span></span>
+      </a></li>
+      <li style="--c:#2f6df6;--tx:4"><a class="ld-nbrow" href="index.html#lesson/culture-c1/theory">
+        <span class="ld-nbtab">My culture, C1</span>
+        <span class="ld-nbmeta" data-t="metaS2">Speaking · C1</span>
+        <span class="ld-nbbody"><b>Describing My Own Culture &amp; People</b><small data-t="rowWords">Five steps: theory, practice, words, speaking, results</small><span class="ld-nbgo" aria-hidden="true" data-t="rowGo">Open the notebook →</span></span>
+        <span class="ld-nbclip" aria-hidden="true"><span class="nb-word">roots</span></span>
+      </a></li>
+      <li class="own" style="--c:#cfab72;--tx:5;--on:#1a171c"><a class="ld-nbrow" href="#own">
+        <span class="ld-nbtab" data-t="navOwn">Your own lesson</span>
+        <span class="ld-nbmeta" data-t="metaOwn">From your teacher</span>
+        <span class="ld-nbbody"><b data-t="navOwn">Your own lesson</b><small data-t="ownSmall">Made from what your teacher gave you</small><span class="ld-nbgo" aria-hidden="true" data-t="ownGo">Paste your homework ↓</span></span>
+      </a></li>
+    </ol>
   </section>
 
+  <!-- свой урок: самый яркий блок. Заголовок спрашивает, что разберем; поле — светлый лист на фиолетовом, внутри него
+       вставка из буфера и вложение. Под листом наклейки с готовыми началами: нажатие вписывает пример в поле, а сами
+       наклейки показывают, с чем сюда можно прийти, и не только с домашкой от учителя -->
   <section class="ld-own" id="own">
-    <div>
-      <h2>Now your own homework</h2>
-      <p class="lede">Paste your teacher's notes, attach a photo of the page or just name a topic.</p>
-    </div>
-    <form class="page ld-form" id="own-form">
-      <div class="note" aria-hidden="true"><svg viewBox="0 0 26 30"><path d="M6 3c1 9 4 16 10 22M8 19l8 6 2-10"/></svg><span>what your teacher gave you</span></div>
-      <label for="own-text">Lesson notes or topic</label>
-      <textarea id="own-text" placeholder="For example, “When do I use the present perfect?”"></textarea>
-      <div class="ld-form-foot">
-        <button type="button" class="ld-attach" id="own-attach"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.5l-6.4 6.4a4 4 0 0 1-5.6-5.6l6.7-6.7a2.7 2.7 0 0 1 3.8 3.8l-6.6 6.6a1.3 1.3 0 0 1-1.9-1.9l6-6"/></svg>Attach a file</button>
-        <button type="submit" class="split"><span class="s-ic" aria-hidden="true">→</span><span class="s-tx">Create my lesson</span></button>
+    <form class="ld-sheet" id="own-form">
+      <h2 id="own-h" data-fit="1" data-t="ownH">What are we learning?</h2>
+      <div class="ld-paper">
+        <textarea id="own-text" rows="2" aria-labelledby="own-h" placeholder="Paste your homework or describe a topic" data-t-ph="ownPh"></textarea>
+        <div class="ld-tools">
+          <button type="button" class="ld-tool" id="own-paste"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4H6.2A2.2 2.2 0 0 0 4 6.2v9.6A2.2 2.2 0 0 0 6.2 18h7.6a2.2 2.2 0 0 0 2.2-2.2V6.2A2.2 2.2 0 0 0 13.8 4h-1.3"/><rect x="7.5" y="2.4" width="5" height="3.2" rx="1"/></svg><span data-t="paste">Paste</span></button>
+          <button type="button" class="ld-tool" id="own-attach"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 9.5l-6.4 6.4a4 4 0 0 1-5.6-5.6l6.7-6.7a2.7 2.7 0 0 1 3.8 3.8l-6.6 6.6a1.3 1.3 0 0 1-1.9-1.9l6-6"/></svg><span data-t="attach">Photo or file</span></button>
+        </div>
+      </div>
+      <div class="ld-own-foot">
+        <div class="ld-starts" role="group" aria-label="Start with an example" data-t-aria="startsAria">
+          <button type="button" class="ld-fill" data-t="start1" data-fill="For Thursday: unit 7, exercises 3–5, and ten phrasal verbs with “get”" data-fill-ru="К четвергу: unit 7, упражнения 3–5 и десять фразовых глаголов с get">My teacher's homework</button>
+          <button type="button" class="ld-fill" data-t="start2" data-fill="The present perfect and the past simple: when do I use which?" data-fill-ru="Present perfect и past simple: когда что ставить?">A topic I don't get</button>
+          <button type="button" class="ld-fill" data-t="start3" data-fill="Words from Friends, season 1: “on a break”, “hang out”, “freak out”" data-fill-ru="Слова из «Друзей», 1 сезон: on a break, hang out, freak out">Words from a show</button>
+          <button type="button" class="ld-fill" data-t="start4" data-fill="An email from my landlord: I want to understand it and answer politely" data-fill-ru="Письмо от арендодателя: хочу понять его и вежливо ответить">A text to understand</button>
+        </div>
+        <button type="submit" class="ld-round"><span><span data-t="mk1">Create</span><br><span data-t="mk2">my lesson</span></span><i aria-hidden="true">→</i></button>
       </div>
     </form>
   </section>
 </main>
 
-<footer class="ld-foot"><span><span class="brand" aria-label="Learny">Learn<i>y</i></span>A little English, every day</span><span>© 2026</span></footer>
+<!-- футер во весь экран: сверху наши пункты (уроки, шаги урока, разделы), внизу прощальная фраза тем же крупным шрифтом,
+     что заголовки; от руки только пометки преподавателя: обводка красным карандашом и короткая приписка -->
+<footer class="ld-foot">
+  <div class="ld-foot-cols">
+    <div class="ld-foot-brand">
+      <a class="brand" href="landing.html" aria-label="Learny"><svg xmlns="http://www.w3.org/2000/svg" viewBox="33 -665 2459 675" class="learny-logo" fill="#1a171c" aria-hidden="true" focusable="false">
+  <title>Learny</title>
+  <path d="M52.8 0Q43.4 0 43.4 -10.9V-644.1Q43.4 -655 52.8 -655H138.4Q147.8 -655 147.8 -644.1V-95.3H307Q317 -95.3 317 -84.4V-10.9Q317 0 307.4 0ZM412.9 0Q403.4 0 403.4 -10.9V-644.1Q403.4 -655 412.4 -655H678.5Q687.4 -655 687.4 -644.1V-570.6Q687.4 -559.7 678.5 -559.7H507.8V-377.6H663.3Q672.3 -377.6 672.3 -366.7V-297.8Q672.3 -286.9 663.3 -286.9H507.8V-95.3H678.5Q687.4 -95.3 687.4 -84.4V-10.9Q687.4 0 678.5 0ZM757.5 0Q748.2 0 749.9 -11.9L883.1 -646.4Q884.8 -655 894 -655H1006.9Q1016 -655 1017.8 -646.4L1151.1 -12.3Q1153.3 0 1144 0H1048.9Q1040.9 0 1038.9 -7.9L971.9 -411.3Q966.1 -446 960.8 -480.3Q955.4 -514.6 950.8 -549.2H948.8Q944.2 -514.6 939.5 -480.3Q934.8 -446 928.5 -410.7L860.4 -8.3Q859.4 0 850.7 0ZM867.5 -143.9 883 -232.6H1014.7L1032.2 -143.9ZM1233.4 0Q1224.4 0 1224.4 -10.9V-644.1Q1224.4 -655 1233.4 -655H1369.1Q1463.8 -655 1507.7 -609.4Q1551.7 -563.9 1551.7 -466.5Q1551.7 -393.4 1531.5 -349.7Q1511.4 -306 1472.6 -288.3L1472.2 -286.9L1575.6 -13.3Q1579.2 0 1568.2 0H1474.3Q1466.6 0 1463.6 -7.2L1373.6 -267.1H1328.8V-10.9Q1328.8 0 1319.8 0ZM1328.8 -356.3H1370.3Q1411.3 -356.3 1429.3 -382.1Q1447.3 -408 1447.3 -460.7Q1447.3 -513.2 1428.1 -536.5Q1408.9 -559.7 1368.5 -559.7H1328.8ZM1673.2 0Q1664.4 0 1664.4 -10.9V-644.1Q1664.4 -655 1673.4 -655H1788.1Q1796.3 -655 1798 -647.4L1888.9 -317.2Q1896.1 -292.4 1903.7 -261Q1911.3 -229.7 1918.5 -198.4Q1925.6 -167 1930.2 -142.6H1932.2Q1930.8 -162.6 1929.2 -189.3Q1927.6 -216 1926.5 -244.4Q1925.5 -272.7 1924.8 -299.4Q1924.1 -326.1 1924.1 -346.1V-644.7Q1924.1 -655 1933.4 -655H2013.6Q2022.9 -655 2022.9 -644.7V-10.9Q2022.9 0 2013.9 0H1899.6Q1892.7 0 1890.3 -6.9L1799.3 -329.9Q1786.3 -377 1776.2 -423.6Q1766.2 -470.2 1758.4 -509.7H1756.4Q1758.1 -480.7 1759.6 -442.1Q1761.1 -403.5 1762.2 -364.6Q1763.3 -325.8 1763.3 -296.8V-10.9Q1763.3 0 1754.5 0ZM2248.6 0Q2239.7 0 2239.7 -10.9V-225.2L2102.3 -641.7Q2097.7 -655 2108.8 -655H2206Q2214.3 -655 2215.3 -647.4L2265 -449.5Q2272.3 -421.1 2279 -391.6Q2285.7 -362.1 2291.5 -333.1H2292.9Q2299.8 -362.1 2306.6 -391.4Q2313.4 -420.7 2320 -449.7L2369.7 -647.4Q2371.3 -655 2378.7 -655H2474.2Q2485.4 -655 2481.4 -641.7L2344 -225.8V-10.9Q2344 0 2336.1 0Z"/>
+</svg></a>
+      <p data-t="tagline">A little English, every day</p>
+    </div>
+    <div>
+      <h3 data-t="navLessons">Sample lessons</h3>
+      <ul>
+        <li><a href="index.html#lesson/modals/theory">Modal verbs</a></li>
+        <li><a href="index.html#lesson/past-stories/theory">Past tenses</a></li>
+        <li><a href="index.html#lesson/future/theory">Future tenses</a></li>
+        <li><a href="index.html#lesson/culture-b1/theory">My culture, B1</a></li>
+        <li><a href="index.html#lesson/culture-c1/theory">My culture, C1</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 data-t="insideH">Inside a lesson</h3>
+      <ul>
+        <li><a href="#book" data-step="0" data-t="s1name">Theory</a></li>
+        <li><a href="#book" data-step="1" data-t="s2name">Practice</a></li>
+        <li><a href="#book" data-step="2" data-t="s3name">Mini-dialogues</a></li>
+        <li><a href="#book" data-step="3" data-t="s4name">Speaking</a></li>
+        <li><a href="#book" data-step="4" data-t="s5name">Results</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Learny</h3>
+      <ul>
+        <li><a href="#book" data-t="how">How it works</a></li>
+        <li><a href="#own" data-t="navOwn">Your own lesson</a></li>
+        <li><a href="index.html#cabinet" data-t="navSpace">My space</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="ld-foot-say" data-fit="1" data-fit-full><span data-t="sayA">See you on</span> <span class="ld-ring"><span data-t="sayB">Thursday</span><svg viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true"><path d="M34 66C28 32 92 9 162 10c70 1 122 20 122 52 0 33-60 50-134 48C80 108 22 94 20 60 19 38 48 22 88 15"/></svg></span></p>
+  <div class="ld-foot-bot"><span>© 2026 Learny</span><span class="ld-foot-note"><svg viewBox="0 0 40 30" aria-hidden="true"><path d="M4 15c4 3 7 7 9 11C18 15 26 7 37 3"/></svg><span data-t="well">Well done!</span></span></div>
+</footer>
 
-<script src="learny-notebook-open.js?v=a9a77eec6f"></script>
+<script src="learny-notebook-open.js?v=e737ea0211"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
@@ -139,87 +225,201 @@
   function order(demo) { const leaf = demo.closest(".ld-leaf"); return leaf.dataset.i ? leaf.dataset.i - 1 : 4; }
 
   // Длины отрезков в высотах экрана: выезд и раскрытие обложки, затем на каждый шаг пауза и перелистывание.
-  const INTRO = 1, HOLD = .7, FLIP = .45, STEPS = 5;
-  const TOTAL = INTRO + STEPS * HOLD + (STEPS - 1) * FLIP;
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { document.body.classList.add("ld-still"); return; }
-  book.style.height = `calc(${(TOTAL + 1) * 100}svh)`;
+  const INTRO = .3, HOLD = .68, FLIP = .2, STEPS = leaves.length;
+  // Первый же жест прокрутки запускает всю вступительную фразу целиком: шапка и заголовок уходят, тетрадь едет в центр
+  // и раскрывается. Пороги стоят почти у самого верха, поэтому «мертвого» отрезка, где прокрутка ничего не делает, нет.
+  const LEAVE = .04, OPEN = .06;
+  const GAP = 60;        // мс между листами, которые летят один за другим
+  const OVERLAP = 260;   // мс: настолько раньше, чем тетрадь доедет до центра, начинает раскрываться обложка
+  const TAIL = .32;   // последний шаг держится дольше: отчет успевает раскрыться и побыть на экране
+  const TOTAL = INTRO + STEPS * HOLD + (STEPS - 1) * FLIP + TAIL;
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (still) document.body.classList.add("ld-still");
+  else book.style.height = `calc(${(TOTAL + 1) * 100}svh)`;
   // затенение листа при перелистывании
   nb.querySelectorAll(".ld-face").forEach(face => face.append(Object.assign(document.createElement("i"), { className: "ld-shade" })));
 
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
-  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const stepStart = s => INTRO + s * (HOLD + FLIP);
-  let hero = {};
+  // Закрытая обложка занимает свободное место под текстом. После раскрытия
+  // центром разворота снова становится корешок, заданный стилями тетради.
+  let closedTransform = "", turnTime = 0;
   function measure() {
-    const cs = getComputedStyle(nb), num = name => parseFloat(cs.getPropertyValue(name)) || 0;
-    hero = { x: num("--hx"), y: num("--hy"), s: num("--hs") || 1, r: num("--hr") };
+    const style = getComputedStyle(nb);
+    const mobile = matchMedia("(max-width:900px)").matches;
+    const angle = parseFloat(style.getPropertyValue("--hr"));
+    const rad = Math.abs(angle) * Math.PI / 180;
+    const w = nb.offsetWidth, h = nb.offsetHeight;
+    const rotatedW = w * Math.cos(rad) + h * Math.sin(rad);
+    const rotatedH = h * Math.cos(rad) + w * Math.sin(rad);
+    const edge = copy.offsetLeft;
+    const gutter = edge;
+    const title = copy.querySelector("h1");
+    const firstLine = title.firstElementChild.getBoundingClientRect();
+    const lastLine = title.lastElementChild.getBoundingClientRect();
+    const top = mobile ? copy.offsetTop + copy.offsetHeight
+      : copy.offsetTop + firstLine.bottom - copy.getBoundingClientRect().top;
+    const width = mobile ? pin.clientWidth - 2 * edge : pin.clientWidth - edge - lastLine.right - gutter;
+    const bottom = pin.clientHeight - edge;
+    const height = Math.max(0, bottom - top - gutter);
+    const scale = Math.max(0, Math.min(parseFloat(style.getPropertyValue("--hs")), width / rotatedW, height / rotatedH));
+    let cx = mobile ? pin.clientWidth / 2 : pin.clientWidth - edge - rotatedW * scale / 2;
+    let cy = top + gutter + height / 2, s = scale, a = angle;
+    // пробы первого экрана (?hero=…) ставят закрытую тетрадь в другое место; без параметра хука нет
+    const o = window.learnyHero?.({ W: pin.clientWidth, H: pin.clientHeight, w, h, mobile });
+    if (o) ({ cx = cx, cy = cy, s = s, a = a } = o);
+    closedTransform = `translate(${cx - nb.offsetLeft - w / 2}px,${cy - nb.offsetTop - h / 2}px) rotate(${a}deg) scale(${s})`;
+    turnTime = parseFloat(style.getPropertyValue("--leaf-time")); // миллисекунды
   }
 
   // Позиция в сцене в высотах экрана: target — куда докрутили, cur — сглаженное значение, по которому рисуется кадр.
-  const position = () => clamp(scrollY - book.offsetTop, 0, TOTAL * innerHeight) / innerHeight;
-  let cur = 0;
-  function frame() {
-    const vh = innerHeight, y = cur;
-    // 1. тетрадь выезжает из первого экрана в центр, заголовок уходит
-    const k = ease(clamp(y / (INTRO * .5)));
-    nb.style.transform = `translate(${hero.x * (1 - k) * innerWidth}px,${hero.y * (1 - k) * vh}px) rotate(${hero.r * (1 - k)}deg) scale(${hero.s + (1 - hero.s) * k})`;
-    copy.style.opacity = clamp(1 - y / (INTRO * .32));
-    copy.style.transform = `translateY(${-clamp(y / (INTRO * .5)) * 70}px)`;
-    copy.style.pointerEvents = y > .15 ? "none" : "";
-    // подпись под тетрадью: сначала зовет листать, на открытой тетради дает уйти со сцены
-    const opened = y > INTRO * .8, ending = y > TOTAL - .05;
-    hint.textContent = opened ? "skip to the lessons ↓" : "scroll to open ↓";
-    hint.dataset.state = opened ? "open" : "closed";
-    hint.style.opacity = (y > .04 && !opened) || ending ? 0 : 1;
-    hint.style.pointerEvents = (y > .04 && !opened) || ending ? "none" : "";
-    // 2. обложка и страницы перелистываются через корешок
-    leaves.forEach((leaf, i) => {
-      const start = i === 0 ? INTRO * .45 : stepStart(i - 1) + HOLD, length = i === 0 ? INTRO * .55 : FLIP;
-      const angle = -180 * ease(clamp((y - start) / length));
-      leaf.style.transform = `rotateY(${angle}deg)`;
-      leaf.style.zIndex = angle < 0 && angle > -180 ? 40 : angle <= -180 ? 20 + i : 20 - i;
-      leaf.style.setProperty("--sh", (Math.sin(-angle * Math.PI / 180) * .34).toFixed(3));
-      // тень на столе слева растет вместе с проекцией обложки, то есть только после того, как та перевалит за середину
-      if (i === 0) nb.style.setProperty("--open", Math.max(0, -Math.cos(-angle * Math.PI / 180)).toFixed(3));
-    });
-    // 3. на открытой странице шаг разыгрывается по мере прокрутки
-    let step = -1;
-    for (let s = 0; s < STEPS; s++) if (y >= stepStart(s) - FLIP * .5) step = s;
-    demos.forEach((demo, s) => {
-      const q = clamp((y - stepStart(s)) / HOLD);
-      demo.querySelectorAll("[data-q]").forEach(el => el.classList.toggle("on", q >= +el.dataset.q));
-    });
-    caps.forEach((cap, s) => cap.classList.toggle("on", s === step));
-    // стол под тетрадью проявляется, когда она выезжает в центр, и уходит в бумагу к концу сцены
-    const lit = Math.min(clamp((y - INTRO * .25) / (INTRO * .45)), clamp((TOTAL - y) / .35));
-    pin.style.setProperty("--lit", lit.toFixed(3));
-    pin.classList.toggle("lit", lit > .5);
-    pin.classList.toggle("opened", opened && !ending);
-    pin.dataset.step = Math.max(0, step);
-    flags.forEach(flag => { flag.classList.toggle("cur", +flag.dataset.s === step); flag.classList.toggle("past", +flag.dataset.s < step); });
+  const position = () => clamp(scrollY - book.offsetTop, 0, TOTAL * pin.clientHeight) / pin.clientHeight;
+  let cur = 0, first = true;
+  const marks = demos.map(demo => [...demo.querySelectorAll("[data-q]")].map(el => [el, +el.dataset.q]));
+  // Вся сцена построена на состояниях. Прокрутка только решает, какое состояние нужно: тетрадь на первом экране или
+  // в центре, открыта ли обложка, какие листы перевернуты. Сами движения идут своим ходом и одинаково в обе стороны,
+  // поэтому при прокрутке назад ничего не застывает на полпути и не расходится.
+  const turned = leaves.map(() => false);
+  let docked = null;
+  const starts = leaves.map(() => 0);   // когда лист начал (или начнет) свое последнее движение
+  let arrive = 0;                       // когда тетрадь доедет до центра сцены
+  // Тетрадь на первом экране (сбоку, под углом) или в центре сцены. Движения идут по очереди. Вперед: шапка и заголовок
+  // уходят, тетрадь едет в центр, на подъезде раскрывается обложка. Назад: закрывается обложка, тетрадь уезжает на место
+  // и гаснет стол, и только когда она встала, возвращаются шапка, заголовок и кнопка.
+  function dock(on, instant) {
+    docked = on;
+    const now = performance.now();
+    const wait = instant || !on ? 0 : Math.max(0, starts[0] + turnTime - now - 180);
+    arrive = on || instant ? 0 : now + turnTime;
+    nb.style.transitionDuration = instant ? "0s" : "";
+    nb.style.transitionDelay = wait + "ms";
+    nb.style.transform = on ? closedTransform : "none";
+    pin.style.setProperty("--lit-delay", wait + "ms");
+    pin.style.setProperty("--copy-delay", (instant ? 0 : wait + 520) + "ms");
+    pin.style.setProperty("--lit", on ? 0 : 1);
+    pin.classList.toggle("lit", !on);
+    pin.classList.toggle("away", !on);
   }
-  // Кадр догоняет прокрутку плавно: колесо мыши крутит рывками, а лист должен идти ровно.
+  // Переворот листа. Порядок листов в стопке зависит от стороны, на которой лист сейчас находится: справа сверху лежит
+  // лист с меньшим номером, слева с большим. Сторону лист меняет, когда стоит ребром и его не видно. Поэтому при любой
+  // скорости прокрутки, и когда летят сразу несколько листов, они не проходят друг сквозь друга и в конце ничего не перещелкивается.
+  // Листы не обгоняют друг друга: вперед лист трогается не раньше предыдущего, назад не раньше следующего.
+  function turn(i, on, instant) {
+    const leaf = leaves[i], now = performance.now();
+    turned[i] = on;
+    clearTimeout(leaf.wait); clearTimeout(leaf.done);
+    let at = now;
+    if (!instant) {
+      const ahead = starts[on ? i - 1 : i + 1];
+      if (ahead) at = Math.max(at, ahead + GAP);
+      if (i === 0 && on) at = Math.max(at, arrive - OVERLAP);   // обложка ждет, пока тетрадь подъедет
+    }
+    starts[i] = instant ? 0 : at;
+    const go = () => {
+      leaf.style.transitionDuration = instant ? "0s" : "";
+      leaf.classList.toggle("moving", !instant);
+      leaf.style.transform = `rotateY(${on ? -180 : 0}deg)`;
+      // тень под раскрытой обложкой включают стили: она появляется, когда обложка почти легла, и уходит, как только та пошла вверх
+      if (i === 0) nb.classList.toggle("open", on);
+      if (instant) return;
+      leaf.done = setTimeout(() => { leaf.classList.remove("moving"); queueSync(); }, turnTime + 100);
+      queueSync();
+    };
+    if (at > now) leaf.wait = setTimeout(go, at - now); else go();
+  }
+  leaves.forEach(leaf => leaf.addEventListener("transitionend", e => {
+    if (e.target !== leaf || e.propertyName !== "transform") return;
+    clearTimeout(leaf.done);
+    leaf.classList.remove("moving");
+    queueSync();
+  }));
+  // Пока листы в движении, каждый кадр сверяется с тем, где они на самом деле: по какую сторону сгиба каждый лист.
+  // От этого зависят порядок в стопке, подписи на закладках (слева они отражены обратно), текущий шаг, цвет стола и подпись шага.
+  const side = leaves.map(() => null);
+  let displayed = -2, syncFrame = 0;
+  function sync() {
+    syncFrame = 0;
+    let step = -1, leading = true;
+    leaves.forEach((leaf, i) => {
+      const matrix = getComputedStyle(leaf).transform;
+      const left = matrix !== "none" && parseFloat(matrix.slice(matrix.indexOf("(") + 1)) < 0;   // косинус угла поворота меньше нуля
+      if (left !== side[i]) {
+        side[i] = left;
+        leaf.classList.toggle("over", left);   // имя .left занято общими стилями
+        leaf.style.zIndex = left ? 20 + i : 20 - i;
+      }
+      if (leading && left) step++; else leading = false;
+    });
+    // тетрадь считается раскрытой, когда обложка перешла за сгиб: тогда появляются закладки и меняется подпись под тетрадью
+    if (pin.classList.contains("opened") !== side[0]) { pin.classList.toggle("opened", side[0]); showHint(); }
+    if (step !== displayed) {
+      displayed = step;
+      caps.forEach((cap, i) => cap.classList.toggle("on", i === step));
+      pin.dataset.step = Math.max(0, step);
+      flags.forEach(flag => {
+        flag.classList.toggle("cur", +flag.dataset.s === step);
+        flag.classList.toggle("past", +flag.dataset.s < step);
+      });
+    }
+    if (leaves.some(leaf => leaf.classList.contains("moving"))) queueSync();
+  }
+  function queueSync() {
+    if (!syncFrame) syncFrame = requestAnimationFrame(sync);
+  }
+  // подпись под тетрадью: на закрытой зовет листать, на раскрытой дает уйти со сцены, не досматривая
+  function showHint() {
+    const opened = pin.classList.contains("opened"), hidden = (cur > LEAVE && !opened) || cur > TOTAL - .05;
+    if (window.learnyText) hint.textContent = learnyText(opened ? "hintOpen" : "hintClosed");
+    hint.dataset.state = opened ? "open" : "closed";
+    hint.style.opacity = hidden ? 0 : 1;
+    hint.style.pointerEvents = hidden ? "none" : "";
+  }
+  function frame() {
+    const y = cur, wantDock = y < LEAVE;
+    // 1. тетрадь уезжает с первого экрана раньше, чем раскрывается: обложка ждет ее приезда
+    if (!wantDock && docked !== false) dock(false, first);
+    // 2. какие листы должны быть перевернуты: обложка и страницы шагов
+    const changes = [];
+    leaves.forEach((leaf, i) => {
+      const mid = i === 0 ? OPEN : stepStart(i - 1) + HOLD + FLIP / 2;
+      if (turned[i] !== y > mid) changes.push(i);
+    });
+    if (changes.length) {
+      const forward = !turned[changes[0]];
+      (forward ? changes : changes.reverse()).forEach(i => turn(i, forward, first));
+    }
+    // 3. возврат на первый экран: после листов, он ждет, пока закроется обложка
+    if (wantDock && docked !== true) dock(true, first);
+    // 4. на открытой странице шаг разыгрывается по мере прокрутки
+    marks.forEach((list, s) => {
+      const q = clamp((y - stepStart(s)) / HOLD);
+      list.forEach(([el, at]) => el.classList.toggle("on", q >= at));
+    });
+    if (first) sync();   // при загрузке все встает на место сразу, без движения
+    showHint();
+    first = false;
+  }
+  // Кадр догоняет прокрутку плавно: от нее зависят только уход заголовка и пометки на странице.
   let running = false;
   function tick() {
     const target = position(), gap = target - cur;
-    cur = Math.abs(gap) < .0008 ? target : cur + gap * .16;
+    cur = Math.abs(gap) < .0008 ? target : cur + gap * .22;
     frame();
     if (cur !== target) requestAnimationFrame(tick); else running = false;
   }
   const queue = () => { if (!running) { running = true; requestAnimationFrame(tick); } };
-  // Тетрадь не остается полуоткрытой: если остановиться посреди перелистывания, лист сам доходит до ближайшего положения.
-  function settle() {
-    const y = position(), vh = innerHeight, go = to => scrollTo({ top: book.offsetTop + to * vh, behavior: "smooth" });
-    if (y > .1 && y < INTRO) return go(y < INTRO * .32 ? 0 : INTRO + .02);
-    for (let s = 0; s < STEPS - 1; s++) {
-      const from = stepStart(s) + HOLD, to = stepStart(s + 1);
-      if (y > from + .01 && y < to - .01) return go(y - from < (to - from) / 2 ? from - .01 : to + .02);
-    }
-  }
-  let idle;
-  addEventListener("scroll", () => { queue(); clearTimeout(idle); idle = setTimeout(settle, 170); }, { passive: true });
-  addEventListener("resize", () => { measure(); queue(); });
-  measure(); cur = position(); frame();
+  const layout = () => {
+    measure();
+    if (still || docked !== null) dock(still || docked, true);
+    if (!still) queue();
+  };
+  new ResizeObserver(layout).observe(copy);
+  addEventListener("resize", layout);
+  document.fonts?.ready.then(layout);
+  layout();
+  if (still) { nb.inert = true; return; }
+  addEventListener("scroll", queue, { passive: true });
+  cur = position(); frame();
   // кнопка из двух наклеек: стрелке нужно знать ширину подписи, чтобы перескочить за нее
   const sizeSplit = () => document.querySelectorAll(".split").forEach(button => button.style.setProperty("--tw", button.querySelector(".s-tx").offsetWidth + "px"));
   sizeSplit(); addEventListener("resize", sizeSplit); document.fonts?.ready.then(sizeSplit);
@@ -227,30 +427,265 @@
   // флажки перелистывают тетрадь к шагу; подпись под тетрадью открывает ее или уводит к урокам
   nb.addEventListener("click", e => {
     const flag = e.target.closest(".ld-flag");
-    if (flag) scrollTo({ top: book.offsetTop + (stepStart(+flag.dataset.s) + HOLD * .85) * innerHeight, behavior: "smooth" });
+    // у последнего шага остановка чуть раньше конца сцены
+    if (flag) return scrollTo({ top: book.offsetTop + Math.min(stepStart(+flag.dataset.s) + HOLD * .85, TOTAL - .2) * pin.clientHeight, behavior: "smooth" });
+    // закрытая тетрадь открывается по нажатию на обложку так же, как прокруткой
+    if (!pin.classList.contains("opened")) scrollTo({ top: book.offsetTop + (stepStart(0) + HOLD * .85) * pin.clientHeight, behavior: "smooth" });
   });
+  // пункты «Внутри урока» в футере открывают тетрадь на своем шаге
+  document.querySelectorAll("a[data-step]").forEach(link => link.addEventListener("click", e => {
+    e.preventDefault();
+    scrollTo({ top: book.offsetTop + Math.min(stepStart(+link.dataset.step) + HOLD * .85, TOTAL - .2) * pin.clientHeight, behavior: "smooth" });
+  }));
   hint.addEventListener("click", () => {
-    if (position() > INTRO * .8) document.querySelector(".ld-shelf").scrollIntoView({ behavior: "smooth" });
-    else scrollTo({ top: book.offsetTop + (stepStart(0) + HOLD * .85) * innerHeight, behavior: "smooth" });
+    if (hint.dataset.state === "open") document.querySelector(".ld-shelf").scrollIntoView({ behavior: "smooth" });
+    else scrollTo({ top: book.offsetTop + (stepStart(0) + HOLD * .85) * pin.clientHeight, behavior: "smooth" });
   });
 
   // «Свой урок»: набранный текст переезжает в окно создания урока в приложении
+})();
+
+// Формы, картотека и остановка прокрутки живут отдельно от сцены: они работают и там, где движение отключено.
+(() => {
+  const $ = id => document.getElementById(id);
+  // Тексты на двух языках. Английский стоит в разметке, русский подставляется по ключам data-t.
+  // Содержимое уроков (страницы тетради, названия уроков, примеры домашки) остается английским: это сам материал.
+  const T = {
+    title: ["Learny — English homework, step by step", "Learny — домашка по английскому, шаг за шагом"],
+    navLessons: ["Sample lessons", "Готовые уроки"], navOwn: ["Your own lesson", "Свой урок"], navSpace: ["My space", "Кабинет"],
+    h1a: ["English homework,", "Домашка по английскому,"], h1b: ["step by step", "шаг за шагом"],
+    lede: ["Learny turns homework, a topic or any text into a lesson. Do one step now, the next one tomorrow: it remembers where you stopped", "Learny превращает домашку, тему или любой текст в\u00a0урок. Сделайте один шаг сейчас, следующий завтра: Learny помнит, где вы остановились"],
+    cta: ["Create my own lesson", "Создать свой урок"],
+    hintClosed: ["scroll to open ↓", "листайте, чтобы открыть ↓"], hintOpen: ["skip to the lessons ↓", "сразу к\u00a0урокам ↓"],
+    tagSubject: ["Subject", "Тема"], tagFor: ["For", "Срок"], tagDay: ["Thursday", "четверг"],
+    s1name: ["Theory", "Теория"], s2name: ["Practice", "Практика"], s3name: ["Mini-dialogues", "Мини-диалоги"], s4name: ["Speaking", "Говорение"], s5name: ["Results", "Итоги"],
+    s1h: ["Your teacher's notes, made clear", "Заметки учителя, понятным языком"],
+    s1p: ["The rule in plain words, with examples. Translate any phrase and save new words", "Правило простыми словами и\u00a0с\u00a0примерами. Любую фразу можно перевести, новые слова сохранить"],
+    s2h: ["A mistake is part of the page", "Ошибка\u00a0— часть страницы"],
+    s2p: ["Check every answer at once. Not right? Try again and see why", "Ответ проверяется сразу. Не\u00a0получилось? Попробуйте еще раз и\u00a0посмотрите разбор"],
+    s3h: ["The same rule in conversation", "То же правило в разговоре"],
+    s3p: ["Read a short dialogue and choose the modal that fits the situation", "Прочитайте диалог и выберите подходящий модальный глагол"],
+    s4h: ["Say it before the lesson", "Проговорите до\u00a0урока"],
+    s4p: ["Record your answer and get suggestions for clearer English", "Запишите ответ и\u00a0получите подсказки, как сказать точнее"],
+    s5h: ["Bring this to your lesson", "Принесите это на\u00a0урок"],
+    s5p: ["A short report for your teacher: what went well, what you fixed, your new words", "Короткий отчет для учителя: что получилось, что исправлено, какие слова новые"],
+    lessonsP: ["Open any notebook. Each one is a complete lesson", "Откройте любой. Каждый\u00a0— целый урок"],
+    metaG: ["Grammar · B1–B2", "Грамматика · B1–B2"], metaS1: ["Speaking · B1", "Говорение · B1"], metaS2: ["Speaking · C1", "Говорение · C1"], metaOwn: ["From anything", "Из чего угодно"],
+    rowDialogues: ["Five steps: theory, practice, mini-dialogues, speaking, results", "Пять шагов: теория, практика, мини-диалоги, говорение, итоги"],
+    rowWords: ["Five steps: theory, practice, words, speaking, results", "Пять шагов: теория, практика, слова, говорение, итоги"],
+    rowSteps: ["Five steps: theory, practice, mini-stories, speaking, results", "Пять шагов: теория, практика, мини-истории, говорение, итоги"],
+    rowGo: ["Open the notebook →", "Открыть урок →"], ownSmall: ["From homework, a topic, words or any text", "Из\u00a0домашки, темы, слов или любого текста"], ownGo: ["Start ↓", "Начать ↓"],
+    ownH: ["What are we learning?", "Что разберем?"], ownPh: ["Paste your homework or describe a topic", "Вставьте домашку или опишите тему"], attach: ["Photo or file", "Фото или файл"], paste: ["Paste", "Вставить"],
+    startsAria: ["Start with an example", "Начать с\u00a0примера"], start1: ["My teacher's homework", "Домашку от\u00a0учителя"], start2: ["A topic I don't get", "Тему, которая не\u00a0дается"], start3: ["Words from a show", "Слова из\u00a0сериала"], start4: ["A text to understand", "Текст, который хочу понять"],
+    mk1: ["Create", "Создать"], mk2: ["my lesson", "урок"],
+    tagline: ["A little English, every day", "Немного английского каждый день"], insideH: ["Inside a lesson", "Внутри урока"], how: ["How it works", "Как это устроено"],
+    repK: ["Report for your teacher", "Отчет для учителя"], repSum: ["8 tasks in 9 minutes", "8 заданий за 9 минут"],
+    rep1: ["right first time", "верно сразу"], rep2: ["fixed", "исправлено"], rep3: ["new words", "новых слова"],
+    sayA: ["See you on", "До\u00a0встречи в"], sayB: ["Thursday", "четверг"], well: ["Well done!", "Молодец!"]
+  };
+  for (let i = 1; i <= 5; i++) {
+    const [en, ru] = T[`s${i}name`];
+    T[`s${i}n`] = [`${i} of 5 · ${en}`, `${i} из 5 · ${ru}`];
+    T[`s${i}aria`] = [`Step ${i}: ${en}`, `Шаг ${i}: ${ru}`];
+    T[`s${i}full`] = [`${T[`s${i}h`][0]}. ${T[`s${i}p`][0]}`, `${T[`s${i}h`][1]}. ${T[`s${i}p`][1]}`];
+  }
+  // Язык общий с приложением: лежит в его сохраненном состоянии. Если его еще нет, берем язык браузера.
+  document.querySelector('meta[name="theme-color"]').content = getComputedStyle(document.body).backgroundColor;
+  const STATE = "homework-english-v3";
+  const readState = () => { try { return JSON.parse(localStorage.getItem(STATE) || "{}") || {}; } catch { return {}; } };
+  let lang = readState().lang;
+  if (lang !== "ru" && lang !== "en") lang = /^ru/i.test(navigator.language || "") ? "ru" : "en";
+  window.learnyText = key => T[key][lang === "ru" ? 1 : 0];
+  // Крупные строки (заголовок первого экрана, «свой урок», фраза в футере) подгоняются под ширину страницы:
+  // слова в двух языках разной длины, а строка должна вставать ровно от края до края.
+  function fit() {
+    document.querySelectorAll("[data-fit]").forEach(el => {
+      el.style.fontSize = "";
+      const style = getComputedStyle(el), full = el.hasAttribute("data-fit-full");
+      // Фраза в футере (data-fit-full) всегда встает ровно от края до края контейнера, на любом экране и в любом языке:
+      // на широком одной строкой, на узком двумя, и тогда по ширине подгоняется более длинная строка.
+      // Вместе со словом считается и карандашная обводка вокруг него: она тоже не должна выходить за край.
+      const stacked = full && getComputedStyle(el.firstElementChild).display === "block";
+      if (!stacked && style.whiteSpace !== "nowrap") return;
+      let width = 0;
+      (stacked ? [...el.children] : [el]).forEach(line => {
+        const range = document.createRange();
+        range.selectNodeContents(line);
+        const box = range.getBoundingClientRect(), ring = line.matches(".ld-ring") ? line.querySelector("path") : line.querySelector(".ld-ring path");
+        const right = ring ? Math.max(box.right, ring.getBoundingClientRect().right + 3) : box.right;   // 3 — половина толщины обводки
+        width = Math.max(width, right - box.left);
+      });
+      const room = el.clientWidth * +el.dataset.fit * (lang === "ru" && !full ? .9 : 1);
+      if (width) el.style.fontSize = Math.min(full ? 1000 : 230, parseFloat(style.fontSize) * room / width).toFixed(1) + "px";
+    });
+  }
+  function setLang(next, save) {
+    lang = next;
+    document.documentElement.lang = lang;
+    document.title = learnyText("title");
+    document.querySelectorAll("[data-t]").forEach(el => { el.textContent = learnyText(el.dataset.t); });
+    document.querySelectorAll("[data-t-ph]").forEach(el => { el.placeholder = learnyText(el.dataset.tPh); });
+    document.querySelectorAll("[data-t-aria]").forEach(el => { el.setAttribute("aria-label", learnyText(el.dataset.tAria)); });
+    document.querySelectorAll("#lang-m button").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.lang === lang)));
+    $("lang-code").textContent = lang.toUpperCase();
+    if (save) try { localStorage.setItem(STATE, JSON.stringify({ ...readState(), lang })); } catch {}
+    window.learnyLook?.();   // пробы стилистики (?look=…), без параметра ее нет
+    fit();
+    dispatchEvent(new Event("resize"));   // кнопки и поле пересчитывают свои размеры под новые слова
+  }
+  // список языков открывается по кнопке, закрывается выбором, нажатием мимо и клавишей Escape
+  const langButton = $("lang-b"), langMenu = $("lang-m");
+  const toggleLang = open => { langMenu.hidden = !open; langButton.setAttribute("aria-expanded", String(open)); };
+  langButton.addEventListener("click", () => toggleLang(langMenu.hidden));
+  langMenu.addEventListener("click", e => {
+    const button = e.target.closest("button");
+    if (!button) return;
+    toggleLang(false);
+    langButton.focus();
+    if (button.dataset.lang !== lang) setLang(button.dataset.lang, true);
+  });
+  addEventListener("click", e => { if (!e.target.closest("#lang")) toggleLang(false); });
+  addEventListener("keydown", e => { if (e.key === "Escape" && !langMenu.hidden) { toggleLang(false); langButton.focus(); } });
+  // Шапка. Ссылки и язык набраны простым текстом одного веса; под курсором и в фокусе пункт обводится карандашом от руки,
+  // как «Thursday» в футере. «Кабинет» — кнопка (переход в приложение), обводки у нее нет: обводка значит «на это указывают»,
+  // и у действия она путалась бы с наведением. Линия именно рисуется, поэтому контур строится под размер каждого слова
+  // (растянутый рисунок дал бы линию разной толщины).
+  const LOOP = "M34 66C28 32 92 9 162 10c70 1 122 20 122 52 0 33-60 50-134 48C80 108 22 94 20 60 19 38 48 22 88 15";
+  const loops = [...document.querySelectorAll(".ld-nav > a:not(.split), .ld-lang-b")].map(item => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"), path = document.createElementNS(svg.namespaceURI, "path");
+    svg.setAttribute("class", "ld-loop");
+    svg.setAttribute("aria-hidden", "true");
+    path.setAttribute("pathLength", "1");
+    svg.append(path);
+    item.append(svg);
+    return [svg, path];
+  });
+  const drawLoops = () => loops.forEach(([svg, path]) => {
+    const { width, height } = svg.getBoundingClientRect();
+    if (!width) return;
+    svg.setAttribute("viewBox", `0 0 ${width.toFixed(1)} ${height.toFixed(1)}`);
+    let n = 0;
+    path.setAttribute("d", LOOP.replace(/-?\d+(\.\d+)?/g, v => " " + (v * (n++ % 2 ? height / 120 : width / 300)).toFixed(1)));
+  });
+  addEventListener("resize", drawLoops);
+  setLang(lang, !readState().lang);
+  addEventListener("resize", fit);
+  document.fonts?.ready.then(fit);
+  // Кириллица догружается отдельным файлом шрифта, когда язык переключили на ходу: после ее загрузки буквы становятся
+  // другой ширины, и все, что подгонялось по ширине (крупные строки, тетрадь, кнопки), пересчитывается еще раз.
+  document.fonts?.addEventListener?.("loadingdone", () => dispatchEvent(new Event("resize")));
+
+  document.querySelectorAll('a[href^="index.html"], a[href="landing.html"]').forEach(link => {
+    link.href = learnyPaperURL(link.getAttribute("href"));
+  });
   const toComposer = () => {
     const text = $("own-text").value.trim();
     try { if (text) sessionStorage.setItem("learny-draft", text); } catch {}
-    location.href = "index.html#new-lesson";
+    location.href = learnyPaperURL("index.html#new-lesson");
   };
+  document.querySelectorAll('a[href="#own"]').forEach(link => link.addEventListener("click", () => {
+    if (matchMedia("(hover:hover) and (pointer:fine)").matches) setTimeout(() => $("own-text").focus({ preventScroll: true }), 0);
+  }));
   $("own-form").addEventListener("submit", e => { e.preventDefault(); toComposer(); });
   $("own-attach").addEventListener("click", toComposer);
 
-  // тетрадь на полке раскрывается в урок
-  $("shelf").addEventListener("click", e => {
-    const card = e.target.closest(".lp-card");
-    const sheet = card?.querySelector(".lp-sheet:not(.blank)");
-    if (!sheet || e.metaKey || e.ctrlKey) return;
-    e.preventDefault();
-    openNotebook(sheet, card.getAttribute("href"));
+  // Лист растет вместе с текстом
+  const field = $("own-text");
+  const grow = () => {
+    field.style.height = "auto";
+    field.style.height = field.scrollHeight + "px";
+  };
+  // примеры вписываются в пропуск по буквам; текст, который посетитель набрал сам, не затираем
+  let typing = 0, sample = "";
+  field.addEventListener("input", () => { typing++; grow(); });
+  document.querySelectorAll(".ld-fill").forEach(button => button.addEventListener("click", () => {
+    if (field.value.trim() && field.value !== sample) { field.focus(); return; }
+    const text = (lang === "ru" && button.dataset.fillRu) || button.dataset.fill, run = ++typing;
+    field.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { field.value = sample = text; grow(); return; }
+    let i = 0;
+    (function write() {
+      if (run !== typing) return;
+      i = Math.min(text.length, i + 2);
+      field.value = sample = text.slice(0, i);
+      grow();
+      if (i < text.length) setTimeout(write, 18);
+    })();
+  }));
+  // «Вставить» кладет в лист то, что скопировано. Если браузер не дал прочитать буфер, курсор уже стоит в поле
+  // и вставить можно обычным способом
+  $("own-paste").addEventListener("click", async () => {
+    field.focus();
+    let text = "";
+    try { text = (await navigator.clipboard.readText()).trim(); } catch {}
+    if (!text) return;
+    typing++;   // останавливает пример, если он еще печатается
+    if (field.value === sample) field.value = "";
+    sample = "";
+    field.setRangeText(text, field.selectionStart, field.selectionEnd, "end");
+    grow();
   });
+  grow(); addEventListener("resize", grow); addEventListener("pageshow", grow); document.fonts?.ready.then(grow);
+
+  // Паузы прокрутки на картотеке уроков и на блоке «свой урок» делает сам браузер (scroll-snap в стилях):
+  // свой перехват колеса заставлял считать прокрутку в основном потоке и рвал движение всей страницы.
+
+  // В картотеке всегда раскрыт один разделитель: сначала первый, дальше тот, на который навели или перешли с клавиатуры.
+  // На сенсорном экране первое касание раскрывает разделитель, второе открывает урок.
+  const stack = $("shelf"), cards = [...stack.querySelectorAll("li")];
+  const openCard = card => cards.forEach(other => other.classList.toggle("open", other === card));
+  // сколько места нужно раскрытой папке: ее текст плюс запас под ярлычок следующей папки
+  const measureCards = () => cards.forEach(card => {
+    const body = card.querySelector(".ld-nbbody");
+    if (body) card.style.setProperty("--need", Math.ceil(body.offsetTop + body.offsetHeight + 56) + "px");
+  });
+  measureCards(); addEventListener("resize", measureCards); document.fonts?.ready.then(measureCards);
+  let ready = true;
+  // Раскрытие сдвигает соседние разделители, и под неподвижным курсором оказывается другой. Поэтому считается только
+  // настоящее движение мыши (координаты изменились): раскрывается тот разделитель, на который курсор привели последним,
+  // и не раньше, чем закончится предыдущее раскрытие.
+  let settled = 0, wanted = null, lastX = -1, lastY = -1, timer = 0;
+  const follow = () => {
+    clearTimeout(timer);
+    if (!wanted || wanted.classList.contains("open")) return;
+    const now = performance.now();
+    if (now < settled) { timer = setTimeout(follow, settled - now + 10); return; }
+    settled = now + 440;
+    openCard(wanted);
+  };
+  cards.forEach(card => {
+    card.addEventListener("mousemove", e => {
+      if (e.clientX === lastX && e.clientY === lastY) return;
+      lastX = e.clientX; lastY = e.clientY;
+      wanted = card;
+      follow();
+    });
+    card.addEventListener("focusin", () => openCard(card));
+  });
+  stack.addEventListener("pointerdown", e => {
+    const card = e.target.closest("li");
+    ready = !card || e.pointerType === "mouse" || card.classList.contains("open");
+  }, true);
+  // раскрытый разделитель вырастает во весь экран и становится уроком
+  stack.addEventListener("click", e => {
+    const row = e.target.closest(".ld-nbrow");
+    if (!row) return;
+    if (!ready) { e.preventDefault(); openCard(row.closest("li")); ready = true; return; }
+    const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // «Свой урок» ведет в соседний блок: страница доезжает до него плавно, а не перескакивает
+    if (row.getAttribute("href") === "#own") { e.preventDefault(); $("own").scrollIntoView({ behavior: calm ? "auto" : "smooth" }); return; }
+    if (e.metaKey || e.ctrlKey || calm) return;
+    e.preventDefault();
+    const r = row.getBoundingClientRect(), sheet = document.createElement("div");
+    sheet.className = "ld-grow";
+    sheet.style.cssText = `left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;background:${getComputedStyle(row).backgroundColor}`;
+    document.body.append(sheet);
+    const desk = getComputedStyle(row).getPropertyValue("--theory-desk").trim();
+    sheet.animate([{ left: r.left + "px", top: r.top + "px", width: r.width + "px", height: r.height + "px", borderRadius: "16px 16px 0 0" }, { left: 0, top: 0, width: "100vw", height: "100vh", borderRadius: 0 }], { duration: 420, easing: "cubic-bezier(.3,0,.2,1)", fill: "forwards" });
+    sheet.animate([{ backgroundColor: getComputedStyle(row).backgroundColor }, { backgroundColor: desk }], { duration: 220, delay: 400, easing: "ease", fill: "forwards" })
+      .finished.then(() => { location.href = row.getAttribute("href"); });
+  });
+  addEventListener("pageshow", () => document.querySelectorAll(".ld-grow").forEach(el => el.remove()));
 })();
 </script>
 </body>
