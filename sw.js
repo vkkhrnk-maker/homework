@@ -1,7 +1,7 @@
 // Офлайн-кэш оболочки приложения. Уроки и прогресс лежат в браузере и через этот файл не проходят.
-const VERSION = '748fdc330b';
+const VERSION = '9f21702e3a';
 const CACHE = `homework-${VERSION}`;
-const LANDING_ASSETS = ["learny-paper.css?v=a97faeba88", "learny-paper.js?v=a97faeba88", "learny-notebook.css?v=a97faeba88", "learny-notebook-landing.css?v=a97faeba88", "learny-notebook-open.js?v=a97faeba88", "learny-looks.css?v=a97faeba88", "learny-looks.js?v=a97faeba88"];
+const LANDING_ASSETS = ["learny-paper.css?v=a759fd0918", "learny-paper.js?v=a759fd0918", "learny-notebook.css?v=a759fd0918", "learny-notebook-landing.css?v=a759fd0918", "learny-notebook-open.js?v=a759fd0918", "learny-looks.css?v=a759fd0918", "learny-looks.js?v=a759fd0918"];
 const SHELL = [...LANDING_ASSETS, './', 'index.html', 'landing.html', 'soft.html', 'blue.html', 'fromt.html', 'playful.html', 'playful-green.html', 'playful-bright.html', 'playful-yellow.html', 'learny.html', 'manifest.webmanifest', 'icons/homework-mark-v1.png', 'icons/klyaksa-16.svg', 'icons/klyaksa-192.png', 'icons/klyaksa-512.png', 'icons/klyaksa-maskable-512.png', 'icons/klyaksa-touch.png',
   'icons/learny-wordmark-v1.png', 'icons/playful/book.svg', 'icons/playful/bubble.svg', 'icons/playful/calendar.svg', 'icons/playful/cup.svg', 'icons/playful/globe.svg', 'icons/playful/pencil.svg', 'icons/playful/microphone.svg', 'icons/playful/star.svg', 'icons/playful/cursor.svg', 'icons/playful/cursor-green.svg',
   'icons/learny-home/attach.svg', 'icons/learny-home/menu.svg', 'icons/learny-home/lesson-arrow.svg',

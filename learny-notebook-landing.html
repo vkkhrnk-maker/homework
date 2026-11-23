@@ -170,20 +170,6 @@
 <!-- футер во весь экран: сверху наши пункты (уроки, шаги урока, разделы), внизу прощальная фраза тем же крупным шрифтом,
      что заголовки; от руки только пометки преподавателя: обводка красным карандашом и короткая приписка -->
 <footer class="ld-foot">
-  <div class="ld-foot-cols">
-    <div class="ld-foot-brand">
-      <a class="brand" href="landing.html" aria-label="Learny"><img class="learny-logo" src="icons/learny-wordmark.svg" alt=""></a>
-      <p data-t="tagline">A little English, every day</p>
-    </div>
-    <!-- одна строка ссылок: колонки «Внутри урока» и «Как это устроено» вели к той же сцене, а готовые уроки уже стоят в картотеке над футером -->
-    <nav class="ld-foot-nav" aria-label="Learny">
-      <ul>
-        <li><a href="#lessons" data-t="navLessons">Sample lessons</a></li>
-        <li><a href="#own" data-t="navOwn">Your own lesson</a></li>
-        <li><a href="index.html#cabinet" data-t="navSpace">My space</a></li>
-      </ul>
-    </nav>
-  </div>
   <!-- низ футера: огромная марка и наклейки из мира урока поверх нее, их можно двигать (по рефу truus, 24 ноября 2026) -->
   <div class="lk-foot-stage" aria-hidden="true">
     <div class="lk-foot-mark"></div>
@@ -196,7 +182,13 @@
     <img class="lk-st lk-st-blot" src="icons/klyaksa.svg" alt="" draggable="false" style="--x:58%;--y:58%;--r:9deg;--mx:78%;--my:34%">
   </div>
   <p class="ld-foot-say" data-fit="1" data-fit-full><span data-t="sayA">See you on</span> <span class="ld-ring"><span data-t="sayB">Thursday</span><svg viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true"><path d="M34 66C28 32 92 9 162 10c70 1 122 20 122 52 0 33-60 50-134 48C80 108 22 94 20 60 19 38 48 22 88 15"/></svg></span></p>
-  <div class="ld-foot-bot"><span>© 2026 Learny</span><span class="ld-foot-note lk-drag-hint" data-t="drag">the stickers move ↗</span></div>
+  <div class="ld-foot-bot"><span>© 2026 Learny</span><nav class="ld-foot-nav" aria-label="Learny">
+      <ul>
+        <li><a href="#lessons" data-t="navLessons">Sample lessons</a></li>
+        <li><a href="#own" data-t="navOwn">Your own lesson</a></li>
+        <li><a href="index.html#cabinet" data-t="navSpace">My space</a></li>
+      </ul>
+    </nav><span class="ld-foot-note lk-drag-hint" data-t="drag">the stickers move ↗</span></div>
 </footer>
 
 <script src="learny-notebook-open.js?v=200138"></script>
