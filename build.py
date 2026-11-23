@@ -130,15 +130,13 @@ learny_html = learny_html.replace('data-theme="light" data-theme-mode="light"', 
 learny_html = learny_html.replace("</head>", '<style id="learny-calm">\n' + calm_css + "\n</style>\n</head>", 1)
 body, end = learny_html.rsplit("</body>", 1)
 learny_html = body + '<script id="learny-calm-script">\n' + calm_js + "\n</script>\n</body>" + end
-# Новый посетитель без уроков, прогресса и словаря сразу уходит на лендинг, еще до отрисовки приложения.
-# У кого есть данные или ссылка внутрь приложения (урок, кабинет, код кабинета), остается здесь.
+# Главная ссылка всегда открывает лендинг, еще до отрисовки приложения: и новому человеку, и тому, кто уже занимался
+# (решение Виктории 23 ноября 2026). В приложение ведут ссылки внутрь: урок, кабинет («My space»), код кабинета.
+# Установленное приложение открывается сразу в кабинете (start_url в manifest.webmanifest).
 landing_redirect = """<script>
 (function(){try{
   if (location.hash && location.hash !== "#welcome") return;
-  var filled = function (key) { try { var v = JSON.parse(localStorage.getItem(key) || "null"); return !!v && (Array.isArray(v) ? v.length > 0 : Object.keys(v).length > 0); } catch (e) { return true; } };
-  var state = JSON.parse(localStorage.getItem("homework-english-v3") || "null");
-  var progress = state && state.progress ? Object.keys(state.progress).length : 0;
-  if (!progress && !filled("homework-english-lessons-v1") && !filled("et-vocab-v1")) location.replace(window.learnyPaperURL?.("landing.html") || "landing.html");
+  location.replace(window.learnyPaperURL?.("landing.html") || "landing.html");
 }catch(e){}})();
 </script>
 """

@@ -17,10 +17,7 @@
 <script>
 (function(){try{
   if (location.hash && location.hash !== "#welcome") return;
-  var filled = function (key) { try { var v = JSON.parse(localStorage.getItem(key) || "null"); return !!v && (Array.isArray(v) ? v.length > 0 : Object.keys(v).length > 0); } catch (e) { return true; } };
-  var state = JSON.parse(localStorage.getItem("homework-english-v3") || "null");
-  var progress = state && state.progress ? Object.keys(state.progress).length : 0;
-  if (!progress && !filled("homework-english-lessons-v1") && !filled("et-vocab-v1")) location.replace(window.learnyPaperURL?.("landing.html") || "landing.html");
+  location.replace(window.learnyPaperURL?.("landing.html") || "landing.html");
 }catch(e){}})();
 </script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -2955,8 +2952,21 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
      ===================================================================== */
   & :is(.sheet, .ask-box) { background: var(--nb-sheet); border-radius: 20px 20px 0 0; box-shadow: none; }
   @media (min-width: 600px) { & :is(.sheet, .ask-box) { border-radius: 20px; } }
-  & .sheet h3 { font: 600 24px/1.15 var(--nb-read); letter-spacing: -.02em; color: var(--nb-ink); }
-  & .sheet p { font: 400 15.5px/1.5 var(--nb-ui); color: var(--nb-ink-2); }
+  & .sheet h3 { margin: 0 0 12px; font: 900 clamp(36px, 3.4vw, 48px)/.86 var(--nb-disp); letter-spacing: -.004em; color: #000; text-wrap: balance; }
+  & .sheet p { font: 400 16px/1.3 var(--nb-ui); color: var(--nb-ink-2); }
+  & .sheet .field label { font: 400 14px/1.3 var(--nb-ui); letter-spacing: 0; text-transform: none; color: var(--nb-ink-2); }
+  /* кнопки листа — пилюли; главная в окне глубокого зеленого, как в окне «Свой урок», второстепенная — с обводкой */
+  & .sheet .acts { gap: 8px; margin-top: 20px; }
+  & .sheet .acts .primary-btn { background: var(--nb-deep); color: #fff; box-shadow: none; }
+  & .sheet .acts .primary-btn:hover:not(:disabled) { background: #0b5a39; box-shadow: none; }
+  & .sheet .acts .ghost-btn { background: #fff; color: var(--nb-ink); box-shadow: inset 0 0 0 1.5px var(--nb-ink); }
+  & .sheet .acts .ghost-btn:hover:not(:disabled) { background: var(--nb-ink); color: #fff; box-shadow: inset 0 0 0 1.5px var(--nb-ink); }
+  /* лист поверх окна «Свой урок» (свой ключ ИИ) — та же открытка: окно под ним прячется, лист встает на его место */
+  & #lesson-composer:has(#sheet:not([hidden])) .learny-own { visibility: hidden; }
+  & #lesson-composer .sheet-wrap { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; padding: 16px; background: none; }
+  & #lesson-composer .sheet { width: min(600px, 100%); max-width: none; max-height: 100%; overflow: auto; margin: 0; padding: 40px 36px 28px; border: 12px solid var(--nb-lime); border-radius: 24px; background: #f6f4ec; }
+  & #lesson-composer .sheet .grab { display: none; }
+  @media (max-width: 640px) { & #lesson-composer .sheet { padding: 32px 20px 20px; border-width: 8px; border-radius: 20px; } }
   & .sheet a { color: var(--nb-ink); }
   & .sheet .grab, & .ask-box::before { background: var(--nb-line); }
   & .opt { border-radius: 11px; font: 500 16px/1.3 var(--nb-ui); color: var(--nb-ink); transition: background-color .15s var(--nb-ease); }
@@ -2973,7 +2983,10 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & .wd-tr { font: 600 20px/1.3 var(--nb-ui); }
   & .wd-line i, & .fc-sent { font-family: var(--nb-read); }
   & .fc-word { font: 600 36px/1.1 var(--nb-read); letter-spacing: -.02em; }
-  & :is(.field input, .field textarea, .sheet .sp-text) { border: 1px solid rgba(26,23,28,.22); border-radius: 12px; background: var(--nb-control-hover); font: 400 16px/1.4 var(--nb-ui); color: var(--nb-ink); }
+  /* поля в окнах — как поле окна «Свой урок»: белый лист с тонким черным контуром, в фокусе лаймовый срез */
+  & :is(.field input, .field textarea, .sheet .sp-text) { border: 1.5px solid var(--nb-ink); border-radius: 8px; background: #fff; font: 400 16px/1.4 var(--nb-ui); color: var(--nb-ink); outline: 0; transition: box-shadow .2s var(--nb-ease); }
+  & :is(.field input, .field textarea, .sheet .sp-text):focus { box-shadow: 4px 4px 0 0 var(--nb-lime); }
+  & .field input { height: 52px; padding: 0 16px; }
   & .sheet .sp-text { min-height: 70px; padding: 12px 14px; background: var(--nb-control-hover); }
   & .ex-chips button { border-radius: 10px; background: var(--nb-tint); font: 400 13.5px/1.3 var(--nb-ui); color: var(--nb-ink-2); }
   & .aq-me { background: var(--nb-purple-soft); color: var(--nb-ink); }
@@ -3100,7 +3113,10 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     & .learny-own #parse-btn { height: 60px; min-height: 60px; font-size: 18px; }
     & .learny-own .parse-status:not([hidden]) { height: 60px; font-size: 16px; }
     & .learny-own .intake-level legend { font-size: 16px; }
-    & .intake-level-options button, & .learny-own .intake-level-options button { height: 48px; min-width: 60px; padding: 0 18px; font-size: 16px; }
+    & .intake-level-options button, & .learny-own .intake-level-options button { height: 48px; min-width: 0; padding: 0 12px; font-size: 16px; }
+    /* на телефоне пять пилюль в строку не встают: уровни — ровной строкой во всю ширину, «Не знаю» — тихой пилюлей под ней, а не одна на второй строке */
+    & .learny-own .intake-level-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    & .learny-own .intake-level-options button:last-child { grid-column: 1 / -1; justify-self: center; height: 44px; padding: 0 18px; background: none; box-shadow: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     & #lesson-composer :is(.nb-scrim, .nb-card > *) { transition: none; }
@@ -9112,6 +9128,8 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     },
     fileHelp: { ru: "Фото или PDF, до 10 МБ", en: "Photo or PDF, up to 10 MB" },
     nbDrop: { ru: "Отпустите здесь", en: "Drop it here" },
+    // файл еще не распознан: «Распознать текст» уже написано на кнопке, подсказка говорит только, что будет потом
+    fileSelected: { ru: "После этого проверьте текст и соберите урок", en: "After that, check the text and build the lesson" },
     // после распознавания файла: что текст уже в поле, и так видно
     fileReview: { ru: "Проверьте текст и исправьте неточности. Нечитаемые места отмечены [неразборчиво]", en: "Check the text and fix any mistakes. Unreadable parts are marked [unreadable]" }
   });

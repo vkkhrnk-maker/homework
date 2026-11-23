@@ -3,7 +3,7 @@
   "short_name": "Домашка",
   "description": "Домашка от учителя превращается в урок: теория, тренажёр, выбор ответа и говорение",
   "lang": "ru",
-  "start_url": "./",
+  "start_url": "./#cabinet",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
