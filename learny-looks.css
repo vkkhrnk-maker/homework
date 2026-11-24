@@ -350,7 +350,9 @@ html[data-look="g"] .ld-leaf.ld-base{inset:1.5% calc(2.5% - .22em) calc(2% - .18
 /* тень под тетрадью: четкая, без размытия, в цвет фона на тон глубже */
 html[data-look="g"] .ld-ground{box-shadow:.14em .18em 0 0 rgba(26,23,28,.14)}
 html[data-cover][data-look="g"] .ld-pin:not(.lit) .ld-ground,
-html[data-look="g"][data-cover] .ld-pin:not(.lit) .ld-ground{box-shadow:.14em .18em 0 0 color-mix(in oklab,var(--cover) 78%,#000)}
+/* на зеленой обложке у тетради нет темной тени на столе: темно-зеленый сдвиг справа снизу читался грязной полосой (Виктория, 24 ноября).
+   Толщину показывает темно-розовый срез самой обложки */
+html[data-look="g"][data-cover] .ld-pin:not(.lit) .ld-ground{box-shadow:none}
 html[data-look="g"] .ld-pin[data-bg="steps"].lit .ld-ground{box-shadow:.14em .18em 0 0 color-mix(in oklab,var(--desk-now,var(--stage)) 82%,#000)}
 /* стол меняет цвет через oklch (считает скрипт), а не через серо-бурую середину, как было при обычном переходе */
 html[data-look="g"] .ld-pin[data-bg="steps"]::before,html[data-look="g"][data-cover] .ld-pin:not(.lit)::before{background:var(--desk-now,var(--stage));transition:opacity .7s var(--ease) var(--lit-delay,0s)}
@@ -444,45 +446,82 @@ html[lang="ru"] .ld-foot-brand p{max-width:none}
    Наклейки — наши, а не смайлики: ярлык тетради, карточка слова, стикер с грамматическим мемом, звезда «+12 words»,
    «Well done!» карандашом, уровень, Клякса. Наклейки можно двигать; тень четкая, как у всего на странице */
 html[data-look="g"] .lk-foot-stage{position:relative;margin:clamp(40px,6vw,80px) 0 0;aspect-ratio:2459/675;font-size:clamp(12px,1.25vw,19px)}
-html[data-look="g"] .lk-foot-mark{position:absolute;inset:0;background:var(--cover,#0e6b44);
-  -webkit-mask:url(icons/learny-wordmark.svg) center/100% 100% no-repeat;mask:url(icons/learny-wordmark.svg) center/100% 100% no-repeat}
+html[data-look="g"] .lk-foot-mark{position:absolute;inset:0}
 html[data-look="g"] .lk-st{position:absolute;left:var(--x);top:var(--y);rotate:var(--r);translate:var(--dx,0) var(--dy,0);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
   transition:scale .18s var(--ease)}
 @media (hover:hover){html[data-look="g"] .lk-st:hover{scale:1.05}}
 html[data-look="g"] .lk-st.is-dragging{cursor:grabbing;scale:1.08;transition:none}
 /* теней нет: полупрозрачная тень на лайме выходила грязно-оливковой (Виктория, 24 ноября). Наклейки плоские, как у truus;
    у цветных — белая вырубка по краю, как у виниловой наклейки; белым карточкам она не нужна */
-html[data-look="g"] .lk-st-label{display:grid;gap:.15em;padding:.55em .9em .6em;border-radius:.35em;background:#fff;color:var(--ink)}
-html[data-look="g"] .lk-st-label span{display:flex;align-items:baseline;gap:.7em;padding-bottom:.1em;border-bottom:1px solid rgba(26,23,28,.18)}
-html[data-look="g"] .lk-st-label i{width:4.2em;font:400 .62em/1 var(--ui);font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
-html[data-look="g"] .lk-st-label b{font:600 1.35em/1.05 var(--hand);color:#2b4ad8}
-html[data-look="g"] .lk-st-word{display:grid;gap:.25em;padding:.8em 1.2em .85em 1.9em;border-radius:.6em;background:#fff;color:var(--ink)}
-html[data-look="g"] .lk-st-word::before{content:"";position:absolute;left:.6em;top:.75em;width:.55em;height:.55em;border-radius:50%;background:var(--acc,#c8f26a);box-shadow:inset 0 0 0 1.5px rgba(26,23,28,.35)}
-html[data-look="g"] .lk-st-word b{font:900 2em/.9 var(--disp);letter-spacing:-.005em}
-html[data-look="g"] .lk-st-word i{font:400 .8em/1.2 var(--ui);font-style:normal;color:var(--ink-2)}
-html[data-look="g"] .lk-st-note{width:7.4em;padding:.7em .75em .9em;background:#ffe46a;outline:.2em solid #fff;font:600 1.45em/1.02 var(--hand);color:var(--ink)}
-html[data-look="g"] .lk-st-burst{display:grid;place-items:center;width:7.2em;aspect-ratio:1;color:#fff;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 108 108'%3E%3Cpolygon points='50,0 61,13 77,6 79,23 96,25 89,40 100,52 87,63 93,79 76,80 71,96 57,88 44,100 36,86 20,92 19,75 3,70 11,55 0,42 13,33 8,17 25,17 30,2 43,12' fill='%236f45e8' stroke='%23fff' stroke-width='4' stroke-linejoin='round' paint-order='stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat}
-html[data-look="g"] .lk-st-burst span{font:900 1.5em/.88 var(--disp);text-align:center;text-transform:uppercase}
-html[data-look="g"] .lk-st-done{display:inline-flex;align-items:center;gap:.4em;padding:.45em .8em .5em;border-radius:.3em;background:#fff;font:600 1.6em/1 var(--hand);color:var(--pencil,#e0452b)}
-html[data-look="g"] .lk-st-done svg{width:1em;height:.75em;overflow:visible}
-html[data-look="g"] .lk-st-done path{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-html[data-look="g"] .lk-st-pill{padding:.5em 1.1em;border-radius:999px;background:#f2619c;outline:.2em solid #fff;font:400 1.1em/1 var(--ui);color:#fff}
-html[data-look="g"] .lk-st-blot{width:5.5em;height:auto;filter:drop-shadow(.16em 0 0 #fff) drop-shadow(-.16em 0 0 #fff) drop-shadow(0 .16em 0 #fff) drop-shadow(0 -.16em 0 #fff)}
+/* Наклейки-перевертыши: слово из уроков в цвете своего урока; на обороте перевод синим карандашом. Формы разные, как у
+   набора наклеек: звезда, карточка, пилюля, круг, ярлык тетради, Клякса. Белая вырубка по краю, теней нет */
+html[data-look="g"] .lk-card{padding:0;border:0;background:none;font:inherit;color:inherit;perspective:700px;-webkit-tap-highlight-color:transparent}
+html[data-look="g"] .lk-card:focus-visible{outline:2px solid var(--cover,#0e6b44);outline-offset:6px;border-radius:.6em}
+html[data-look="g"] .lk-flip{display:grid;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,1.35,.5,1)}
+html[data-look="g"] .lk-card.is-flipped .lk-flip{transform:rotateY(180deg)}
+html[data-look="g"] :is(.lk-f,.lk-b){grid-area:1/1;display:grid;place-items:center;-webkit-backface-visibility:hidden;backface-visibility:hidden;text-align:center}
+html[data-look="g"] .lk-f{padding:.45em .8em .5em;border-radius:.45em;background:var(--c,#f2619c);color:var(--on,#fff);outline:.2em solid #fff;font:900 2.2em/.88 var(--disp);letter-spacing:-.004em;white-space:nowrap}
+html[data-look="g"] .lk-b{transform:rotateY(180deg);padding:.5em .9em;border-radius:.45em;background:#fff;color:#2b4ad8;font:600 1.6em/1 var(--hand);white-space:nowrap}
+html[data-look="g"] .lk-pill :is(.lk-f,.lk-b){border-radius:999px;padding-inline:1em}
+html[data-look="g"] .lk-round :is(.lk-f,.lk-b){width:5.6em;aspect-ratio:1;padding:0;border-radius:50%}
+html[data-look="g"] .lk-round .lk-f{font-size:1.75em;width:3.2em}
+html[data-look="g"] .lk-round .lk-b{width:3.5em}
+html[data-look="g"] .lk-burst :is(.lk-f,.lk-b){width:6.4em;aspect-ratio:1;padding:0;border-radius:0;outline:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 108 108'%3E%3Cpolygon points='50,0 61,13 77,6 79,23 96,25 89,40 100,52 87,63 93,79 76,80 71,96 57,88 44,100 36,86 20,92 19,75 3,70 11,55 0,42 13,33 8,17 25,17 30,2 43,12' fill='%23f2619c' stroke='%23fff' stroke-width='4' stroke-linejoin='round' paint-order='stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+html[data-look="g"] .lk-burst .lk-f{font-size:2em;width:3.2em}
+html[data-look="g"] .lk-burst .lk-b{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 108 108'%3E%3Cpolygon points='50,0 61,13 77,6 79,23 96,25 89,40 100,52 87,63 93,79 76,80 71,96 57,88 44,100 36,86 20,92 19,75 3,70 11,55 0,42 13,33 8,17 25,17 30,2 43,12' fill='%23fff' stroke='%23fff' stroke-width='4' stroke-linejoin='round' paint-order='stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat;font-size:1.3em;line-height:1.05;width:4.9em}
+html[data-look="g"] .lk-label .lk-f{grid-template-columns:auto auto;gap:.6em;align-items:baseline;padding:.6em .9em .65em;border-radius:.3em;background:#fff;color:#2b4ad8;font:600 1.55em/1 var(--hand)}
+html[data-look="g"] .lk-label .lk-f i{font:400 .42em/1 var(--ui);font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+html[data-look="g"] .lk-label .lk-b{border-radius:.3em}
+html[data-look="g"] .lk-blot .lk-f{padding:0;background:none;outline:0}
+html[data-look="g"] .lk-blot img{display:block;width:4.6em;height:auto;filter:drop-shadow(.16em 0 0 #fff) drop-shadow(-.16em 0 0 #fff) drop-shadow(0 .16em 0 #fff) drop-shadow(0 -.16em 0 #fff)}
+/* оборот Кляксы — ее белый силуэт, а не квадрат */
+html[data-look="g"] .lk-blot .lk-b{position:relative;isolation:isolate;padding:0;background:none;font-size:1.2em;line-height:1.05}
+html[data-look="g"] .lk-blot .lk-b::before{content:"";position:absolute;inset:0;z-index:-1;background:#fff;
+  -webkit-mask:url(icons/klyaksa-silhouette.svg) center/contain no-repeat;mask:url(icons/klyaksa-silhouette.svg) center/contain no-repeat}
 html[data-look="g"] .lk-drag-hint{font-size:22px}
-html[data-look="g"] .lk-st-note .lk-ne{font:400 .9em/1 var(--ui)}
 /* футер начинается сразу с марки: слоган «A little English, every day» висел над ней ни к селу ни к городу,
    ссылки — в нижней строке между © и подсказкой про наклейки */
 html[data-look="g"] .ld-foot{padding-top:clamp(48px,6vw,80px)}
 html[data-look="g"] .lk-foot-stage{margin-top:0}
 html[data-look="g"] .ld-foot-bot .ld-foot-nav{margin:0 auto 0 clamp(24px,6vw,96px)}
 @media (max-width:800px){html[data-look="g"] .ld-foot-bot{flex-direction:column;align-items:flex-start}html[data-look="g"] .ld-foot-bot .ld-foot-nav{order:-1;margin:0}}
-@media (hover:none){html[data-look="g"] .lk-drag-hint{display:none}}
 /* на телефоне марка внизу полосы, наклейки — над ней, по своим местам; Клякса и уровень остаются */
 @media (max-width:800px){
   html[data-look="g"] .lk-foot-stage{aspect-ratio:auto;height:clamp(250px,74vw,330px);font-size:12px}
   html[data-look="g"] .lk-foot-mark{inset:auto 0 0;aspect-ratio:2459/675}
   html[data-look="g"] .lk-st{left:var(--mx);top:var(--my)}
-  html[data-look="g"] .lk-st-word{display:none}
+  html[data-look="g"] .lk-wide-only{display:none}
 }
-@media (prefers-reduced-motion:reduce){html[data-look="g"] .lk-st{transition:none}}
+@media (prefers-reduced-motion:reduce){html[data-look="g"] :is(.lk-st,.lk-flip){transition:none}}
+
+/* Марка двойным контуром, дорисовывается карандашом. Внешняя линия толще глубоким зеленым, внутренняя тоньше цветом лайма
+   поверх нее — получается двойной контур, как в рефе «FUTURE». Толщина линий в пикселях экрана, а не в долях марки:
+   на телефоне марка в четыре раза меньше, и линии иначе становились тоньше пикселя */
+html[data-foot="b"] .lk-foot-mark svg{display:block;width:100%;height:100%;overflow:visible}
+html[data-foot="b"] .lk-foot-mark path{fill:none;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+html[data-foot="b"] .lk-line-out{stroke:var(--cover,#0e6b44);stroke-width:11px}
+html[data-foot="b"] .lk-line-in{stroke:var(--acc,#c8f26a);stroke-width:4.4px}
+@media (max-width:800px){html[data-foot="b"] .lk-line-out{stroke-width:6px}html[data-foot="b"] .lk-line-in{stroke-width:2.4px}}
+html[data-foot="b"] .lk-foot-mark.is-drawn path{stroke-dashoffset:0;transition:stroke-dashoffset 2.2s cubic-bezier(.45,.05,.3,1)}
+html[data-foot="b"] .lk-foot-mark.is-drawn .lk-line-in{transition-delay:.08s}
+@media (prefers-reduced-motion:reduce){html[data-foot="b"] .lk-foot-mark path{stroke-dashoffset:0;transition:none}}
+
+/* Шум: на светлых поверхностях (лайм, столы) — почти белое зерно умножением, лайм темнеет на 1–2%, а не становится
+   грязно-оливковым, как от черного зерна; на зеленом — серое зерно «мягким светом» с низким центром, чтобы зеленый не светлел. Только на больших цветных поверхностях, только на больших цветных поверхностях — обложка и стол в сцене, картотека,
+   «свой урок», футер. Белые карточки, тетрадь и текст чистые. Зерно лежит в фоне блока и едет вместе с ним */
+html[data-grain]{--lk-noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='.3' intercept='.8'/%3E%3CfeFuncG type='linear' slope='.3' intercept='.8'/%3E%3CfeFuncB type='linear' slope='.3' intercept='.8'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+html[data-grain]{--lk-noise-dark:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='.3' intercept='.04'/%3E%3CfeFuncG type='linear' slope='.3' intercept='.04'/%3E%3CfeFuncB type='linear' slope='.3' intercept='.04'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+html[data-grain][data-look="g"] .ld-pin[data-bg]::before,html[data-grain][data-look="g"][data-cover] .ld-pin:not(.lit)::before{background-image:var(--lk-noise);background-size:330px;background-blend-mode:multiply}
+html[data-grain][data-look][lang][data-look="g"][data-cover="green"] :is(.ld-shelf,.ld-own,.ld-foot){background-image:var(--lk-noise);background-size:330px;background-blend-mode:multiply}
+/* у «мягкого света» светлые крупинки на темном цвете заметнее темных: на зеленом центр зерна ниже, чтобы зеленый не светлел */
+html[data-grain][data-look][lang][data-look="g"][data-cover="green"] .ld-own,html[data-grain][data-look="g"][data-cover] .ld-pin:not(.lit)::before{background-image:var(--lk-noise-dark);background-blend-mode:soft-light}
+
+/* Закрытая тетрадь: белые страницы под обложкой того же размера просвечивали тонкой светлой линией вдоль корешка
+   (сглаживание края повернутой обложки, Виктория: «край какой-то странный»). Пока тетрадь закрыта, страниц нет;
+   при открытии они появляются сразу, при закрытии исчезают, когда обложка уже легла */
+html[data-look="g"] .ld-nb:not(.open) .ld-leaf:not(.ld-cover){visibility:hidden;transition:transform var(--leaf-time) var(--leaf-ease),visibility 0s linear var(--leaf-time)}
+
+/* Проба логотипа одинарным контуром в шапке (?logo=line), 24 ноября 2026. Двойной контур на 28 px слипался в кашу — удален */
+html[data-logo] .ld-top .learny-logo{overflow:visible}
+html[data-logo] .ld-top .learny-logo path{fill:none;stroke:currentColor;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+html[data-logo="line"] .ld-top .learny-logo path{stroke-width:1.6px}

@@ -121,12 +121,37 @@
   document.fonts?.ready.then(queueGrid);
   addEventListener("load", queueGrid);
 
-  // Наклейки в футере двигаются пальцем и мышью: сдвиг хранится в --dx/--dy, поворот остается свой; последняя тронутая — сверху
+  // Проба логотипа одинарным контуром в шапке: ?logo=line
+  if (new URLSearchParams(location.search).get("logo") === "line") root.dataset.logo = "line";
+
+  // Легкое зерно на больших цветных поверхностях — глубина цвета, как в печатной иллюстрации (выбрано Викторией 24 ноября 2026)
+  root.dataset.grain = "1";
+
+  // Марка в футере нарисована двойным контуром, чуть неровным, как от руки, и дорисовывается карандашом, когда футер
+  // появляется (выбрано Викторией 24 ноября 2026; сплошную марку сравнили и отклонили)
+  {
+    root.dataset.foot = "b";
+    addEventListener("DOMContentLoaded", () => {
+      const mark = document.querySelector(".lk-foot-mark");
+      if (!mark) return;
+      fetch(mark.ownerDocument.baseURI.replace(/[^/]*$/, "") + "icons/learny-wordmark.svg").then(r => r.text()).then(svg => {
+        const d = (svg.match(/ d="([^"]+)"/) || [])[1], vb = (svg.match(/viewBox="([^"]+)"/) || [])[1];
+        if (!d || !vb) return;
+        mark.innerHTML = `<svg viewBox="${vb}" preserveAspectRatio="none" aria-hidden="true"><defs><filter id="lk-hand" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency=".008" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter></defs><g filter="url(#lk-hand)"><path class="lk-line-out" pathLength="1" vector-effect="non-scaling-stroke" d="${d}"/><path class="lk-line-in" pathLength="1" vector-effect="non-scaling-stroke" d="${d}"/></g></svg>`;
+        const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { mark.classList.add("is-drawn"); io.disconnect(); } }), { threshold: .35 });
+        io.observe(mark);
+      });
+    });
+  }
+
+  // Наклейки в футере: нажатие переворачивает (на обороте перевод), перетаскивание двигает. Сдвиг хранится в --dx/--dy,
+  // поворот остается свой; последняя тронутая — сверху. После перетаскивания наклейка не переворачивается
   addEventListener("DOMContentLoaded", () => {
     let top = 3;
     document.querySelectorAll(".lk-st").forEach(st => {
-      let x0 = 0, y0 = 0, dx = 0, dy = 0;
+      let x0 = 0, y0 = 0, dx = 0, dy = 0, sx = 0, sy = 0, dragged = false;
       const move = e => {
+        if (Math.hypot(e.clientX - sx, e.clientY - sy) > 5) dragged = true;
         dx = e.clientX - x0; dy = e.clientY - y0;
         st.style.setProperty("--dx", dx + "px");
         st.style.setProperty("--dy", dy + "px");
@@ -140,12 +165,18 @@
       st.addEventListener("pointerdown", e => {
         if (e.button) return;
         e.preventDefault();
-        x0 = e.clientX - dx; y0 = e.clientY - dy;
+        x0 = e.clientX - dx; y0 = e.clientY - dy; sx = e.clientX; sy = e.clientY;
+        dragged = false;
         st.classList.add("is-dragging");
         st.style.zIndex = ++top;
         addEventListener("pointermove", move);
         addEventListener("pointerup", drop);
         addEventListener("pointercancel", drop);
+      });
+      st.addEventListener("click", () => {
+        if (dragged) { dragged = false; return; }
+        st.classList.toggle("is-flipped");
+        st.setAttribute("aria-pressed", String(st.classList.contains("is-flipped")));
       });
     });
   });
