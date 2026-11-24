@@ -358,7 +358,6 @@ html[data-look="g"] .ld-pin[data-bg="steps"].lit .ld-ground{box-shadow:.14em .18
 html[data-look="g"] .ld-pin[data-bg="steps"]::before,html[data-look="g"][data-cover] .ld-pin:not(.lit)::before{background:var(--desk-now,var(--stage));transition:opacity .7s var(--ease) var(--lit-delay,0s)}
 
 /* у «своего урока» подпись «From anything» повторяла бы заголовок */
-html[data-look][lang][data-look="g"] #shelf > li.own .ld-nbmeta{display:none}
 
 /* футер — лаймовое поле (по мотивам крупных футеров HABITAT, AFTERFORM): после зеленого «своего урока» страница
    заканчивается самым светлым цветом акцента; прощальная фраза глубоким зеленым во всю ширину, обводка карандашом остается */
@@ -660,13 +659,79 @@ html[data-look][lang][data-look="g"] .ld-sr{position:absolute;width:1px;height:1
   /* калибр — по самому длинному слову среди заголовков («возвращаются»): оно встает во всю ширину (64 px на 375).
      54 px Виктория назвала мелким (24 ноября 2026) */
   html[data-look][lang][data-look="g"] :is(.ld-shelf h2,.ld-words-head h2,#own-h){font-size:min(17vw,88px)}
+  /* заголовок первого экрана не мельче заголовков разделов (Виктория: «как минимум как h2»). По-русски на телефоне
+     перенос «Домашка по / английскому»: «по английскому» в этом калибре в строку не встает, а одинокое «по» — плохо */
+  html[data-look][lang][data-look="g"] .ld-copy h1{font-size:min(17vw,88px)}
+  html[data-look][lang="ru"][data-look="g"] .ld-copy h1 br{display:none}
+  html[data-look][lang="ru"][data-look="g"] .ld-copy h1 > span:first-child::after{content:" "}
+  /* у всех крупных заголовков на телефоне один межстрочный (было .76, .84 и .86 вразнобой; Виктория просила плотнее) */
+  html[data-look][lang][data-look="g"] :is(.ld-shelf h2,.ld-words-head h2,#own-h,.ld-caps h3){line-height:.8}
   html[data-look][lang][data-look="g"] .ld-words-head p{font-size:16px}
-  /* заголовок шага в сцене стоит над тетрадью: калибр раздела давал три строки и наезжал на нее, здесь две строки */
-  html[data-look][lang][data-look="g"] .ld-caps h3{font-size:clamp(38px,11.7vw,46px)}
-  /* «Что будем разбирать?» не растягивается на весь экран: кнопка сразу под вариантами, низ раздела — как у остальных */
-  html[data-look][lang][data-look="g"] .ld-sheet{min-height:0;padding-bottom:var(--sp-entry)}
+  /* заголовок шага в сцене — тем же калибром: заголовки шагов сокращены до двух строк (24 ноября 2026) */
+  html[data-look][lang][data-look="g"] .ld-caps h3{font-size:min(17vw,88px)}
+  /* «Что будем разбирать?» — на весь экран (блок короче экрана пробовали — в фокус вылезал футер), форма одной группой
+     по центру: заголовок, крупное поле, варианты, кнопка. Поле — около трети экрана, растет с текстом; поле во всю
+     свободную высоту тоже пробовали — «ну не настолько же» (Виктория, 24 ноября 2026) */
+  html[data-look][lang][data-look="g"] .ld-sheet{min-height:100svh;justify-content:center;padding-bottom:var(--sp-entry)}
+  html[data-look][lang][data-look="g"] .ld-own .ld-paper{flex:none;display:flex;flex-direction:column;min-height:clamp(140px,calc(100svh - 540px),280px)}
+  html[data-look][lang][data-look="g"] .ld-own textarea{flex:1 1 auto}
+  html[data-look][lang][data-look="g"] .ld-own-foot{flex:none}
   /* варианты помельче и по центру, в перенос; кнопка по центру — как заголовок над полем (Виктория, 24 ноября 2026) */
   html[data-look][lang][data-look="g"] .ld-own-foot .ld-starts{align-self:stretch;justify-content:center;gap:var(--sp-group)}
   html[data-look][lang][data-look="g"][data-cover] .ld-starts .ld-fill{height:40px;padding:0 14px;font-size:15px}
   html[data-look][lang][data-look="g"] .ld-own-foot .ld-round{align-self:center;margin:0}
 }
+
+/* =====================================================================
+   Сцена на телефоне: подпись шага и тетрадь — одна колонка (24 ноября 2026, Виктория: «тут слипается все»).
+   Раньше тетрадь стояла на фиксированных 172 px ниже подписи: длинная подпись наезжала на тетрадь,
+   а на высоком экране под тетрадью оставалась пустота. Теперь высоту подписи меряет скрипт по самому
+   длинному шагу (--cap-h), тетрадь встает под ней на расстоянии блока, и обе вместе стоят по центру
+   между шапкой и подсказкой «сразу к урокам». Внутри подписи: метка → заголовок — группа,
+   заголовок → описание — пара, от букв; межстрочный как у заголовков разделов
+   ===================================================================== */
+@media (max-width:900px){
+  html[data-look][lang][data-look="g"] .ld-pin{--cap-top:76px;--cap-res:72px;--cap-gap:var(--sp-block);
+    --cap-free:calc(100svh - var(--cap-top) - var(--cap-res));
+    --cap-nbw:min(84vw,calc((var(--cap-free) - var(--cap-h,172px) - var(--cap-gap)) / 1.2));
+    --cap-shift:max(0px,calc((var(--cap-free) - var(--cap-h,172px) - var(--cap-gap) - var(--cap-nbw) * 1.2) / 2))}
+  html[data-look][lang][data-look="g"] .ld-caps{top:calc(var(--cap-top) + var(--cap-shift))}
+  html[data-look][lang][data-look="g"] .ld-nb{--nbw:var(--cap-nbw);top:calc(var(--cap-top) + var(--cap-shift) + var(--cap-h,172px) + var(--cap-gap))}
+  /* метки «5 из 5 · Итоги» нет: номер шага показывает выдвинутая закладка, название повторяет заголовок (Виктория, 24 ноября 2026) */
+  html[data-look][lang][data-look="g"] .ld-caps .ld-n{display:none}
+  html[data-look][lang][data-look="g"] .ld-caps h3{margin:0;line-height:.8;text-box:trim-both cap alphabetic;padding-bottom:.2em}
+  html[data-look][lang][data-look="g"] .ld-caps p{margin:var(--sp-pair) 0 0}
+}
+/* на совсем низких экранах описание шага не помещается рядом с тетрадью — остается метка и заголовок */
+@media (max-width:900px) and (max-height:620px){html[data-look][lang][data-look="g"] .ld-caps p{display:none}}
+
+/* =====================================================================
+   Главная кнопка одна на весь лендинг (24 ноября 2026, Виктория: «кнопку create my lesson по лендосу сделать одинаковой»,
+   на телефоне «не на весь экран»). На первом экране — та же лаймовая пилюля с надписью и стрелкой, что в форме,
+   по ширине текста; пару наклеек (кружок со стрелкой + пилюля во всю ширину) убрали. На компьютере — справа внизу,
+   на телефоне — слева под описанием, на расстоянии пары
+   ===================================================================== */
+html[data-hero="b"] .ld-copy .ld-cta{position:absolute;right:0;bottom:0;margin:0;text-decoration:none}
+@media (max-width:900px){
+  html[data-look][lang][data-hero="b"] .ld-copy .lede{bottom:calc(58px + var(--sp-pair))}
+}
+
+/* Телефон: одна ось по центру (Виктория, 24 ноября 2026). Словарь, картотека, форма и тетрадь уже стояли по центру,
+   а заголовки первого экрана и шагов сцены — слева: глаз прыгал между двумя осями. Теперь по центру и они,
+   с описанием и кнопкой */
+@media (max-width:900px){
+  html[data-hero="b"] .ld-copy h1{text-align:center}
+  html[data-look][lang][data-hero="b"] .ld-copy .lede{text-align:center}
+  html[data-hero="b"] .ld-copy .ld-cta{left:50%;right:auto;translate:-50% 0}
+  html[data-look][lang][data-look="g"] .ld-caps{text-align:center}
+  html[data-look][lang][data-look="g"] .ld-caps p{margin-inline:auto}
+}
+
+/* Страница отчета в тетради — без лишних стилей (Виктория, 24 ноября 2026: «много лишнего и много текстовых стилей»):
+   название урока фирменным узким, как заголовок страницы теории; метки «Report for your teacher», приписки
+   «8 tasks in 9 minutes» и номеров строк нет. Остаются ответы фиолетовым, правка карандашом, галочки, итог строкой
+   и приписка учителя */
+html[data-look][lang][data-look="g"] .ld-report .ld-answers li{grid-template-columns:minmax(0,1fr) auto}
+html[data-look][lang][data-look="g"] .ld-report .ld-answers li::before{content:none}
+/* главная кнопка на первом экране не переносится, когда стоит по центру */
+html[data-hero="b"] .ld-copy .ld-cta{white-space:nowrap}

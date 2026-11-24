@@ -13,9 +13,17 @@
     const copy = document.getElementById("copy"), title = copy.querySelector("h1");
     const top = copy.offsetTop + title.offsetTop + title.offsetHeight - (mobile ? 8 : 6);
     if (mobile) {
-      const bottom = copy.offsetTop + copy.querySelector(".lede").offsetTop - 20;
-      const s = Math.max(.4, Math.min(W * .86 / w, (bottom - top) / h));
-      return { s, a: -5, cx: W / 2, cy: top + h * s / 2 };
+      // телефон: тетрадь между заголовком и описанием, от хвостов букв и до описания — по блоку шкалы.
+      // Считаем рамку уже повернутой тетради: без этого один угол заходил на заголовок, другой на описание (24 ноября 2026)
+      const a = -5, rad = Math.abs(a) * Math.PI / 180;
+      const gap = parseFloat(getComputedStyle(root).getPropertyValue("--sp-block")) || 24;
+      const tails = parseFloat(getComputedStyle(title).fontSize) * .2;
+      const from = copy.offsetTop + title.offsetTop + title.offsetHeight + tails + gap;
+      const to = copy.offsetTop + copy.querySelector(".lede").offsetTop - gap;
+      const rw = w * Math.cos(rad) + h * Math.sin(rad), rh = h * Math.cos(rad) + w * Math.sin(rad);
+      // на низких экранах тетрадь не мельче 45% ширины: поля тогда сжимаются поровну, но остаются
+      const s = Math.max(.4, W * .45 / rw, Math.min(W * .86 / rw, (to - from) / rh));
+      return { s, a, cx: W / 2, cy: from + (to - from) / 2 };
     }
     const s = Math.min(H * .66 / h, W * .3 / w);
     return { s, a: -6, cx: W * .5, cy: top + h * s / 2 };
@@ -39,7 +47,19 @@
   addEventListener("resize", sizeOwn);
   document.fonts?.ready.then(sizeOwn);
 
+  // сцена на телефоне: место под подписью шага — по самой длинной подписи в текущем языке и ширине,
+  // чтобы тетрадь не прыгала при смене шага (раскладка — learny-looks.css, «Сцена на телефоне»)
+  function capBudget() {
+    const pin = document.querySelector(".ld-pin"), items = [...document.querySelectorAll(".ld-caps li")];
+    if (!pin || !items.length) return;
+    const h = Math.max(...items.map(li => li.offsetHeight));
+    if (h) pin.style.setProperty("--cap-h", `${Math.ceil(h)}px`); else pin.style.removeProperty("--cap-h");
+  }
+  addEventListener("resize", capBudget);
+  document.fonts?.ready.then(capBudget);
+
   window.learnyLook = () => {
+    requestAnimationFrame(() => capBudget());
     const ru = root.lang === "ru";
     // H1 подгоняется под всю ширину: узкому шрифту не нужна поправка Литераты на плотную кириллицу
     const h1 = document.querySelector(".ld-copy h1");
@@ -71,14 +91,6 @@
       }
       if (words.length > 1) ownH.innerHTML = `<span>${esc(words.slice(0, cut).join(" "))}</span><span>${esc(words.slice(cut).join(" "))}</span>`;
       sizeOwn();
-    }
-    // «Свой урок» в картотеке: заголовок не повторяет ярлычок — в нем то, из чего урок делается; вместо крупного слова,
-    // как у других уроков, крупная стрелка вниз: разделитель ведет к блоку «свой урок»
-    const ownRow = document.querySelector("#shelf > li.own");
-    if (ownRow) {
-      const b = ownRow.querySelector(".ld-nbbody b"), small = ownRow.querySelector(".ld-nbbody small");
-      if (b && small) { b.removeAttribute("data-t"); b.textContent = small.textContent; small.hidden = true; }
-      if (!ownRow.querySelector(".ld-nbclip")) ownRow.querySelector(".ld-nbrow")?.insertAdjacentHTML("beforeend", '<span class="ld-nbclip" aria-hidden="true"><span class="nb-word lk-own-arrow">↓</span></span>');
     }
     // «пять шагов» один раз — в описании картотеки, а не в каждом уроке
     const lp = document.querySelector('[data-t="lessonsP"]');

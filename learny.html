@@ -3102,12 +3102,14 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & .composer-close:focus-visible { outline: 2px solid var(--nb-ink); outline-offset: 2px; }
   & .learny-own .drop-card { margin: 28px 0 0; padding: 0; border: 0; background: none; box-shadow: none; }
   & .learny-own .learny-editor-frame { padding: 0; border: 0; background: none; }
-  /* поле: белый лист с тонким черным контуром; в фокусе под ним лаймовый срез, при перетаскивании файла поле лаймовое */
+  /* поле: белый лист на кремовой карточке, без контура — вокруг уже лаймовая рамка окна, черная обводка и лаймовый срез
+     давали рамку в рамке (Виктория, 24 ноября 2026: «у поля ввода лишняя обводка»). В фокусе — тонкая бледная линия,
+     при перетаскивании файла поле лаймовое */
   & .intake .drop-card .material-composer, &[data-hero="b"] .learny-own .material-composer {
-    position: relative; min-height: 0; border: 1.5px solid var(--nb-ink); border-radius: 8px; background: #fff; text-align: left; box-shadow: none; outline: 0;
+    position: relative; min-height: 0; border: 0; border-radius: 8px; background: #fff; text-align: left; box-shadow: none; outline: 0;
     transition: box-shadow .2s cubic-bezier(.25,.1,.25,1), background-color .2s cubic-bezier(.25,.1,.25,1);
   }
-  & .intake .drop-card .material-composer:focus-within { box-shadow: 4px 4px 0 0 var(--nb-lime); }
+  & .intake .drop-card .material-composer:focus-within { box-shadow: inset 0 0 0 1.5px rgba(26, 23, 28, .18); }
   & .intake .drop-card .material-composer.is-dragging { outline: 0; background: var(--nb-lime); }
   & .intake .drop-card .material-composer::after { content: attr(data-drop); position: absolute; inset: 0; display: grid; place-items: center; border-radius: inherit;
     font: 900 40px/1 var(--nb-disp); color: var(--nb-on-lime); opacity: 0; pointer-events: none; transition: opacity .15s var(--nb-ease); }
