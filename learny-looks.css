@@ -525,3 +525,148 @@ html[data-look="g"] .ld-nb:not(.open) .ld-leaf:not(.ld-cover){visibility:hidden;
 html[data-logo] .ld-top .learny-logo{overflow:visible}
 html[data-logo] .ld-top .learny-logo path{fill:none;stroke:currentColor;vector-effect:non-scaling-stroke;stroke-linejoin:round}
 html[data-logo="line"] .ld-top .learny-logo path{stroke-width:1.6px}
+
+/* Аккаунт в шапке лендинга (24 ноября 2026): у того, кто уже занимался, вместо «Кабинета» — кружок с первой буквой имени и имя,
+   как в шапке приложения. На зеленой обложке кружок лаймовый: зеленый на зеленом пропадал */
+/* та же приставка, что у общего правила пилюль шапки (padding 0 20px), иначе оно перебивало поля и аватар не прижимался к краю */
+html[data-look][lang][data-look="g"] .split.sm.ld-space.ld-acct .s-tx{display:inline-flex;align-items:center;gap:10px;padding:0 16px 0 4px}
+html[data-look] .ld-ava{display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:50%;background:#0e6b44;color:#fff;font:900 20px/1 "Sofia Sans Extra Condensed","Arial Narrow",sans-serif}
+html[data-look] .ld-ava.is-anon{background:#fff;color:#5b5660;box-shadow:inset 0 0 0 1px rgba(26,23,28,.16)}
+html[data-look] .ld-ava svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
+html[data-look] .ld-acct-name{max-width:16ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html[data-look][lang][data-cover="green"] .ld-pin:not(.lit) .ld-ava:not(.is-anon){background:var(--acc,#c8f26a);color:var(--on-acc,#0b3a24)}
+/* правило лендинга «.split.sm span» красит любой кусочек внутри пилюли: у имени и кружка своя заливка */
+html[data-look] .split.sm.ld-acct .s-tx .ld-acct-name{background:none;outline:0;border-radius:0;transition:none}
+html[data-look] .split.sm.ld-acct .s-tx .ld-ava{outline:0;border-radius:50%;transition:none}
+html[data-look] .split.sm.ld-acct .s-tx .ld-ava:not(.is-anon){background:#0e6b44;color:#fff}
+html[data-look] .split.sm.ld-acct .s-tx .ld-ava.is-anon{background:#fff;color:#5b5660}
+html[data-look][lang][data-cover="green"] .ld-pin:not(.lit) .split.sm.ld-acct .s-tx .ld-ava:not(.is-anon){background:var(--acc,#c8f26a);color:var(--on-acc,#0b3a24)}
+@media (max-width:600px){html[data-look] .ld-acct-name{display:none}html[data-look][lang][data-look="g"] .split.sm.ld-space.ld-acct .s-tx{padding:0 4px}}
+
+/* =====================================================================
+   Отступы лендинга — та же шкала и те же четыре роли, что в приложении (8 · 16 · 24 · 32 · 48 · 96; DESIGN.md, «5а. Отступы»).
+   Своего у лендинга одно: вход в полноэкранный блок — 96 (на низком экране меньше, но не меньше 48), на телефоне 48.
+   ===================================================================== */
+html[data-look][lang][data-look="g"]{--sp-group:8px;--sp-pair:16px;--sp-block:32px;--sp-section:48px;--sp-edge:var(--sp-block);--sp-entry:clamp(48px,11svh,96px)}
+@media (max-width:800px){html[data-look][lang][data-look="g"]{--sp-block:24px;--sp-section:32px;--sp-entry:48px}}
+/* край страницы — один на все блоки (раньше 32 и 20 в пяти местах); у первого экрана край задан на body, там и переопределяем */
+html[data-look][lang][data-look="g"] body.ld{--hero-edge:var(--sp-edge)}
+html[data-look][lang][data-look="g"] :is(.ld-top,.ld-shelf,.ld-sheet,.ld-foot){padding-inline:var(--sp-edge)}
+html[data-look][lang][data-hero="b"] .ld-copy{bottom:var(--sp-edge)}
+@media (max-width:800px){html[data-look][lang][data-look="g"] .ld-caps{left:var(--sp-edge);right:var(--sp-edge)}}
+/* картотека: вход → заголовок, заголовок → описание (пара), описание → ярлычки (раздел) */
+html[data-look][lang][data-look="g"] .ld-shelf{padding-top:var(--sp-entry)}
+/* отступ у описания, а не промежуток: на телефоне шапка картотеки не флекс, и описание вставало вплотную к заголовку */
+html[data-look][lang][data-look="g"] .ld-shelf-h{gap:0}
+html[data-look][lang][data-look="g"] .ld-shelf-h p{margin:var(--sp-pair) 0 0}
+html[data-look][lang][data-look="g"] .ld-stack{margin-top:var(--sp-section)}
+/* «свой урок»: вход → заголовок, заголовок → поле (раздел), поле → начала фраз и кнопка (блок), низ — край */
+html[data-look][lang][data-look="g"] .ld-sheet{padding-top:var(--sp-entry);padding-bottom:var(--sp-edge)}
+html[data-look][lang][data-look="g"] .ld-own .ld-paper{margin-top:var(--sp-section)}
+html[data-look][lang][data-look="g"] .ld-own-foot{margin-top:var(--sp-block);gap:var(--sp-block)}
+/* у кнопки-пилюли нет поворота при наведении, как у прежней печати: запас 4 справа не нужен, она стоит у края */
+html[data-look][lang][data-look="g"] .ld-own-foot .ld-round{margin-right:0}
+/* футер: вход → марка, марка → нижняя строка (раздел; черта и пара до ссылок), низ — край */
+html[data-look][lang][data-look="g"] .ld-foot{padding-top:var(--sp-entry);padding-bottom:var(--sp-edge)}
+html[data-look][lang][data-look="g"] .ld-foot-bot{margin-top:var(--sp-section);padding-top:var(--sp-pair)}
+/* первый экран на телефоне: описание прибито к низу над кнопкой (ее высота на телефоне 58), между ними пара */
+@media (max-width:800px){html[data-look][lang][data-hero="b"] .ld-copy .lede{bottom:calc(58px + var(--sp-pair))}}
+/* Визуальные отступы у крупных заголовков (24 ноября 2026, Виктория: «в лендосе надо смотреть на визуальные отступы, там
+   заголовки крупные»). У узкого шрифта на 100–200 px под базовой линией 16–28 px пустоты, и отступ шкалы на глаз становился
+   больше: заголовок → описание 44 вместо 16, заголовок → поле 64 вместо 48. Рамку заголовка обрезаем по базовой линии,
+   отступ считается от букв; хвосты у «у» и «р» уходят в отступ. Сверху рамка и так совпадает с верхом заглавных.
+   Первый экран не трогаем: там заголовок стоит в сцене над тетрадью, его место задает композиция */
+/* Под заголовком «своего урока» дальше поле на расстоянии раздела: отступ от базовой линии, хвосты уходят в него.
+   Под заголовком картотеки и словаря — строка описания на расстоянии пары: отступ от низа хвостов «р», «у»,
+   иначе хвосты задевают строку (24 ноября 2026: хвост «у» в «уроках» уходил на 26 px при отступе 16) */
+html[data-look][lang][data-look="g"] .ld-own h2{text-box:trim-end cap alphabetic}
+/* у картотеки и словаря под заголовком строка на расстоянии пары: рамка кончается по низу хвостов — базовая линия плюс их глубина у Sofia, .2 кегля */
+html[data-look][lang][data-look="g"] :is(.ld-shelf h2, .ld-words-head h2){text-box:trim-end cap alphabetic;padding-bottom:.2em}
+
+/* =====================================================================
+   Словарь — колода слов из уроков (24 ноября 2026, доска refs/2026-11-24-vocab-deck/).
+   Стол — желтый маркер. Слева заголовок и строка, справа колода: карточки лежат стопкой с наклоном к столу,
+   по краям видны цвета уроков. Верхняя поднимается к вам и переворачивается; оценка прячет ее в колоду
+   на глубину по отделению (глубже — позже вернется). Подписей к механике нет, ее видно по движению.
+   Плоско, без теней: «толщина» карточки — жесткая кромка на тон темнее
+   ===================================================================== */
+html[data-look][lang][data-look="g"] .ld-words{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;gap:var(--sp-block);
+  padding:var(--sp-entry) var(--sp-edge);background:var(--marker,#ffe46a);color:#1a171c}
+html[data-look][lang][data-look="g"] .ld-words-head h2{margin:0;font:900 clamp(64px,7.4vw,128px)/.84 var(--disp);letter-spacing:-.006em}
+html[data-look][lang][data-look="g"] .ld-words-head p{margin:var(--sp-pair) 0 0;max-width:26em;font:400 clamp(17px,1.4vw,20px)/1.35 var(--ui);text-wrap:pretty}
+/* колода и подсказка под ней — пара, кнопки — отдельное действие на расстоянии блока; подсказка считается от букв */
+html[data-look][lang][data-look="g"] .ld-deck{position:relative;display:grid;justify-items:center;min-width:0}
+/* числа без единиц читает скрипт: шаг между карточками, наклон, подъем верхней карточки, ее приближение, ширина «щели» */
+html[data-look][lang][data-look="g"] .ld-deck-stage{--w:340px;--h:216px;--gap:6;--tilt:56;--lift:196;--near:110;--mouth:48;
+  position:relative;width:100%;height:390px;perspective:1500px;perspective-origin:50% 25%;transform-style:preserve-3d}
+html[data-look][lang][data-look="g"] .ld-dc{position:absolute;left:calc(50% - var(--w) / 2);top:calc(100% - 79px - var(--h) / 2);width:var(--w);height:var(--h);
+  transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.7,.2,1),translate .3s cubic-bezier(.25,.1,.25,1),rotate .3s cubic-bezier(.25,.1,.25,1)}
+html[data-look][lang][data-look="g"] :is(.ld-dc-f,.ld-dc-b){position:absolute;inset:0;display:grid;padding:22px 24px;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* дырочка под кольцо — как у карточки слова в сцене урока; на обороте она с другой стороны */
+html[data-look][lang][data-look="g"] .ld-dc-f{align-content:end;background:var(--c);color:var(--on);box-shadow:0 3px 0 color-mix(in srgb,var(--c) 72%,#000);
+  -webkit-mask:radial-gradient(circle at 24px 24px,#0000 7px,#000 7.5px);mask:radial-gradient(circle at 24px 24px,#0000 7px,#000 7.5px)}
+html[data-look][lang][data-look="g"] .ld-dc-f b{font:900 calc(var(--h) * .3 * min(1, 9 / var(--len)))/.86 var(--disp);letter-spacing:-.006em;text-wrap:balance}
+html[data-look][lang][data-look="g"] .ld-dc-b{align-content:space-between;background:#fff;color:#1a171c;transform:rotateY(180deg);box-shadow:0 3px 0 #d9d4c8;
+  -webkit-mask:radial-gradient(circle at calc(100% - 24px) 24px,#0000 7px,#000 7.5px);mask:radial-gradient(circle at calc(100% - 24px) 24px,#0000 7px,#000 7.5px)}
+html[data-look][lang][data-look="g"] .ld-dc-b b{padding-top:22px;font:400 clamp(22px,2vw,26px)/1.2 var(--ui);text-wrap:balance}
+html[data-look][lang][data-look="g"] .ld-dc-b small{font:400 16px/1.35 var(--ui);color:#5b5660}
+html[data-look][lang][data-look="g"] .ld-dc-b mark{padding:0 .1em;margin:0 -.1em;border-radius:.3em .15em;color:#1a171c;
+  background:linear-gradient(100deg,rgba(255,228,106,0) 1%,#ffe46a 4%,rgba(255,228,106,.88) 95%,rgba(255,228,106,0) 99%) no-repeat 0 .2em/100% 1.05em}
+html[data-look][lang][data-look="g"] .ld-dc.is-cur{cursor:grab;outline:0;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+/* карточку можно бросить: влево — «не помню», вправо — «помню»; пока тянете, загорается пилюля с той же стороны */
+html[data-look][lang][data-look="g"] .ld-dc.is-drag{cursor:grabbing;transition:transform .55s cubic-bezier(.3,.7,.2,1)}
+html[data-look][lang][data-look="g"] .ld-dc.is-cur:focus-visible :is(.ld-dc-f,.ld-dc-b){outline:2px solid #1a171c;outline-offset:4px}
+@media (hover:hover){html[data-look][lang][data-look="g"] .ld-dc.is-cur:not(.is-drag):hover{translate:0 -6px}}
+html[data-look][lang][data-look="g"] .ld-deck-acts{display:flex;justify-content:center;gap:var(--sp-group);min-height:52px;margin-top:var(--sp-block)}
+/* подсказка карандашом, как «tap a sticker to flip it» в футере: карточку переворачивают нажатием, кнопки «Показать перевод» нет,
+   поэтому ряд «← Не помню · Помню →» стоит все время и не перескакивает (Виктория, 24 ноября 2026) */
+html[data-look][lang][data-look="g"] .ld-deck-tip{margin:var(--sp-pair) 0 0;text-box:trim-both cap alphabetic;text-align:center;font:600 24px/1 var(--hand,"Caveat",cursive);color:var(--pencil,#e0442e);rotate:-1.5deg}
+html[data-look][lang][data-look="g"] .ld-deck-btn{display:inline-flex;align-items:center;gap:var(--sp-group);height:52px;padding:0 24px;white-space:nowrap;border:0;border-radius:999px;background:#fff;color:#1a171c;
+  font:400 18px/1 var(--ui);cursor:pointer;transition:background-color .15s cubic-bezier(.25,.1,.25,1),color .15s cubic-bezier(.25,.1,.25,1)}
+/* белая пилюля без обводки: на желтом она грязнила (Виктория, 24 ноября 2026) */
+html[data-look][lang][data-look="g"] .ld-deck-btn.is-ink{background:#1a171c;color:#fff}
+html[data-look][lang][data-look="g"] .ld-deck-btn:focus-visible{outline:2px solid #1a171c;outline-offset:3px}
+html[data-look][lang][data-look="g"] .ld-deck-btn.is-hot{background:#1a171c;color:#fff}
+html[data-look][lang][data-look="g"] .ld-deck-btn.is-ink.is-hot{background:var(--acc,#c8f26a);color:var(--on-acc,#0b3a24)}
+@media (hover:hover){html[data-look][lang][data-look="g"] .ld-deck-btn:hover{background:#1a171c;color:#fff}html[data-look][lang][data-look="g"] .ld-deck-btn.is-ink:hover{background:var(--acc,#c8f26a);color:var(--on-acc,#0b3a24)}}
+html[data-look][lang][data-look="g"] .ld-sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media (max-width:1000px){html[data-look][lang][data-look="g"] .ld-words{grid-template-columns:minmax(0,1fr);gap:var(--sp-section)}html[data-look][lang][data-look="g"] .ld-words-head h2{font-size:clamp(64px,12vw,128px)}}
+@media (max-width:600px){
+  html[data-look][lang][data-look="g"] .ld-deck-stage{--w:224px;--h:142px;--gap:4.5;--lift:132;--near:70;--mouth:34;height:253px}
+  html[data-look][lang][data-look="g"] .ld-dc{top:calc(100% - 48px - var(--h) / 2)}
+  html[data-look][lang][data-look="g"] .ld-words-head h2{font-size:clamp(48px,16.5vw,72px)}
+  html[data-look][lang][data-look="g"] :is(.ld-dc-f,.ld-dc-b){padding:16px 18px;border-radius:10px}
+  html[data-look][lang][data-look="g"] .ld-dc-f{-webkit-mask:radial-gradient(circle at 18px 18px,#0000 5px,#000 5.5px);mask:radial-gradient(circle at 18px 18px,#0000 5px,#000 5.5px)}
+  html[data-look][lang][data-look="g"] .ld-dc-b{-webkit-mask:radial-gradient(circle at calc(100% - 18px) 18px,#0000 5px,#000 5.5px);mask:radial-gradient(circle at calc(100% - 18px) 18px,#0000 5px,#000 5.5px)}
+  html[data-look][lang][data-look="g"] .ld-dc-b b{padding-top:14px;font-size:19px}
+  html[data-look][lang][data-look="g"] .ld-dc-b small{font-size:14px}
+  html[data-look][lang][data-look="g"] .ld-deck-btn{height:56px;padding:0 20px;font-size:17px}
+  html[data-look][lang][data-look="g"] .ld-deck-acts{min-height:56px}
+  html[data-look][lang][data-look="g"] .ld-deck-tip{font-size:21px}
+}
+@media (prefers-reduced-motion:reduce){html[data-look][lang][data-look="g"] .ld-dc{transition:none}}
+
+/* =====================================================================
+   Телефон: у разделов один калибр заголовка (24 ноября 2026, Виктория: заголовок шага в сцене читался мелким текстом,
+   а «Что будем разбирать?», подогнанный во всю ширину, — огромным). Размер — как у «Готовых уроков»,
+   не больше первого экрана: H1 там подгоняется по ширине и на 375 выходит 54 px.
+   Словарь в одну колонку стоит по центру, как картотека
+   ===================================================================== */
+@media (max-width:1000px){
+  html[data-look][lang][data-look="g"] .ld-words-head{text-align:center}
+  html[data-look][lang][data-look="g"] .ld-words-head p{margin-inline:auto}
+}
+@media (max-width:600px){
+  /* калибр — по самому длинному слову среди заголовков («возвращаются»): оно встает во всю ширину (64 px на 375).
+     54 px Виктория назвала мелким (24 ноября 2026) */
+  html[data-look][lang][data-look="g"] :is(.ld-shelf h2,.ld-words-head h2,#own-h){font-size:min(17vw,88px)}
+  html[data-look][lang][data-look="g"] .ld-words-head p{font-size:16px}
+  /* заголовок шага в сцене стоит над тетрадью: калибр раздела давал три строки и наезжал на нее, здесь две строки */
+  html[data-look][lang][data-look="g"] .ld-caps h3{font-size:clamp(38px,11.7vw,46px)}
+  /* «Что будем разбирать?» не растягивается на весь экран: кнопка сразу под вариантами, низ раздела — как у остальных */
+  html[data-look][lang][data-look="g"] .ld-sheet{min-height:0;padding-bottom:var(--sp-entry)}
+  /* варианты помельче и по центру, в перенос; кнопка по центру — как заголовок над полем (Виктория, 24 ноября 2026) */
+  html[data-look][lang][data-look="g"] .ld-own-foot .ld-starts{align-self:stretch;justify-content:center;gap:var(--sp-group)}
+  html[data-look][lang][data-look="g"][data-cover] .ld-starts .ld-fill{height:40px;padding:0 14px;font-size:15px}
+  html[data-look][lang][data-look="g"] .ld-own-foot .ld-round{align-self:center;margin:0}
+}

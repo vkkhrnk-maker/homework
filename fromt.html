@@ -445,6 +445,8 @@ body.home main{padding-top:0}
 .use-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .fix-btn{flex:none;font-size:12px;font-weight:600;color:var(--fg-2);background:var(--bg);border-radius:999px;padding:5px 12px}
 .fix-btn:hover{background:var(--surface-2);color:var(--fg)}
+.ask-why{display:inline-block;margin-top:10px;padding:6px 0;font-size:15px;color:var(--fg-2);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.ask-why:hover{color:var(--fg)}
 .table-scroll{overflow-x:auto;margin-top:6px;-webkit-overflow-scrolling:touch}
 .prob-table,.sum-table{width:100%;border-collapse:collapse;font-size:15px;table-layout:fixed}
 .prob-table td,.sum-table td{padding:11px 18px 11px 0;border-bottom:1px solid var(--line);vertical-align:top}
@@ -964,6 +966,7 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
     <div class="opts">
       <button class="opt" id="report-btn" hidden></button>
       <button class="opt" id="extend-btn" hidden></button>
+      <button class="opt" id="fixq-btn" hidden></button>
       <button class="opt" id="moveq-btn" hidden></button>
       <button class="opt" id="tr-btn" hidden></button>
       <button class="opt" id="sync-btn"></button>
@@ -1537,6 +1540,8 @@ const UI = {
   askChipWhy:   { ru: w => `Почему не «${w}»?`, en: w => `Why not "${w}"?` },
   askChipSimple:{ ru: "Объясни проще", en: "Explain it more simply" },
   askChipMore:  { ru: "Приведи еще примеры", en: "Give me more examples" },
+  askWhyBetter: { ru: w => `Почему точнее «${w}»?`, en: w => `Why is "${w}" better?` },
+  fixItemBtn:   { ru: "Исправить задание", en: "Fix this task" },
   wrongWhy:     { ru: w => `Почему не «${w}»:`, en: w => `Why not "${w}":` },
   wrongWhyLoading: { ru: "Разбираю ваш ответ…", en: "Looking at your answer…" },
   verdictTypo:  { ru: "Опечатка — засчитано", en: "Typo — counted" },
@@ -3471,6 +3476,9 @@ $("#sheet").addEventListener("click", e => { if (e.target === $("#sheet")) close
 function closeMenu() { $("#menu").hidden = true; }
 $("#menu-btn").addEventListener("click", async () => {
   $("#menu").hidden = false;
+  // «Исправить задание» — правка текущего вопроса через ИИ: редкое действие, поэтому в меню, а не на экране задания
+  $("#fixq-btn").textContent = t("fixItemBtn");
+  $("#fixq-btn").hidden = !fixTarget();
   const ai = await claudeCap("sample");
   $("#ai-btn").innerHTML = `<span>${t("aiBtn")}<small>${ai ? t("aiBuiltIn") : aiKey() ? AI_NAMES[aiProvider()] : t("aiServer")}</small></span><span aria-hidden="true">›</span>`;
   $("#ai-btn").hidden = !!ai;
@@ -3478,6 +3486,24 @@ $("#menu-btn").addEventListener("click", async () => {
 $("#menu").addEventListener("click", e => { if (e.target === $("#menu") || e.target.closest(".opt")) closeMenu(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeMenu(); closeSheet(); } });
 $("#ai-btn").addEventListener("click", () => keySheet());
+$("#fixq-btn").addEventListener("click", () => { const f = fixTarget(); if (f) fixSheet(...f); });
+/* что правит «Исправить задание»: текущий вопрос тренажера, слов или говорения; у мини-историй и теории своей правки здесь нет */
+function fixTarget() {
+  if (!["drill", "match", "speak"].includes(S.view) || !S.lessonId) return null;
+  const l = lesson();
+  if (!l) return null;
+  if (S.view === "drill") {
+    const i = prog().drill.i;
+    return l.drill && i < l.drill.items.length ? ["drill", `drill.items.${i}`, renderDrill] : null;
+  }
+  if (S.view === "match") {
+    const M = l.match, items = Array.isArray(M) ? M : M?.items, i = prog().match.i;
+    if (!items || M.kind === "cloze" || i >= items.length) return null;
+    return ["match", Array.isArray(M) ? `match.${i}` : `match.items.${i}`, renderMatch];
+  }
+  const i = prog().speak.i;
+  return i < speakItems(l).length ? ["speak", `speak.items.${i}`, renderSpeak] : null;
+}
 
 const lightThemeOnly = document.documentElement.dataset.themeMode === "light";
 function getTheme() { return lightThemeOnly ? "light" : lsGet("hw-theme") || "auto"; }
@@ -4905,8 +4931,6 @@ function renderDrill() {
     <div class="q-counter">
       <span>${t("qCounter", i+1, items.length)}</span>
       ${q.part ? `<span class="part-badge">${t("partBadge", q.part)}</span>` : ""}
-      <span class="question-tools"><button class="fix-btn" id="drill-ask">${t("askBtn")}</button>
-      <button class="fix-btn" id="drill-fix">${t("fixBtn")}</button></span>
     </div>
     <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? shown : "___") + stripTags(q.s[1]))}">${q.s[0]}${state ? `<span class="blank filled">${shown}</span>` : `<span class="blank empty">&nbsp;&nbsp;&nbsp;&nbsp;</span>`}${q.s[1]}</p>
     ${cue}
@@ -4965,10 +4989,7 @@ function wireDrill(i) {
     const mine = state ? (p.lastInput?.[i] || "") : "";
     askTeacher(`Lesson: "${l.title}". Gap-fill sentence: "${stripTags(q.s[0])}___${stripTags(q.s[1])}"${q.verb ? ` (cue: ${q.verb})` : ""}.
 Correct answer: "${q.a[0]}"${q.also?.length ? `; also accepted: ${q.also.join(", ")}` : ""}.${mine ? ` The learner wrote: "${mine}".` : ""}
-Official explanation: ${stripTags(plainEn(q.why))}`, mine && mine !== q.a[0] ? mine : "");
-  });
-  $("#drill-fix")?.addEventListener("click", () => {
-    fixSheet("drill", `drill.items.${i}`, renderDrill);
+Official explanation: ${stripTags(plainEn(q.why))}`, mine && mine !== q.a[0] ? mine : "", $("#drill-ask").dataset.q);
   });
   $("#skip-btn")?.addEventListener("click", () => { p.i = drillStep(p, items, i, 1); if (p.i >= items.length) delete p.redo; save(); renderDrill(); });
 }
@@ -5019,6 +5040,9 @@ function showFeedback(i, raw) {
   const verdict = state === "good" ? t(first ? "verdictFixed" : "verdictGood") : typo ? t("verdictTypo") : state === "also" ? t("verdictAlso") : t("verdictBad");
   const lead = typo ? t("typoLead", escH(raw), q.a[0]) : state === "also" ? t("alsoLead", escH(raw), q.a[0]) : "";
   const alsoLine = q.also ? t("alsoLine", q.also.join(", ")) : "";
+  // ниже разбора — вопрос, который логично задать следом: про первую попытку, про более точный вариант
+  // или «объясни проще», если ИИ уже объяснил ошибку сам. За верный ответ с первого раза вопроса нет
+  const askQ = first ? t("askChipWhy", first) : typo ? "" : state === "also" ? t("askWhyBetter", q.a[0]) : state === "bad" ? t("askChipSimple") : "";
   $("#drill-feedback").innerHTML = `
     <div class="feedback ${state === "bad" ? "bad" : "good"}">
       <span class="verdict"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/>${state === "bad" ? '<path d="M12 7v6m0 3v1"/>' : '<path d="m8 12 2.5 2.5L16 9"/>'}</svg>${verdict}</span>
@@ -5030,6 +5054,7 @@ function showFeedback(i, raw) {
       ${q.trap && norm(raw || "") !== norm(q.trap.word) ? `<p class="why trap-why"><b>${t("trapLead", escH(q.trap.word))}</b> ${TR(q.trap.why)}</p>` : ""}
       <p class="why">${TR(q.why)}</p>
       ${alsoLine ? `<p class="also">${alsoLine}</p>` : ""}
+      ${askQ ? `<button type="button" class="ask-why" id="drill-ask" data-q="${escH(askQ)}">${escH(askQ)}</button>` : ""}
       </div>
     </div>`;
   if (state === "bad") {
@@ -5044,9 +5069,9 @@ function showFeedback(i, raw) {
   }
 }
 /* «Спросить»: свободный вопрос по заданию; ИИ видит предложение, правильный ответ и то, что написали вы */
-function askTeacher(context, ownAnswer) {
+function askTeacher(context, ownAnswer, firstQ = "") {
   const thread = [];
-  const chips = [ownAnswer ? t("askChipWhy", ownAnswer) : "", t("askChipSimple"), t("askChipMore")].filter(Boolean);
+  const chips = [ownAnswer ? t("askChipWhy", ownAnswer) : "", t("askChipSimple"), t("askChipMore")].filter(c => c && c !== firstQ);
   openSheet(`<h3>${t("askTitle")}</h3>
     <div class="aq-thread" id="aq-thread"></div>
     <textarea class="sp-text" id="aq-text" style="min-height:70px;margin-top:6px" placeholder="${t("askPh")}"></textarea>
@@ -5078,6 +5103,7 @@ Answer concisely (at most 5 short sentences), concretely, in the language of the
       } catch(e) { wait.className = "aq-ans"; wait.textContent = t("askFail"); }
       send.disabled = false; box.scrollTop = box.scrollHeight;
     };
+    if (firstQ) { field.value = firstQ; send.onclick(); }
   });
 }
 /* почему именно ваше слово не подходит: ИИ объясняет по-английски и по-русски (русский — по клику), ответ запоминается */
@@ -5190,17 +5216,20 @@ function renderCloze(M, items, p) {
     const cls = checked ? (pick === gaps[g].a ? "right" : "wrong") : (g === U.active ? "active" : "");
     return `<button class="gap ${cls}" data-gap="${g}" ${checked ? "disabled" : ""} aria-label="${escH(t("gapLabel", x, pick ? stripTags(pick) : ""))}">${pick ? `${escH(pick)}<sup>${x}</sup>` : `<span class="gap-n">${x}</span>`}</button>`;
   }).join("");
+  const slip = checked ? gaps.findIndex((g, k) => U.picks[k] !== g.a) : -1;
+  const askQ = slip >= 0 && U.picks[slip] ? t("askChipWhy", stripTags(U.picks[slip])) : "";
   const why = checked ? `<div class="cz-whys">${gaps.map((g, k) => {
     const ok = U.picks[k] === g.a;
     return `<div class="cz-why ${ok ? "ok" : "no"}"><b>${k + 1}. ${escH(g.a)}</b>${ok ? "" : ` <span>${t("czYouPicked", escH(U.picks[k] || "—"))}</span>`}${g.why ? `<p>${TR(g.why)}</p>` : ""}</div>`;
   }).join("")}</div>` : "";
   $("#match-card").innerHTML = `
-    <div class="q-counter"><span>${t("qCounter", i + 1, items.length)}</span><button class="fix-btn" id="match-ask">${t("askBtn")}</button></div>
+    <div class="q-counter"><span>${t("qCounter", i + 1, items.length)}</span></div>
     <div class="eyebrow" style="margin:6px 0 4px">${M.ask ? L(M.ask) : t("czAsk")}</div>
     <p class="cz-text">${text}</p>
     ${checked ? "" : `<div class="cz-opts">${clozeRotate(gaps[U.active].options, i + U.active).map(o => `<button class="chip" data-opt="${escH(o)}" aria-pressed="${U.picks[U.active] === o}">${escH(o)}</button>`).join("")}</div>
       <div class="nav-row"><button class="primary-btn" id="cz-check" ${filled ? "" : "disabled"}>${t("czCheck")}</button></div>`}
     ${why}
+    ${askQ ? `<button type="button" class="ask-why" id="match-ask" data-q="${escH(askQ)}">${escH(askQ)}</button>` : ""}
     ${checked ? `<div class="nav-row"><button class="primary-btn" id="m-next">${i === items.length - 1 ? t("resultsBtn") : t("nextBtn")}</button></div>` : ""}`;
   $$("#match-card [data-gap]").forEach(b => b.addEventListener("click", () => { U.active = +b.dataset.gap; renderCloze(M, items, p); }));
   $$("#match-card [data-opt]").forEach(b => b.addEventListener("click", () => {
@@ -5218,7 +5247,7 @@ function renderCloze(M, items, p) {
   $("#match-ask")?.addEventListener("click", () => {
     const mine = U.picks.filter(Boolean).length === gaps.length ? clozeText(q, U.picks) : "";
     askTeacher(`Lesson: "${lesson().title}". A mini-story where the learner chooses the right verb form for each gap: "${clozeText(q, [])}".
-Correct choices in order: ${gaps.map((g, k) => `${k + 1}) ${g.a} (other option: ${g.options.filter(o => o !== g.a).join(", ")})`).join("; ")}.${mine ? ` The learner's version: "${mine}".` : ""}`, "");
+Correct choices in order: ${gaps.map((g, k) => `${k + 1}) ${g.a} (other option: ${g.options.filter(o => o !== g.a).join(", ")})`).join("; ")}.${mine ? ` The learner's version: "${mine}".` : ""}`, "", $("#match-ask").dataset.q);
   });
 }
 function renderMatch() {
@@ -5258,8 +5287,10 @@ function renderMatch() {
   if (M.kind === "cloze") return renderCloze(M, items, p);
   const i = p.i, q = items[i], done = i in p.answered, chosen = p.chosen?.[i];
   const opts = optionsFor(M, i);
+  const picked = done && chosen && chosen !== q.a ? stripTags(L(opts.find(m => m.key === chosen)?.label) || chosen) : "";
+  const askQ = picked ? t("askChipWhy", picked) : "";
   $("#match-card").innerHTML = `
-    <div class="q-counter"><span>${t("qCounter", i+1, items.length)}</span><button class="fix-btn" id="match-ask">${t("askBtn")}</button><button class="fix-btn" id="match-fix">${t("fixBtn")}</button></div>
+    <div class="q-counter"><span>${t("qCounter", i+1, items.length)}</span></div>
     <p class="q-sentence" style="max-width:28ch">${TR(q.s)}</p>
     <div class="eyebrow" style="margin-bottom:8px">${M.ask ? L(M.ask) : t("matchAsk")}</div>
     <div class="match-options">
@@ -5272,7 +5303,8 @@ function renderMatch() {
     </div>
     ${done ? `<div class="feedback ${p.answered[i] ? "good" : "bad"}" style="margin-top:18px">
         <span class="verdict">${p.answered[i] ? t("verdictGood") : t("rightAnswer", q.a)}</span>
-        ${q.why ? `<p class="why">${TR(q.why)}</p>` : ""}</div>
+        ${q.why ? `<p class="why">${TR(q.why)}</p>` : ""}
+        ${askQ ? `<button type="button" class="ask-why" id="match-ask" data-q="${escH(askQ)}">${escH(askQ)}</button>` : ""}</div>
       <div class="nav-row"><button class="primary-btn" id="m-next">${i === items.length-1 ? t("resultsBtn") : t("nextBtn")}</button></div>` : ""}`;
 
   $$("#match-card .match-btn").forEach(b => b.addEventListener("click", () => {
@@ -5286,10 +5318,7 @@ function renderMatch() {
     const mine = done && chosen ? label(chosen) : "";
     askTeacher(`Lesson: "${lesson().title}". Question: "${stripTags(L(q.s))}"
 Options: ${opts.map(m => label(m.key)).join(" / ")}. Correct: "${label(q.a)}".${mine ? ` The learner chose: "${mine}".` : ""}
-${q.why ? `Official explanation: ${stripTags(plainEn(q.why))}` : ""}`, mine && chosen !== q.a ? mine : "");
-  });
-  $("#match-fix")?.addEventListener("click", () => {
-    fixSheet("match", Array.isArray(lesson().match) ? `match.${i}` : `match.items.${i}`, renderMatch);
+${q.why ? `Official explanation: ${stripTags(plainEn(q.why))}` : ""}`, mine && chosen !== q.a ? mine : "", $("#match-ask").dataset.q);
   });
 }
 
@@ -5356,7 +5385,6 @@ function renderSpeak() {
     <div class="q-counter">
       <span>${t("qCounter", i+1, SP.length)}</span>
       ${q.group ? `<span class="part-badge">${L(q.group)}</span>` : ""}
-      <button class="fix-btn" id="speak-fix">${t("fixBtn")}</button>
     </div>
     <p class="speak-q ${plain(q.q).length > 90 ? "long" : ""}">${TR(q.q)}</p>
     ${q.starter ? `<p class="starter">${t("starterLead")} <b>${q.starter}</b></p>` : ""}
@@ -5380,9 +5408,6 @@ function renderSpeak() {
   $("#s-check")?.addEventListener("click", () => { const v = $("#sp-text").value.trim(); if (v) checkAnswer(i, { text: v }); });
   $("#s-next")?.addEventListener("click", () => { p.i = i+1; save(); renderSpeak(); updateProgress(); });
   $("#s-prev")?.addEventListener("click", () => { p.i = i-1; save(); renderSpeak(); });
-  $("#speak-fix")?.addEventListener("click", () => {
-    fixSheet("speak", `speak.items.${i}`, renderSpeak);
-  });
 }
 
 /* «поправка» без изменений (said = better) — не поправка: такие ИИ иногда присылает, прячем */

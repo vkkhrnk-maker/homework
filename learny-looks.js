@@ -26,6 +26,8 @@
   function sizeOwn() {
     const ownH = document.getElementById("own-h");
     if (!ownH || !ownH.children.length) return;
+    // на телефоне у заголовка общий калибр разделов (learny-looks.css, «Телефон: один калибр заголовка»)
+    if (matchMedia("(max-width:600px)").matches) { ownH.style.fontSize = ""; return; }
     ownH.style.fontSize = "100px";
     let longest = 0;
     [...ownH.children].forEach(line => { const r = document.createRange(); r.selectNodeContents(line); longest = Math.max(longest, r.getBoundingClientRect().width); });

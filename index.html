@@ -463,6 +463,8 @@ body.home main{padding-top:0}
 .use-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .fix-btn{flex:none;font-size:12px;font-weight:600;color:var(--fg-2);background:var(--bg);border-radius:999px;padding:5px 12px}
 .fix-btn:hover{background:var(--surface-2);color:var(--fg)}
+.ask-why{display:inline-block;margin-top:10px;padding:6px 0;font-size:15px;color:var(--fg-2);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.ask-why:hover{color:var(--fg)}
 .table-scroll{overflow-x:auto;margin-top:6px;-webkit-overflow-scrolling:touch}
 .prob-table,.sum-table{width:100%;border-collapse:collapse;font-size:15px;table-layout:fixed}
 .prob-table td,.sum-table td{padding:11px 18px 11px 0;border-bottom:1px solid var(--line);vertical-align:top}
@@ -2170,6 +2172,14 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     transition: color .15s var(--nb-ease);
   }
   & :is(.fix-btn, .q-counter button, .question-tools button):hover { background: none; color: var(--nb-ink); }
+  /* вопрос учителю — тихой ссылкой под разбором ответа: появляется, только когда есть что спросить */
+  & .ask-why {
+    display: inline-flex; align-items: center; min-height: 40px; margin: 6px 0 0; padding: 0; background: none;
+    font: 400 16px/1.3 var(--nb-ui); color: var(--nb-ink-2); text-decoration: underline; text-decoration-thickness: 1px;
+    text-underline-offset: .24em; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); transition: color .15s var(--nb-ease);
+  }
+  & .ask-why:hover { color: var(--nb-ink); text-decoration-color: currentColor; }
+  & #match-card > .ask-why { margin-top: 10px; }
   & .hint { font: var(--t-caption); color: var(--nb-ink-2); }
   & .hint.err { color: var(--nb-pencil-ink); }
   & .spinner { border-color: var(--nb-purple); border-top-color: transparent; }
@@ -2837,7 +2847,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     & body.has-result .learny-actionbar[data-result="good"] .learny-actionbar-verdict { color: var(--nb-green); }
     & body.has-result .learny-actionbar[data-result="bad"] .learny-actionbar-verdict { color: var(--nb-pencil-ink); }
     & body.has-result.learny-lesson-mode #drill-feedback .feedback { background: var(--nb-sheet); }
-    & body.has-action :is(#drill-card .answer-row .primary-btn, #drill-card .nav-row .primary-btn, #match-card .nav-row .primary-btn, #speak-card .nav-row .primary-btn, #speak-card #s-stop, #speak-card:not(:has(.nav-row .primary-btn)) #s-rec) { height: 52px; }
+    & body.has-action :is(#drill-card .answer-row .primary-btn, #drill-card .nav-row .primary-btn, #match-card .nav-row .primary-btn, #speak-card .nav-row .primary-btn, #speak-card #s-stop, #speak-card:not(:has(.nav-row .primary-btn)) #s-rec) { height: 56px; font-size: 18px; }
     & #drill-card .answer-row { grid-template-columns: minmax(0,1fr); }
   }
 
@@ -2927,7 +2937,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-name { font-size: clamp(34px, 2.9vw, 46px); }
   & body[data-calm-page="cabinet"] #lesson-list .nb-row-word { right: 6%; font-size: clamp(110px, 9vw, 150px); }
   & body[data-calm-page="cabinet"] #lesson-list .nb-own-row { order: -1; }
-  & body[data-calm-page="cabinet"] #lesson-list .nb-own-row .learny-lesson-name { font-size: clamp(28px, 2.3vw, 36px); }
+  /* название «Своего урока» того же кегля, что у остальных тетрадей: уменьшенное читалось другим шрифтом (24 ноября 2026) */
   @media (hover: hover) {
     & body[data-calm-page="cabinet"] #lesson-list .lesson-card:hover { translate: 0 -4px; }
     & body[data-calm-page="cabinet"] #lesson-list .lesson-card:hover .learny-row-arrow { translate: 4px 0; }
@@ -3008,7 +3018,6 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-meta { left: 20px; top: 22px; font-size: 11px; }
     & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-copy { left: 20px; right: 20px; top: 48px; }
     & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-name { font-size: 34px; }
-    & body[data-calm-page="cabinet"] #lesson-list .nb-own-row .learny-lesson-name { font-size: 28px; }
     & body[data-calm-page="cabinet"] #lesson-list .nb-row-word { font-size: 104px; }
     /* вкладки кабинета на телефоне — строкой-плашкой над разделом */
     & body.home[data-calm-page="cabinet"] .nb-cab-tabs { display: flex; gap: 4px; margin: 4px 0 24px; padding: 4px; border-radius: var(--nb-pill); background: var(--hd-plate, #efedf1); }
@@ -3237,6 +3246,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & #report-card .answers-table td.given.skip { white-space: nowrap; }
   & #view-match .cz-opts .chip { height: 64px; border-radius: 999px; font-size: 20px; }
   & #view-match #cz-check, & #view-speak .sp-actions :is(.primary-btn, .ghost-btn) { height: 64px; padding: 0 32px; font-size: 20px; }
+  & #view-match .match-btn { min-height: 64px; padding: 10px 28px; border-radius: 999px; font-size: 20px; }
   & #view-speak .speak-q { font-size: 36px; line-height: 1.25; }
   /* у «Говорения» справка «что значит каждый» тише: ниже, мельче, как примечание под заданием */
   & #view-speak #speak-tips { margin-top: 24px; }
@@ -3278,6 +3288,10 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   @media (max-width: 800px) {
     & #view-drill .q-sentence, & #view-speak .speak-q { font-size: 28px; }
     & #view-match .cz-text { font-size: 22px; }
+    /* все пилюли задания одной высоты, 56: варианты, свое слово, «Написать ответ», главная кнопка внизу.
+       Раньше варианты были 64, кнопка внизу 52, а варианты «Слов» 54 */
+    & :is(#view-drill .chip, #view-drill #drill-input, #view-drill #check-btn, #view-drill #next-btn, #view-match .cz-opts .chip, #view-speak .sp-actions :is(.primary-btn, .ghost-btn)) { height: 56px; font-size: 18px; }
+    & #view-match .match-btn { min-height: 56px; font-size: 18px; }
     /* на телефоне строка не вмещает пять ссылок: «Спросить · Исправить» — второй строкой, под подсказкой */
     /* первая строка — подсказка и «Пропустить», вторая — «Спросить · Исправить» и «Назад»; перенос — пустым элементом во всю ширину */
     & #drill-card > .nav-row { row-gap: 0; }
@@ -3291,6 +3305,266 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     & .learny-rail .toc { flex-wrap: nowrap; }
     & #theory-toc a { flex: none; white-space: nowrap; }
   }
+}
+
+/* =====================================================================
+   Шапка приложения (24 ноября 2026): одна на всех страницах приложения — кабинет, каталог, урок.
+   Слева марка, в плашке «Уроки · Словарь», справа аккаунт. Прежние плашка лендинга («Готовые уроки · Свой урок · язык»),
+   пилюля «Кабинет» и вкладки кабинета больше не показываются: язык и настройки — в меню аккаунта, «···» — только в уроке.
+   ===================================================================== */
+:root:is(#_#_#_#_#_#_#_#_,[data-nb]) {
+  & .header-actions :is(.nb-notch, .nb-split), & .nb-cab-tabs { display: none !important; }
+  & body.home .header-actions #menu-btn { display: none; }
+  /* аккаунт всегда у правого края: в уроке марка теряла margin-right: auto, и аккаунт с «···» прилипал к ней */
+  & .header-actions { display: flex; margin-left: auto; }
+  & .header-actions .nb-acct { order: 10; }
+  & .header-actions #menu-btn { order: 9; }
+  & .nb-appnav { display: flex; align-items: center; gap: 4px; }
+  & .nb-appnav .nb-link[aria-current="page"] { background: var(--hd-now-bg); color: var(--hd-now-fg); padding: 0 15px; }
+  @media (min-width: 1001px) {
+    & header.top .nb-appnav {
+      position: absolute; left: 50%; top: 0; z-index: 7; translate: -50% 0; height: 58px; padding: 0 18px; border-radius: 0 0 20px 20px; background: var(--hd-plate);
+    }
+    & header.top .nb-appnav::before, & header.top .nb-appnav::after { content: ""; position: absolute; top: 0; width: 20px; height: 20px; }
+    & header.top .nb-appnav::before { right: 100%; background: radial-gradient(circle at 0 100%, transparent 19.5px, var(--hd-plate) 20px); }
+    & header.top .nb-appnav::after { left: 100%; background: radial-gradient(circle at 100% 100%, transparent 19.5px, var(--hd-plate) 20px); }
+  }
+  /* узкий экран: разделы — строкой-плашкой над страницей кабинета и каталога; в уроке у телефона своя строка шагов */
+  & #view-home > .nb-appnav { margin: 4px 0 24px; padding: 4px; border-radius: var(--nb-pill); background: var(--hd-plate); }
+  & #view-home > .nb-appnav .nb-link { flex: 1; justify-content: center; height: 44px; }
+
+  /* аккаунт: кружок с первой буквой имени и имя; без имени — силуэт и «Мой кабинет». Под курсором черная пилюля, как пункты шапки */
+  & .nb-acct { position: relative; }
+  & .nb-acct-b {
+    display: inline-flex; align-items: center; gap: 10px; height: 40px; padding: 0 16px 0 4px; border: 0; border-radius: var(--nb-pill);
+    background: var(--hd-plate); font: 400 16px/1 var(--nb-ui); color: var(--hd-fg); cursor: pointer;
+    transition: background-color .22s var(--nb-ease), color .22s var(--nb-ease);
+  }
+  & .nb-acct-b[aria-expanded="true"] { background: var(--hd-hover-bg); color: var(--hd-hover-fg); }
+  @media (hover: hover) { & .nb-acct-b:hover { background: var(--hd-hover-bg); color: var(--hd-hover-fg); } }
+  & .nb-acct-b:focus-visible { outline: 2px solid var(--hd-fg); outline-offset: 2px; }
+  & .nb-ava { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: #0e6b44; color: #fff; font: 900 20px/1 var(--nb-disp); }
+  & .nb-ava.is-anon { background: #fff; color: var(--nb-ink-2); box-shadow: inset 0 0 0 1px rgba(26,23,28,.16); }
+  & .nb-ava svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; }
+  & .nb-acct-name { max-width: 16ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  & .nb-acct-m {
+    position: absolute; right: 0; top: calc(100% + 10px); z-index: 9; display: grid; gap: 2px; width: 280px; padding: 8px; border-radius: 16px;
+    background: #fff; box-shadow: 0 0 0 1px rgba(26,23,28,.14); transition: opacity .14s var(--nb-ease), translate .14s var(--nb-ease);
+  }
+  @starting-style { & .nb-acct-m { opacity: 0; translate: 0 -4px; } }
+  & .nb-acct-in {
+    height: 44px; margin: 0; padding: 0 16px; border: 0; border-radius: var(--nb-pill); outline: 0; background: #fff;
+    box-shadow: inset 0 0 0 1px rgba(26,23,28,.18); font: 400 16px/1 var(--nb-ui); color: var(--nb-ink);
+  }
+  & .nb-acct-in::placeholder { color: var(--nb-ink-3); }
+  & .nb-acct-in:focus { box-shadow: inset 0 0 0 1.5px var(--nb-ink); }
+  & .nb-acct-note { margin: 6px 16px 8px; font: 400 13px/1.3 var(--nb-ui); color: var(--nb-ink-2); }
+  & .nb-acct-i {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 6px 16px; border: 0; border-radius: 14px;
+    background: none; text-align: left; font: 400 16px/1.25 var(--nb-ui); color: var(--nb-ink); text-decoration: none; cursor: pointer;
+    transition: background-color .15s var(--nb-ease);
+  }
+  & .nb-acct-i small { display: block; margin-top: 2px; font-size: 13px; color: var(--nb-ink-2); }
+  @media (hover: hover) { & .nb-acct-i:hover { background: var(--nb-plate); } }
+  & .nb-acct-i:focus-visible { outline: 2px solid var(--nb-ink); outline-offset: -2px; }
+  & .nb-acct-lang { display: flex; gap: 2px; padding: 4px 8px; }
+  & .nb-acct-lang button { flex: 1; height: 36px; border: 0; border-radius: var(--nb-pill); background: none; font: 400 15px/1 var(--nb-ui); color: var(--nb-ink); cursor: pointer; }
+  & .nb-acct-lang button[aria-pressed="true"] { background: linear-gradient(100deg, rgba(255,228,106,0) 2%, var(--nb-marker) 7%, rgba(255,228,106,.9) 93%, rgba(255,228,106,0) 98%) no-repeat 0 50% / 100% 1.7em; }
+  @media (hover: hover) { & .nb-acct-lang button:not([aria-pressed="true"]):hover { background: var(--nb-plate); } }
+  @media (max-width: 600px) {
+    & .nb-acct-name { display: none; }
+    & .nb-acct-b { padding: 0 4px; }
+    & .nb-acct-m { position: fixed; left: 12px; right: 12px; top: 64px; width: auto; }
+  }
+
+  /* название урока — строкой над шагами: шапка одна на все приложение и названия урока в ней нет */
+  @media (min-width: 801px) {
+    & main.wrap > .lb-title { display: block; margin: 28px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 400 16px/1.3 var(--nb-ui); color: var(--nb-ink-2); }
+    & main.wrap > .lb-title + #tabs { margin-top: 12px; }
+  }
+}
+
+/* =====================================================================
+   Отступы (24 ноября 2026): одна шкала на приложение и лендинг — 8 · 16 · 24 · 32 · 48 · 96 — и четыре роли.
+   Группа 8 — части одного целого. Пара 16 — подпись и то, к чему она относится. Блок 32 (на телефоне 24) — соседние
+   блоки; край страницы равен блоку. Раздел 48 (на телефоне 32) — разные части страницы и место под крупным заголовком.
+   Других значений между блоками нет. Правила — в DESIGN.md, раздел «5а. Отступы».
+   ===================================================================== */
+:root:is(#_#_#_#_#_#_#_#_,[data-nb]) {
+  --sp-group: 8px; --sp-pair: 16px; --sp-block: 32px; --sp-section: 48px; --sp-edge: var(--sp-block);
+  @media (max-width: 800px) { --sp-block: 24px; --sp-section: 32px; }
+
+  /* края страницы: шапка, урок, кабинет и каталог на одной линии — край равен блоку */
+  & body header.top .bar { padding-inline: var(--sp-edge); }
+  & body.home main.wrap { padding-inline: var(--sp-edge); }
+  /* лента оглавления теории на телефоне прокручивается вбок от края до края экрана, первое слово — на линии края */
+  @media (max-width: 800px) { & .learny-rail .toc { margin-inline: calc(-1 * var(--sp-edge)); padding-inline: var(--sp-edge); } }
+  @media (max-width: 800px) {
+    & body:not(.home) main.wrap { padding-inline: var(--sp-edge); }
+    & body.learny-lesson-mode .nb-head { padding-inline: var(--sp-edge); }
+  }
+  /* урок на компьютере: шапка → название 32, название → шаги 12, шаги → полоса вопросов 12, навигация → задание 48 */
+  @media (min-width: 801px) {
+    & body:not(.home) main.wrap { padding-top: 0; }
+    & main.wrap > .lb-title { margin-top: var(--sp-block); }
+    & main.wrap > .lb-title + #tabs { margin-top: var(--sp-group); }
+    & main.wrap > .nb-head { margin-top: var(--sp-group); }
+    /* отступ до задания задает верхнее поле страницы урока (было 34) */
+    & main > section:not(#view-home) { padding-top: var(--sp-section); }
+  }
+  & #view-speak .aside { margin-top: 0; }
+  /* задание: формулировка → вопрос 16, вопрос → варианты 32, варианты между собой и свое слово 12, дальше нижняя строка 32 */
+  & .learny-stage :is(#drill-card, #match-card, #speak-card) { margin-top: 0; }
+  & :is(#drill-card, #match-card) .q-sentence, & #match-card .cz-text, & #speak-card .speak-q { margin-top: var(--sp-pair); }
+  & #drill-card .chips, & #match-card :is(.cz-opts, .match-options) { gap: var(--sp-group); margin-top: var(--sp-block); }
+  & #drill-card .answer-row { margin-top: var(--sp-group); }
+  & :is(#drill-card, #match-card, #speak-card) > .nav-row { margin-top: var(--sp-block); }
+  & #speak-card .starter { margin-top: var(--sp-pair); }
+  & #speak-card .sp-actions { margin-top: var(--sp-block); }
+  & #view-speak #speak-tips { margin-top: var(--sp-section); }
+  /* кабинет и каталог: шапка → первая строка 32, в каталоге до заголовка 48; на узком экране плашка разделов — 8 от шапки */
+  & #learny-library, & body.home[data-calm-page="cabinet"] :is(#learny-library, #vocab-box) { margin-top: var(--sp-block); }
+  & body:is([data-calm-page="catalog"], [data-calm-page="welcome"]) #learny-library { margin-top: var(--sp-section); }
+  & #view-home > .nb-appnav { margin: var(--sp-group) 0 0; }
+  & body[data-calm-page="cabinet"] #lesson-list { margin-top: var(--sp-block); }
+  /* «Готовые уроки →» у правого края сетки: заголовок раздела скрыт, и ссылка вставала в первую колонку, на 24 левее края */
+  & body[data-calm-page="cabinet"] #learny-library .desk-catalog { grid-column: 1 / -1; }
+  /* каталог: заголовок → фильтры 24, фильтры → тетради — раздел */
+  & body:is([data-calm-page="catalog"], [data-calm-page="welcome"]) .learny-filters { margin-top: var(--sp-block); }
+  /* под заголовком каталога фильтры: отступ от низа хвостов «у», «р» — рамка кончается на базовой линии плюс их глубина у Sofia, .2 кегля */
+  & body:is([data-calm-page="catalog"], [data-calm-page="welcome"]) #learny-library-title { text-box: trim-end cap alphabetic; padding-bottom: .2em; }
+  & body:is([data-calm-page="catalog"], [data-calm-page="welcome"]) #lesson-list { margin-top: var(--sp-section); }
+  /* телефон, урок: от полосы вопросов до задания — раздел (32); верхнее поле страницы урока не добавляем сверху */
+  @media (max-width: 800px) {
+    & body:not(.home) main.wrap { padding-top: 0; }
+    & .learny-stage :is(#drill-card, #match-card, #speak-card) { margin-top: var(--sp-section); }
+    /* теория: липкая полоса оглавления во всю ширину — от края страницы до края; до первого правила 32 видимых
+       (под полосой уже 20: ее поле и отступ) */
+    & body.learny-lesson-mode #view-theory .learny-rail { margin-inline: calc(-1 * var(--sp-edge)); padding-inline: var(--sp-edge); }
+    & #view-theory .learny-work > div { margin-top: calc(var(--sp-section) - 20px); }
+  }
+  /* строки урока (название и полоса вопросов) на страницах кабинета пустые, но со своими отступами добавляли 44 сверху */
+  & body.home main.wrap > :is(.lb-title, .nb-head) { display: none; }
+  /* теория: оглавление темы — часть навигации урока (12 от шагов), первое правило — новый раздел (48 видимых).
+     Под оглавлением уже есть 40: поле липкой полосы 14 и промежуток сетки страницы 26, поэтому сверху у правил только 8 */
+  @media (min-width: 801px) {
+    & main > section#view-theory:not(#view-home) { padding-top: 0; }
+    & #view-theory .learny-work > div { margin-top: calc(var(--sp-section) - 40px); }
+  }
+}
+
+/* =====================================================================
+   Кабинет: тетрадь, а не папка (24 ноября 2026, Виктория: «поаккуратней, без закладки сверху, в форме тетради»;
+   белые этикетки и срез страниц отклонены: «плашки неаккуратно выглядят, и тени»).
+   Тетрадь держат корешок слева на тон темнее обложки и скругление только у внешних углов. Ярлычка нет.
+   Все тетради — один компонент: строка мелкими заглавными («Грамматика · B1–B2», у своего — «Свой урок»), название
+   на одной линии во всем ряду, ход урока, ссылка, крупное слово в углу.
+   ===================================================================== */
+:root:is(#_#_#_#_#_#_#_#_,[data-nb]) {
+  & body[data-calm-page="cabinet"] #lesson-list { padding-top: 0; gap: var(--sp-block); }
+  & body[data-calm-page="cabinet"] #lesson-list .lesson-card.lesson-card { --spine: 16px; border-radius: 6px 16px 16px 6px; }
+  & body[data-calm-page="cabinet"] #lesson-list .lesson-card.lesson-card::before {
+    content: ""; position: absolute; inset: 0 auto 0 0; z-index: 0; width: var(--spine); border-radius: 6px 0 0 6px;
+    background: color-mix(in srgb, var(--c) 82%, #000); pointer-events: none;
+  }
+  /* строка мелкими заглавными: у уроков — раздел и уровень, у своего урока на том же месте его ярлычок */
+  & body[data-calm-page="cabinet"] #lesson-list .lesson-card:not(.nb-own-row) .nb-row-tab { display: none; }
+  & body[data-calm-page="cabinet"] #lesson-list :is(.learny-lesson-meta, .nb-own-row .nb-row-tab) {
+    position: absolute; left: calc(var(--spine) + 24px); right: 24px; top: 28px; bottom: auto; z-index: 1; display: block;
+    min-width: 0; max-width: none; height: auto; padding: 0; border-radius: 0; background: none;
+    font: 400 12px/1 var(--nb-ui); letter-spacing: .12em; text-transform: uppercase; color: var(--on, #fffdf6); opacity: .82;
+  }
+  & body[data-calm-page="cabinet"] #lesson-list .nb-own-row .nb-row-tab::before, & body[data-calm-page="cabinet"] #lesson-list .nb-own-row .nb-row-tab::after { content: none; }
+  & body[data-calm-page="cabinet"] #lesson-list .lesson-card:not(.nb-own-row) .learny-lesson-meta { display: block !important; }
+  & body[data-calm-page="cabinet"] #lesson-list .nb-own-row .learny-lesson-meta { display: none !important; }
+  & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-copy { left: calc(var(--spine) + 24px); right: 24px; top: 58px; z-index: 1; }
+  & body[data-calm-page="cabinet"] #lesson-list .nb-row-clip { z-index: 0; }
+  @media (max-width: 800px) {
+    & body[data-calm-page="cabinet"] #lesson-list :is(.learny-lesson-meta, .nb-own-row .nb-row-tab) { left: calc(var(--spine) + 20px); right: 20px; top: 24px; }
+    & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-copy { left: calc(var(--spine) + 20px); right: 20px; top: 52px; }
+  }
+}
+
+/* =====================================================================
+   Кабинет: новый урок — поле ввода вверху «Уроков», а не тетрадь в сетке (24 ноября 2026, по идее Виктории).
+   Это действие, а не урок, поэтому у него свой вид: белое поле с тонкой обводкой, как поле «свой урок»,
+   внизу «Фото или файл» тихой пилюлей и «Создать урок» лаймовой. В фокусе — лаймовый срез, как в окне «Свой урок».
+   Шапка → поле — блок, поле → «Готовые уроки» и сетка — раздел.
+   ===================================================================== */
+:root:is(#_#_#_#_#_#_#_#_,[data-nb]) {
+  & .nb-new, & body[data-calm-page="cabinet"] #lesson-list .nb-own-row { display: none; }
+  & .nb-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  & body.home[data-calm-page="cabinet"] .nb-new {
+    display: grid; gap: var(--sp-group); margin-top: var(--sp-block); padding: var(--sp-pair); border-radius: 16px; background: #fff;
+    box-shadow: inset 0 0 0 1.5px rgba(26,23,28,.18); transition: box-shadow .2s var(--nb-ease), background-color .2s var(--nb-ease);
+  }
+  & body.home[data-calm-page="cabinet"] .nb-new:focus-within { box-shadow: inset 0 0 0 1.5px var(--nb-ink), 4px 4px 0 0 var(--acc, #c8f26a); }
+  /* файл над страницей: поле лаймовое и говорит «Отпустите здесь», как поле в окне «Свой урок» */
+  & body.home[data-calm-page="cabinet"] .nb-new { position: relative; }
+  & body.home[data-calm-page="cabinet"] .nb-new.is-dragging { background: var(--nb-lime); box-shadow: inset 0 0 0 1.5px var(--nb-on-lime); }
+  & body.home[data-calm-page="cabinet"] .nb-new::after {
+    content: attr(data-drop); position: absolute; inset: 0; display: grid; place-items: center; border-radius: inherit;
+    font: 900 40px/1 var(--nb-disp); color: var(--nb-on-lime); opacity: 0; pointer-events: none; transition: opacity .15s var(--nb-ease);
+  }
+  & body.home[data-calm-page="cabinet"] .nb-new.is-dragging::after { opacity: 1; }
+  & body.home[data-calm-page="cabinet"] .nb-new.is-dragging > * { visibility: hidden; }
+  /* прикрепленные файлы — карточками в поле: скрепка, имя, размер, крестик */
+  /* колонка поля не шире самого поля: длинное имя файла сокращается многоточием, а не распирает поле за край */
+  & body.home[data-calm-page="cabinet"] .nb-new { grid-template-columns: minmax(0, 1fr); }
+  & .nb-new > *, & .nb-new-row > * { min-width: 0; }
+  & .nb-new-files { display: flex; flex-wrap: wrap; gap: var(--sp-group); }
+  & .nb-new-chip {
+    display: inline-flex; align-items: center; gap: 8px; max-width: 100%; height: 40px; padding: 0 4px 0 12px; border-radius: 10px;
+    background: var(--nb-plate); font: 400 14px/1 var(--nb-ui); color: var(--nb-ink);
+  }
+  & .nb-new-chip svg { flex: none; width: 16px; height: 16px; fill: none; stroke: var(--nb-ink-2); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  & .nb-new-chip-name { min-width: 0; max-width: 28ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  & .nb-new-chip small { flex: none; font-size: 12px; color: var(--nb-ink-2); }
+  & .nb-new-chip button { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border: 0; border-radius: 8px; background: none; font: 400 20px/1 var(--nb-ui); color: var(--nb-ink-2); cursor: pointer; }
+  @media (hover: hover) { & .nb-new-chip button:hover { background: #fff; color: var(--nb-ink); } }
+  /* пустое поле: кнопка светло-серая, но нажимается и подсказывает, что вписать */
+  & .nb-new-go.is-empty { background: #e4e1d6; color: #8d8892; outline-color: transparent; }
+  @media (hover: hover) { & .nb-new-go.is-empty:hover { background: #dcd8cb; } }
+  /* ошибка — карандашом под кнопками */
+  & .nb-new-err { margin: 0; padding: 0 4px; font: 400 14px/1.3 var(--nb-ui); color: var(--nb-pencil-ink); text-wrap: balance; }
+  & .nb-new textarea {
+    display: block; width: 100%; min-height: calc(2 * 1.3em); max-height: 40vh; margin: 0; padding: 0 4px; border: 0; outline: 0; resize: none; overflow: auto;
+    background: none; font: 400 20px/1.3 var(--nb-ui); color: var(--nb-ink);
+  }
+  & .nb-new textarea::placeholder { color: var(--nb-ink-3); }
+  & .nb-new-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-pair); }
+  & .nb-new-attach {
+    display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px 0 12px; border: 0; border-radius: var(--nb-pill);
+    background: var(--nb-plate); font: 400 16px/1 var(--nb-ui); color: var(--nb-ink); cursor: pointer; transition: background-color .15s var(--nb-ease), color .15s var(--nb-ease);
+  }
+  & .nb-new-attach svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  & .nb-new-go {
+    display: inline-flex; align-items: center; gap: 12px; height: 56px; padding: 0 28px; border: 0; border-radius: var(--nb-pill);
+    background: var(--acc, #c8f26a); color: var(--on-acc, #0b3a24); font: 400 20px/1 var(--nb-ui); cursor: pointer;
+    outline: 1px solid color-mix(in srgb, var(--on-acc, #0b3a24) 30%, transparent); outline-offset: -6px;
+    transition: background-color .15s var(--nb-ease), scale .15s var(--nb-ease);
+  }
+  & .nb-new-go:active { scale: .98; }
+  & .nb-new-go:focus-visible, & .nb-new-attach:focus-visible { outline: 2px solid var(--nb-ink); outline-offset: 3px; }
+  @media (hover: hover) {
+    & .nb-new-attach:hover { background: var(--nb-ink); color: #fff; }
+    & .nb-new-go:hover { background: #d6f78a; }
+    & .nb-new-go:hover span:last-child { translate: 4px 0; }
+  }
+  & .nb-new-go span:last-child { transition: translate .3s var(--nb-ease); }
+  & body.home[data-calm-page="cabinet"] .nb-new + #learny-library { margin-top: var(--sp-section); }
+  @media (max-width: 800px) {
+    & body.home[data-calm-page="cabinet"] .nb-new { margin-top: var(--sp-block); }
+    & .nb-new textarea { font-size: 16px; }
+    /* на телефоне подписи не переносятся: файл — круглая кнопка со скрепкой, «Создать урок» — остаток строки */
+    & .nb-new-attach { width: 48px; height: 48px; padding: 0; justify-content: center; flex: none; }
+    & .nb-new-attach span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    & .nb-new-attach svg { width: 20px; height: 20px; }
+    & .nb-new-go { flex: 1; justify-content: center; height: 48px; padding: 0 20px; font-size: 18px; white-space: nowrap; }
+    /* тетрадь на телефоне выше: под названием в три строки и «Открыть урок» крупное слово не наезжает на ссылку */
+    & body[data-calm-page="cabinet"] #lesson-list .lesson-card.lesson-card { height: 340px; }
+  }
+  & .nb-new-go, & .nb-new-attach { white-space: nowrap; }
 }
 
 </style>
@@ -3321,6 +3595,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     <div class="opts">
       <button class="opt" id="report-btn" hidden></button>
       <button class="opt" id="extend-btn" hidden></button>
+      <button class="opt" id="fixq-btn" hidden></button>
       <button class="opt" id="moveq-btn" hidden></button>
       <button class="opt" id="tr-btn" hidden></button>
       <button class="opt" id="sync-btn"></button>
@@ -3897,6 +4172,8 @@ const UI = {
   askChipWhy:   { ru: w => `Почему не «${w}»?`, en: w => `Why not "${w}"?` },
   askChipSimple:{ ru: "Объясни проще", en: "Explain it more simply" },
   askChipMore:  { ru: "Приведи еще примеры", en: "Give me more examples" },
+  askWhyBetter: { ru: w => `Почему точнее «${w}»?`, en: w => `Why is "${w}" better?` },
+  fixItemBtn:   { ru: "Исправить задание", en: "Fix this task" },
   wrongWhy:     { ru: w => `Почему не «${w}»:`, en: w => `Why not "${w}":` },
   wrongWhyLoading: { ru: "Разбираю ваш ответ…", en: "Looking at your answer…" },
   verdictTypo:  { ru: "Опечатка — засчитано", en: "Typo — counted" },
@@ -5831,6 +6108,9 @@ $("#sheet").addEventListener("click", e => { if (e.target === $("#sheet")) close
 function closeMenu() { $("#menu").hidden = true; }
 $("#menu-btn").addEventListener("click", async () => {
   $("#menu").hidden = false;
+  // «Исправить задание» — правка текущего вопроса через ИИ: редкое действие, поэтому в меню, а не на экране задания
+  $("#fixq-btn").textContent = t("fixItemBtn");
+  $("#fixq-btn").hidden = !fixTarget();
   const ai = await claudeCap("sample");
   $("#ai-btn").innerHTML = `<span>${t("aiBtn")}<small>${ai ? t("aiBuiltIn") : aiKey() ? AI_NAMES[aiProvider()] : t("aiServer")}</small></span><span aria-hidden="true">›</span>`;
   $("#ai-btn").hidden = !!ai;
@@ -5838,6 +6118,24 @@ $("#menu-btn").addEventListener("click", async () => {
 $("#menu").addEventListener("click", e => { if (e.target === $("#menu") || e.target.closest(".opt")) closeMenu(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeMenu(); closeSheet(); } });
 $("#ai-btn").addEventListener("click", () => keySheet());
+$("#fixq-btn").addEventListener("click", () => { const f = fixTarget(); if (f) fixSheet(...f); });
+/* что правит «Исправить задание»: текущий вопрос тренажера, слов или говорения; у мини-историй и теории своей правки здесь нет */
+function fixTarget() {
+  if (!["drill", "match", "speak"].includes(S.view) || !S.lessonId) return null;
+  const l = lesson();
+  if (!l) return null;
+  if (S.view === "drill") {
+    const i = prog().drill.i;
+    return l.drill && i < l.drill.items.length ? ["drill", `drill.items.${i}`, renderDrill] : null;
+  }
+  if (S.view === "match") {
+    const M = l.match, items = Array.isArray(M) ? M : M?.items, i = prog().match.i;
+    if (!items || M.kind === "cloze" || i >= items.length) return null;
+    return ["match", Array.isArray(M) ? `match.${i}` : `match.items.${i}`, renderMatch];
+  }
+  const i = prog().speak.i;
+  return i < speakItems(l).length ? ["speak", `speak.items.${i}`, renderSpeak] : null;
+}
 
 const lightThemeOnly = document.documentElement.dataset.themeMode === "light";
 function getTheme() { return lightThemeOnly ? "light" : lsGet("hw-theme") || "auto"; }
@@ -7265,8 +7563,6 @@ function renderDrill() {
     <div class="q-counter">
       <span>${t("qCounter", i+1, items.length)}</span>
       ${q.part ? `<span class="part-badge">${t("partBadge", q.part)}</span>` : ""}
-      <span class="question-tools"><button class="fix-btn" id="drill-ask">${t("askBtn")}</button>
-      <button class="fix-btn" id="drill-fix">${t("fixBtn")}</button></span>
     </div>
     <p class="q-sentence tr" tabindex="0" role="button" data-tr="${trIdx(stripTags(q.s[0]) + (state ? shown : "___") + stripTags(q.s[1]))}">${q.s[0]}${state ? `<span class="blank filled">${shown}</span>` : `<span class="blank empty">&nbsp;&nbsp;&nbsp;&nbsp;</span>`}${q.s[1]}</p>
     ${cue}
@@ -7325,10 +7621,7 @@ function wireDrill(i) {
     const mine = state ? (p.lastInput?.[i] || "") : "";
     askTeacher(`Lesson: "${l.title}". Gap-fill sentence: "${stripTags(q.s[0])}___${stripTags(q.s[1])}"${q.verb ? ` (cue: ${q.verb})` : ""}.
 Correct answer: "${q.a[0]}"${q.also?.length ? `; also accepted: ${q.also.join(", ")}` : ""}.${mine ? ` The learner wrote: "${mine}".` : ""}
-Official explanation: ${stripTags(plainEn(q.why))}`, mine && mine !== q.a[0] ? mine : "");
-  });
-  $("#drill-fix")?.addEventListener("click", () => {
-    fixSheet("drill", `drill.items.${i}`, renderDrill);
+Official explanation: ${stripTags(plainEn(q.why))}`, mine && mine !== q.a[0] ? mine : "", $("#drill-ask").dataset.q);
   });
   $("#skip-btn")?.addEventListener("click", () => { p.i = drillStep(p, items, i, 1); if (p.i >= items.length) delete p.redo; save(); renderDrill(); });
 }
@@ -7379,6 +7672,9 @@ function showFeedback(i, raw) {
   const verdict = state === "good" ? t(first ? "verdictFixed" : "verdictGood") : typo ? t("verdictTypo") : state === "also" ? t("verdictAlso") : t("verdictBad");
   const lead = typo ? t("typoLead", escH(raw), q.a[0]) : state === "also" ? t("alsoLead", escH(raw), q.a[0]) : "";
   const alsoLine = q.also ? t("alsoLine", q.also.join(", ")) : "";
+  // ниже разбора — вопрос, который логично задать следом: про первую попытку, про более точный вариант
+  // или «объясни проще», если ИИ уже объяснил ошибку сам. За верный ответ с первого раза вопроса нет
+  const askQ = first ? t("askChipWhy", first) : typo ? "" : state === "also" ? t("askWhyBetter", q.a[0]) : state === "bad" ? t("askChipSimple") : "";
   $("#drill-feedback").innerHTML = `
     <div class="feedback ${state === "bad" ? "bad" : "good"}">
       <span class="verdict"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/>${state === "bad" ? '<path d="M12 7v6m0 3v1"/>' : '<path d="m8 12 2.5 2.5L16 9"/>'}</svg>${verdict}</span>
@@ -7390,6 +7686,7 @@ function showFeedback(i, raw) {
       ${q.trap && norm(raw || "") !== norm(q.trap.word) ? `<p class="why trap-why"><b>${t("trapLead", escH(q.trap.word))}</b> ${TR(q.trap.why)}</p>` : ""}
       <p class="why">${TR(q.why)}</p>
       ${alsoLine ? `<p class="also">${alsoLine}</p>` : ""}
+      ${askQ ? `<button type="button" class="ask-why" id="drill-ask" data-q="${escH(askQ)}">${escH(askQ)}</button>` : ""}
       </div>
     </div>`;
   if (state === "bad") {
@@ -7404,9 +7701,9 @@ function showFeedback(i, raw) {
   }
 }
 /* «Спросить»: свободный вопрос по заданию; ИИ видит предложение, правильный ответ и то, что написали вы */
-function askTeacher(context, ownAnswer) {
+function askTeacher(context, ownAnswer, firstQ = "") {
   const thread = [];
-  const chips = [ownAnswer ? t("askChipWhy", ownAnswer) : "", t("askChipSimple"), t("askChipMore")].filter(Boolean);
+  const chips = [ownAnswer ? t("askChipWhy", ownAnswer) : "", t("askChipSimple"), t("askChipMore")].filter(c => c && c !== firstQ);
   openSheet(`<h3>${t("askTitle")}</h3>
     <div class="aq-thread" id="aq-thread"></div>
     <textarea class="sp-text" id="aq-text" style="min-height:70px;margin-top:6px" placeholder="${t("askPh")}"></textarea>
@@ -7438,6 +7735,7 @@ Answer concisely (at most 5 short sentences), concretely, in the language of the
       } catch(e) { wait.className = "aq-ans"; wait.textContent = t("askFail"); }
       send.disabled = false; box.scrollTop = box.scrollHeight;
     };
+    if (firstQ) { field.value = firstQ; send.onclick(); }
   });
 }
 /* почему именно ваше слово не подходит: ИИ объясняет по-английски и по-русски (русский — по клику), ответ запоминается */
@@ -7550,17 +7848,20 @@ function renderCloze(M, items, p) {
     const cls = checked ? (pick === gaps[g].a ? "right" : "wrong") : (g === U.active ? "active" : "");
     return `<button class="gap ${cls}" data-gap="${g}" ${checked ? "disabled" : ""} aria-label="${escH(t("gapLabel", x, pick ? stripTags(pick) : ""))}">${pick ? `${escH(pick)}<sup>${x}</sup>` : `<span class="gap-n">${x}</span>`}</button>`;
   }).join("");
+  const slip = checked ? gaps.findIndex((g, k) => U.picks[k] !== g.a) : -1;
+  const askQ = slip >= 0 && U.picks[slip] ? t("askChipWhy", stripTags(U.picks[slip])) : "";
   const why = checked ? `<div class="cz-whys">${gaps.map((g, k) => {
     const ok = U.picks[k] === g.a;
     return `<div class="cz-why ${ok ? "ok" : "no"}"><b>${k + 1}. ${escH(g.a)}</b>${ok ? "" : ` <span>${t("czYouPicked", escH(U.picks[k] || "—"))}</span>`}${g.why ? `<p>${TR(g.why)}</p>` : ""}</div>`;
   }).join("")}</div>` : "";
   $("#match-card").innerHTML = `
-    <div class="q-counter"><span>${t("qCounter", i + 1, items.length)}</span><button class="fix-btn" id="match-ask">${t("askBtn")}</button></div>
+    <div class="q-counter"><span>${t("qCounter", i + 1, items.length)}</span></div>
     <div class="eyebrow" style="margin:6px 0 4px">${M.ask ? L(M.ask) : t("czAsk")}</div>
     <p class="cz-text">${text}</p>
     ${checked ? "" : `<div class="cz-opts">${clozeRotate(gaps[U.active].options, i + U.active).map(o => `<button class="chip" data-opt="${escH(o)}" aria-pressed="${U.picks[U.active] === o}">${escH(o)}</button>`).join("")}</div>
       <div class="nav-row"><button class="primary-btn" id="cz-check" ${filled ? "" : "disabled"}>${t("czCheck")}</button></div>`}
     ${why}
+    ${askQ ? `<button type="button" class="ask-why" id="match-ask" data-q="${escH(askQ)}">${escH(askQ)}</button>` : ""}
     ${checked ? `<div class="nav-row"><button class="primary-btn" id="m-next">${i === items.length - 1 ? t("resultsBtn") : t("nextBtn")}</button></div>` : ""}`;
   $$("#match-card [data-gap]").forEach(b => b.addEventListener("click", () => { U.active = +b.dataset.gap; renderCloze(M, items, p); }));
   $$("#match-card [data-opt]").forEach(b => b.addEventListener("click", () => {
@@ -7578,7 +7879,7 @@ function renderCloze(M, items, p) {
   $("#match-ask")?.addEventListener("click", () => {
     const mine = U.picks.filter(Boolean).length === gaps.length ? clozeText(q, U.picks) : "";
     askTeacher(`Lesson: "${lesson().title}". A mini-story where the learner chooses the right verb form for each gap: "${clozeText(q, [])}".
-Correct choices in order: ${gaps.map((g, k) => `${k + 1}) ${g.a} (other option: ${g.options.filter(o => o !== g.a).join(", ")})`).join("; ")}.${mine ? ` The learner's version: "${mine}".` : ""}`, "");
+Correct choices in order: ${gaps.map((g, k) => `${k + 1}) ${g.a} (other option: ${g.options.filter(o => o !== g.a).join(", ")})`).join("; ")}.${mine ? ` The learner's version: "${mine}".` : ""}`, "", $("#match-ask").dataset.q);
   });
 }
 function renderMatch() {
@@ -7618,8 +7919,10 @@ function renderMatch() {
   if (M.kind === "cloze") return renderCloze(M, items, p);
   const i = p.i, q = items[i], done = i in p.answered, chosen = p.chosen?.[i];
   const opts = optionsFor(M, i);
+  const picked = done && chosen && chosen !== q.a ? stripTags(L(opts.find(m => m.key === chosen)?.label) || chosen) : "";
+  const askQ = picked ? t("askChipWhy", picked) : "";
   $("#match-card").innerHTML = `
-    <div class="q-counter"><span>${t("qCounter", i+1, items.length)}</span><button class="fix-btn" id="match-ask">${t("askBtn")}</button><button class="fix-btn" id="match-fix">${t("fixBtn")}</button></div>
+    <div class="q-counter"><span>${t("qCounter", i+1, items.length)}</span></div>
     <p class="q-sentence" style="max-width:28ch">${TR(q.s)}</p>
     <div class="eyebrow" style="margin-bottom:8px">${M.ask ? L(M.ask) : t("matchAsk")}</div>
     <div class="match-options">
@@ -7632,7 +7935,8 @@ function renderMatch() {
     </div>
     ${done ? `<div class="feedback ${p.answered[i] ? "good" : "bad"}" style="margin-top:18px">
         <span class="verdict">${p.answered[i] ? t("verdictGood") : t("rightAnswer", q.a)}</span>
-        ${q.why ? `<p class="why">${TR(q.why)}</p>` : ""}</div>
+        ${q.why ? `<p class="why">${TR(q.why)}</p>` : ""}
+        ${askQ ? `<button type="button" class="ask-why" id="match-ask" data-q="${escH(askQ)}">${escH(askQ)}</button>` : ""}</div>
       <div class="nav-row"><button class="primary-btn" id="m-next">${i === items.length-1 ? t("resultsBtn") : t("nextBtn")}</button></div>` : ""}`;
 
   $$("#match-card .match-btn").forEach(b => b.addEventListener("click", () => {
@@ -7646,10 +7950,7 @@ function renderMatch() {
     const mine = done && chosen ? label(chosen) : "";
     askTeacher(`Lesson: "${lesson().title}". Question: "${stripTags(L(q.s))}"
 Options: ${opts.map(m => label(m.key)).join(" / ")}. Correct: "${label(q.a)}".${mine ? ` The learner chose: "${mine}".` : ""}
-${q.why ? `Official explanation: ${stripTags(plainEn(q.why))}` : ""}`, mine && chosen !== q.a ? mine : "");
-  });
-  $("#match-fix")?.addEventListener("click", () => {
-    fixSheet("match", Array.isArray(lesson().match) ? `match.${i}` : `match.items.${i}`, renderMatch);
+${q.why ? `Official explanation: ${stripTags(plainEn(q.why))}` : ""}`, mine && chosen !== q.a ? mine : "", $("#match-ask").dataset.q);
   });
 }
 
@@ -7716,7 +8017,6 @@ function renderSpeak() {
     <div class="q-counter">
       <span>${t("qCounter", i+1, SP.length)}</span>
       ${q.group ? `<span class="part-badge">${L(q.group)}</span>` : ""}
-      <button class="fix-btn" id="speak-fix">${t("fixBtn")}</button>
     </div>
     <p class="speak-q ${plain(q.q).length > 90 ? "long" : ""}">${TR(q.q)}</p>
     ${q.starter ? `<p class="starter">${t("starterLead")} <b>${q.starter}</b></p>` : ""}
@@ -7740,9 +8040,6 @@ function renderSpeak() {
   $("#s-check")?.addEventListener("click", () => { const v = $("#sp-text").value.trim(); if (v) checkAnswer(i, { text: v }); });
   $("#s-next")?.addEventListener("click", () => { p.i = i+1; save(); renderSpeak(); updateProgress(); });
   $("#s-prev")?.addEventListener("click", () => { p.i = i-1; save(); renderSpeak(); });
-  $("#speak-fix")?.addEventListener("click", () => {
-    fixSheet("speak", `speak.items.${i}`, renderSpeak);
-  });
 }
 
 /* «поправка» без изменений (said = better) — не поправка: такие ИИ иногда присылает, прячем */
@@ -9433,7 +9730,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
       if (phoneHead.matches) { title.remove(); return; }
       const tabs = one("main.wrap > #tabs");
       if (tabs && tabs.nextElementSibling !== head) tabs.after(head);
-      if (!title.isConnected) one("header.top .bar").insertBefore(title, one(".header-actions"));
+      if (tabs && title.nextElementSibling !== tabs) tabs.before(title);
     };
     phoneHead.addEventListener("change", () => setTimeout(placeB));
     document.addEventListener("lessonviewchange", () => requestAnimationFrame(placeB));
@@ -9903,6 +10200,229 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   let startTab = "lessons";
   try { startTab = sessionStorage.getItem("nb-cab-tab") || "lessons"; } catch {}
   setCabTab(startTab);
+
+  /* ---------- шапка приложения (24 ноября 2026) ----------
+     Виктория: «когда ты в кабинете, шапка должна об этом говорить», «лендинг — это только промо». Раньше шапка менялась
+     от страницы к странице: на лендинге одна плашка, в кабинете другая, в уроке плашки не было, «Кабинет» то был, то нет.
+     Теперь шапка одна на всех страницах приложения: слева марка, в плашке разделы «Уроки · Словарь» (в уроке и каталоге
+     подсвечены «Уроки»), справа аккаунт — кружок с первой буквой имени и имя. Имя то же, что подпись в отчете учителю;
+     пока его нет — силуэт и «Мой кабинет». В меню аккаунта: имя, настройки, сохранение кабинета, язык и выход на сайт.
+     «···» остается только в уроке, для действий с уроком. Прежние плашка, «Кабинет» и вкладки кабинета скрыты стилями */
+  Object.assign(UI, {
+    nbAppNav: { ru: "Разделы", en: "Sections" },
+    nbAcctAnon: { ru: "Мой кабинет", en: "My space" },
+    nbAcctLabel: { ru: "Аккаунт", en: "Account" },
+    nbAcctNamePh: { ru: "Как вас зовут?", en: "What's your name?" },
+    nbAcctNameNote: { ru: "Имя увидит учитель в отчете", en: "Your teacher sees it in reports" },
+    nbAcctSettings: { ru: "Настройки", en: "Settings" },
+    nbAcctSite: { ru: "Сайт Learny", en: "Learny website" }
+  });
+  const PERSON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.8 20c1.3-3.5 4-5.4 7.2-5.4s5.9 1.9 7.2 5.4"/></svg>';
+  const appNav = document.createElement("nav");
+  appNav.className = "nb-appnav";
+  appNav.innerHTML = [["lessons", "nbTabLessons"], ["words", "nbTabWords"]]
+    .map(([name, key]) => `<a class="nb-link" href="#cabinet" data-go="${name}" data-ui="${key}"></a>`).join("");
+  const acct = document.createElement("div");
+  acct.className = "nb-acct";
+  acct.innerHTML = `<button type="button" class="nb-acct-b" aria-haspopup="true" aria-expanded="false"><span class="nb-ava" aria-hidden="true"></span><span class="nb-acct-name"></span></button>
+    <div class="nb-acct-m" hidden>
+      <input class="nb-acct-in" type="text" autocomplete="given-name" maxlength="40" spellcheck="false">
+      <p class="nb-acct-note" data-ui="nbAcctNameNote"></p>
+      <button type="button" class="nb-acct-i" data-act="settings" data-ui="nbAcctSettings"></button>
+      <button type="button" class="nb-acct-i nb-acct-sync" data-act="sync"></button>
+      <div class="nb-acct-lang" role="group"><button type="button" data-lang="ru">Русский</button><button type="button" data-lang="en">English</button></div>
+      <a class="nb-acct-i" href="landing.html" data-ui="nbAcctSite"></a>
+    </div>`;
+  const acctB = acct.querySelector(".nb-acct-b"), acctM = acct.querySelector(".nb-acct-m"), acctIn = acct.querySelector(".nb-acct-in");
+  one("header.top .bar").insertBefore(appNav, actions);
+  actions.append(acct);
+  // на узком экране разделы — строкой-плашкой над страницей кабинета и каталога
+  const placeAppNav = () => {
+    const wide = matchMedia("(min-width: 1001px)").matches;
+    if (wide && appNav.parentElement !== one("header.top .bar")) one("header.top .bar").insertBefore(appNav, actions);
+    if (!wide && appNav.parentElement !== homeView) homeView.prepend(appNav);
+  };
+  matchMedia("(min-width: 1001px)").addEventListener("change", placeAppNav);
+  placeAppNav();
+  function syncAcct() {
+    const name = (S.studentName || "").trim(), ava = acct.querySelector(".nb-ava");
+    ava.innerHTML = name ? escH(name.charAt(0).toUpperCase()) : PERSON;
+    ava.classList.toggle("is-anon", !name);
+    acct.querySelector(".nb-acct-name").textContent = name || t("nbAcctAnon");
+    acctB.setAttribute("aria-label", `${t("nbAcctLabel")}: ${name || t("nbAcctAnon")}`);
+    acctIn.placeholder = t("nbAcctNamePh");
+    acctIn.setAttribute("aria-label", t("nbAcctNamePh"));
+    if (document.activeElement !== acctIn) acctIn.value = name;
+    acct.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === S.lang)));
+    acct.querySelector(".nb-acct-sync").innerHTML = one("#sync-btn")?.innerHTML || escH(t("syncBtn"));
+    [...appNav.querySelectorAll("[data-ui]"), ...acct.querySelectorAll("[data-ui]")].forEach(el => { el.textContent = t(el.dataset.ui); });
+    appNav.setAttribute("aria-label", t("nbAppNav"));
+    // где вы: в кабинете — выбранный раздел, в уроке и каталоге — «Уроки»; настройки открываются из аккаунта, в плашке их нет
+    const home = document.body.classList.contains("home"), cab = document.body.dataset.cabTab;
+    const current = home && document.body.dataset.calmPage === "cabinet" ? (cab === "settings" ? "" : cab) : "lessons";
+    appNav.querySelectorAll("[data-go]").forEach(a => a.dataset.go === current ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+  }
+  const toggleAcct = open => {
+    acctM.hidden = !open;
+    acctB.setAttribute("aria-expanded", String(open));
+    if (open) syncAcct();
+  };
+  function goCabinet(tab) {
+    setCabTab(tab);
+    if (location.hash !== "#cabinet") location.hash = "cabinet";
+    else if (S.view !== "home") show("home");
+    scrollTo({ top: 0 });
+    requestAnimationFrame(syncAcct);
+  }
+  appNav.addEventListener("click", event => {
+    const link = event.target.closest("[data-go]");
+    if (!link) return;
+    event.preventDefault();
+    goCabinet(link.dataset.go);
+  });
+  acctB.addEventListener("click", () => toggleAcct(acctM.hidden));
+  document.addEventListener("click", event => { if (!event.target.closest?.(".nb-acct")) toggleAcct(false); });
+  document.addEventListener("keydown", event => { if (event.key === "Escape" && !acctM.hidden) { toggleAcct(false); acctB.focus(); } });
+  acctIn.addEventListener("input", () => { S.studentName = acctIn.value; save(); syncAcct(); });
+  acctIn.addEventListener("keydown", event => { if (event.key === "Enter") { event.preventDefault(); toggleAcct(false); acctB.focus(); } });
+  acctM.addEventListener("click", event => {
+    const lang = event.target.closest("[data-lang]"), act = event.target.closest("[data-act]")?.dataset.act;
+    if (lang) { setLanguage(lang.dataset.lang, lang); requestAnimationFrame(syncAcct); }
+    if (act === "settings") { toggleAcct(false); goCabinet("settings"); }
+    if (act === "sync") { toggleAcct(false); one("#sync-btn")?.click(); }
+  });
+  new MutationObserver(syncAcct).observe(root, { attributes: true, attributeFilter: ["lang"] });
+  new MutationObserver(syncAcct).observe(document.body, { attributes: true, attributeFilter: ["class", "data-calm-page", "data-cab-tab"] });
+  document.addEventListener("lessonviewchange", () => requestAnimationFrame(syncAcct));
+  syncAcct();
+
+  /* ---------- кабинет: новый урок — поле ввода, а не тетрадь (24 ноября 2026) ----------
+     Виктория: «для загрузки нового надо какой-то отдельный визуал, поле ввода может». Тетрадь «Свой урок» в сетке
+     притворялась одним из уроков, хотя это действие. Теперь вверху «Уроков» поле: вставил домашку — «Создать урок».
+     Логика та же, что у лендинга: текст уходит черновиком в окно «Свой урок», окно открывается и сразу собирает урок
+     (с вопросом об уровне и сообщениями об ошибках); файлы уходят в то же окно и распознаются там.
+     Перетаскивание — как в окне «Свой урок» и как принято: файл над любым местом кабинета — поле лаймовое, «Отпустите здесь»;
+     брошенный или выбранный файл остается в поле карточкой (имя, размер, крестик), можно дописать текст;
+     неподходящий — строка карандашом под полем; скриншот из буфера вставляется в поле так же */
+  Object.assign(UI, {
+    nbNewLabel: { ru: "Новый урок", en: "New lesson" },
+    nbNewAttach: { ru: "Фото или файл", en: "Photo or file" },
+    nbNewGo: { ru: "Создать урок", en: "Create my lesson" },
+    nbNewRemove: { ru: "Убрать файл", en: "Remove the file" },
+    nbNewBadType: { ru: name => `«${name}» не подойдет: нужны фото или PDF`, en: name => `"${name}" won't work: photos or PDFs only` },
+    nbNewTooBig: { ru: "На все файлы вместе до 10 МБ", en: "Up to 10 MB for all files together" },
+    nbNewTooMany: { ru: "Не больше 5 файлов", en: "Up to 5 files" },
+    nbNewEmpty: { ru: "Вставьте домашку, тему или прикрепите файл", en: "Paste your homework, a topic or attach a file" }
+  });
+  const CLIP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 11-8.5 8.5a6 6 0 0 1-8.5-8.5l9-9a4 4 0 0 1 5.7 5.7l-9 9a2 2 0 0 1-2.8-2.8l8.4-8.4"/></svg>';
+  const newBox = document.createElement("form");
+  newBox.className = "nb-new";
+  newBox.noValidate = true;
+  newBox.innerHTML = `<label class="nb-sr" for="nb-new-text" data-ui="nbNewLabel"></label>
+    <textarea id="nb-new-text" rows="2" spellcheck="false"></textarea>
+    <div class="nb-new-files" hidden></div>
+    <div class="nb-new-row">
+      <button type="button" class="nb-new-attach" data-aria="nbNewAttach">${CLIP}<span data-ui="nbNewAttach"></span></button>
+      <button type="submit" class="nb-new-go"><span data-ui="nbNewGo"></span><span aria-hidden="true">→</span></button>
+    </div>
+    <p class="nb-new-err" role="status" aria-live="polite" hidden></p>
+    <input type="file" class="nb-new-file" accept="image/png,image/jpeg,image/webp,application/pdf,.png,.jpg,.jpeg,.webp,.pdf" multiple hidden>`;
+  const newText = newBox.querySelector("textarea"), newFile = newBox.querySelector(".nb-new-file"), newChips = newBox.querySelector(".nb-new-files");
+  const newErr = newBox.querySelector(".nb-new-err"), newGo = newBox.querySelector(".nb-new-go");
+  (one("#learny-library") || homeView.firstElementChild)?.before(newBox);
+  let newErrKey = "", newErrArg = "";
+  const syncNew = () => {
+    newBox.querySelectorAll("[data-ui]").forEach(el => { el.textContent = t(el.dataset.ui); });
+    newBox.querySelectorAll("[data-aria]").forEach(el => el.setAttribute("aria-label", t(el.dataset.aria)));
+    newText.placeholder = t("calmOwnLede");
+    newBox.dataset.drop = t("nbDrop");
+    if (newErrKey) newErr.textContent = t(newErrKey, newErrArg);
+    renderNewFiles();
+  };
+  const growNew = () => { newText.style.height = "auto"; newText.style.height = Math.min(newText.scrollHeight, innerHeight * .4) + "px"; };
+  const showNewErr = (key, arg = "") => { newErrKey = key; newErrArg = arg; newErr.hidden = !key; newErr.textContent = key ? t(key, arg) : ""; };
+  // файлы, которые уйдут в окно «Свой урок»; ограничения те же, что у окна: фото или PDF, до 5 штук и до 10 МБ вместе
+  const newFiles = [], NEW_MAX = 5, NEW_LIMIT = 10 * 1024 * 1024;
+  const okNewFile = file => /^(image\/(png|jpeg|webp)|application\/pdf)$/.test(file.type) || /\.(png|jpe?g|webp|pdf)$/i.test(file.name);
+  const fileSize = bytes => bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} ${S.lang === "ru" ? "КБ" : "KB"}` : `${(bytes / 1024 / 1024).toFixed(1).replace(".", S.lang === "ru" ? "," : ".")} ${S.lang === "ru" ? "МБ" : "MB"}`;
+  function renderNewFiles() {
+    newChips.hidden = !newFiles.length;
+    newChips.innerHTML = newFiles.map((file, i) => `<span class="nb-new-chip">${CLIP}<span class="nb-new-chip-name">${escH(file.name)}</span><small>${fileSize(file.size)}</small><button type="button" data-i="${i}" aria-label="${escH(t("nbNewRemove"))}: ${escH(file.name)}">×</button></span>`).join("");
+    syncNewGo();
+  }
+  function addNewFiles(list) {
+    let key = "", arg = "";
+    for (const file of list) {
+      if (!okNewFile(file)) { key = "nbNewBadType"; arg = file.name; continue; }
+      if (newFiles.some(f => f.name === file.name && f.size === file.size)) continue;
+      if (newFiles.length >= NEW_MAX) { key = "nbNewTooMany"; break; }
+      if (newFiles.reduce((sum, f) => sum + f.size, 0) + file.size > NEW_LIMIT) { key = "nbNewTooBig"; break; }
+      newFiles.push(file);
+    }
+    showNewErr(key, arg);
+    renderNewFiles();
+  }
+  // пустое поле: кнопка светло-серая, но нажимается и подсказывает, что вписать — как в окне «Свой урок»
+  const syncNewGo = () => newGo.classList.toggle("is-empty", !newText.value.trim() && !newFiles.length);
+  syncNew();
+  new MutationObserver(syncNew).observe(root, { attributes: true, attributeFilter: ["lang"] });
+  newText.addEventListener("input", () => { growNew(); syncNewGo(); if (newErrKey === "nbNewEmpty") showNewErr(""); });
+  function startNew() {
+    const text = newText.value.trim(), files = newFiles.splice(0);
+    if (!text && !files.length) { showNewErr("nbNewEmpty"); newText.focus(); return; }
+    try { if (text) sessionStorage.setItem("learny-draft", text); } catch {}
+    newText.value = "";
+    growNew();
+    showNewErr("");
+    renderNewFiles();
+    location.hash = "new-lesson";   // роутер откроет окно «Свой урок» и вставит черновик
+    setTimeout(() => {
+      if (files.length) {
+        const input = one("#material-input"), box = new DataTransfer();
+        files.forEach(file => box.items.add(file));
+        input.files = box.files;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      // окно получило текст и файлы — дальше то же, что нажать в нем главную кнопку: распознать файлы или собрать урок
+      setTimeout(() => one("#parse-btn")?.click(), files.length ? 120 : 0);
+    }, 80);
+  }
+  newBox.addEventListener("submit", event => { event.preventDefault(); startNew(); });
+  newText.addEventListener("keydown", event => { if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) { event.preventDefault(); startNew(); } });
+  newBox.querySelector(".nb-new-attach").addEventListener("click", () => newFile.click());
+  newFile.addEventListener("change", () => { addNewFiles(newFile.files); newFile.value = ""; newText.focus(); });
+  newChips.addEventListener("click", event => {
+    const button = event.target.closest("[data-i]");
+    if (!button) return;
+    newFiles.splice(+button.dataset.i, 1);
+    showNewErr("");
+    renderNewFiles();
+    newText.focus();
+  });
+  // скриншот или файл из буфера обмена вставляется в поле так же, как перетащенный
+  newText.addEventListener("paste", event => {
+    const files = [...(event.clipboardData?.files || [])];
+    if (!files.length) return;
+    if (!event.clipboardData.getData("text")) event.preventDefault();
+    addNewFiles(files);
+  });
+  // перетаскивание файла над любым местом кабинета: поле становится целью, бросить можно куда угодно на странице
+  const onCabinet = () => document.body.classList.contains("home") && document.body.dataset.calmPage === "cabinet" && !one("#lesson-composer")?.open;
+  const carriesFiles = event => [...(event.dataTransfer?.types || [])].includes("Files");
+  // пока файл над страницей, браузер шлет dragover без остановки; пропали эти сигналы — файл увели за окно или отпустили.
+  // Так одинаково в Chrome и Safari: Safari не сообщает, куда ушел курсор, и по dragleave состояние мигало и пропадало
+  let dragTimer = 0;
+  const endDrag = () => { clearTimeout(dragTimer); newBox.classList.remove("is-dragging"); };
+  const holdDrag = () => { newBox.classList.add("is-dragging"); clearTimeout(dragTimer); dragTimer = setTimeout(endDrag, 300); };
+  addEventListener("dragenter", event => { if (onCabinet() && carriesFiles(event)) holdDrag(); });
+  addEventListener("dragover", event => { if (onCabinet() && carriesFiles(event)) { event.preventDefault(); event.dataTransfer.dropEffect = "copy"; holdDrag(); } });
+  addEventListener("drop", event => {
+    if (!newBox.classList.contains("is-dragging")) return;
+    event.preventDefault();
+    endDrag();
+    if (event.dataTransfer?.files.length) { addNewFiles(event.dataTransfer.files); newText.focus(); }
+  });
+  addEventListener("dragend", endDrag);
 
   /* ---------- окно «Свой урок» — «открытка» из пробы A ----------
      Карточка в лаймовой рамке. Под полем — файл и ограничение одной строкой, ниже кнопка во всю ширину.
