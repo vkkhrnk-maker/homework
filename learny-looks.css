@@ -589,7 +589,8 @@ html[data-look][lang][data-look="g"] :is(.ld-shelf h2, .ld-words-head h2){text-b
    на глубину по отделению (глубже — позже вернется). Подписей к механике нет, ее видно по движению.
    Плоско, без теней: «толщина» карточки — жесткая кромка на тон темнее
    ===================================================================== */
-html[data-look][lang][data-look="g"] .ld-words{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;gap:var(--sp-block);
+/* карточка в полете (бросок, вход в колоду сбоку) не выходит за края раздела */
+html[data-look][lang][data-look="g"] .ld-words{overflow-x:clip;position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;gap:var(--sp-block);
   padding:var(--sp-entry) var(--sp-edge);background:var(--marker,#ffe46a);color:#1a171c}
 html[data-look][lang][data-look="g"] .ld-words-head h2{margin:0;font:900 clamp(64px,7.4vw,128px)/.84 var(--disp);letter-spacing:-.006em}
 html[data-look][lang][data-look="g"] .ld-words-head p{margin:var(--sp-pair) 0 0;max-width:26em;font:400 clamp(17px,1.4vw,20px)/1.35 var(--ui);text-wrap:pretty}
@@ -615,6 +616,9 @@ html[data-look][lang][data-look="g"] .ld-dc.is-cur{cursor:grab;outline:0;touch-a
 /* карточку можно бросить: влево — «не помню», вправо — «помню»; пока тянете, загорается пилюля с той же стороны */
 html[data-look][lang][data-look="g"] .ld-dc.is-drag{cursor:grabbing;transition:transform .55s cubic-bezier(.3,.7,.2,1)}
 html[data-look][lang][data-look="g"] .ld-dc.is-cur:focus-visible :is(.ld-dc-f,.ld-dc-b){outline:2px solid #1a171c;outline-offset:4px}
+/* подсказка: поднятая карточка качается влево-вправо, как будто ее примеряют бросить */
+html[data-look][lang][data-look="g"] .ld-dc.is-hint{animation:ld-sway .9s cubic-bezier(.45,0,.25,1)}
+@keyframes ld-sway{25%{translate:-14px -2px;rotate:-3deg}50%{translate:0 0;rotate:0deg}75%{translate:14px -2px;rotate:3deg}}
 @media (hover:hover){html[data-look][lang][data-look="g"] .ld-dc.is-cur:not(.is-drag):hover{translate:0 -6px}}
 html[data-look][lang][data-look="g"] .ld-deck-acts{display:flex;justify-content:center;gap:var(--sp-group);min-height:52px;margin-top:var(--sp-block)}
 /* подсказка карандашом, как «tap a sticker to flip it» в футере: карточку переворачивают нажатием, кнопки «Показать перевод» нет,
@@ -679,7 +683,7 @@ html[data-look][lang][data-look="g"] .ld-sr{position:absolute;width:1px;height:1
   /* варианты помельче и по центру, в перенос; кнопка по центру — как заголовок над полем (Виктория, 24 ноября 2026) */
   html[data-look][lang][data-look="g"] .ld-own-foot .ld-starts{align-self:stretch;justify-content:center;gap:var(--sp-group)}
   html[data-look][lang][data-look="g"][data-cover] .ld-starts .ld-fill{height:40px;padding:0 14px;font-size:15px}
-  html[data-look][lang][data-look="g"] .ld-own-foot .ld-round{align-self:center;margin:0}
+  html[data-look][lang][data-look="g"] .ld-own-foot .split.ld-main{align-self:center}
 }
 
 /* =====================================================================
@@ -699,22 +703,12 @@ html[data-look][lang][data-look="g"] .ld-sr{position:absolute;width:1px;height:1
   html[data-look][lang][data-look="g"] .ld-nb{--nbw:var(--cap-nbw);top:calc(var(--cap-top) + var(--cap-shift) + var(--cap-h,172px) + var(--cap-gap))}
   /* метки «5 из 5 · Итоги» нет: номер шага показывает выдвинутая закладка, название повторяет заголовок (Виктория, 24 ноября 2026) */
   html[data-look][lang][data-look="g"] .ld-caps .ld-n{display:none}
-  html[data-look][lang][data-look="g"] .ld-caps h3{margin:0;line-height:.8;text-box:trim-both cap alphabetic;padding-bottom:.2em}
+  /* заголовок шага всегда в две строки, и на экранах шире телефона («Rules made clear» вставал в одну) */
+  html[data-look][lang][data-look="g"] .ld-caps h3{max-width:5.6em;margin:0 auto;line-height:.8;text-wrap:balance;text-box:trim-both cap alphabetic;padding-bottom:.2em}
   html[data-look][lang][data-look="g"] .ld-caps p{margin:var(--sp-pair) 0 0}
 }
 /* на совсем низких экранах описание шага не помещается рядом с тетрадью — остается метка и заголовок */
 @media (max-width:900px) and (max-height:620px){html[data-look][lang][data-look="g"] .ld-caps p{display:none}}
-
-/* =====================================================================
-   Главная кнопка одна на весь лендинг (24 ноября 2026, Виктория: «кнопку create my lesson по лендосу сделать одинаковой»,
-   на телефоне «не на весь экран»). На первом экране — та же лаймовая пилюля с надписью и стрелкой, что в форме,
-   по ширине текста; пару наклеек (кружок со стрелкой + пилюля во всю ширину) убрали. На компьютере — справа внизу,
-   на телефоне — слева под описанием, на расстоянии пары
-   ===================================================================== */
-html[data-hero="b"] .ld-copy .ld-cta{position:absolute;right:0;bottom:0;margin:0;text-decoration:none}
-@media (max-width:900px){
-  html[data-look][lang][data-hero="b"] .ld-copy .lede{bottom:calc(58px + var(--sp-pair))}
-}
 
 /* Телефон: одна ось по центру (Виктория, 24 ноября 2026). Словарь, картотека, форма и тетрадь уже стояли по центру,
    а заголовки первого экрана и шагов сцены — слева: глаз прыгал между двумя осями. Теперь по центру и они,
@@ -722,7 +716,6 @@ html[data-hero="b"] .ld-copy .ld-cta{position:absolute;right:0;bottom:0;margin:0
 @media (max-width:900px){
   html[data-hero="b"] .ld-copy h1{text-align:center}
   html[data-look][lang][data-hero="b"] .ld-copy .lede{text-align:center}
-  html[data-hero="b"] .ld-copy .ld-cta{left:50%;right:auto;translate:-50% 0}
   html[data-look][lang][data-look="g"] .ld-caps{text-align:center}
   html[data-look][lang][data-look="g"] .ld-caps p{margin-inline:auto}
 }
@@ -733,5 +726,53 @@ html[data-hero="b"] .ld-copy .ld-cta{position:absolute;right:0;bottom:0;margin:0
    и приписка учителя */
 html[data-look][lang][data-look="g"] .ld-report .ld-answers li{grid-template-columns:minmax(0,1fr) auto}
 html[data-look][lang][data-look="g"] .ld-report .ld-answers li::before{content:none}
-/* главная кнопка на первом экране не переносится, когда стоит по центру */
-html[data-hero="b"] .ld-copy .ld-cta{white-space:nowrap}
+
+/* =====================================================================
+   Главная кнопка — одна на весь лендинг: фирменная пара наклеек, кружок со стрелкой и пилюля с подписью,
+   по ширине надписи (24 ноября 2026, Виктория: «сделать одинаковой», на телефоне «не на весь экран»;
+   пилюлю без кружка пробовали — «а чего стрелки убрали?»). Первый экран и форма — одни размеры:
+   72 и текст 24 на компьютере, 58 и текст 18 на телефоне. При наведении стрелка перескакивает за подпись
+   ===================================================================== */
+html[data-look][lang][data-look="g"] .split.ld-main{height:72px;margin:0;padding:0;border:0;background:none;font:400 24px/1 var(--ui);color:var(--on-acc,#0b3a24);text-decoration:none}
+html[data-look][lang][data-look="g"] .split.ld-main span{border-radius:999px;background:var(--acc,#c8f26a);outline-color:color-mix(in srgb,var(--on-acc,#0b3a24) 30%,transparent)}
+html[data-look][lang][data-look="g"] .split.ld-main .s-ic{flex:none;width:72px;font-size:26px}
+html[data-look][lang][data-look="g"] .split.ld-main .s-tx{flex:none;padding:0 30px;font-size:24px}
+@media (hover:hover){html[data-look][lang][data-look="g"] .split.ld-main:hover .s-tx{translate:-76px 0}}
+html[data-look][lang][data-look="g"] .ld-own-foot .split.ld-main{align-self:flex-end}
+@media (max-width:900px){
+  html[data-look][lang][data-look="g"] .split.ld-main{height:58px;font-size:18px}
+  html[data-look][lang][data-look="g"] .split.ld-main .s-ic{width:58px;font-size:20px}
+  html[data-look][lang][data-look="g"] .split.ld-main .s-tx{padding:0 24px;font-size:18px}
+  /* на телефоне кнопка первого экрана по центру под описанием, по ширине надписи */
+  html[data-hero="b"] .ld-copy .split.ld-main{left:50%;right:auto;translate:-50% 0}
+  html[data-look][lang][data-look="g"] .ld-own-foot .split.ld-main{align-self:center}
+}
+@media (max-width:360px){html[data-look][lang][data-look="g"] .split.ld-main .s-tx{padding:0 18px}}
+
+/* Safari на iPhone: когда нижняя панель прячется, экран выше 100svh, и под закрепленной сценой проступал белый фон
+   (24 ноября 2026). Место под сценой красится текущим цветом стола; следующий раздел ложится поверх */
+html[data-look][lang][data-look="g"] .ld-pin{box-shadow:0 30svh 0 0 var(--desk-now,var(--cover,transparent))}
+
+/* Футер на телефоне: подсказка «нажмите на наклейку ↗» сразу под маркой с наклейками, а не внизу под © —
+   там ее не связывали с наклейками (Виктория, 24 ноября 2026). Нижняя строка раскладывается на свои части */
+@media (max-width:800px){
+  html[data-look="g"] .ld-foot-bot{display:contents}
+  html[data-look="g"] .ld-foot .lk-drag-hint{order:1;align-self:flex-end;margin-top:var(--sp-pair)}
+  html[data-look="g"] .ld-foot .ld-foot-nav{order:2;margin-top:var(--sp-section);padding-top:var(--sp-pair);border-top:1px solid color-mix(in srgb,var(--on-acc,#0b3a24) 24%,transparent)}
+  html[data-look="g"] .ld-foot-bot > span:first-child{order:3;margin-top:var(--sp-pair);font-size:14px;color:var(--on-acc,#0b3a24)}
+}
+
+/* Карточка слова на кольце в сцене — чище (Виктория: «грязновато»): было пять серых линий — контур карточки,
+   контуры двух карточек под ней, обводка дырочки, серое кольцо. Осталась одна бледная кромка, одна карточка
+   под ней без контура, дырочка и кольцо одним цветом чернил */
+html[data-look="g"] .ld-demo .lk-ring-card{box-shadow:0 0 0 1px rgba(26,23,28,.1),.18em .18em 0 0 #fbe8a6}
+html[data-look="g"] .ld-demo .lk-ring-card::before{background:rgba(26,23,28,.16);box-shadow:none}
+html[data-look="g"] .ld-demo .lk-ring-loop{border:.09em solid rgba(26,23,28,.55)}
+
+/* Футер на телефоне чище (Виктория: «грязновато»): марка маленькая, и двойной контур ложился линиями почти вплотную,
+   а наклейки размером с буквы лежали на линиях. Здесь марка одним контуром, полоса выше, наклейки над маркой,
+   на ее верхнем крае сидит только Клякса. На компьютере все как было: марка крупная, наклейки поверх букв работают */
+@media (max-width:800px){
+  html[data-look="g"] .lk-foot-stage{height:clamp(320px,96vw,420px)}
+  html[data-look="g"] .lk-foot-mark .lk-line-in{display:none}
+}

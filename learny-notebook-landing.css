@@ -13,6 +13,10 @@ body.ld{
   --leaf-ease:cubic-bezier(.45,.05,.2,1);
   --caption-enter:150ms;
   background:var(--paper);overflow-x:clip}
+/* Safari на iPhone не всегда переносит обрезку с body на всю страницу: когда что-то на миг выходит за правый край
+   (карточка колоды входит в колоду сбоку), страницу можно было потянуть вбок и увидеть белую полосу (24 ноября 2026).
+   Обрезка на html переходит на окно во всех браузерах; sticky и прокрутку окна не трогает */
+html:has(body.ld){overflow-x:hidden;overflow-x:clip}
 /* шапка — часть первого экрана: закреплена вместе с ним и уходит и возвращается заодно с заголовком (правила ниже, у .ld-copy) */
 .ld-top{position:absolute;inset:0 0 auto 0;z-index:6;display:flex;align-items:center;justify-content:space-between;height:72px;padding:0 32px}
 .ld-top .brand,.ld-foot-brand .brand{display:inline-flex;align-items:center;vertical-align:middle}
