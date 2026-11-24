@@ -780,3 +780,14 @@ html[data-look="g"] .ld-demo .lk-ring-loop{border:.09em solid rgba(26,23,28,.55)
   html[data-look="g"] .lk-foot-stage{height:clamp(320px,96vw,420px)}
   html[data-look="g"] .lk-foot-mark .lk-line-in{display:none}
 }
+
+/* =====================================================================
+   Компьютер и планшет: у заголовков разделов один калибр (24 ноября 2026, Виктория: «H2 хочется одинаковым, в том числе
+   What are we learning?», и крупнее). Было 138 px у «Sample lessons» и «Words come back» и около 154 у «What are we
+   learning?», который считался скриптом. Теперь 11% ширины, но не больше пятой части высоты экрана — чтобы форма
+   с полем и кнопкой помещалась в экран: 158 px на 1440×900, 154 на 1440×813. Межстрочный .8, как на телефоне
+   ===================================================================== */
+@media (min-width:601px){
+  html[data-look][lang][data-look="g"]{--h2:clamp(64px,min(11vw,19svh),180px)}
+  html[data-look][lang][data-look="g"] :is(.ld-shelf h2,.ld-words-head h2,#own-h){font-size:var(--h2);line-height:.8}
+}

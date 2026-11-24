@@ -34,8 +34,10 @@
   function sizeOwn() {
     const ownH = document.getElementById("own-h");
     if (!ownH || !ownH.children.length) return;
-    // на телефоне у заголовка общий калибр разделов (learny-looks.css, «Телефон: один калибр заголовка»)
-    if (matchMedia("(max-width:600px)").matches) { ownH.style.fontSize = ""; return; }
+    // у заголовка общий калибр разделов и на телефоне, и на компьютере (learny-looks.css, «один калибр заголовка»);
+    // ниже — прежний расчет по ширине и высоте, он остается на случай, если калибр снова понадобится считать скриптом
+    ownH.style.fontSize = "";
+    if (getComputedStyle(ownH).getPropertyValue("--h2-own-fit").trim() !== "1") return;
     ownH.style.fontSize = "100px";
     let longest = 0;
     [...ownH.children].forEach(line => { const r = document.createRange(); r.selectNodeContents(line); longest = Math.max(longest, r.getBoundingClientRect().width); });
