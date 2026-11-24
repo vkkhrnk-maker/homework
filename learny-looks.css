@@ -590,16 +590,21 @@ html[data-look][lang][data-look="g"] :is(.ld-shelf h2, .ld-words-head h2){text-b
    Плоско, без теней: «толщина» карточки — жесткая кромка на тон темнее
    ===================================================================== */
 /* карточка в полете (бросок, вход в колоду сбоку) не выходит за края раздела */
-html[data-look][lang][data-look="g"] .ld-words{overflow-x:clip;position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;gap:var(--sp-block);
+/* одна ось по центру, как у картотеки и формы: заголовок с описанием, под ними колода. Две колонки (заголовок слева,
+   колода справа) распадались на две половины с пустой серединой (Виктория, 24 ноября 2026: «композиционно не нравится») */
+html[data-look][lang][data-look="g"] .ld-words{overflow-x:clip;position:relative;display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:var(--sp-section);
   padding:var(--sp-entry) var(--sp-edge);background:var(--marker,#ffe46a);color:#1a171c}
-html[data-look][lang][data-look="g"] .ld-words-head h2{margin:0;font:900 clamp(64px,7.4vw,128px)/.84 var(--disp);letter-spacing:-.006em}
-html[data-look][lang][data-look="g"] .ld-words-head p{margin:var(--sp-pair) 0 0;max-width:26em;font:400 clamp(17px,1.4vw,20px)/1.35 var(--ui);text-wrap:pretty}
+html[data-look][lang][data-look="g"] .ld-words-head{text-align:center}
+html[data-look][lang][data-look="g"] .ld-words-head h2{margin:0;font:900 clamp(64px,9.6vw,150px)/.86 var(--disp);letter-spacing:-.006em}
+/* в одну строку, как «Готовые уроки»; на телефоне — в две */
+@media (min-width:601px){html[data-look][lang][data-look="g"] .ld-words-head h2 br{display:none}html[data-look][lang][data-look="g"] .ld-words-head h2 > span:first-child::after{content:" "}}
+html[data-look][lang][data-look="g"] .ld-words-head p{margin:var(--sp-pair) auto 0;max-width:40em;font:400 16px/1.35 var(--ui);text-wrap:pretty}
 /* колода и подсказка под ней — пара, кнопки — отдельное действие на расстоянии блока; подсказка считается от букв */
-html[data-look][lang][data-look="g"] .ld-deck{position:relative;display:grid;justify-items:center;min-width:0}
+html[data-look][lang][data-look="g"] .ld-deck{position:relative;display:grid;justify-items:center;width:min(100%,720px);min-width:0}
 /* числа без единиц читает скрипт: шаг между карточками, наклон, подъем верхней карточки, ее приближение, ширина «щели» */
-html[data-look][lang][data-look="g"] .ld-deck-stage{--w:340px;--h:216px;--gap:6;--tilt:56;--lift:196;--near:110;--mouth:48;
-  position:relative;width:100%;height:390px;perspective:1500px;perspective-origin:50% 25%;transform-style:preserve-3d}
-html[data-look][lang][data-look="g"] .ld-dc{position:absolute;left:calc(50% - var(--w) / 2);top:calc(100% - 79px - var(--h) / 2);width:var(--w);height:var(--h);
+html[data-look][lang][data-look="g"] .ld-deck-stage{--w:280px;--h:178px;--gap:5.5;--tilt:56;--lift:142;--near:90;--mouth:42;
+  position:relative;width:100%;height:306px;perspective:1500px;perspective-origin:50% 25%;transform-style:preserve-3d}
+html[data-look][lang][data-look="g"] .ld-dc{position:absolute;left:calc(50% - var(--w) / 2);top:calc(100% - 61px - var(--h) / 2);width:var(--w);height:var(--h);
   transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.7,.2,1),translate .3s cubic-bezier(.25,.1,.25,1),rotate .3s cubic-bezier(.25,.1,.25,1)}
 html[data-look][lang][data-look="g"] :is(.ld-dc-f,.ld-dc-b){position:absolute;inset:0;display:grid;padding:22px 24px;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 /* дырочка под кольцо — как у карточки слова в сцене урока; на обороте она с другой стороны */
@@ -633,7 +638,6 @@ html[data-look][lang][data-look="g"] .ld-deck-btn.is-hot{background:#1a171c;colo
 html[data-look][lang][data-look="g"] .ld-deck-btn.is-ink.is-hot{background:var(--acc,#c8f26a);color:var(--on-acc,#0b3a24)}
 @media (hover:hover){html[data-look][lang][data-look="g"] .ld-deck-btn:hover{background:#1a171c;color:#fff}html[data-look][lang][data-look="g"] .ld-deck-btn.is-ink:hover{background:var(--acc,#c8f26a);color:var(--on-acc,#0b3a24)}}
 html[data-look][lang][data-look="g"] .ld-sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-@media (max-width:1000px){html[data-look][lang][data-look="g"] .ld-words{grid-template-columns:minmax(0,1fr);gap:var(--sp-section)}html[data-look][lang][data-look="g"] .ld-words-head h2{font-size:clamp(64px,12vw,128px)}}
 @media (max-width:600px){
   html[data-look][lang][data-look="g"] .ld-deck-stage{--w:224px;--h:142px;--gap:4.5;--lift:132;--near:70;--mouth:34;height:253px}
   html[data-look][lang][data-look="g"] .ld-dc{top:calc(100% - 48px - var(--h) / 2)}
