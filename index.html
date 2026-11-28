@@ -3526,18 +3526,8 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
     & .nb-side #tabs#tabs { display: contents; }
     /* у шага в сайдбаре те же поля 16 слева и справа, что у пилюли в строке: выделение не прилипает к тексту */
     & .nb-side #tabs .tab, & .nb-side #tabs .tab[aria-selected="true"] { order: 2; height: auto; padding: 8px 16px; }
-    & .nb-side #tabs .tab[data-view="theory"], & .nb-side #tabs .tab[data-view="theory"][aria-selected="true"] { order: 1; }
-    & .nb-side #theory-toc#theory-toc { order: 1; position: static; display: flex; flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: 0; margin: 0 0 8px; padding: 0 16px 0 40px; overflow: visible; }
-    /* раздел в две строки: подчеркивание идет под словами каждой строки, а не на всю ширину колонки — линией текста, не фоном */
-    & .nb-side #theory-toc a, & .nb-side #theory-toc a.active { flex: none; padding: 4px 0; background: none; font-size: 15px; white-space: normal;
-      text-decoration: underline 3px transparent; text-underline-offset: 6px; text-decoration-skip-ink: none; transition: text-decoration-color .2s var(--nb-ease), color .15s var(--nb-ease); }
-    & .nb-side #theory-toc a.active { text-decoration-color: #f6cf3a; }
-    @media (hover: hover) { & .nb-side #theory-toc a:not(.active):hover { text-decoration-color: var(--nb-ink-3); text-decoration-thickness: 1px; } }
-    /* один-два раздела — оглавление ничего не дает: подпунктов нет */
-    & .nb-side #theory-toc:not(:has(a:nth-child(3))) { display: none !important; }
-    &:not([data-nb-view="theory"]) .nb-side #theory-toc { display: none !important; }
+    /* разделов теории в сайдбаре нет, а строка разделов над теорией при сайдбаре не нужна */
     &[data-nb-side] #view-theory .learny-rail { display: none; }
-    & .nb-side .toc-label { display: none; }
     /* шаги ушли из колонки. Замер 28 ноября: шапка → первая строка колонки 32 (блок), сайдбар начинается вровень с ней
        (прилипает на 90 = шапка 58 + 32); полоса вопросов → задание 48 (раздел). Свои 40 у шагов здесь не нужны */
     &[data-nb-side]:not([data-nb-view="home"]) main.wrap { padding-top: 16px; }
@@ -10917,34 +10907,33 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
      От 1280 навигация урока уходит в узкую колонку вплотную слева от текста: название урока, шаги столбиком,
      под «Теорией» — ее разделы со сдвигом, деревом. Уже — как было: шаги строкой над заданием.
      Сайдбар есть на всех шагах, чтобы навигация не прыгала при переходе между ними.
-     Шаги переносятся в колонку целиком (тот же #tabs, его перерисовка ничего не ломает), разделы теории — тот же #theory-toc */
+     Шаги переносятся в колонку целиком (тот же #tabs, его перерисовка ничего не ломает). Разделов теории в сайдбаре нет
+     (Виктория, 28 ноября 2026: без подпунктов чище) */
   {
     const wide = matchMedia("(min-width: 1280px)");
     const side = document.createElement("aside");
     side.className = "nb-side";
     side.innerHTML = '<div class="nb-side-in"></div>';
-    const inner = side.firstElementChild, main = one("main.wrap"), tabs = one("#tabs"), toc = one("#theory-toc");
-    const tocHome = document.createComment("theory-toc");
-    toc.before(tocHome);
+    const inner = side.firstElementChild, main = one("main.wrap"), tabs = one("#tabs");
     const placeSide = () => {
       const title = one(".lb-title");
       if (wide.matches) {
         if (!side.isConnected) main.prepend(side);
         if (title && title.parentElement !== inner) inner.append(title);
         if (tabs.parentElement !== inner) inner.append(tabs);
-        if (toc.parentElement !== inner) inner.append(toc);
         root.dataset.nbSide = "";
       } else if (side.isConnected) {
         const head = one(".nb-head");
         if (head?.parentElement === main) head.before(tabs); else main.prepend(tabs);
         if (title) tabs.before(title);
-        tocHome.after(toc);
         side.remove();
         delete root.dataset.nbSide;
       }
     };
     wide.addEventListener("change", placeSide);
-    document.addEventListener("lessonviewchange", () => requestAnimationFrame(placeSide));
+    // сразу и после отрисовки: название урока ставится своим кодом в кадре, а в фоновой вкладке кадры не идут
+    document.addEventListener("lessonviewchange", () => { placeSide(); requestAnimationFrame(placeSide); });
+    placeSide();
     requestAnimationFrame(placeSide);
   }
 
