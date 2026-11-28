@@ -3510,11 +3510,56 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   /* в кабинете карточка нажимается вся, «Открыть урок →» лишнее (Виктория, 28 ноября 2026).
      Прогресс начатого урока — кольцом справа на строке «раздел · уровень», а не процентом в тексте */
   & body[data-calm-page="cabinet"] #lesson-list .lesson-card:not(.nb-own-row) .learny-row-arrow { display: none; }
-  & #lesson-list .lesson-card[data-progress] .learny-lesson-meta::after {
-    content: ""; position: absolute; right: 0; top: 50%; width: 20px; height: 20px; translate: 0 -50%; border-radius: 50%;
-    background: conic-gradient(currentColor calc(var(--p) * 1%), color-mix(in srgb, currentColor 30%, transparent) 0);
-    -webkit-mask: radial-gradient(closest-side, transparent 66%, #000 70%); mask: radial-gradient(closest-side, transparent 66%, #000 70%);
+  /* сайдбар урока от 1280 (проба 28 ноября 2026): колонка 208 вплотную слева от текста урока, через 64.
+     Вся пара «сайдбар + колонка» стоит по центру: колонка сдвинута вправо на половину ширины сайдбара с отступом.
+     Дерево: название урока тихо, шаги столбиком (текущий — маркером цвета шага, как в строке), под «Теорией» — ее разделы
+     со сдвигом 24, тише и мельче; текущий раздел темнее с линией цвета шага */
+  & .nb-side { display: none; }
+  @media (min-width: 1280px) {
+    &[data-nb-side]:not([data-nb-view="home"]) main.wrap { position: relative; left: 136px; }
+    &[data-nb-side]:not([data-nb-view="home"]) .nb-side { position: absolute; top: 0; bottom: 0; right: calc(100% + 48px); display: block; width: 224px; }
+    & .nb-side-in { position: sticky; top: 96px; display: flex; flex-direction: column; align-items: flex-start; max-height: calc(100vh - 120px); overflow: auto; scrollbar-width: none; }
+    & .nb-side .lb-title { order: 0; margin: 0 0 16px; padding: 0 16px; overflow: visible; white-space: normal; text-overflow: clip; font: 400 14px/1.35 var(--nb-ui); color: var(--nb-ink-2); }
+    & .nb-side #tabs#tabs { display: contents; }
+    /* у шага в сайдбаре те же поля 16 слева и справа, что у пилюли в строке: выделение не прилипает к тексту */
+    & .nb-side #tabs .tab, & .nb-side #tabs .tab[aria-selected="true"] { order: 2; height: auto; padding: 8px 16px; }
+    & .nb-side #tabs .tab[data-view="theory"], & .nb-side #tabs .tab[data-view="theory"][aria-selected="true"] { order: 1; }
+    & .nb-side #theory-toc#theory-toc { order: 1; position: static; display: flex; flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: 0; margin: 0 0 8px; padding: 0 16px 0 40px; overflow: visible; }
+    & .nb-side #theory-toc a, & .nb-side #theory-toc a.active { flex: none; padding: 4px 0; font-size: 15px; white-space: normal; }
+    &:not([data-nb-view="theory"]) .nb-side #theory-toc { display: none !important; }
+    &[data-nb-side] #view-theory .learny-rail { display: none; }
+    & .nb-side .toc-label { display: none; }
+    /* шаги ушли из колонки: над заданием остается отступ раздела, 48 */
+    &[data-nb-side]:not([data-nb-view="home"]) main.wrap { padding-top: 48px; }
   }
+  /* кольцо прогресса (компонент progressRing): 36, дуга со скругленными концами, число посередине; цвет — от текста вокруг.
+     В кабинете — слева от строки прогресса под названием (28 ноября 2026: маленькое пустое кольцо читалось радиокнопкой,
+     в углу оно делило место с «⋯», внизу спорило бы со словом обложки). В каталоге его нет */
+  & .progress-ring { --ring: 36px; position: relative; display: inline-grid; place-items: center; flex: none; width: var(--ring); height: var(--ring); }
+  & .progress-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; rotate: -90deg; fill: none; stroke-width: 2.5; }
+  & .progress-ring-track { stroke: currentColor; opacity: .28; }
+  & .progress-ring-bar { stroke: currentColor; stroke-linecap: round; }
+  & .progress-ring-num { font: 600 12px/1 var(--nb-ui); letter-spacing: 0; font-variant-numeric: tabular-nums; }
+  & #lesson-list .learny-lesson-sub:has(.progress-ring) { display: flex; align-items: center; gap: 12px; }
+  & body:not([data-calm-page="cabinet"]) #lesson-list .progress-ring { display: none; }
+  /* карточка — блок: нажимается растянутая кнопка «открыть» поверх всего, «⋯» лежит над ней.
+     «⋯» тихие: в правом верхнем углу при наведении и в фокусе, на телефоне — всегда; подложка только под курсором */
+  & #lesson-list .lesson-open { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; border-radius: inherit; background: none; cursor: pointer; }
+  & #lesson-list .lesson-open:focus-visible { outline: 2px solid currentColor; outline-offset: -6px; }
+  & #lesson-list .lesson-more { position: absolute; right: 22px; top: 14px; z-index: 3; display: grid; place-items: center; width: 40px; height: 40px; padding: 0;
+    border: 0; border-radius: var(--nb-pill); background: none; color: var(--on, #fffdf6); opacity: 0; transition: opacity .15s var(--nb-ease), background-color .15s var(--nb-ease); }
+  & #lesson-list .lesson-more svg { width: 22px; height: 22px; fill: currentColor; }
+  & #lesson-list .lesson-card:is(:hover, :focus-within, .menu-open) .lesson-more, & #lesson-list .lesson-more:focus-visible { opacity: .85; }
+  & #lesson-list .lesson-card.menu-open .lesson-more { opacity: 1; }
+  /* меню карточки: белый листок под «⋯», пункт удаления — красным карандашом */
+  & .card-menu:not([hidden]) { position: fixed; z-index: 60; display: grid; min-width: 180px; padding: 4px; border-radius: 12px; background: #fff;
+    box-shadow: 0 0 0 1px rgba(26, 23, 28, .14); animation: nb-rise .16s var(--nb-ease); }
+  & .card-menu-item { height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: none; text-align: left; font: 400 16px/1 var(--nb-ui); color: var(--nb-ink); }
+  & .card-menu-item.danger { color: var(--nb-pencil-ink); }
+  & .card-menu-item:is(:hover, :focus-visible) { outline: 0; background: color-mix(in srgb, var(--nb-ink) 6%, transparent); }
+  & #lesson-list .lesson-more:hover { opacity: 1; background: color-mix(in srgb, currentColor 18%, transparent); }
+  & #lesson-list .lesson-more:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+  @media (hover: none) { & #lesson-list .lesson-more { opacity: .85; } }
   @media (max-width: 800px) {
     & body[data-calm-page="cabinet"] #lesson-list :is(.learny-lesson-meta, .nb-own-row .nb-row-tab) { left: calc(var(--spine) + 20px); right: 20px; top: 24px; }
     & body[data-calm-page="cabinet"] #lesson-list .learny-lesson-copy { left: calc(var(--spine) + 20px); right: 20px; top: 52px; }
@@ -3562,6 +3607,28 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & .nb-new-go.is-empty { background: #e4e1d6; color: #8d8892; outline-color: transparent; }
   @media (hover: hover) { & .nb-new-go.is-empty:hover { background: #dcd8cb; } }
   /* ошибка — карандашом под кнопками */
+  /* сборка прямо в поле: на месте кнопки — ход сборки, под ним «Остановить»; потом — «Урок готов» с составом и кнопкой */
+  & .nb-new.is-building .nb-new-row, & .nb-new.is-ready :is(textarea, .nb-new-row, .nb-new-files, .nb-new-err) { display: none; }
+  & .nb-new.is-building textarea { color: var(--nb-ink-2); }
+  & .nb-new-status:not([hidden]) { display: flex; align-items: center; gap: 16px; min-height: 56px; padding: 0 24px; border-radius: var(--nb-pill); background: var(--nb-deep); color: #fff; font: 400 18px/1.3 var(--nb-ui); }
+  & .nb-new-spin { width: 20px; height: 20px; flex: none; border: 2.5px solid var(--nb-lime); border-top-color: transparent; border-radius: 50%; }
+  & .nb-new-progress { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  & .nb-new-stop { justify-self: center; height: 40px; padding: 0 16px; border: 0; border-radius: var(--nb-pill); background: none; font: 400 16px/1 var(--nb-ui); color: var(--nb-ink); }
+  @media (hover: hover) { & .nb-new-stop:hover { background: var(--nb-ink); color: #fff; } }
+  & .nb-new-ready:not([hidden]) { display: grid; gap: 8px; justify-items: start; padding: 8px 4px; }
+  & .nb-new-ready p { margin: 0; }
+  & .nb-new-ready-label, & .nb-ready-label { font: 400 12px/1 var(--nb-ui); letter-spacing: .12em; text-transform: uppercase; color: var(--nb-ink-2); }
+  & .nb-new-ready-title { font: 900 32px/1.05 var(--nb-disp); color: var(--nb-ink); }
+  & .nb-new-ready-meta, & .nb-ready-meta { font: 400 16px/1.4 var(--nb-ui); color: var(--nb-ink-2); }
+  & .nb-new-ready-row { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
+  & .nb-new-more { height: 40px; padding: 0 16px; border: 0; border-radius: var(--nb-pill); background: none; font: 400 16px/1 var(--nb-ui); color: var(--nb-ink); }
+  @media (hover: hover) { & .nb-new-more:hover { background: var(--nb-ink); color: #fff; } }
+  /* то же в окне «Свой урок»: форма уходит, остаются крестик и «Урок готов» */
+  & #lesson-composer .nb-card.is-ready > :not(.nb-ready, .composer-close) { display: none; }
+  & #lesson-composer .nb-ready:not([hidden]) { display: grid; gap: 16px; justify-items: center; padding: 24px 0 8px; }
+  & #lesson-composer .nb-ready p { margin: 0; }
+  & #lesson-composer .nb-ready-title { margin: 0; font: 900 48px/1 var(--nb-disp); color: var(--nb-ink); text-wrap: balance; }
+  & #lesson-composer .nb-ready-open { height: 64px; margin-top: 16px; padding: 0 36px; font-size: 20px; }
   & .nb-new-err { margin: 0; padding: 0 4px; font: 400 14px/1.3 var(--nb-ui); color: var(--nb-pencil-ink); text-wrap: balance; }
   & .nb-new textarea {
     display: block; width: 100%; min-height: calc(2 * 1.3em); max-height: 40vh; margin: 0; padding: 0 4px; border: 0; outline: 0; resize: none; overflow: auto;
@@ -4181,6 +4248,7 @@ const UI = {
   parseLocal:   { ru: "Урок сохранен только в\u00a0этом браузере: база страницы сейчас недоступна.",
                   en: "The lesson is saved in this browser only: the page's storage is unavailable right now." },
   deleteBtn:    { ru: "Удалить урок", en: "Delete lesson" },
+  cardMore:     { ru: "Действия с\u00a0уроком", en: "Lesson actions" },
   confirmDelete:{ ru: "Удалить этот урок и\u00a0прогресс по\u00a0нему?", en: "Delete this lesson and its progress?" },
   askYes:       { ru: "Да", en: "Yes" },
   askNo:        { ru: "Отмена", en: "Cancel" },
@@ -5324,6 +5392,7 @@ function buildLesson({ id, createdAt, lesson: x }) {
   const l = {
     id, own: true,
     title: safe(x.title || "Lesson"),
+    coverWord: /^[a-z]{2,8}$/.test(String(x.coverWord || "").trim().toLowerCase()) ? String(x.coverWord).trim().toLowerCase() : undefined,
     date: { ru: [day.ru, level].filter(Boolean).join(" · "), en: [day.en, level].filter(Boolean).join(" · ") },
     theoryTitle: bi(x.theoryTitle || x.title || ""),
     theory: arr(x.theory).filter(r => r && r.name).map(r => ({
@@ -5531,6 +5600,7 @@ async function storeLesson(rec) {
 const LESSON_FORMAT = `Reply with ONLY one JSON object of this shape (leave out optional keys you don't need):
 {
   "title": "lesson title in English",
+  "coverWord": "one lowercase English word of 3–7 letters that sums the lesson up, printed big on its cover (e.g. must, will, once, team)",
   "level": "e.g. B1–B2",
   "theoryTitle": {"ru": "...", "en": "..."},
   "theory": [rule, ...],
@@ -6146,7 +6216,8 @@ async function parseLesson(chosenLevel = null) {
     if (unifiedIntake) setIntakeQuestion();
     if (!topic) clearMaterialFiles();
     parseHint(stored ? (topic ? "topicHint" : "parseHint") : "parseLocal", !stored);
-    openLesson(rec.id);
+    // оформление может само сказать «урок готов» и открыть урок по кнопке; если событие никто не перехватил — открываем сразу
+    if (document.dispatchEvent(new CustomEvent("lessonbuilt", { detail: rec.id, cancelable: true }))) openLesson(rec.id);
   } catch (e) {
     parseHint(PARSE_ERRORS[e?.code] || (e instanceof Error ? "parseBad" : "parseFailed"), e?.code !== "cancelled");
   } finally {
@@ -6875,14 +6946,18 @@ function renderLessonList() {
     if (document.documentElement.dataset.style === "learny") {
       const started = startedLesson(l);
       const position = document.documentElement.dataset.hero === "b" && started && !completion.complete ? savedPosition(l, steps) : resume;
-      return `<button class="lesson-card" data-lesson="${escH(l.id)}"${started && !completion.complete ? ` style="--p: ${completion.percent || 0}" data-progress` : ""}>
+      /* карточка — блок с растянутой кнопкой «открыть» поверх и, у своего урока, кнопкой «удалить»:
+         кнопку нельзя вложить в кнопку, поэтому сама карточка больше не кнопка */
+      return `<div class="lesson-card" data-lesson="${escH(l.id)}"${started && !completion.complete ? " data-progress" : ""}>
+        <button type="button" class="lesson-open" aria-label="${escH(l.title + (started ? " · " + position : ""))}"></button>
+        ${l.own ? `<button type="button" class="lesson-more" data-more="${escH(l.id)}" aria-haspopup="menu" aria-expanded="false" aria-label="${escH(t("cardMore") + ": " + l.title)}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>` : ""}
         <span class="learny-lesson-copy">
           <span class="learny-lesson-name">${escH(l.title)}</span>
-          <span class="learny-lesson-sub">${started ? `<span class="learny-lesson-progress">${escH(position)}</span>` : ""}<span class="learny-lesson-meta-inline">${escH(L(l.date))}</span></span>
+          <span class="learny-lesson-sub">${started ? `${!completion.complete ? progressRing(completion.percent) : ""}<span class="learny-lesson-progress">${escH(position)}</span>` : ""}<span class="learny-lesson-meta-inline">${escH(L(l.date))}</span></span>
         </span>
         <span class="learny-lesson-meta">${escH(L(l.date))}</span>
         <span class="learny-row-arrow" aria-hidden="true">${completion.complete ? "✓" : "→"}</span>
-      </button>`;
+      </div>`;
     }
     return `<button class="lesson-card" data-lesson="${l.id}">
       <div class="lc-overview${art ? " has-art" : ""}">
@@ -6903,6 +6978,7 @@ function renderLessonList() {
       </div>
     </button>`;
   }).join("");
+  $$("#lesson-list [data-more]").forEach(b => b.addEventListener("click", event => { event.stopPropagation(); openCardMenu(b); }));
   $$("#lesson-list [data-lesson]").forEach(b => b.addEventListener("click", () => {
     const l = LESSONS.find(item => item.id === b.dataset.lesson);
     openLesson(l.id, document.documentElement.dataset.hero === "b" ? savedStage(l) : "theory");
@@ -7001,16 +7077,63 @@ $$(".top-nav [data-nav]").forEach(b => b.addEventListener("click", () => {
 }));
 $("#parse-btn").addEventListener("click", () => parseLesson());
 $("#parse-stop").addEventListener("click", () => parseCtl?.abort());
-$("#delete-btn").addEventListener("click", async () => {
-  const id = S.lessonId;
+/* Кольцо прогресса — компонент: SVG-кольцо 36 со скругленной дугой и числом посередине, для диктора — progressbar.
+   Цвет берет из текста вокруг (currentColor), поэтому садится на любую обложку. Размер — через --ring */
+function progressRing(percent, label = t("cardProgress")) {
+  const p = Math.max(0, Math.min(100, Math.round(percent || 0)));
+  return `<span class="progress-ring" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p}" aria-label="${escH(label)}">
+    <svg viewBox="0 0 36 36" aria-hidden="true"><circle class="progress-ring-track" cx="18" cy="18" r="16"/>${p ? `<circle class="progress-ring-bar" cx="18" cy="18" r="16" pathLength="100" stroke-dasharray="${p} 100"/>` : ""}</svg>
+    <span class="progress-ring-num" aria-hidden="true">${p}</span></span>`;
+}
+/* меню карточки своего урока: «⋯» в углу карточки, пока в нем один пункт — удалить урок.
+   Меню одно на страницу, встает под кнопкой и закрывается щелчком мимо, Esc и прокруткой */
+const cardMenu = document.createElement("div");
+cardMenu.className = "card-menu";
+cardMenu.setAttribute("role", "menu");
+cardMenu.hidden = true;
+document.body.append(cardMenu);
+let cardMenuBtn = null;
+function closeCardMenu() {
+  if (cardMenu.hidden) return;
+  cardMenu.hidden = true;
+  cardMenuBtn?.setAttribute("aria-expanded", "false");
+  cardMenuBtn?.closest(".lesson-card")?.classList.remove("menu-open");
+  cardMenuBtn = null;
+}
+function openCardMenu(btn) {
+  const same = cardMenuBtn === btn;
+  closeCardMenu();
+  if (same) return;
+  cardMenuBtn = btn;
+  const id = btn.dataset.more;
+  cardMenu.innerHTML = `<button type="button" role="menuitem" class="card-menu-item danger">${t("deleteBtn")}</button>`;
+  cardMenu.hidden = false;
+  btn.setAttribute("aria-expanded", "true");
+  btn.closest(".lesson-card")?.classList.add("menu-open");
+  const r = btn.getBoundingClientRect(), w = cardMenu.offsetWidth;
+  cardMenu.style.top = Math.round(r.bottom + 8) + "px";
+  cardMenu.style.left = Math.round(Math.max(8, Math.min(innerWidth - w - 8, r.right - w))) + "px";
+  const item = cardMenu.querySelector("button");
+  item.addEventListener("click", () => { closeCardMenu(); removeOwnLesson(id); });
+  item.focus({ preventScroll: true });
+}
+document.addEventListener("click", event => { if (!cardMenu.contains(event.target)) closeCardMenu(); });
+document.addEventListener("keydown", event => { if (event.key === "Escape" && !cardMenu.hidden) { const b = cardMenuBtn; closeCardMenu(); b?.focus(); } });
+addEventListener("scroll", closeCardMenu, { passive: true });
+addEventListener("resize", closeCardMenu);
+/* убрать свой урок: из меню урока и из меню карточки в кабинете; спрашиваем один раз, вернуть урок нельзя */
+async function removeOwnLesson(id) {
   if (!(await ask(t("confirmDelete"), "deleteBtn"))) return;
   customRaw = customRaw.filter(r => r.id !== id);
   const gone = readJSON(VOCAB_DEL_KEY, {}); gone[id] = Date.now(); lsSet(VOCAB_DEL_KEY, JSON.stringify(gone));   // «надгробие»: удаление дойдет и до других устройств
   cacheCustom(); rebuildLessons();
   delete S.progress[id];
-  S.lessonId = null; save(); show("home");
+  if (S.lessonId === id) S.lessonId = null;
+  save();
+  if (S.view !== "home") show("home"); else renderLessonList();
   if (db) myCol().doc(id).delete().catch(() => {});
-});
+}
+$("#delete-btn").addEventListener("click", () => removeOwnLesson(S.lessonId));
 $$("[data-goto]").forEach(b => b.addEventListener("click", () => show(b.dataset.goto)));
 $("#reset-btn").addEventListener("click", async () => {
   if (!(await ask(t("confirmReset")))) return;
@@ -9731,7 +9854,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   const TICK = '<svg class="nb-tick" viewBox="0 0 40 30" aria-hidden="true"><path pathLength="1" d="M4 15c4 3 7 7 9 11C18 15 26 7 37 3"/></svg>';
   const ARROW = '<svg class="nb-arrow" viewBox="0 0 26 30" aria-hidden="true"><path pathLength="1" d="M20 27C10 25 5 17 7 5M2 11l5-7 6 6"/></svg>';
 
-  // Тетради готовых уроков: цвет обложки и слово на ней те же, что на лендинге G. Свой урок — крафтовая обложка.
+  // Тетради готовых уроков: цвет обложки и слово на ней те же, что на лендинге G.
   // На зеленом «Modal verbs» розовая, а «My culture, B1» фиолетовая: фиолетовый на зеленом тускнеет
   const COVERS = {
     modals: { c: "#f2619c", word: "must", tab: { ru: "Модальные глаголы", en: "Modal verbs" } },
@@ -9741,7 +9864,21 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     "culture-c1": { c: "#2f6df6", word: "roots", tab: { ru: "Моя культура, C1", en: "My culture, C1" } }
   };
   const OWN_COVER = { c: "#cfab72", on: "#1a171c", wc: "#c29a5c" };
-  const cover = id => COVERS[id] || OWN_COVER;
+  /* Свой урок — такая же цветная тетрадь, как готовые, со словом на обложке (Виктория, 28 ноября 2026: крафтовая
+     обложка без слова выглядела заглушкой). Цвет — из тех же обложек, по номеру урока, поэтому у урока он не меняется.
+     Слово дает ИИ при сборке (coverWord); у уроков, собранных раньше, — короткое слово из названия */
+  const OWN_PALETTE = [
+    { c: "#f2619c" }, { c: "#25a873" }, { c: "#ffc533", on: "#1a171c", wc: "#f3a81c" },
+    { c: "#6f45e8" }, { c: "#2f6df6" }, { c: "#f2994a", on: "#1a171c", wc: "#e07f2c" }
+  ];
+  const COVER_STOP = new Set(["the", "and", "for", "with", "your", "you", "from", "into", "about", "using", "use", "how", "what", "when", "lesson", "part", "unit", "english", "level"]);
+  const hashId = id => [...String(id)].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7);
+  const ownWord = l => l.coverWord || ((stripTags(l.title || "").toLowerCase().match(/[a-z]+/g) || []).filter(w => w.length >= 3 && w.length <= 7 && !COVER_STOP.has(w)).at(-1) || "");
+  const cover = id => {
+    if (COVERS[id]) return COVERS[id];
+    const l = id && LESSONS.find(item => item.id === id);
+    return l ? { ...OWN_PALETTE[hashId(id) % OWN_PALETTE.length], word: ownWord(l) } : OWN_COVER;
+  };
 
   /* ---------- шаг урока: вид в атрибуте, цвет обложки и системной строки телефона ---------- */
   function syncView(view = S.view) {
@@ -10428,8 +10565,14 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     nbNewBadType: { ru: name => `«${name}» не\u00a0подойдет: нужны фото или\u00a0PDF`, en: name => `"${name}" won't work: photos or PDFs only` },
     nbNewTooBig: { ru: "На\u00a0все файлы вместе до\u00a010\u00a0МБ", en: "Up to 10 MB for all files together" },
     nbNewTooMany: { ru: "Не\u00a0больше 5\u00a0файлов", en: "Up to 5 files" },
-    nbNewEmpty: { ru: "Вставьте домашку, тему или\u00a0прикрепите файл", en: "Paste your homework, a topic or attach a file" }
+    nbNewEmpty: { ru: "Вставьте домашку, тему или\u00a0прикрепите файл", en: "Paste your homework, a topic or attach a file" },
+    nbReady: { ru: "Урок готов", en: "Your lesson is ready" },
+    nbReadyOpen: { ru: "Открыть урок", en: "Open the lesson" },
+    nbReadyMore: { ru: "Собрать еще один", en: "Make another" },
+    nbStop: { ru: "Остановить", en: "Stop" }
   });
+  /* состав готового урока одной строкой: шаги по порядку, у заданий — сколько их */
+  const lessonSummary = l => stepProgress(l).map(s => s.total ? `${s.label}\u00a0${s.total}` : s.label).join(" · ");
   const CLIP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 11-8.5 8.5a6 6 0 0 1-8.5-8.5l9-9a4 4 0 0 1 5.7 5.7l-9 9a2 2 0 0 1-2.8-2.8l8.4-8.4"/></svg>';
   const newBox = document.createElement("form");
   newBox.className = "nb-new";
@@ -10483,9 +10626,86 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   syncNew();
   new MutationObserver(syncNew).observe(root, { attributes: true, attributeFilter: ["lang"] });
   newText.addEventListener("input", () => { growNew(); syncNewGo(); if (newErrKey === "nbNewEmpty") showNewErr(""); });
+  /* Текст без файлов собирается прямо в этом поле: окно поверх повторяло бы то же поле (Виктория, 28 ноября 2026).
+     Работает та же сборка, что в окне «Свой урок», окно просто не показывается; ход сборки — на месте кнопки,
+     «Остановить» под ним. Окно открывается, только если сборке нужен вопрос (уровень) или она не удалась:
+     там текст уже лежит, и видно, что делать дальше. Файлы по-прежнему идут через окно — их надо распознать и проверить */
+  const status = document.createElement("div");
+  status.className = "nb-new-status";
+  status.hidden = true;
+  status.setAttribute("role", "status");
+  status.innerHTML = `<span class="nb-new-spin spinner" aria-hidden="true"></span><span class="nb-new-progress"></span>`;
+  const stop = document.createElement("button");
+  stop.type = "button";
+  stop.className = "nb-new-stop";
+  stop.hidden = true;
+  const ready = document.createElement("div");
+  ready.className = "nb-new-ready";
+  ready.hidden = true;
+  newBox.querySelector(".nb-new-row").after(status, stop, ready);
+  let inline = false, builtId = "", draftText = "";
+  const setBuilding = on => {
+    inline = on;
+    newBox.classList.toggle("is-building", on);
+    newText.readOnly = on;
+    status.hidden = stop.hidden = !on;
+    stop.textContent = t("nbStop");
+  };
+  new MutationObserver(() => { status.querySelector(".nb-new-progress").textContent = one("#parse-progress")?.textContent || ""; })
+    .observe(one("#parse-progress"), { childList: true, characterData: true, subtree: true });
+  stop.addEventListener("click", () => one("#parse-stop")?.click());
+  function showReady(id) {
+    const l = LESSONS.find(item => item.id === id);
+    if (!l) return openLesson(id);
+    ready.innerHTML = `<p class="nb-new-ready-label">${t("nbReady")}</p>
+      <p class="nb-new-ready-title">${escH(l.title)}</p>
+      <p class="nb-new-ready-meta">${escH(lessonSummary(l))}</p>
+      <div class="nb-new-ready-row"><button type="button" class="nb-new-go nb-new-open"><span>${t("nbReadyOpen")}</span><span aria-hidden="true">→</span></button>
+      <button type="button" class="nb-new-more">${t("nbReadyMore")}</button></div>`;
+    newBox.classList.add("is-ready");
+    ready.hidden = false;
+    ready.querySelector(".nb-new-open").addEventListener("click", () => { resetNew(); openLesson(id); });
+    ready.querySelector(".nb-new-more").addEventListener("click", () => { resetNew(); newText.focus(); });
+    ready.querySelector(".nb-new-open").focus({ preventScroll: true });
+    if (typeof renderLessonList === "function") renderLessonList();
+  }
+  function resetNew() {
+    newBox.classList.remove("is-ready");
+    ready.hidden = true;
+    ready.innerHTML = "";
+    newText.value = "";
+    growNew(); syncNewGo();
+  }
+  document.addEventListener("lessonbuilt", event => {
+    if (!inline) return;
+    event.preventDefault();
+    builtId = event.detail;
+  });
+  // сборка закончилась (строка хода скрылась): урок готов, остановлена или ей нужно окно
+  new MutationObserver(() => {
+    if (!inline || !one("#parse-status").hidden) return;
+    setBuilding(false);
+    if (builtId) { const id = builtId; builtId = ""; newText.value = ""; return showReady(id); }
+    const hint = one("#parse-hint"), stopped = hint?.dataset.message === "parseStopped";
+    if (stopped) { newText.value = draftText; growNew(); syncNewGo(); newText.focus(); return; }
+    // нужен вопрос об уровне или сборка не удалась: показываем окно, текст в нем уже стоит
+    newText.value = ""; growNew(); syncNewGo();
+    location.hash = "new-lesson";
+  }).observe(one("#parse-status"), { attributes: true, attributeFilter: ["hidden"] });
   function startNew() {
     const text = newText.value.trim(), files = newFiles.splice(0);
     if (!text && !files.length) { showNewErr("nbNewEmpty"); newText.focus(); return; }
+    if (!files.length) {
+      const area = one("#paste-area");
+      draftText = newText.value;
+      showNewErr("");
+      area.value = text;
+      area.dispatchEvent(new Event("input", { bubbles: true }));
+      setBuilding(true);
+      one("#parse-btn").click();
+      if (one("#parse-status").hidden) setBuilding(false);   // сборка не началась (например, нет ключа): дальше окно
+      return;
+    }
     try { if (text) sessionStorage.setItem("learny-draft", text); } catch {}
     newText.value = "";
     growNew();
@@ -10578,6 +10798,25 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     text.addEventListener("scroll", syncFade, { passive: true });
     text.addEventListener("input", syncFade);
     new ResizeObserver(syncFade).observe(text);
+    // урок собран: окно не закрывается молча, а говорит, что получилось, и открывает урок по кнопке
+    const readyBox = document.createElement("div");
+    readyBox.className = "nb-ready";
+    readyBox.hidden = true;
+    card.append(readyBox);
+    document.addEventListener("lessonbuilt", event => {
+      if (!composer.open || event.defaultPrevented) return;
+      event.preventDefault();
+      const id = event.detail, l = LESSONS.find(item => item.id === id);
+      if (!l) return openLesson(id);
+      readyBox.innerHTML = `<p class="nb-ready-label">${t("nbReady")}</p><h2 class="nb-ready-title">${escH(l.title)}</h2>
+        <p class="nb-ready-meta">${escH(lessonSummary(l))}</p>
+        <button type="button" class="primary-btn nb-ready-open">${t("nbReadyOpen")} <span aria-hidden="true">→</span></button>`;
+      card.classList.add("is-ready");
+      readyBox.hidden = false;
+      readyBox.querySelector(".nb-ready-open").addEventListener("click", () => openLesson(id));
+      readyBox.querySelector(".nb-ready-open").focus({ preventScroll: true });
+    });
+    composer.addEventListener("close", () => { card.classList.remove("is-ready"); readyBox.hidden = true; readyBox.innerHTML = ""; });
     const syncDrop = () => { field.dataset.drop = t("nbDrop"); };
     new MutationObserver(syncDrop).observe(root, { attributes: true, attributeFilter: ["lang"] });
     syncDrop();
@@ -10654,6 +10893,41 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   for (const id of ["#drill-card", "#match-card", "#speak-card", "#report-card"]) new MutationObserver(marks).observe(one(id), { childList: true });
   // подсказка и правило открываются без перерисовки карточки: нижняя строка и пометка у предложения пересобираются по их изменению
   for (const id of ["#hint-text", "#rule-box"]) new MutationObserver(queueMarks).observe(one(id), { childList: true });
+
+  /* ---------- сайдбар урока (проба, 28 ноября 2026) ----------
+     От 1280 навигация урока уходит в узкую колонку вплотную слева от текста: название урока, шаги столбиком,
+     под «Теорией» — ее разделы со сдвигом, деревом. Уже — как было: шаги строкой над заданием.
+     Сайдбар есть на всех шагах, чтобы навигация не прыгала при переходе между ними.
+     Шаги переносятся в колонку целиком (тот же #tabs, его перерисовка ничего не ломает), разделы теории — тот же #theory-toc */
+  {
+    const wide = matchMedia("(min-width: 1280px)");
+    const side = document.createElement("aside");
+    side.className = "nb-side";
+    side.innerHTML = '<div class="nb-side-in"></div>';
+    const inner = side.firstElementChild, main = one("main.wrap"), tabs = one("#tabs"), toc = one("#theory-toc");
+    const tocHome = document.createComment("theory-toc");
+    toc.before(tocHome);
+    const placeSide = () => {
+      const title = one(".lb-title");
+      if (wide.matches) {
+        if (!side.isConnected) main.prepend(side);
+        if (title && title.parentElement !== inner) inner.append(title);
+        if (tabs.parentElement !== inner) inner.append(tabs);
+        if (toc.parentElement !== inner) inner.append(toc);
+        root.dataset.nbSide = "";
+      } else if (side.isConnected) {
+        const head = one(".nb-head");
+        if (head?.parentElement === main) head.before(tabs); else main.prepend(tabs);
+        if (title) tabs.before(title);
+        tocHome.after(toc);
+        side.remove();
+        delete root.dataset.nbSide;
+      }
+    };
+    wide.addEventListener("change", placeSide);
+    document.addEventListener("lessonviewchange", () => requestAnimationFrame(placeSide));
+    requestAnimationFrame(placeSide);
+  }
 
   syncView();
   markLessons();

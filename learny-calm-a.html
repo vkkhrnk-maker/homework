@@ -2575,6 +2575,7 @@ const UI = {
   parseLocal:   { ru: "Урок сохранен только в\u00a0этом браузере: база страницы сейчас недоступна.",
                   en: "The lesson is saved in this browser only: the page's storage is unavailable right now." },
   deleteBtn:    { ru: "Удалить урок", en: "Delete lesson" },
+  cardMore:     { ru: "Действия с\u00a0уроком", en: "Lesson actions" },
   confirmDelete:{ ru: "Удалить этот урок и\u00a0прогресс по\u00a0нему?", en: "Delete this lesson and its progress?" },
   askYes:       { ru: "Да", en: "Yes" },
   askNo:        { ru: "Отмена", en: "Cancel" },
@@ -3718,6 +3719,7 @@ function buildLesson({ id, createdAt, lesson: x }) {
   const l = {
     id, own: true,
     title: safe(x.title || "Lesson"),
+    coverWord: /^[a-z]{2,8}$/.test(String(x.coverWord || "").trim().toLowerCase()) ? String(x.coverWord).trim().toLowerCase() : undefined,
     date: { ru: [day.ru, level].filter(Boolean).join(" · "), en: [day.en, level].filter(Boolean).join(" · ") },
     theoryTitle: bi(x.theoryTitle || x.title || ""),
     theory: arr(x.theory).filter(r => r && r.name).map(r => ({
@@ -3925,6 +3927,7 @@ async function storeLesson(rec) {
 const LESSON_FORMAT = `Reply with ONLY one JSON object of this shape (leave out optional keys you don't need):
 {
   "title": "lesson title in English",
+  "coverWord": "one lowercase English word of 3–7 letters that sums the lesson up, printed big on its cover (e.g. must, will, once, team)",
   "level": "e.g. B1–B2",
   "theoryTitle": {"ru": "...", "en": "..."},
   "theory": [rule, ...],
@@ -4540,7 +4543,8 @@ async function parseLesson(chosenLevel = null) {
     if (unifiedIntake) setIntakeQuestion();
     if (!topic) clearMaterialFiles();
     parseHint(stored ? (topic ? "topicHint" : "parseHint") : "parseLocal", !stored);
-    openLesson(rec.id);
+    // оформление может само сказать «урок готов» и открыть урок по кнопке; если событие никто не перехватил — открываем сразу
+    if (document.dispatchEvent(new CustomEvent("lessonbuilt", { detail: rec.id, cancelable: true }))) openLesson(rec.id);
   } catch (e) {
     parseHint(PARSE_ERRORS[e?.code] || (e instanceof Error ? "parseBad" : "parseFailed"), e?.code !== "cancelled");
   } finally {
@@ -5269,14 +5273,18 @@ function renderLessonList() {
     if (document.documentElement.dataset.style === "learny") {
       const started = startedLesson(l);
       const position = document.documentElement.dataset.hero === "b" && started && !completion.complete ? savedPosition(l, steps) : resume;
-      return `<button class="lesson-card" data-lesson="${escH(l.id)}"${started && !completion.complete ? ` style="--p: ${completion.percent || 0}" data-progress` : ""}>
+      /* карточка — блок с растянутой кнопкой «открыть» поверх и, у своего урока, кнопкой «удалить»:
+         кнопку нельзя вложить в кнопку, поэтому сама карточка больше не кнопка */
+      return `<div class="lesson-card" data-lesson="${escH(l.id)}"${started && !completion.complete ? " data-progress" : ""}>
+        <button type="button" class="lesson-open" aria-label="${escH(l.title + (started ? " · " + position : ""))}"></button>
+        ${l.own ? `<button type="button" class="lesson-more" data-more="${escH(l.id)}" aria-haspopup="menu" aria-expanded="false" aria-label="${escH(t("cardMore") + ": " + l.title)}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>` : ""}
         <span class="learny-lesson-copy">
           <span class="learny-lesson-name">${escH(l.title)}</span>
-          <span class="learny-lesson-sub">${started ? `<span class="learny-lesson-progress">${escH(position)}</span>` : ""}<span class="learny-lesson-meta-inline">${escH(L(l.date))}</span></span>
+          <span class="learny-lesson-sub">${started ? `${!completion.complete ? progressRing(completion.percent) : ""}<span class="learny-lesson-progress">${escH(position)}</span>` : ""}<span class="learny-lesson-meta-inline">${escH(L(l.date))}</span></span>
         </span>
         <span class="learny-lesson-meta">${escH(L(l.date))}</span>
         <span class="learny-row-arrow" aria-hidden="true">${completion.complete ? "✓" : "→"}</span>
-      </button>`;
+      </div>`;
     }
     return `<button class="lesson-card" data-lesson="${l.id}">
       <div class="lc-overview${art ? " has-art" : ""}">
@@ -5297,6 +5305,7 @@ function renderLessonList() {
       </div>
     </button>`;
   }).join("");
+  $$("#lesson-list [data-more]").forEach(b => b.addEventListener("click", event => { event.stopPropagation(); openCardMenu(b); }));
   $$("#lesson-list [data-lesson]").forEach(b => b.addEventListener("click", () => {
     const l = LESSONS.find(item => item.id === b.dataset.lesson);
     openLesson(l.id, document.documentElement.dataset.hero === "b" ? savedStage(l) : "theory");
@@ -5395,16 +5404,63 @@ $$(".top-nav [data-nav]").forEach(b => b.addEventListener("click", () => {
 }));
 $("#parse-btn").addEventListener("click", () => parseLesson());
 $("#parse-stop").addEventListener("click", () => parseCtl?.abort());
-$("#delete-btn").addEventListener("click", async () => {
-  const id = S.lessonId;
+/* Кольцо прогресса — компонент: SVG-кольцо 36 со скругленной дугой и числом посередине, для диктора — progressbar.
+   Цвет берет из текста вокруг (currentColor), поэтому садится на любую обложку. Размер — через --ring */
+function progressRing(percent, label = t("cardProgress")) {
+  const p = Math.max(0, Math.min(100, Math.round(percent || 0)));
+  return `<span class="progress-ring" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p}" aria-label="${escH(label)}">
+    <svg viewBox="0 0 36 36" aria-hidden="true"><circle class="progress-ring-track" cx="18" cy="18" r="16"/>${p ? `<circle class="progress-ring-bar" cx="18" cy="18" r="16" pathLength="100" stroke-dasharray="${p} 100"/>` : ""}</svg>
+    <span class="progress-ring-num" aria-hidden="true">${p}</span></span>`;
+}
+/* меню карточки своего урока: «⋯» в углу карточки, пока в нем один пункт — удалить урок.
+   Меню одно на страницу, встает под кнопкой и закрывается щелчком мимо, Esc и прокруткой */
+const cardMenu = document.createElement("div");
+cardMenu.className = "card-menu";
+cardMenu.setAttribute("role", "menu");
+cardMenu.hidden = true;
+document.body.append(cardMenu);
+let cardMenuBtn = null;
+function closeCardMenu() {
+  if (cardMenu.hidden) return;
+  cardMenu.hidden = true;
+  cardMenuBtn?.setAttribute("aria-expanded", "false");
+  cardMenuBtn?.closest(".lesson-card")?.classList.remove("menu-open");
+  cardMenuBtn = null;
+}
+function openCardMenu(btn) {
+  const same = cardMenuBtn === btn;
+  closeCardMenu();
+  if (same) return;
+  cardMenuBtn = btn;
+  const id = btn.dataset.more;
+  cardMenu.innerHTML = `<button type="button" role="menuitem" class="card-menu-item danger">${t("deleteBtn")}</button>`;
+  cardMenu.hidden = false;
+  btn.setAttribute("aria-expanded", "true");
+  btn.closest(".lesson-card")?.classList.add("menu-open");
+  const r = btn.getBoundingClientRect(), w = cardMenu.offsetWidth;
+  cardMenu.style.top = Math.round(r.bottom + 8) + "px";
+  cardMenu.style.left = Math.round(Math.max(8, Math.min(innerWidth - w - 8, r.right - w))) + "px";
+  const item = cardMenu.querySelector("button");
+  item.addEventListener("click", () => { closeCardMenu(); removeOwnLesson(id); });
+  item.focus({ preventScroll: true });
+}
+document.addEventListener("click", event => { if (!cardMenu.contains(event.target)) closeCardMenu(); });
+document.addEventListener("keydown", event => { if (event.key === "Escape" && !cardMenu.hidden) { const b = cardMenuBtn; closeCardMenu(); b?.focus(); } });
+addEventListener("scroll", closeCardMenu, { passive: true });
+addEventListener("resize", closeCardMenu);
+/* убрать свой урок: из меню урока и из меню карточки в кабинете; спрашиваем один раз, вернуть урок нельзя */
+async function removeOwnLesson(id) {
   if (!(await ask(t("confirmDelete"), "deleteBtn"))) return;
   customRaw = customRaw.filter(r => r.id !== id);
   const gone = readJSON(VOCAB_DEL_KEY, {}); gone[id] = Date.now(); lsSet(VOCAB_DEL_KEY, JSON.stringify(gone));   // «надгробие»: удаление дойдет и до других устройств
   cacheCustom(); rebuildLessons();
   delete S.progress[id];
-  S.lessonId = null; save(); show("home");
+  if (S.lessonId === id) S.lessonId = null;
+  save();
+  if (S.view !== "home") show("home"); else renderLessonList();
   if (db) myCol().doc(id).delete().catch(() => {});
-});
+}
+$("#delete-btn").addEventListener("click", () => removeOwnLesson(S.lessonId));
 $$("[data-goto]").forEach(b => b.addEventListener("click", () => show(b.dataset.goto)));
 $("#reset-btn").addEventListener("click", async () => {
   if (!(await ask(t("confirmReset")))) return;
