@@ -5,12 +5,12 @@
   Object.assign(UI, {
     brandName: { ru: "Learny", en: "Learny" },
     menuTitle: { ru: "Learny", en: "Learny" },
-    homeTitle: { ru: "Из текста — в практику", en: "Turn your text into practice" },
-    learnyTitleStart: { ru: "Из текста —", en: "Turn your text" },
-    learnyTitleEnd: { ru: "в практику", en: "into practice" },
-    learnyMaterial: { ru: "Текст или тема урока", en: "Lesson notes or topic" },
+    homeTitle: { ru: "Из\u00a0текста\u00a0— в\u00a0практику", en: "Turn your text into practice" },
+    learnyTitleStart: { ru: "Из\u00a0текста\u00a0—", en: "Turn your text" },
+    learnyTitleEnd: { ru: "в\u00a0практику", en: "into practice" },
+    learnyMaterial: { ru: "Текст или\u00a0тема урока", en: "Lesson notes or topic" },
     homeLede: {
-      ru: "Превратите заметки учителя или любую тему в урок с упражнениями и разговорной практикой.",
+      ru: "Превратите заметки учителя или\u00a0любую тему в\u00a0урок с\u00a0упражнениями и\u00a0разговорной практикой.",
       en: "Turn your teacher’s notes or a topic of your choice into exercises and speaking practice."
     },
     intakeBtn: { ru: "Создать урок", en: "Create my lesson" },
@@ -20,16 +20,16 @@
     learnyAll: { ru: "Все", en: "All" },
     learnyGrammar: { ru: "Грамматика", en: "Grammar" },
     learnySpeaking: { ru: "Говорение", en: "Speaking" },
-    learnyNoLessons: { ru: "В этой категории пока нет уроков", en: "No lessons in this category yet" },
+    learnyNoLessons: { ru: "В\u00a0этой категории пока нет уроков", en: "No lessons in this category yet" },
     intakeReady: { ru: "Нажмите «Создать урок», когда будете готовы.", en: "Choose Create my lesson when you’re ready." },
     intakePlaceholder: { ru: "Например, «Когда употреблять present perfect?»", en: "For example, “When do I use the present perfect?”" },
-    how2p: { ru: "Разбирайте правила, переводите фразы и сохраняйте новые слова.", en: "Explore explanations, translate phrases and save new words." },
-    how3p: { ru: "Решайте задания, проверяйте ответы и разбирайте ошибки.", en: "Try exercises, check your answers and learn from feedback." },
-    how4t: { ru: "Выбирайте по смыслу", en: "Choose in context" },
-    how4p: { ru: "Читайте мини-истории и выбирайте форму, которая подходит по смыслу.", en: "Read short stories and choose the form that fits the meaning." },
-    how5p: { ru: "Запишите ответ и получите подсказки, как сказать яснее.", en: "Record an answer and review suggestions for clearer English." },
-    how6t: { ru: "Повторяйте и запоминайте", en: "Review & remember" },
-    how6p: { ru: "Повторите урок, вернитесь к сохраненным словам и поделитесь отчетом.", en: "Review your lesson, revisit saved words and share your report." }
+    how2p: { ru: "Разбирайте правила, переводите фразы и\u00a0сохраняйте новые слова.", en: "Explore explanations, translate phrases and save new words." },
+    how3p: { ru: "Решайте задания, проверяйте ответы и\u00a0разбирайте ошибки.", en: "Try exercises, check your answers and learn from feedback." },
+    how4t: { ru: "Выбирайте по\u00a0смыслу", en: "Choose in context" },
+    how4p: { ru: "Читайте мини-истории и\u00a0выбирайте форму, которая подходит по\u00a0смыслу.", en: "Read short stories and choose the form that fits the meaning." },
+    how5p: { ru: "Запишите ответ и\u00a0получите подсказки, как сказать яснее.", en: "Record an answer and review suggestions for clearer English." },
+    how6t: { ru: "Повторяйте и\u00a0запоминайте", en: "Review & remember" },
+    how6p: { ru: "Повторите урок, вернитесь к\u00a0сохраненным словам и\u00a0поделитесь отчетом.", en: "Review your lesson, revisit saved words and share your report." }
   });
 
   function mascot(name, className) {

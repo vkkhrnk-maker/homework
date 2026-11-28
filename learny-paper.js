@@ -1,4 +1,4 @@
-// Вариант сравнения живёт в адресе вкладки и следует за переходом между страницами.
+// Вариант сравнения живет в адресе вкладки и следует за переходом между страницами.
 (() => {
   const paper = new URLSearchParams(location.search).get("paper");
   if (paper === "warm" || paper === "white") document.documentElement.dataset.paper = paper;

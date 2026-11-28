@@ -12,6 +12,15 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).parent
+# Первый шаг — типограф (tools/typograf.py, правила в DESIGN.md, «4. Тексты»): правит сами исходники лендинга, проб
+# и приложения — без «ё», без точки в конце подписей, короткие слова и тире привязаны неразрывным пробелом.
+# Собирать без него: python3 build.py --no-typograf
+if "--no-typograf" not in sys.argv:
+    sys.path.insert(0, str(ROOT / "tools"))
+    sys.dont_write_bytecode = True
+    import typograf
+    if typograf.run(write=True, quiet=True):
+        print("Типограф поправил тексты в исходниках (выше — где и сколько строк)")
 src = (ROOT / "src" / "homework.html").read_text(encoding="utf-8")
 
 # всё до первого <header — title, meta, шрифты, стили — уходит в <head>

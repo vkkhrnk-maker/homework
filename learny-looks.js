@@ -140,6 +140,11 @@
   // Проба логотипа одинарным контуром в шапке: ?logo=line
   if (new URLSearchParams(location.search).get("logo") === "line") root.dataset.logo = "line";
 
+  // Рисованный стиль по рефу Cringe Birthday (выбран 27 ноября 2026): клетка-растр вместо зерна на первом экране, в картотеке,
+  // «своем уроке» и футере; Клякса маркером со сдвинутой заливкой; две пометки карандашом на полях тетради.
+  // Прежний вид для сверки — ?drawn=0
+  if (new URLSearchParams(location.search).get("drawn") !== "0") root.dataset.drawn = "1";
+
   // Легкое зерно на больших цветных поверхностях — глубина цвета, как в печатной иллюстрации (выбрано Викторией 24 ноября 2026)
   root.dataset.grain = "1";
 
@@ -149,11 +154,16 @@
     root.dataset.foot = "b";
     addEventListener("DOMContentLoaded", () => {
       const mark = document.querySelector(".lk-foot-mark");
-      if (!mark) return;
-      fetch(mark.ownerDocument.baseURI.replace(/[^/]*$/, "") + "icons/learny-wordmark.svg").then(r => r.text()).then(svg => {
-        const d = (svg.match(/ d="([^"]+)"/) || [])[1], vb = (svg.match(/viewBox="([^"]+)"/) || [])[1];
+      const headerLogo = document.querySelector(".ld-top .brand .learny-logo");
+      if (!mark || !headerLogo) return;
+      // В сборке берем контуры из шапки. В исходном HTML на ее месте изображение того же SVG.
+      const source = headerLogo instanceof SVGSVGElement ? Promise.resolve(headerLogo)
+        : fetch(headerLogo.src).then(r => r.text()).then(text => new DOMParser().parseFromString(text, "image/svg+xml").documentElement);
+      source.then(svg => {
+        const d = Array.from(svg.querySelectorAll("path"), path => path.getAttribute("d")).join(" ");
+        const vb = svg.getAttribute("viewBox");
         if (!d || !vb) return;
-        mark.innerHTML = `<svg viewBox="${vb}" preserveAspectRatio="none" aria-hidden="true"><defs><filter id="lk-hand" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency=".008" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter></defs><g filter="url(#lk-hand)"><path class="lk-line-out" pathLength="1" vector-effect="non-scaling-stroke" d="${d}"/><path class="lk-line-in" pathLength="1" vector-effect="non-scaling-stroke" d="${d}"/></g></svg>`;
+        mark.innerHTML = `<svg viewBox="${vb}" aria-hidden="true"><defs><filter id="lk-hand" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency=".008" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter></defs><g filter="url(#lk-hand)"><path class="lk-line-out" pathLength="1" vector-effect="non-scaling-stroke" d="${d}"/><path class="lk-line-in" pathLength="1" vector-effect="non-scaling-stroke" d="${d}"/></g></svg>`;
         const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { mark.classList.add("is-drawn"); io.disconnect(); } }), { threshold: .35 });
         io.observe(mark);
       });

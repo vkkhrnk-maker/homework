@@ -8,10 +8,10 @@
   const HERO_COPY = {
     a: {},
     b: {
-      learnyTitleStart: { ru: "Домашка по английскому,", en: "English homework," },
-      learnyTitleEnd: { ru: "шаг за шагом", en: "step by step" },
+      learnyTitleStart: { ru: "Домашка по\u00a0английскому,", en: "English homework," },
+      learnyTitleEnd: { ru: "шаг за\u00a0шагом", en: "step by step" },
       homeLede: {
-        ru: "Learny превращает заметки учителя в урок: теория, упражнения и разговорная практика.",
+        ru: "Learny превращает заметки учителя в\u00a0урок: теория, упражнения и\u00a0разговорная практика.",
         en: "Learny turns your teacher’s notes into a lesson: theory, exercises and speaking practice."
       }
     },
@@ -19,7 +19,7 @@
       learnyTitleStart: { ru: "Что учим", en: "What are you" },
       learnyTitleEnd: { ru: "сегодня?", en: "learning today?" },
       homeLede: {
-        ru: "Вставьте заметки учителя или назовите тему. Learny соберет теорию, упражнения и разговорную практику.",
+        ru: "Вставьте заметки учителя или\u00a0назовите тему. Learny соберет теорию, упражнения и\u00a0разговорную практику.",
         en: "Paste your teacher’s notes or name a topic. Learny builds the theory, exercises and speaking practice."
       },
       intakePlaceholder: { ru: "Например, «Когда употреблять present perfect?»", en: "For example, “When do I use the present perfect?”" }
@@ -29,71 +29,71 @@
     calmDemo: { ru: "Открыть готовый урок", en: "Try a sample lesson" },
     calmOwnLink: { ru: "Создать свой урок", en: "Create my own lesson" },
     calmSampleLink: { ru: "Открыть пример", en: "Open sample lesson" },
-    calmOwnTitle: { ru: "Урок из текста", en: "A lesson from your text" },
+    calmOwnTitle: { ru: "Урок из\u00a0текста", en: "A lesson from your text" },
     // Над полем — одно предложение о том, что делать; куда уходит текст — подписью под кнопкой.
-    calmOwnLede: { ru: "Вставьте домашку от учителя или назовите тему.", en: "Paste your teacher’s homework or name a topic." },
+    calmOwnLede: { ru: "Вставьте домашку от\u00a0учителя или\u00a0назовите тему.", en: "Paste your teacher’s homework or name a topic." },
     calmOwnNote: {
       // Ключ не нужен: без своего ключа текст уходит на сервер Learny. Со своим ключом строка честно говорит другое.
       ru: () => aiKey()
-        ? "Текст отправится напрямую в ИИ по вашему ключу."
-        : "Текст отправится на сервер Learny и в Google Gemini для разбора.",
+        ? "Текст отправится напрямую в\u00a0ИИ по\u00a0вашему ключу."
+        : "Текст отправится на\u00a0сервер Learny и\u00a0в\u00a0Google Gemini для\u00a0разбора.",
       en: () => aiKey()
         ? "Your text goes straight to the AI under your own key."
         : "Your text is sent to the Learny server and Google Gemini to build the lesson."
     },
     calmTrLabel: { ru: "Перевод теории", en: "Theory translation" },
-    calmTrTap: { ru: "По тапу", en: "On tap" },
+    calmTrTap: { ru: "По\u00a0тапу", en: "On tap" },
     calmTrShow: { ru: "Сразу", en: "Always" },
-    calmSampleLabel: { ru: "Вопрос из готового урока", en: "A question from a sample lesson" },
+    calmSampleLabel: { ru: "Вопрос из\u00a0готового урока", en: "A question from a sample lesson" },
     cabinet: { ru: "Кабинет", en: "My space" },
     cabinetTitle: { ru: "Мой кабинет", en: "My learning space" },
     cabinetContinue: { ru: "Продолжить урок", en: "Continue lesson" },
     // ссылка называется так же, как страница, на которую ведет («Sample lessons»)
     cabinetCatalog: { ru: "Готовые уроки", en: "Sample lessons" },
-    cabinetEmpty: { ru: "Здесь появятся уроки, которые вы открыли или создали.", en: "Lessons you open or create will appear here." },
-    cabinetLocal: { ru: "Уроки и прогресс сохраняются в этом браузере.", en: "Your lessons and progress are saved in this browser." },
+    cabinetEmpty: { ru: "Здесь появятся уроки, которые вы\u00a0открыли или\u00a0создали.", en: "Lessons you open or create will appear here." },
+    cabinetLocal: { ru: "Уроки и\u00a0прогресс сохраняются в\u00a0этом браузере.", en: "Your lessons and progress are saved in this browser." },
     cabinetStageEnd: { ru: "Итоги этапа", en: "Stage results" },
     // Сохранение кабинета по личному коду: без почты и пароля.
     syncBtn: { ru: "Сохранить кабинет", en: "Save my space" },
-    syncOn: { ru: "по личному коду", en: "under your code" },
-    syncOff: { ru: "только в этом браузере", en: "this browser only" },
+    syncOn: { ru: "по\u00a0личному коду", en: "under your code" },
+    syncOff: { ru: "только в\u00a0этом браузере", en: "this browser only" },
     spaceSave: { ru: "Сохранить кабинет", en: "Save my space" },
     spaceShow: { ru: "Показать код", en: "Show my code" },
-    spaceLocal: { ru: "Кабинет сохранен только в этом браузере", en: "Your space is saved in this browser only" },
-    spaceSavedLine: { ru: "Кабинет сохранен по личному коду", en: "Your space is saved under your personal code" },
+    spaceLocal: { ru: "Кабинет сохранен только в\u00a0этом браузере", en: "Your space is saved in this browser only" },
+    spaceSavedLine: { ru: "Кабинет сохранен по\u00a0личному коду", en: "Your space is saved under your personal code" },
     spaceLead: {
-      ru: "Уроки, прогресс и словарь сохранятся по личному коду. Почта и пароль не нужны.",
+      ru: "Уроки, прогресс и\u00a0словарь сохранятся по\u00a0личному коду. Почта и\u00a0пароль не\u00a0нужны.",
       en: "Your lessons, progress and vocabulary are kept under a personal code. No email, no password."
     },
     spaceCreate: { ru: "Создать код", en: "Create my code" },
-    spaceHave: { ru: "У меня уже есть код", en: "I already have a code" },
+    spaceHave: { ru: "У\u00a0меня уже есть код", en: "I already have a code" },
     spaceCodeLabel: { ru: "Личный код", en: "Personal code" },
     spaceOpen: { ru: "Открыть кабинет", en: "Open my space" },
     spaceSavedTitle: { ru: "Кабинет сохранен", en: "Your space is saved" },
     spaceKeep: {
-      ru: "Сохраните код: по нему кабинет откроется на другом устройстве или после очистки браузера.",
+      ru: "Сохраните код: по\u00a0нему кабинет откроется на\u00a0другом устройстве или\u00a0после очистки браузера.",
       en: "Keep this code: it opens your space on another device or after the browser is cleared."
     },
     spaceCopyCode: { ru: "Скопировать код", en: "Copy code" },
     spaceCopyLink: { ru: "Скопировать ссылку", en: "Copy link" },
     spaceCopied: { ru: "Скопировано", en: "Copied" },
-    spaceOff: { ru: "Отключить на этом устройстве", en: "Turn off on this device" },
-    spaceOffDone: { ru: "Отключено. Кабинет остался в этом браузере", en: "Turned off. Your space stays in this browser" },
+    spaceOff: { ru: "Отключить на\u00a0этом устройстве", en: "Turn off on this device" },
+    spaceOffDone: { ru: "Отключено. Кабинет остался в\u00a0этом браузере", en: "Turned off. Your space stays in this browser" },
     spaceBusy: { ru: "Сохраняем…", en: "Saving…" },
     spaceFail: {
-      ru: "Не получилось связаться с сервером. Кабинет остался в этом браузере.",
+      ru: "Не\u00a0получилось связаться с\u00a0сервером. Кабинет остался в\u00a0этом браузере.",
       en: "Couldn’t reach the server. Your space is still in this browser."
     },
-    spaceBad: { ru: "Такой код не найден", en: "This code wasn’t recognised" },
+    spaceBad: { ru: "Такой код не\u00a0найден", en: "This code wasn’t recognised" },
     spaceEmpty: {
-      ru: "По этому коду кабинет пуст. Проверьте код: возможно, в нем опечатка.",
+      ru: "По\u00a0этому коду кабинет пуст. Проверьте код: возможно, в\u00a0нем опечатка.",
       en: "There’s nothing under this code yet. Check it for a typo."
     },
-    spaceShort: { ru: "Проверьте код: в нем 15 знаков", en: "Check the code: it has 15 characters" },
+    spaceShort: { ru: "Проверьте код: в\u00a0нем 15\u00a0знаков", en: "Check the code: it has 15 characters" },
     calmReview: { ru: "Повторение", en: "Review" },
     calmStepMatch: { ru: "Мини-истории", en: "Mini-stories" },
     calmSamples: { ru: "Готовые уроки", en: "Sample lessons" },
-    calmSampleNote: { ru: "Выберите слово, урок откроется на этом вопросе", en: "Pick a word and the lesson opens on this question" }
+    calmSampleNote: { ru: "Выберите слово, урок откроется на\u00a0этом вопросе", en: "Pick a word and the lesson opens on this question" }
   }, HERO_COPY[hero] || {});
 
   function translated(tag, key, className) {

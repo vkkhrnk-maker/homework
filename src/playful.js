@@ -1,4 +1,4 @@
-/* Оформление пробного варианта. Логика уроков остаётся в общем приложении. */
+/* Оформление пробного варианта. Логика уроков остается в общем приложении. */
 (() => {
   if (document.documentElement.dataset.style !== "playful") return;
   const svgAssets = {}; // ASSETS_INLINE
@@ -20,7 +20,7 @@
     const brandImage = document.querySelector("#brand-home i img");
     if (brandImage.getAttribute("src") !== "icons/learny-wordmark-v1.png") brandImage.src = "icons/learny-wordmark-v1.png";
     document.querySelectorAll(".footer-name").forEach(name => { if (name.textContent !== "Learny") name.textContent = "Learny"; });
-    document.title = document.documentElement.lang === "ru" ? "Learny — практика английского" : "Learny — English practice";
+    document.title = document.documentElement.lang === "ru" ? "Learny\u00a0— практика английского" : "Learny — English practice";
     lessons.querySelectorAll(".lesson-card").forEach(card => {
       const image = card.querySelector("img.lc-art"), name = lessonArt[card.dataset.lesson];
       if (image && name) image.replaceWith(makeArt(name, "lc-art", 132, 132));

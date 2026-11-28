@@ -9,10 +9,11 @@
   --paper-edge: #dedee4;
   --paper-cut: #e1e1e7;
   --paper-cut-light: #f2f2f5;
-  /* надпись LEARNY узкая: ширина считается от высоты прописной — 24px в шапке, 21px на телефоне, 28px в футере */
-  --brand-width-header: 90px;
-  --brand-width-mobile: 79px;
-  --brand-width-footer: 105px;
+  /* Оптический размер строчной надписи из примерки, с нижним выносом y. */
+  --brand-aspect: 1971 / 868;
+  --brand-width-header: 72px;
+  --brand-width-mobile: 63px;
+  --brand-width-footer: 84px;
   /* в этот цвет на главной вырастает разделитель урока перед переходом: урок открывается на бумаге, без стола */
   --theory-desk: var(--paper-leaf);
 }

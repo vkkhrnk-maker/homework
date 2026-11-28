@@ -556,6 +556,8 @@ html{scroll-snap-type:y proximity}
 /* картотека во весь экран: как и «свой урок», ее нельзя пролететь одним рывком — жест останавливается на ней, следующий листает дальше */
 .ld-shelf{scroll-snap-align:start;scroll-snap-stop:always}
 .ld-own{scroll-snap-align:start;scroll-snap-stop:always}
+/* словарь на компьютере тоже сцена во весь экран (27 ноября 2026): жест останавливается на ней, как на картотеке */
+@media (min-width:601px) and (orientation:landscape){.ld-words{scroll-snap-align:start;scroll-snap-stop:always}}
 
 /* закрытая тетрадь открывается и по нажатию на обложку */
 .ld-pin:not(.opened) .ld-nb{cursor:pointer}

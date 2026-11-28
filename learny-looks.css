@@ -423,6 +423,8 @@ html[data-look][lang][data-look="g"] .ld-nb .ld-answers li{box-sizing:border-box
    разведены минимум на ряд (скрипт округляет к ближайшему ряду, отступ уводит на следующий) */
 html[data-look][lang][data-look="g"] .ld-nb .ld-demo .rule-g{margin-top:calc(var(--lk-g) * .35)}
 html[data-look][lang][data-look="g"] .ld-nb .ld-report .print{margin-bottom:calc(var(--lk-g) * .9)}
+/* приписка учителя под счетом в отчете: скрипт тянул ее базовую линию на ряд вверх, и «Well done!» заходило на строку счета (27 ноября 2026) */
+html[data-look][lang][data-look="g"] .ld-nb .ld-report .note{margin-top:calc(var(--lk-g) * .9)}
 /* ---------- русская версия (23 ноября 2026) ----------
    Русские строки длиннее английских; здесь только то, что нужно русскому тексту. Английский эти правила не задевают */
 /* телефон: подписи шага над тетрадью шире английских 30 знаков, иначе последнее слово уходит одно на третью строку */
@@ -444,7 +446,7 @@ html[lang="ru"] .ld-foot-brand p{max-width:none}
 /* Низ футера: огромная марка глубоким зеленым во всю ширину и наклейки из мира урока поверх нее (24 ноября 2026, реф truus).
    Наклейки — наши, а не смайлики: ярлык тетради, карточка слова, стикер с грамматическим мемом, звезда «+12 words»,
    «Well done!» карандашом, уровень, Клякса. Наклейки можно двигать; тень четкая, как у всего на странице */
-html[data-look="g"] .lk-foot-stage{position:relative;margin:clamp(40px,6vw,80px) 0 0;aspect-ratio:2459/675;font-size:clamp(12px,1.25vw,19px)}
+html[data-look="g"] .lk-foot-stage{position:relative;margin:clamp(40px,6vw,80px) 0 0;aspect-ratio:var(--brand-aspect);font-size:clamp(12px,1.25vw,19px)}
 html[data-look="g"] .lk-foot-mark{position:absolute;inset:0}
 html[data-look="g"] .lk-st{position:absolute;left:var(--x);top:var(--y);rotate:var(--r);translate:var(--dx,0) var(--dy,0);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
   transition:scale .18s var(--ease)}
@@ -487,7 +489,7 @@ html[data-look="g"] .ld-foot-bot .ld-foot-nav{margin:0 auto 0 clamp(24px,6vw,96p
 /* на телефоне марка внизу полосы, наклейки — над ней, по своим местам; Клякса и уровень остаются */
 @media (max-width:800px){
   html[data-look="g"] .lk-foot-stage{aspect-ratio:auto;height:clamp(250px,74vw,330px);font-size:12px}
-  html[data-look="g"] .lk-foot-mark{inset:auto 0 0;aspect-ratio:2459/675}
+  html[data-look="g"] .lk-foot-mark{inset:auto 0 0;aspect-ratio:var(--brand-aspect)}
   html[data-look="g"] .lk-st{left:var(--mx);top:var(--my)}
   html[data-look="g"] .lk-wide-only{display:none}
 }
@@ -601,8 +603,9 @@ html[data-look][lang][data-look="g"] .ld-words-head h2{margin:0;font:900 clamp(6
 html[data-look][lang][data-look="g"] .ld-words-head p{margin:var(--sp-pair) auto 0;max-width:40em;font:400 16px/1.35 var(--ui);text-wrap:pretty}
 /* колода и подсказка под ней — пара, кнопки — отдельное действие на расстоянии блока; подсказка считается от букв */
 html[data-look][lang][data-look="g"] .ld-deck{position:relative;display:grid;justify-items:center;width:min(100%,720px);min-width:0}
-/* числа без единиц читает скрипт: шаг между карточками, наклон, подъем верхней карточки, ее приближение, ширина «щели» */
-html[data-look][lang][data-look="g"] .ld-deck-stage{--w:280px;--h:178px;--gap:5.5;--tilt:56;--lift:142;--near:90;--mouth:42;
+/* числа без единиц читает скрипт: шаг между карточками, наклон, подъем верхней карточки, ее приближение, ширина «щели».
+   Они заданы для карточки шириной --base; карточка крупнее — скрипт умножает их в ту же меру */
+html[data-look][lang][data-look="g"] .ld-deck-stage{--base:280;--w:280px;--h:178px;--gap:5.5;--tilt:56;--lift:142;--near:90;--mouth:42;
   position:relative;width:100%;height:306px;perspective:1500px;perspective-origin:50% 25%;transform-style:preserve-3d}
 html[data-look][lang][data-look="g"] .ld-dc{position:absolute;left:calc(50% - var(--w) / 2);top:calc(100% - 61px - var(--h) / 2);width:var(--w);height:var(--h);
   transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.7,.2,1),translate .3s cubic-bezier(.25,.1,.25,1),rotate .3s cubic-bezier(.25,.1,.25,1)}
@@ -638,8 +641,44 @@ html[data-look][lang][data-look="g"] .ld-deck-btn.is-hot{background:#1a171c;colo
 html[data-look][lang][data-look="g"] .ld-deck-btn.is-ink.is-hot{background:var(--acc,#c8f26a);color:var(--on-acc,#0b3a24)}
 @media (hover:hover){html[data-look][lang][data-look="g"] .ld-deck-btn:hover{background:#1a171c;color:#fff}html[data-look][lang][data-look="g"] .ld-deck-btn.is-ink:hover{background:var(--acc,#c8f26a);color:var(--on-acc,#0b3a24)}}
 html[data-look][lang][data-look="g"] .ld-sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* Компьютер: словарь — полноэкранная сцена (27 ноября 2026, Виктория: карточки очень мелкие, а блок занимает целый экран).
+   Блок ровно в экран, колода берет всю высоту между строкой под заголовком и пилюлями, и карточка считается от этой высоты.
+   Сцена колоды растет целиком: наклон, подъем, шаг, перспектива, поля, шрифты и дырочка карточки — в одной мере, поэтому
+   выглядит как одобренная, только крупнее. Верхнюю карточку ниже и стопку площе пробовали: она закрывала слово на второй.
+   Из высоты колоды вычитаются подсказка (пара + 15 по буквам) и пилюли (блок + 52); карточка не уже прежней
+   (280) и не шире 61% ширины блока. Потолка в пикселях нет: на 1920×1080 карточка занимает ту же долю экрана, что на 1440×900.
+   Только в горизонтальном окне: на высоком узком экране (планшет стоя) карточка упиралась в ширину, и колода висела в пустоте */
+@media (min-width:601px) and (orientation:landscape){
+  html[data-look][lang][data-look="g"] .ld-words{min-height:100svh;box-sizing:border-box;grid-template-rows:auto minmax(0,1fr);padding-bottom:var(--sp-edge)}
+  html[data-look][lang][data-look="g"] .ld-deck{container-type:size;width:100%;align-self:stretch;align-content:center;min-height:calc(306px + var(--sp-pair) + 15px + var(--sp-block) + 52px)}
+  html[data-look][lang][data-look="g"] .ld-deck-stage{--h:max(178px,min((100cqh - var(--sp-pair) - 15px - var(--sp-block) - 52px) * 178 / 306,39cqw));--w:calc(var(--h) * 280 / 178);
+    height:calc(var(--h) * 306 / 178);perspective:calc(var(--h) * 1500 / 178)}
+  html[data-look][lang][data-look="g"] .ld-dc{--o:calc(var(--w) * 24 / 280);--r:calc(var(--w) * 7 / 280);--edge:calc(var(--h) * 3 / 178);top:calc(100% - var(--h) * 61 / 178 - var(--h) / 2)}
+  html[data-look][lang][data-look="g"] :is(.ld-dc-f,.ld-dc-b){padding:calc(var(--h) * 22 / 178) var(--o);border-radius:calc(var(--w) * 14 / 280)}
+  html[data-look][lang][data-look="g"] .ld-dc-f{box-shadow:0 var(--edge) 0 color-mix(in srgb,var(--c) 72%,#000);
+    -webkit-mask:radial-gradient(circle at var(--o) var(--o),#0000 var(--r),#000 calc(var(--r) + .5px));mask:radial-gradient(circle at var(--o) var(--o),#0000 var(--r),#000 calc(var(--r) + .5px))}
+  html[data-look][lang][data-look="g"] .ld-dc-b{box-shadow:0 var(--edge) 0 #d9d4c8;
+    -webkit-mask:radial-gradient(circle at calc(100% - var(--o)) var(--o),#0000 var(--r),#000 calc(var(--r) + .5px));mask:radial-gradient(circle at calc(100% - var(--o)) var(--o),#0000 var(--r),#000 calc(var(--r) + .5px))}
+  html[data-look][lang][data-look="g"] .ld-dc-b b{padding-top:calc(var(--h) * 22 / 178);font-size:calc(var(--h) * 26 / 178)}
+  html[data-look][lang][data-look="g"] .ld-dc-b small{font-size:calc(var(--h) * 16 / 178)}
+}
+/* Пилюли по бокам поднятой карточки (27 ноября 2026, по решению Виктории): «← Не помню» слева, «Помню →» справа — туда же,
+   куда карточку бросают, и бросок идет прямо в пилюлю. Ряд под колодой занимал 84 px высоты; теперь их получает колода
+   (на 1440×813 карточка 399 вместо 322). Под колодой остается только подсказка. Пилюли стоят на высоте центра поднятой
+   карточки (.588 ее высоты от верха сцены, с учетом приближения) и отстоят от ее краев на блок; поднятая карточка видна
+   шире своей ширины в 1.064 раза из-за приближения. Карточка тянется под пилюлю, и та загорается поверх нее.
+   С 1000 px: уже карточка вместе с пилюлями не помещается, и там ряд остается под колодой */
+@media (min-width:1000px) and (orientation:landscape){
+  html[data-look][lang][data-look="g"] .ld-deck{align-content:start;min-height:calc(306px + var(--sp-pair) + 15px)}
+  html[data-look][lang][data-look="g"] :is(.ld-deck-stage,.ld-deck-acts){--h:max(178px,min((100cqh - var(--sp-pair) - 15px) * 178 / 306,39cqw,(100cqw - 2 * var(--sp-block) - 304px) * 178 / 280 / 1.064))}
+  html[data-look][lang][data-look="g"] .ld-deck-acts{position:absolute;inset-inline:0;top:calc(var(--h) * .588 - 26px);margin:0;display:grid;gap:0;align-items:center;
+    grid-template-columns:1fr calc(var(--h) * 280 / 178 * 1.064 + 2 * var(--sp-block)) 1fr;pointer-events:none}
+  html[data-look][lang][data-look="g"] .ld-deck-acts .ld-deck-btn{pointer-events:auto}
+  html[data-look][lang][data-look="g"] #deck-again{justify-self:end}
+  html[data-look][lang][data-look="g"] #deck-good{grid-column:3;justify-self:start}
+}
 @media (max-width:600px){
-  html[data-look][lang][data-look="g"] .ld-deck-stage{--w:224px;--h:142px;--gap:4.5;--lift:132;--near:70;--mouth:34;height:253px}
+  html[data-look][lang][data-look="g"] .ld-deck-stage{--base:224;--w:224px;--h:142px;--gap:4.5;--lift:132;--near:70;--mouth:34;height:253px}
   html[data-look][lang][data-look="g"] .ld-dc{top:calc(100% - 48px - var(--h) / 2)}
   html[data-look][lang][data-look="g"] .ld-words-head h2{font-size:clamp(48px,16.5vw,72px)}
   html[data-look][lang][data-look="g"] :is(.ld-dc-f,.ld-dc-b){padding:16px 18px;border-radius:10px}
@@ -790,4 +829,65 @@ html[data-look="g"] .ld-demo .lk-ring-loop{border:.09em solid rgba(26,23,28,.55)
 @media (min-width:601px){
   html[data-look][lang][data-look="g"]{--h2:clamp(64px,min(11vw,19svh),180px)}
   html[data-look][lang][data-look="g"] :is(.ld-shelf h2,.ld-words-head h2,#own-h){font-size:var(--h2);line-height:.8}
+}
+
+/* Рисованный стиль (выбран 27 ноября 2026, реф Cringe Birthday в refs/2026-11-27-cringe; прежний вид — ?drawn=0).
+   1. Клетка-растр вместо зерна: на больших цветных полях мелкая светлая клетка, цвет читается как тетрадь в клетку,
+      напечатанная в типографии. Только на больших полях — на мелких элементах фактура становится грязью
+   2. Клякса маркером: черный контур отдельно, заливка съезжает, как при печати в два прогона (icons/klyaksa-drawn.svg)
+   3. Пометки на полях — тем же карандашом учителя, без нового цвета: лучики у правила, сердечко у «Well done!» */
+html[data-drawn]{--lk-mesh:linear-gradient(90deg,rgb(255 255 255/.26) 1px,transparent 0),linear-gradient(rgb(255 255 255/.26) 1px,transparent 0);--lk-mesh-dark:linear-gradient(90deg,rgb(255 255 255/.1) 1px,transparent 0),linear-gradient(rgb(255 255 255/.1) 1px,transparent 0)}
+html[data-drawn][data-grain][data-look="g"] .ld-pin[data-bg]::before,html[data-drawn][data-grain][data-look="g"][data-cover] .ld-pin:not(.lit)::before,
+html[data-drawn][data-grain][data-look][lang][data-look="g"][data-cover="green"] :is(.ld-shelf,.ld-foot){background-image:var(--lk-mesh);background-size:18px 18px;background-blend-mode:normal}
+html[data-drawn][data-grain][data-look][lang][data-look="g"][data-cover="green"] .ld-own,html[data-drawn][data-grain][data-look="g"][data-cover] .ld-pin:not(.lit)::before{background-image:var(--lk-mesh-dark);background-size:18px 18px;background-blend-mode:normal}
+html[data-drawn] .lk-blot .lk-f img{content:url(icons/klyaksa-drawn.svg)}
+.lk-doodle{display:none}
+html[data-drawn] .lk-doodle{display:block;overflow:visible;color:var(--pencil)}
+html[data-drawn] .lk-doodle path{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+html[data-drawn] .ld-demo .rule-h:has(.lk-rays){position:relative;align-self:flex-start}
+html[data-drawn] .lk-rays{position:absolute;left:100%;bottom:58%;width:.95em;height:.95em;margin-left:.02em}
+html[data-drawn] .lk-rays path{stroke-width:2.4px;vector-effect:non-scaling-stroke}
+html[data-drawn] .ld-demo .note .lk-heart{flex:none;align-self:center;width:1em;height:.95em;margin:.1em 0 0 .15em;rotate:8deg}
+/* Столы в сцене плоские: страницы тетради в точку, и клетка на столе давала вторую бумагу рядом с тетрадью */
+html[data-drawn][data-grain][data-look="g"] .ld-pin.lit[data-bg]::before{background-image:none}
+/* Клякса выглядывает из-за левого края закрытой тетради на первом экране; когда тетрадь уезжает в сцену, прячется */
+.lk-peek{display:none}
+html[data-drawn] .lk-peek{display:block;position:absolute;z-index:0;left:calc(var(--nbw) * -.215);top:13%;width:calc(var(--nbw) * .28);height:auto;rotate:-14deg;pointer-events:none;
+  transition:opacity .25s var(--ease),translate .35s var(--ease)}
+html[data-drawn] .ld-pin.lit .lk-peek,html[data-drawn] .ld-nb.open .lk-peek{opacity:0;translate:28% 0}
+/* на телефоне поля у тетради около 26 px — Клякса упиралась в край экрана; там она остается только в футере */
+@media (max-width:900px){html[data-drawn] .lk-peek{display:none}}
+
+/* =====================================================================
+   Тарифы (27 ноября 2026, Виктория: «какую-то цену давай поставим и какие-то ориентировочные фичи»).
+   Лавандовый стол (цвет «Итогов»): соседи — зеленый «свой урок» и лаймовый футер, третий цвет делит зоны.
+   Тарифы — две тетради рядом, как в кабинете: корешок слева на тон темнее, скруглены только внешние углы, без теней.
+   Бесплатная — бумага, «Плюс» — глубокий зеленый. Цена узким крупно, остальное Geist. У «Плюса» нет кнопки:
+   оплаты еще нет, «скоро» стоит в строке над ценой. Кнопок здесь нет вовсе — главная кнопка на лендинге одна
+   ===================================================================== */
+html[data-look][lang][data-look="g"] .ld-price{display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:var(--sp-entry) var(--sp-edge) var(--sp-entry);background:#b7a2f8;color:#000}
+html[data-look][lang][data-look="g"] .ld-price h2{margin:0;font:900 var(--h2,min(17vw,88px))/.8 var(--disp);letter-spacing:-.006em;text-box:trim-end cap alphabetic}
+html[data-look][lang][data-look="g"] .ld-plans{display:flex;justify-content:center;align-items:stretch;gap:var(--sp-block);margin-top:var(--sp-section);width:100%}
+html[data-look][lang][data-look="g"] .ld-plan{box-sizing:border-box;width:min(100%,400px);padding:var(--sp-block);padding-left:calc(var(--sp-block) + 14px);
+  border-radius:6px 20px 20px 6px;background:#fffdf6 linear-gradient(90deg,#d9d2c4 14px,transparent 0);color:#1a171c;text-align:left}
+html[data-look][lang][data-look="g"] .ld-plan-plus{background:var(--cover) linear-gradient(90deg,#0a5233 14px,transparent 0);color:#fff}
+html[data-look][lang][data-look="g"] .ld-plan p{margin:0}
+html[data-look][lang][data-look="g"] .ld-plan-k{font:400 12px/1.3 var(--ui);letter-spacing:.08em;text-transform:uppercase;opacity:.7}
+html[data-look][lang][data-look="g"] .ld-plan-p{margin-top:var(--sp-pair) !important;font:900 96px/.8 var(--disp);letter-spacing:-.006em;text-box:trim-both cap alphabetic}
+html[data-look][lang][data-look="g"] .ld-plan-s{margin-top:var(--sp-pair) !important;font:400 14px/1.3 var(--ui);opacity:.7}
+html[data-look][lang][data-look="g"] .ld-plan ul{display:grid;gap:var(--sp-group);margin:var(--sp-block) 0 0;padding:var(--sp-block) 0 0;border-top:1px solid currentColor;
+  border-top-color:color-mix(in srgb,currentColor 20%,transparent);list-style:none;font:400 16px/1.3 var(--ui)}
+/* пункты — рукописной галочкой «верно», как пройденный шаг в уроке (та же линия); в «Плюсе» лаймом: зеленая на зеленом пропадает.
+   Галочка → текст — группа; галочка стоит на первой строке пункта */
+html[data-look][lang][data-look="g"] .ld-plan li{display:grid;grid-template-columns:20px 1fr;gap:var(--sp-group);align-items:start}
+html[data-look][lang][data-look="g"] .ld-plan li::before{content:"";width:20px;height:15px;margin-top:.12em;background:var(--tick,#2e9a70);
+  -webkit-mask:var(--lk-tick) center/contain no-repeat;mask:var(--lk-tick) center/contain no-repeat}
+html[data-look][lang][data-look="g"] .ld-plan-plus li::before{background:var(--acc)}
+html[data-look][lang][data-look="g"] .ld-price{--lk-tick:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 30'%3E%3Cpath d='M4 15c4 3 7 7 9 11C18 15 26 7 37 3' fill='none' stroke='%23000' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+html[data-look][lang][data-look="g"] .ld-price-note{margin:var(--sp-block) 0 0;font:400 16px/1.3 var(--ui)}
+html[data-drawn][data-grain][data-look][lang][data-look="g"][data-cover="green"] .ld-price{background-image:var(--lk-mesh);background-size:18px 18px}
+@media (max-width:800px){
+  html[data-look][lang][data-look="g"] .ld-plans{flex-direction:column;align-items:center}
+  html[data-look][lang][data-look="g"] .ld-plan-p{font-size:80px}
 }
