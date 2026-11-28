@@ -3,8 +3,8 @@
   let mascotCount = 0;
 
   Object.assign(UI, {
-    brandName: { ru: "Learny", en: "Learny" },
-    menuTitle: { ru: "Learny", en: "Learny" },
+    brandName: { ru: "Homewords", en: "Homewords" },
+    menuTitle: { ru: "Homewords", en: "Homewords" },
     homeTitle: { ru: "Из\u00a0текста\u00a0— в\u00a0практику", en: "Turn your text into practice" },
     learnyTitleStart: { ru: "Из\u00a0текста\u00a0—", en: "Turn your text" },
     learnyTitleEnd: { ru: "в\u00a0практику", en: "into practice" },

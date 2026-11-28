@@ -132,7 +132,7 @@ learny_html = fromt_html.replace(
 learny_html = learny_html.replace("</head>", '<style id="learny-home">\n' + learny_css + "\n</style>\n</head>", 1)
 learny_body, learny_end = learny_html.rsplit("</body>", 1)
 learny_html = learny_body + '<script id="learny-home-script">\n' + learny_js + "\n</script>\n</body>" + learny_end
-# В рабочей версии Learny первый экран B ведёт в урок или кабинет.
+# В рабочей версии Homewords первый экран B ведёт в урок или кабинет.
 calm_css = (ROOT / "src" / "learny-calm.css").read_text(encoding="utf-8")
 calm_js = (ROOT / "src" / "learny-calm.js").read_text(encoding="utf-8")
 learny_html = learny_html.replace('data-theme="light" data-theme-mode="light"', 'data-calm data-hero="b"', 1)
@@ -155,8 +155,8 @@ landing_assets = ["learny-paper.css", "learny-paper.js", "learny-notebook.css", 
 landing_version = hashlib.sha1(b"".join((ROOT / name).read_bytes() for name in landing_assets)).hexdigest()[:10]
 landing_html = re.sub(r'(learny-paper\.(?:css|js)|learny-notebook(?:-landing)?\.css|learny-notebook-open\.js|learny-looks\.(?:css|js))(\?v=[0-9a-f]+)?"', lambda m: m.group(1) + "?v=" + landing_version + '"', (ROOT / "learny-notebook-landing.html").read_text(encoding="utf-8"))
 # Встроенный SVG наследует цвет чернил темы и виден при открытии HTML с диска.
-brand_logo = (ROOT / "icons/learny-wordmark.svg").read_text(encoding="utf-8").strip()
-landing_html = landing_html.replace('<img class="learny-logo" src="icons/learny-wordmark.svg" alt="">', brand_logo)
+brand_logo = (ROOT / "icons/homewords-wordmark.svg").read_text(encoding="utf-8").strip()
+landing_html = landing_html.replace('<img class="learny-logo" src="icons/homewords-wordmark.svg" alt="">', brand_logo)
 pages = {
     "landing.html": landing_html,
     "index.html": learny_html,
@@ -181,7 +181,7 @@ notebook_js = (ROOT / "src" / "learny-notebook-app.js").read_text(encoding="utf-
 notebook_html = learny_html.replace('data-calm data-hero="b"', 'data-calm data-hero="b" data-nb', 1)
 notebook_html = re.sub(r'<i id="brand-dot"[^>]*>.*?</i>', lambda _: brand_logo, notebook_html, count=1)
 notebook_html = notebook_html.replace('<span class="footer-name" data-ui="brandName"></span>',
-                                      '<span class="footer-name" role="img" aria-label="Learny">' + brand_logo + '</span>', 1)
+                                      '<span class="footer-name" role="img" aria-label="Homewords">' + brand_logo + '</span>', 1)
 notebook_html = notebook_html.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<script>' + paper_js + '</script>', 1)
 # Темная тема приложения выключена, пока ее дорабатывают (23 ноября 2026): приложение всегда светлое, переключатель темы
 # в меню скрыт. Посмотреть темную для доработки — параметр ?dark=1 в адресе. Включить для всех — DARK_READY = True.

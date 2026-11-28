@@ -16,11 +16,11 @@
   const lessons = document.querySelector("#lesson-list"), how = document.querySelector("#how-list");
   const decorate = () => {
     const brandName = document.querySelector("#brand-name");
-    if (brandName.textContent !== "Learny") brandName.textContent = "Learny";
+    if (brandName.textContent !== "Homewords") brandName.textContent = "Homewords";
     const brandImage = document.querySelector("#brand-home i img");
     if (brandImage.getAttribute("src") !== "icons/learny-wordmark-v1.png") brandImage.src = "icons/learny-wordmark-v1.png";
-    document.querySelectorAll(".footer-name").forEach(name => { if (name.textContent !== "Learny") name.textContent = "Learny"; });
-    document.title = document.documentElement.lang === "ru" ? "Learny\u00a0— практика английского" : "Learny — English practice";
+    document.querySelectorAll(".footer-name").forEach(name => { if (name.textContent !== "Homewords") name.textContent = "Homewords"; });
+    document.title = document.documentElement.lang === "ru" ? "Homewords\u00a0— практика английского" : "Homewords — English practice";
     lessons.querySelectorAll(".lesson-card").forEach(card => {
       const image = card.querySelector("img.lc-art"), name = lessonArt[card.dataset.lesson];
       if (image && name) image.replaceWith(makeArt(name, "lc-art", 132, 132));

@@ -1,4 +1,4 @@
-/* Learny, спокойная проба (learny-calm*.html). Слой поверх learny-home.css, исходник не меняет.
+/* Homewords, спокойная проба (learny-calm*.html). Слой поверх learny-home.css, исходник не меняет.
    Одна система для лендинга и курса:
    — текст: 5 кеглей с заметным шагом (13 · 16 · 22 · 30 · 38+), 3 насыщенности, 8 стилей, все на токенах --t-*;
    — цвет: один фон, один акцент (фиолетовый = «твой ход»), две поверхности: белая карточка и мятная бумага;
@@ -563,7 +563,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 :root:is(#_#_,[data-calm]) #vb-review:not(:disabled) { box-shadow: none; }
 :root:is(#_#_,[data-calm])[data-hero="b"] body[data-calm-page="cabinet"]:has(.desk-resume:not([hidden])) #vb-review { color: var(--fg); border: 0; box-shadow: inset 0 0 0 1px var(--line); }
 
-/* ---------- логотип: только слово Learny; маскоты остаются внутри продукта (шаги урока, карточка вопроса).
+/* ---------- логотип: только слово Homewords; маскоты остаются внутри продукта (шаги урока, карточка вопроса).
    Прежний вариант с книжкой можно посмотреть по адресу ?logo=mascot ---------- */
 :root[data-calm]:not([data-logo="mascot"]) #brand-home i { display: none; }
 :root:is(#_#_,[data-calm]):not([data-logo="mascot"]) #brand-name { font-size: 26px; letter-spacing: -.04em; }

@@ -1288,7 +1288,7 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 
 </style>
 <style id="learny-calm">
-/* Learny, спокойная проба (learny-calm*.html). Слой поверх learny-home.css, исходник не меняет.
+/* Homewords, спокойная проба (learny-calm*.html). Слой поверх learny-home.css, исходник не меняет.
    Одна система для лендинга и курса:
    — текст: 5 кеглей с заметным шагом (13 · 16 · 22 · 30 · 38+), 3 насыщенности, 8 стилей, все на токенах --t-*;
    — цвет: один фон, один акцент (фиолетовый = «твой ход»), две поверхности: белая карточка и мятная бумага;
@@ -1853,7 +1853,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 :root:is(#_#_,[data-calm]) #vb-review:not(:disabled) { box-shadow: none; }
 :root:is(#_#_,[data-calm])[data-hero="b"] body[data-calm-page="cabinet"]:has(.desk-resume:not([hidden])) #vb-review { color: var(--fg); border: 0; box-shadow: inset 0 0 0 1px var(--line); }
 
-/* ---------- логотип: только слово Learny; маскоты остаются внутри продукта (шаги урока, карточка вопроса).
+/* ---------- логотип: только слово Homewords; маскоты остаются внутри продукта (шаги урока, карточка вопроса).
    Прежний вариант с книжкой можно посмотреть по адресу ?logo=mascot ---------- */
 :root[data-calm]:not([data-logo="mascot"]) #brand-home i { display: none; }
 :root:is(#_#_,[data-calm]):not([data-logo="mascot"]) #brand-name { font-size: 26px; letter-spacing: -.04em; }
@@ -2040,10 +2040,10 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   --paper-cut: #e1e1e7;
   --paper-cut-light: #f2f2f5;
   /* Оптический размер строчной надписи из примерки, с нижним выносом y. */
-  --brand-aspect: 1971 / 868;
-  --brand-width-header: 72px;
-  --brand-width-mobile: 63px;
-  --brand-width-footer: 84px;
+  --brand-aspect: 3658 / 868;
+  --brand-width-header: 134px;
+  --brand-width-mobile: 117px;
+  --brand-width-footer: 156px;
   /* в этот цвет на главной вырастает разделитель урока перед переходом: урок открывается на бумаге, без стола */
   --theory-desk: var(--paper-leaf);
 }
@@ -2064,7 +2064,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   --paper-cut: #efe9d8;
   --paper-cut-light: #f4eedf;
 }
-/* Рабочая тетрадь Learny для уроков, кабинета и каталога.
+/* Рабочая тетрадь Homewords для уроков, кабинета и каталога.
    Материалы листа и обложек общие с лендингом.
    Источник общего вида — лендинг (learny-notebook-landing.css и стилистика G из learny-looks.css), языка упражнения — проба (learny-notebook.css); значения скопированы сюда.
    Стилистика с 23 ноября 2026 — та же, что у лендинга G:
@@ -3688,14 +3688,17 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 <body>
 <header class="top">
   <div class="wrap bar">
-    <button class="brand" id="brand-home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="27 -683 1971 868" class="learny-logo" fill="currentColor" aria-hidden="true" focusable="false">
-  <title>Learny</title>
-  <path d="M39.05 0Q27.94 0 27.94 -13.11L27.94 -669.89Q27.94 -683 39.05 -683L159.83 -683Q170.94 -683 170.94 -669.89L170.94 -13.11Q170.94 0 159.83 0Z"/>
-  <path d="M384.97 6Q298.26 6 255.59 -36Q212.92 -78 212.92 -166.83L212.92 -324.8Q212.92 -411.08 257.65 -457.29Q302.37 -503.5 383.44 -503.5Q472.53 -503.5 515.7 -457.84Q558.87 -412.17 558.87 -316.94L558.87 -228.61Q558.87 -214.86 546.12 -214.86L353.45 -214.86L353.45 -154.69Q353.45 -126.23 360.74 -114.61Q368.03 -102.98 384.97 -102.98Q401.83 -102.98 409.26 -113.73Q416.7 -124.48 416.34 -148.45Q415.98 -160.09 426.44 -160.09L539.31 -160.09Q551.23 -160.09 551.23 -147.98Q552.4 -69.39 511.65 -31.7Q470.89 6 384.97 6ZM353.45 -298.03L418.34 -298.03L418.34 -347.95Q418.34 -371.86 410.4 -383.27Q402.47 -394.69 385.89 -394.69Q369.5 -394.69 361.47 -383.19Q353.45 -371.69 353.45 -347.95Z"/>
-  <path d="M816.55 0Q805.61 0 803.8 -11.47Q801.8 -26.17 799.8 -50.39Q797.8 -74.61 796.97 -94.44L781.49 -113.39L781.49 -358Q781.49 -380.94 776.5 -389.05Q771.52 -397.16 757.3 -397.16Q741.61 -397.16 735.95 -384.95Q730.28 -372.73 733.28 -345.94Q734.92 -332.83 721.17 -332.83L618.07 -332.83Q606.42 -332.83 605.42 -347.3Q599.6 -422.72 640 -463.11Q680.41 -503.5 762.39 -503.5Q846.39 -503.5 885.44 -467.93Q924.49 -432.36 924.49 -354.25L924.49 -129.86Q924.49 -84.11 925.07 -58.16Q925.66 -32.2 927.49 -14.11Q929.3 0 917.55 0ZM683.27 6Q638.52 6 613.33 -29.64Q588.14 -65.28 588.14 -128.75Q588.14 -200.03 620.6 -238.25Q653.07 -276.47 729.27 -286.75L790.3 -295.2L789.49 -217.58L764.19 -214.05Q742.33 -210.86 732.63 -195.3Q722.92 -179.75 722.92 -150.98Q722.92 -126.2 729.23 -113.77Q735.53 -101.34 748.42 -101.34Q760.5 -101.34 773.08 -112.38Q785.66 -123.41 800.52 -147.28L812.55 -75.31Q777.61 -30.11 749.05 -12.05Q720.49 6 683.27 6Z"/>
-  <path d="M981.47 0Q970.36 0 970.36 -13.11L970.36 -367.64Q970.36 -401.44 969.86 -430.8Q969.36 -460.17 967.36 -483.2Q966.36 -497.5 977.47 -497.5L1080.11 -497.5Q1090.04 -497.5 1091.04 -486.86Q1093.04 -470.95 1095.04 -446.56Q1097.04 -422.17 1097.86 -403.06L1113.36 -369.97L1113.36 -13.11Q1113.36 0 1101.44 0ZM1103.25 -310.12L1091.86 -430.59Q1104.69 -447.14 1121.01 -463.82Q1137.33 -480.5 1156.65 -492Q1175.97 -503.5 1197.79 -503.5Q1210.08 -503.5 1218.53 -500.86Q1224.17 -499.03 1225.67 -494.8Q1227.17 -490.56 1227.17 -484.75Q1227.17 -458.72 1226.26 -428.12Q1225.36 -397.52 1223.36 -369.84Q1222.36 -357.92 1213.08 -358.92Q1208.08 -360.09 1201.76 -360.59Q1195.44 -361.09 1188.44 -361.09Q1166.61 -361.09 1144.25 -346.73Q1121.89 -332.38 1103.25 -310.12Z"/>
-  <path d="M1471.6 0Q1459.68 0 1459.68 -13.11L1459.68 -347.94Q1459.68 -365.34 1454.61 -372.63Q1449.54 -379.92 1437.39 -379.92Q1428.06 -379.92 1418.28 -374.09Q1408.51 -368.27 1399.93 -358.44L1376.87 -419Q1400.12 -453.36 1434.78 -478.43Q1469.43 -503.5 1511.46 -503.5Q1559.04 -503.5 1580.86 -472.27Q1602.68 -441.03 1602.68 -371.64L1602.68 -13.11Q1602.68 0 1590.76 0ZM1272.57 0Q1260.65 0 1260.65 -13.11L1260.65 -367.64Q1260.65 -401.44 1260.15 -430.8Q1259.65 -460.17 1257.65 -483.2Q1256.65 -497.5 1267.76 -497.5L1369.87 -497.5Q1379.51 -497.5 1381.34 -486.03Q1383.51 -471.14 1385.42 -446.66Q1387.34 -422.17 1388.15 -403.06L1403.65 -369.97L1403.65 -13.11Q1403.65 0 1391.73 0Z"/>
-  <path d="M1715.37 185Q1703.45 185 1706.26 169.89L1744.34 1.39L1627.59 -482.56Q1624.59 -497.5 1636.51 -497.5L1767.23 -497.5Q1779.15 -497.5 1780.15 -485.56L1798.6 -323.28Q1801.66 -293.56 1805.12 -254.46Q1808.57 -215.36 1811.1 -183.17L1814.74 -183.17Q1817.29 -215.36 1819.68 -254.55Q1822.07 -293.75 1825.79 -323.47L1847.15 -487.2Q1848.15 -497.5 1859.26 -497.5L1987.98 -497.5Q1994.26 -497.5 1996.67 -494.09Q1999.09 -490.67 1997.09 -483.2L1843.34 174.72Q1840.7 185 1830.41 185Z"/>
+    <button class="brand" id="brand-home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="28 -683 3658 868" class="learny-logo" fill="currentColor" aria-hidden="true" focusable="false">
+  <title>Homewords</title>
+  <path d="M238 0Q227 0 227 -13V-348Q227 -365 222 -372.5Q217 -380 205 -380Q195 -380 185.5 -374Q176 -368 167 -358L144 -419Q167 -453 202 -478Q237 -503 279 -503Q326 -503 348 -472Q370 -441 370 -372V-13Q370 0 359 0ZM39 0Q28 0 28 -13V-670Q28 -683 39 -683H160Q171 -683 171 -670V-13Q171 0 160 0Z"/>
+  <path d="M585 6Q503 6 457.5 -39Q412 -84 412 -169V-330Q412 -413 457.5 -458Q503 -503 585 -503Q668 -503 713 -458Q758 -413 758 -330V-169Q758 -84 713 -39Q668 6 585 6ZM585 -118Q601 -118 608.5 -130Q616 -142 616 -170V-328Q616 -357 608.5 -368.5Q601 -380 585 -380Q569 -380 561.5 -368.5Q554 -357 554 -328V-170Q554 -142 561.5 -130Q569 -118 585 -118Z"/>
+  <path d="M811 0Q800 0 800 -13V-368Q800 -401 799.5 -430.5Q799 -460 797 -483Q796 -497 807 -497H910Q920 -497 921 -487Q922 -477 923 -462Q924 -447 925 -433Q951 -463 979 -483Q1007 -503 1047 -503Q1079 -503 1099 -489.5Q1119 -476 1128 -444Q1151 -469 1178.5 -486Q1206 -503 1240 -503Q1288 -503 1310 -472Q1332 -441 1332 -373V-13Q1332 0 1321 0H1200Q1189 0 1189 -13V-353Q1189 -368 1185 -374Q1181 -380 1171 -380Q1163 -380 1154 -375.5Q1145 -371 1138 -362V-13Q1138 0 1126 0H1006Q995 0 995 -13V-353Q995 -368 990.5 -374Q986 -380 976 -380Q968 -380 959.5 -375.5Q951 -371 943 -362V-13Q943 0 931 0Z"/>
+  <path d="M1546 6Q1459 6 1416.5 -36Q1374 -78 1374 -167V-325Q1374 -411 1418.5 -457Q1463 -503 1545 -503Q1634 -503 1677 -457.5Q1720 -412 1720 -317V-229Q1720 -215 1707 -215H1515V-155Q1515 -126 1522 -114.5Q1529 -103 1546 -103Q1563 -103 1570.5 -113.5Q1578 -124 1577 -148Q1577 -160 1588 -160H1700Q1712 -160 1712 -148Q1714 -69 1673 -31.5Q1632 6 1546 6ZM1515 -298H1579V-348Q1579 -372 1571.5 -383.5Q1564 -395 1547 -395Q1531 -395 1523 -383.5Q1515 -372 1515 -348Z"/>
+  <path d="M1848 0Q1837 0 1834 -10L1747 -483Q1744 -497 1756 -497H1883Q1894 -497 1895 -486L1915 -286Q1917 -252 1919.5 -218.5Q1922 -185 1924 -151H1926Q1931 -185 1934.5 -218Q1938 -251 1942 -284L1954 -375L1942 -472Q1941 -487 1952 -487H2060Q2071 -487 2072 -476L2091 -283Q2094 -250 2097 -217Q2100 -184 2103 -151H2105Q2107 -184 2110 -217.5Q2113 -251 2116 -284L2134 -486Q2136 -497 2146 -497H2274Q2286 -497 2283 -483L2196 -10Q2193 0 2182 0H2051Q2040 0 2038 -10L2028 -87Q2025 -115 2022 -146.5Q2019 -178 2016 -226H2012Q2009 -178 2006 -146Q2003 -114 2000 -86L1991 -11Q1990 0 1979 0Z"/>
+  <path d="M2483 6Q2401 6 2355.5 -39Q2310 -84 2310 -169V-330Q2310 -413 2355.5 -458Q2401 -503 2483 -503Q2566 -503 2611 -458Q2656 -413 2656 -330V-169Q2656 -84 2611 -39Q2566 6 2483 6ZM2483 -118Q2499 -118 2506.5 -130Q2514 -142 2514 -170V-328Q2514 -357 2506.5 -368.5Q2499 -380 2483 -380Q2467 -380 2459.5 -368.5Q2452 -357 2452 -328V-170Q2452 -142 2459.5 -130Q2467 -118 2483 -118Z"/>
+  <path d="M2709 0Q2698 0 2698 -13V-368Q2698 -401 2697.5 -430.5Q2697 -460 2695 -483Q2694 -497 2705 -497H2808Q2818 -497 2819 -487Q2821 -471 2823 -446.5Q2825 -422 2825 -403L2841 -370V-13Q2841 0 2829 0ZM2831 -310 2819 -431Q2832 -447 2848.5 -463.5Q2865 -480 2884.5 -491.5Q2904 -503 2925 -503Q2938 -503 2946 -501Q2952 -499 2953.5 -495Q2955 -491 2955 -485Q2955 -459 2954 -428.5Q2953 -398 2951 -370Q2950 -358 2941 -359Q2936 -360 2929.5 -360.5Q2923 -361 2916 -361Q2894 -361 2871.5 -346.5Q2849 -332 2831 -310Z"/>
+  <path d="M3080 6Q3031 6 3008.5 -24.5Q2986 -55 2986 -124V-358Q2986 -431 3012.5 -467Q3039 -503 3093 -503Q3121 -503 3147.5 -496.5Q3174 -490 3196 -478V-377Q3171 -387 3155 -387Q3142 -387 3135.5 -378Q3129 -369 3129 -350V-146Q3129 -130 3134 -124Q3139 -118 3150 -118Q3161 -118 3170.5 -124Q3180 -130 3190 -142L3212 -81Q3191 -44 3155.5 -19Q3120 6 3080 6ZM3218 0Q3207 0 3205 -11Q3202 -27 3200.5 -51.5Q3199 -76 3199 -94L3183 -119V-670Q3183 -683 3195 -683H3315Q3326 -683 3326 -670V-130Q3326 -97 3326.5 -67Q3327 -37 3329 -14Q3331 0 3319 0Z"/>
+  <path d="M3518 6Q3431 6 3394.5 -33Q3358 -72 3367 -150Q3368 -163 3379 -163H3485Q3497 -163 3496 -150Q3494 -121 3499 -108Q3504 -95 3518 -95Q3543 -95 3543 -131Q3543 -152 3534.5 -164.5Q3526 -177 3506 -192L3430 -247Q3400 -269 3382.5 -298.5Q3365 -328 3365 -369Q3365 -435 3403.5 -469Q3442 -503 3522 -503Q3606 -503 3644 -467Q3682 -431 3680 -360Q3680 -347 3668 -347H3564Q3557 -347 3554 -351Q3551 -355 3552 -362Q3554 -382 3548.5 -392Q3543 -402 3530 -402Q3507 -402 3507 -375Q3507 -358 3514 -347Q3521 -336 3539 -324L3610 -272Q3648 -246 3667 -215Q3686 -184 3686 -137Q3686 -66 3645 -30Q3604 6 3518 6Z"/>
 </svg><span id="brand-name">Домашка</span></button>
     <nav class="top-nav" aria-label="Разделы"><button data-nav="lesson-list" data-ui="navLessons"></button><button data-nav="vocab-box" data-ui="navVocab"></button></nav>
     <div class="progress-wrap" id="progress-wrap" hidden><span id="progress-label" class="num">0%</span><div class="pbar"><i id="progress-fill"></i></div></div>
@@ -3907,14 +3910,17 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   </section>
 </main>
 <footer class="app-footer wrap">
-  <div class="footer-copy"><span class="footer-name" role="img" aria-label="Learny"><svg xmlns="http://www.w3.org/2000/svg" viewBox="27 -683 1971 868" class="learny-logo" fill="currentColor" aria-hidden="true" focusable="false">
-  <title>Learny</title>
-  <path d="M39.05 0Q27.94 0 27.94 -13.11L27.94 -669.89Q27.94 -683 39.05 -683L159.83 -683Q170.94 -683 170.94 -669.89L170.94 -13.11Q170.94 0 159.83 0Z"/>
-  <path d="M384.97 6Q298.26 6 255.59 -36Q212.92 -78 212.92 -166.83L212.92 -324.8Q212.92 -411.08 257.65 -457.29Q302.37 -503.5 383.44 -503.5Q472.53 -503.5 515.7 -457.84Q558.87 -412.17 558.87 -316.94L558.87 -228.61Q558.87 -214.86 546.12 -214.86L353.45 -214.86L353.45 -154.69Q353.45 -126.23 360.74 -114.61Q368.03 -102.98 384.97 -102.98Q401.83 -102.98 409.26 -113.73Q416.7 -124.48 416.34 -148.45Q415.98 -160.09 426.44 -160.09L539.31 -160.09Q551.23 -160.09 551.23 -147.98Q552.4 -69.39 511.65 -31.7Q470.89 6 384.97 6ZM353.45 -298.03L418.34 -298.03L418.34 -347.95Q418.34 -371.86 410.4 -383.27Q402.47 -394.69 385.89 -394.69Q369.5 -394.69 361.47 -383.19Q353.45 -371.69 353.45 -347.95Z"/>
-  <path d="M816.55 0Q805.61 0 803.8 -11.47Q801.8 -26.17 799.8 -50.39Q797.8 -74.61 796.97 -94.44L781.49 -113.39L781.49 -358Q781.49 -380.94 776.5 -389.05Q771.52 -397.16 757.3 -397.16Q741.61 -397.16 735.95 -384.95Q730.28 -372.73 733.28 -345.94Q734.92 -332.83 721.17 -332.83L618.07 -332.83Q606.42 -332.83 605.42 -347.3Q599.6 -422.72 640 -463.11Q680.41 -503.5 762.39 -503.5Q846.39 -503.5 885.44 -467.93Q924.49 -432.36 924.49 -354.25L924.49 -129.86Q924.49 -84.11 925.07 -58.16Q925.66 -32.2 927.49 -14.11Q929.3 0 917.55 0ZM683.27 6Q638.52 6 613.33 -29.64Q588.14 -65.28 588.14 -128.75Q588.14 -200.03 620.6 -238.25Q653.07 -276.47 729.27 -286.75L790.3 -295.2L789.49 -217.58L764.19 -214.05Q742.33 -210.86 732.63 -195.3Q722.92 -179.75 722.92 -150.98Q722.92 -126.2 729.23 -113.77Q735.53 -101.34 748.42 -101.34Q760.5 -101.34 773.08 -112.38Q785.66 -123.41 800.52 -147.28L812.55 -75.31Q777.61 -30.11 749.05 -12.05Q720.49 6 683.27 6Z"/>
-  <path d="M981.47 0Q970.36 0 970.36 -13.11L970.36 -367.64Q970.36 -401.44 969.86 -430.8Q969.36 -460.17 967.36 -483.2Q966.36 -497.5 977.47 -497.5L1080.11 -497.5Q1090.04 -497.5 1091.04 -486.86Q1093.04 -470.95 1095.04 -446.56Q1097.04 -422.17 1097.86 -403.06L1113.36 -369.97L1113.36 -13.11Q1113.36 0 1101.44 0ZM1103.25 -310.12L1091.86 -430.59Q1104.69 -447.14 1121.01 -463.82Q1137.33 -480.5 1156.65 -492Q1175.97 -503.5 1197.79 -503.5Q1210.08 -503.5 1218.53 -500.86Q1224.17 -499.03 1225.67 -494.8Q1227.17 -490.56 1227.17 -484.75Q1227.17 -458.72 1226.26 -428.12Q1225.36 -397.52 1223.36 -369.84Q1222.36 -357.92 1213.08 -358.92Q1208.08 -360.09 1201.76 -360.59Q1195.44 -361.09 1188.44 -361.09Q1166.61 -361.09 1144.25 -346.73Q1121.89 -332.38 1103.25 -310.12Z"/>
-  <path d="M1471.6 0Q1459.68 0 1459.68 -13.11L1459.68 -347.94Q1459.68 -365.34 1454.61 -372.63Q1449.54 -379.92 1437.39 -379.92Q1428.06 -379.92 1418.28 -374.09Q1408.51 -368.27 1399.93 -358.44L1376.87 -419Q1400.12 -453.36 1434.78 -478.43Q1469.43 -503.5 1511.46 -503.5Q1559.04 -503.5 1580.86 -472.27Q1602.68 -441.03 1602.68 -371.64L1602.68 -13.11Q1602.68 0 1590.76 0ZM1272.57 0Q1260.65 0 1260.65 -13.11L1260.65 -367.64Q1260.65 -401.44 1260.15 -430.8Q1259.65 -460.17 1257.65 -483.2Q1256.65 -497.5 1267.76 -497.5L1369.87 -497.5Q1379.51 -497.5 1381.34 -486.03Q1383.51 -471.14 1385.42 -446.66Q1387.34 -422.17 1388.15 -403.06L1403.65 -369.97L1403.65 -13.11Q1403.65 0 1391.73 0Z"/>
-  <path d="M1715.37 185Q1703.45 185 1706.26 169.89L1744.34 1.39L1627.59 -482.56Q1624.59 -497.5 1636.51 -497.5L1767.23 -497.5Q1779.15 -497.5 1780.15 -485.56L1798.6 -323.28Q1801.66 -293.56 1805.12 -254.46Q1808.57 -215.36 1811.1 -183.17L1814.74 -183.17Q1817.29 -215.36 1819.68 -254.55Q1822.07 -293.75 1825.79 -323.47L1847.15 -487.2Q1848.15 -497.5 1859.26 -497.5L1987.98 -497.5Q1994.26 -497.5 1996.67 -494.09Q1999.09 -490.67 1997.09 -483.2L1843.34 174.72Q1840.7 185 1830.41 185Z"/>
+  <div class="footer-copy"><span class="footer-name" role="img" aria-label="Homewords"><svg xmlns="http://www.w3.org/2000/svg" viewBox="28 -683 3658 868" class="learny-logo" fill="currentColor" aria-hidden="true" focusable="false">
+  <title>Homewords</title>
+  <path d="M238 0Q227 0 227 -13V-348Q227 -365 222 -372.5Q217 -380 205 -380Q195 -380 185.5 -374Q176 -368 167 -358L144 -419Q167 -453 202 -478Q237 -503 279 -503Q326 -503 348 -472Q370 -441 370 -372V-13Q370 0 359 0ZM39 0Q28 0 28 -13V-670Q28 -683 39 -683H160Q171 -683 171 -670V-13Q171 0 160 0Z"/>
+  <path d="M585 6Q503 6 457.5 -39Q412 -84 412 -169V-330Q412 -413 457.5 -458Q503 -503 585 -503Q668 -503 713 -458Q758 -413 758 -330V-169Q758 -84 713 -39Q668 6 585 6ZM585 -118Q601 -118 608.5 -130Q616 -142 616 -170V-328Q616 -357 608.5 -368.5Q601 -380 585 -380Q569 -380 561.5 -368.5Q554 -357 554 -328V-170Q554 -142 561.5 -130Q569 -118 585 -118Z"/>
+  <path d="M811 0Q800 0 800 -13V-368Q800 -401 799.5 -430.5Q799 -460 797 -483Q796 -497 807 -497H910Q920 -497 921 -487Q922 -477 923 -462Q924 -447 925 -433Q951 -463 979 -483Q1007 -503 1047 -503Q1079 -503 1099 -489.5Q1119 -476 1128 -444Q1151 -469 1178.5 -486Q1206 -503 1240 -503Q1288 -503 1310 -472Q1332 -441 1332 -373V-13Q1332 0 1321 0H1200Q1189 0 1189 -13V-353Q1189 -368 1185 -374Q1181 -380 1171 -380Q1163 -380 1154 -375.5Q1145 -371 1138 -362V-13Q1138 0 1126 0H1006Q995 0 995 -13V-353Q995 -368 990.5 -374Q986 -380 976 -380Q968 -380 959.5 -375.5Q951 -371 943 -362V-13Q943 0 931 0Z"/>
+  <path d="M1546 6Q1459 6 1416.5 -36Q1374 -78 1374 -167V-325Q1374 -411 1418.5 -457Q1463 -503 1545 -503Q1634 -503 1677 -457.5Q1720 -412 1720 -317V-229Q1720 -215 1707 -215H1515V-155Q1515 -126 1522 -114.5Q1529 -103 1546 -103Q1563 -103 1570.5 -113.5Q1578 -124 1577 -148Q1577 -160 1588 -160H1700Q1712 -160 1712 -148Q1714 -69 1673 -31.5Q1632 6 1546 6ZM1515 -298H1579V-348Q1579 -372 1571.5 -383.5Q1564 -395 1547 -395Q1531 -395 1523 -383.5Q1515 -372 1515 -348Z"/>
+  <path d="M1848 0Q1837 0 1834 -10L1747 -483Q1744 -497 1756 -497H1883Q1894 -497 1895 -486L1915 -286Q1917 -252 1919.5 -218.5Q1922 -185 1924 -151H1926Q1931 -185 1934.5 -218Q1938 -251 1942 -284L1954 -375L1942 -472Q1941 -487 1952 -487H2060Q2071 -487 2072 -476L2091 -283Q2094 -250 2097 -217Q2100 -184 2103 -151H2105Q2107 -184 2110 -217.5Q2113 -251 2116 -284L2134 -486Q2136 -497 2146 -497H2274Q2286 -497 2283 -483L2196 -10Q2193 0 2182 0H2051Q2040 0 2038 -10L2028 -87Q2025 -115 2022 -146.5Q2019 -178 2016 -226H2012Q2009 -178 2006 -146Q2003 -114 2000 -86L1991 -11Q1990 0 1979 0Z"/>
+  <path d="M2483 6Q2401 6 2355.5 -39Q2310 -84 2310 -169V-330Q2310 -413 2355.5 -458Q2401 -503 2483 -503Q2566 -503 2611 -458Q2656 -413 2656 -330V-169Q2656 -84 2611 -39Q2566 6 2483 6ZM2483 -118Q2499 -118 2506.5 -130Q2514 -142 2514 -170V-328Q2514 -357 2506.5 -368.5Q2499 -380 2483 -380Q2467 -380 2459.5 -368.5Q2452 -357 2452 -328V-170Q2452 -142 2459.5 -130Q2467 -118 2483 -118Z"/>
+  <path d="M2709 0Q2698 0 2698 -13V-368Q2698 -401 2697.5 -430.5Q2697 -460 2695 -483Q2694 -497 2705 -497H2808Q2818 -497 2819 -487Q2821 -471 2823 -446.5Q2825 -422 2825 -403L2841 -370V-13Q2841 0 2829 0ZM2831 -310 2819 -431Q2832 -447 2848.5 -463.5Q2865 -480 2884.5 -491.5Q2904 -503 2925 -503Q2938 -503 2946 -501Q2952 -499 2953.5 -495Q2955 -491 2955 -485Q2955 -459 2954 -428.5Q2953 -398 2951 -370Q2950 -358 2941 -359Q2936 -360 2929.5 -360.5Q2923 -361 2916 -361Q2894 -361 2871.5 -346.5Q2849 -332 2831 -310Z"/>
+  <path d="M3080 6Q3031 6 3008.5 -24.5Q2986 -55 2986 -124V-358Q2986 -431 3012.5 -467Q3039 -503 3093 -503Q3121 -503 3147.5 -496.5Q3174 -490 3196 -478V-377Q3171 -387 3155 -387Q3142 -387 3135.5 -378Q3129 -369 3129 -350V-146Q3129 -130 3134 -124Q3139 -118 3150 -118Q3161 -118 3170.5 -124Q3180 -130 3190 -142L3212 -81Q3191 -44 3155.5 -19Q3120 6 3080 6ZM3218 0Q3207 0 3205 -11Q3202 -27 3200.5 -51.5Q3199 -76 3199 -94L3183 -119V-670Q3183 -683 3195 -683H3315Q3326 -683 3326 -670V-130Q3326 -97 3326.5 -67Q3327 -37 3329 -14Q3331 0 3319 0Z"/>
+  <path d="M3518 6Q3431 6 3394.5 -33Q3358 -72 3367 -150Q3368 -163 3379 -163H3485Q3497 -163 3496 -150Q3494 -121 3499 -108Q3504 -95 3518 -95Q3543 -95 3543 -131Q3543 -152 3534.5 -164.5Q3526 -177 3506 -192L3430 -247Q3400 -269 3382.5 -298.5Q3365 -328 3365 -369Q3365 -435 3403.5 -469Q3442 -503 3522 -503Q3606 -503 3644 -467Q3682 -431 3680 -360Q3680 -347 3668 -347H3564Q3557 -347 3554 -351Q3551 -355 3552 -362Q3554 -382 3548.5 -392Q3543 -402 3530 -402Q3507 -402 3507 -375Q3507 -358 3514 -347Q3521 -336 3539 -324L3610 -272Q3648 -246 3667 -215Q3686 -184 3686 -137Q3686 -66 3645 -30Q3604 6 3518 6Z"/>
 </svg></span><span data-ui="footerNote"></span></div>
   <span class="footer-year">© <span id="footer-year"></span></span>
 </footer>
@@ -4154,8 +4160,8 @@ const UI = {
   parseBadKey:  { ru: "Ключ ИИ не\u00a0подошел. Проверьте его: меню → «ИИ для\u00a0разбора уроков».", en: "The AI key didn't work. Check it: menu → \"AI for lessons\"." },
   aiQuotaDevice:{ ru: "На\u00a0сегодня бесплатный лимит на\u00a0этом устройстве исчерпан. Текст и\u00a0файлы остались на\u00a0месте, завтра можно продолжить.",
                   en: "Today's free limit on this device is used up. Your text and files are still here; you can continue tomorrow." },
-  aiQuotaDay:   { ru: "На\u00a0сегодня общий бесплатный лимит Learny исчерпан. Текст и\u00a0файлы остались на\u00a0месте, завтра можно продолжить.",
-                  en: "Learny's shared free limit for today is used up. Your text and files are still here; you can continue tomorrow." },
+  aiQuotaDay:   { ru: "На\u00a0сегодня общий бесплатный лимит Homewords исчерпан. Текст и\u00a0файлы остались на\u00a0месте, завтра можно продолжить.",
+                  en: "Today's free Homewords limit is used up. Your text and files are still here; you can continue tomorrow." },
   aiServerDown: { ru: "Сервис создания уроков сейчас недоступен. Текст и\u00a0файлы остались на\u00a0месте, попробуйте позже.",
                   en: "The lesson service is unavailable right now. Your text and files are still here; try again later." },
   aiServerBusy: { ru: "Сейчас слишком много запросов. Подождите пару минут и\u00a0попробуйте снова.",
@@ -4163,13 +4169,13 @@ const UI = {
   aiLimitShort: { ru: "Бесплатный лимит ИИ на\u00a0сегодня исчерпан. Свой ключ можно подключить в\u00a0меню «···».",
                   en: "Today's free AI limit is used up. You can connect your own key in the ··· menu." },
   aiDownShort:  { ru: "Сервис ИИ сейчас недоступен. Попробуйте позже.", en: "The AI service is unavailable right now. Try again later." },
-  aiServer:     { ru: "через сервер Learny, без\u00a0ключа", en: "via the Learny server, no key" },
-  aiSheetServer:{ ru: "Ключ не\u00a0обязателен: без\u00a0него уроки создаются через сервер Learny с\u00a0дневным лимитом. Со\u00a0своим ключом лимита нет, а\u00a0запросы идут напрямую в\u00a0ИИ.",
-                  en: "A key is optional: without one, lessons are built through the Learny server with a daily limit. With your own key there is no limit and requests go straight to the AI." },
+  aiServer:     { ru: "через сервер Homewords, без\u00a0ключа", en: "via the Homewords server, no key" },
+  aiSheetServer:{ ru: "Ключ не\u00a0обязателен: без\u00a0него уроки создаются через сервер Homewords с\u00a0дневным лимитом. Со\u00a0своим ключом лимита нет, а\u00a0запросы идут напрямую в\u00a0ИИ.",
+                  en: "A key is optional: without one, lessons are built through the Homewords server with a daily limit. With your own key there is no limit and requests go straight to the AI." },
   fallbackDemo: { ru: "Открыть готовый урок", en: "Open a sample lesson" },
   fallbackKey:  { ru: "Подключить свой ключ ИИ", en: "Use my own AI key" },
-  fileSendServer:{ ru: "По\u00a0нажатию «Распознать текст» файлы отправятся на\u00a0сервер Learny и\u00a0в\u00a0Google Gemini. Результат можно будет проверить перед созданием урока.",
-                  en: "Choosing Extract text sends the files to the Learny server and Google Gemini. You can review the result before building your lesson." },
+  fileSendServer:{ ru: "По\u00a0нажатию «Распознать текст» файлы отправятся на\u00a0сервер Homewords и\u00a0в\u00a0Google Gemini. Результат можно будет проверить перед созданием урока.",
+                  en: "Choosing Extract text sends the files to the Homewords server and Google Gemini. You can review the result before building your lesson." },
   modeMaterial: { ru: "Текст от\u00a0учителя", en: "Teacher's text" },
   modeTopic:    { ru: "Своя тема", en: "My topic" },
   topicBtn:     { ru: "Составить урок", en: "Build the lesson" },
@@ -5547,7 +5553,7 @@ function copyBuiltin(b) {
 }
 function rebuildLessons() {
   const own = customRaw.slice().sort((a, b) => b.createdAt - a.createdAt)
-    .map(r => { try { return buildLesson(r); } catch(e) { console.error("Learny: урок не\u00a0собрался", r?.id, e); return null; } }).filter(Boolean);
+    .map(r => { try { return buildLesson(r); } catch(e) { console.error("Homewords: урок не\u00a0собрался", r?.id, e); return null; } }).filter(Boolean);
   LESSONS = [...own, ...BUILTIN_LESSONS.map(copyBuiltin)];   // копии: правки не должны портить исходные
   applyOverrides();
 }
@@ -5865,7 +5871,7 @@ async function geminiJSON(prompt, { signal, audio, quick, media } = {}) {
   throw lastErr;
 }
 /* null — разбирать некому: так бывает только там, где серверного пути нет */
-/* SERVER_AI_START — без своего ключа запрос идет на сервер Learny: ключ ИИ живет только там, в страницу не попадает */
+/* SERVER_AI_START — без своего ключа запрос идет на сервер Homewords: ключ ИИ живет только там, в страницу не попадает */
 const AI_SERVER_DEFAULT = "https://homework-sync-vika.fly.dev", DEVICE_KEY = "et-device";
 const SERVER_ERRORS = { device_limit: "quota_device", daily_limit: "quota_day", busy: "server_busy", no_key: "server_down", origin: "server_down",
   too_large: "prompt_too_large", refused: "refused", bad_answer: "invalid_json", timeout: "upstream_error", upstream: "upstream_error", bad_request: "upstream_error" };
@@ -5910,7 +5916,7 @@ async function serverJSON(prompt, { signal, media, task = "quick" } = {}) {
   } finally { clearTimeout(timer); signal?.removeEventListener("abort", onAbort); }
 }
 /* SERVER_AI_END */
-/* кто разбирает: Claude на claude.ai; свой ключ, если он подключен; иначе сервер Learny. task — вид задачи для лимитов сервера */
+/* кто разбирает: Claude на claude.ai; свой ключ, если он подключен; иначе сервер Homewords. task — вид задачи для лимитов сервера */
 async function lessonAI({ requireMedia = false, task = "quick" } = {}) {
   const sample = requireMedia ? null : await claudeCap("sample");
   if (sample) return { builtIn: true, json: (prompt, opts) => sample.json(prompt, { ...opts, cache: false }) };
@@ -6830,7 +6836,7 @@ function renderHowMarquee(howSet) {
 function applyLang() {
   document.documentElement.lang = S.lang;
   document.title = document.documentElement.dataset.style === "learny"
-    ? (S.lang === "en" ? "Learny — English practice" : "Learny\u00a0— практика английского")
+    ? (S.lang === "en" ? "Homewords — English practice" : "Homewords\u00a0— практика английского")
     : (S.lang === "en" ? "English homework" : "Домашка по\u00a0английскому");
   $("#footer-year").textContent = new Date().getFullYear();
   $$("[data-ui]").forEach(el => { const v = t(el.dataset.ui); if (typeof v === "string") el.textContent = v; });
@@ -7750,7 +7756,7 @@ function gapWord(q, state, raw) {
   const word = mine || q.a[0], before = stripTags(q.s[0]).trim();
   return !before || /[.!?…]["'”’)]?$/.test(before) ? word.charAt(0).toUpperCase() + word.slice(1) : word;
 }
-/* вторая попытка есть только в рабочей версии Learny */
+/* вторая попытка есть только в рабочей версии Homewords */
 const drillRetry = () => document.documentElement.hasAttribute("data-calm");
 function renderDrill() {
   const l = lesson(), D = l.drill, items = D.items, p = prog().drill;
@@ -8823,8 +8829,8 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   let mascotCount = 0;
 
   Object.assign(UI, {
-    brandName: { ru: "Learny", en: "Learny" },
-    menuTitle: { ru: "Learny", en: "Learny" },
+    brandName: { ru: "Homewords", en: "Homewords" },
+    menuTitle: { ru: "Homewords", en: "Homewords" },
     homeTitle: { ru: "Из\u00a0текста\u00a0— в\u00a0практику", en: "Turn your text into practice" },
     learnyTitleStart: { ru: "Из\u00a0текста\u00a0—", en: "Turn your text" },
     learnyTitleEnd: { ru: "в\u00a0практику", en: "into practice" },
@@ -9012,7 +9018,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
 
 </script>
 <script id="learny-calm-script">
-// Learny, спокойная проба: вход в готовый урок для гостя, раздел «Как устроен урок», варианты первого экрана.
+// Homewords, спокойная проба: вход в готовый урок для гостя, раздел «Как устроен урок», варианты первого экрана.
 (() => {
   const DEMO_LESSON = "modals"; // встроенный урок с вариантами ответа: первый вопрос решается двумя тапами
   const hero = document.documentElement.dataset.hero || "b";
@@ -9025,16 +9031,16 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
       learnyTitleStart: { ru: "Домашка по\u00a0английскому,", en: "English homework," },
       learnyTitleEnd: { ru: "шаг за\u00a0шагом", en: "step by step" },
       homeLede: {
-        ru: "Learny превращает заметки учителя в\u00a0урок: теория, упражнения и\u00a0разговорная практика.",
-        en: "Learny turns your teacher’s notes into a lesson: theory, exercises and speaking practice."
+        ru: "Homewords превращает заметки учителя в\u00a0урок: теория, упражнения и\u00a0разговорная практика.",
+        en: "Homewords turns your teacher’s notes into a lesson: theory, exercises and speaking practice."
       }
     },
     c: {
       learnyTitleStart: { ru: "Что учим", en: "What are you" },
       learnyTitleEnd: { ru: "сегодня?", en: "learning today?" },
       homeLede: {
-        ru: "Вставьте заметки учителя или\u00a0назовите тему. Learny соберет теорию, упражнения и\u00a0разговорную практику.",
-        en: "Paste your teacher’s notes or name a topic. Learny builds the theory, exercises and speaking practice."
+        ru: "Вставьте заметки учителя или\u00a0назовите тему. Homewords соберет теорию, упражнения и\u00a0разговорную практику.",
+        en: "Paste your teacher’s notes or name a topic. Homewords builds the theory, exercises and speaking practice."
       },
       intakePlaceholder: { ru: "Например, «Когда употреблять present perfect?»", en: "For example, “When do I use the present perfect?”" }
     }
@@ -9047,13 +9053,13 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     // Над полем — одно предложение о том, что делать; куда уходит текст — подписью под кнопкой.
     calmOwnLede: { ru: "Вставьте домашку от\u00a0учителя или\u00a0назовите тему.", en: "Paste your teacher’s homework or name a topic." },
     calmOwnNote: {
-      // Ключ не нужен: без своего ключа текст уходит на сервер Learny. Со своим ключом строка честно говорит другое.
+      // Ключ не нужен: без своего ключа текст уходит на сервер Homewords. Со своим ключом строка честно говорит другое.
       ru: () => aiKey()
         ? "Текст отправится напрямую в\u00a0ИИ по\u00a0вашему ключу."
-        : "Текст отправится на\u00a0сервер Learny и\u00a0в\u00a0Google Gemini для\u00a0разбора.",
+        : "Текст отправится на\u00a0сервер Homewords и\u00a0в\u00a0Google Gemini для\u00a0разбора.",
       en: () => aiKey()
         ? "Your text goes straight to the AI under your own key."
-        : "Your text is sent to the Learny server and Google Gemini to build the lesson."
+        : "Your text is sent to the Homewords server and Google Gemini to build the lesson."
     },
     calmTrLabel: { ru: "Перевод теории", en: "Theory translation" },
     calmTrTap: { ru: "По\u00a0тапу", en: "On tap" },
@@ -9268,7 +9274,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   window.addEventListener("scroll", queueCover, { passive: true });
   window.addEventListener("resize", queueCover);
 
-  /* ---------- меню: заголовок «Learny» только для скринридера, «Reset lesson» в самом низу и красным,
+  /* ---------- меню: заголовок «Homewords» только для скринридера, «Reset lesson» в самом низу и красным,
      перевод теории — сегментом, как язык подсказок и тема, а не строкой, которая меняет надпись по нажатию ---------- */
   $one("#menu-title").classList.add("learny-visually-hidden");
   const resetButton = $one("#reset-btn");
@@ -9781,7 +9787,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
   // Темная тема по умолчанию теплая; ?dark=graphite показывает запасной холодный вариант для сравнения.
   if (new URLSearchParams(location.search).get("dark") === "graphite") document.documentElement.dataset.dark = "graphite";
 
-  // Логотип — только слово Learny. Для сравнения ?logo=mascot возвращает в шапку книжку.
+  // Логотип — только слово Homewords. Для сравнения ?logo=mascot возвращает в шапку книжку.
   if (new URLSearchParams(location.search).get("logo") === "mascot") document.documentElement.dataset.logo = "mascot";
 
   applyLang();
@@ -9794,7 +9800,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
 
 </script>
 <script id="learny-notebook-app-script">
-// Рабочая тетрадь Learny для урока, кабинета и каталога.
+// Рабочая тетрадь Homewords для урока, кабинета и каталога.
 // Логику урока не меняет: после каждой отрисовки дорисовывает пометки поверх готовой разметки.
 // Ответ вписан от руки в пропуск, ошибка зачеркнута красным карандашом, верное вписано сверху, верное с первого раза отмечено галочкой.
 (() => {
@@ -9848,8 +9854,8 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     calmOwnTitle: { ru: "Урок из\u00a0вашего текста", en: "A lesson from your text" },
     calmOwnLede: { ru: "Вставьте домашку или\u00a0назовите тему", en: "Paste your homework or name a topic" },
     calmOwnNote: {
-      ru: () => aiKey() ? "Текст уходит напрямую в\u00a0ИИ по\u00a0вашему ключу" : "Текст уходит на\u00a0сервер Learny и\u00a0в\u00a0Google Gemini, чтобы собрать урок",
-      en: () => aiKey() ? "The text goes straight to the AI under your own key" : "The text goes to the Learny server and Google Gemini to build the lesson"
+      ru: () => aiKey() ? "Текст уходит напрямую в\u00a0ИИ по\u00a0вашему ключу" : "Текст уходит на\u00a0сервер Homewords и\u00a0в\u00a0Google Gemini, чтобы собрать урок",
+      en: () => aiKey() ? "The text goes straight to the AI under your own key" : "The text goes to the Homewords server and Google Gemini to build the lesson"
     },
     fileHelp: { ru: "Фото или\u00a0PDF, до\u00a010\u00a0МБ", en: "Photo or PDF, up to 10 MB" },
     nbDrop: { ru: "Отпустите здесь", en: "Drop it here" },
@@ -10481,7 +10487,7 @@ if ('serviceWorker' in navigator) addEventListener('load', async () => {
     nbAcctNamePh: { ru: "Как вас зовут?", en: "What's your name?" },
     nbAcctNameNote: { ru: "Имя увидит учитель в\u00a0отчете", en: "Your teacher sees it in reports" },
     nbAcctSettings: { ru: "Настройки", en: "Settings" },
-    nbAcctSite: { ru: "Сайт Learny", en: "Learny website" }
+    nbAcctSite: { ru: "Сайт Homewords", en: "Homewords website" }
   });
   const PERSON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.8 20c1.3-3.5 4-5.4 7.2-5.4s5.9 1.9 7.2 5.4"/></svg>';
   const appNav = document.createElement("nav");

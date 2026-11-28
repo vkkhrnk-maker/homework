@@ -1,4 +1,4 @@
-// Learny, спокойная проба: вход в готовый урок для гостя, раздел «Как устроен урок», варианты первого экрана.
+// Homewords, спокойная проба: вход в готовый урок для гостя, раздел «Как устроен урок», варианты первого экрана.
 (() => {
   const DEMO_LESSON = "modals"; // встроенный урок с вариантами ответа: первый вопрос решается двумя тапами
   const hero = document.documentElement.dataset.hero || "b";
@@ -11,16 +11,16 @@
       learnyTitleStart: { ru: "Домашка по\u00a0английскому,", en: "English homework," },
       learnyTitleEnd: { ru: "шаг за\u00a0шагом", en: "step by step" },
       homeLede: {
-        ru: "Learny превращает заметки учителя в\u00a0урок: теория, упражнения и\u00a0разговорная практика.",
-        en: "Learny turns your teacher’s notes into a lesson: theory, exercises and speaking practice."
+        ru: "Homewords превращает заметки учителя в\u00a0урок: теория, упражнения и\u00a0разговорная практика.",
+        en: "Homewords turns your teacher’s notes into a lesson: theory, exercises and speaking practice."
       }
     },
     c: {
       learnyTitleStart: { ru: "Что учим", en: "What are you" },
       learnyTitleEnd: { ru: "сегодня?", en: "learning today?" },
       homeLede: {
-        ru: "Вставьте заметки учителя или\u00a0назовите тему. Learny соберет теорию, упражнения и\u00a0разговорную практику.",
-        en: "Paste your teacher’s notes or name a topic. Learny builds the theory, exercises and speaking practice."
+        ru: "Вставьте заметки учителя или\u00a0назовите тему. Homewords соберет теорию, упражнения и\u00a0разговорную практику.",
+        en: "Paste your teacher’s notes or name a topic. Homewords builds the theory, exercises and speaking practice."
       },
       intakePlaceholder: { ru: "Например, «Когда употреблять present perfect?»", en: "For example, “When do I use the present perfect?”" }
     }
@@ -33,13 +33,13 @@
     // Над полем — одно предложение о том, что делать; куда уходит текст — подписью под кнопкой.
     calmOwnLede: { ru: "Вставьте домашку от\u00a0учителя или\u00a0назовите тему.", en: "Paste your teacher’s homework or name a topic." },
     calmOwnNote: {
-      // Ключ не нужен: без своего ключа текст уходит на сервер Learny. Со своим ключом строка честно говорит другое.
+      // Ключ не нужен: без своего ключа текст уходит на сервер Homewords. Со своим ключом строка честно говорит другое.
       ru: () => aiKey()
         ? "Текст отправится напрямую в\u00a0ИИ по\u00a0вашему ключу."
-        : "Текст отправится на\u00a0сервер Learny и\u00a0в\u00a0Google Gemini для\u00a0разбора.",
+        : "Текст отправится на\u00a0сервер Homewords и\u00a0в\u00a0Google Gemini для\u00a0разбора.",
       en: () => aiKey()
         ? "Your text goes straight to the AI under your own key."
-        : "Your text is sent to the Learny server and Google Gemini to build the lesson."
+        : "Your text is sent to the Homewords server and Google Gemini to build the lesson."
     },
     calmTrLabel: { ru: "Перевод теории", en: "Theory translation" },
     calmTrTap: { ru: "По\u00a0тапу", en: "On tap" },
@@ -254,7 +254,7 @@
   window.addEventListener("scroll", queueCover, { passive: true });
   window.addEventListener("resize", queueCover);
 
-  /* ---------- меню: заголовок «Learny» только для скринридера, «Reset lesson» в самом низу и красным,
+  /* ---------- меню: заголовок «Homewords» только для скринридера, «Reset lesson» в самом низу и красным,
      перевод теории — сегментом, как язык подсказок и тема, а не строкой, которая меняет надпись по нажатию ---------- */
   $one("#menu-title").classList.add("learny-visually-hidden");
   const resetButton = $one("#reset-btn");
@@ -767,7 +767,7 @@
   // Темная тема по умолчанию теплая; ?dark=graphite показывает запасной холодный вариант для сравнения.
   if (new URLSearchParams(location.search).get("dark") === "graphite") document.documentElement.dataset.dark = "graphite";
 
-  // Логотип — только слово Learny. Для сравнения ?logo=mascot возвращает в шапку книжку.
+  // Логотип — только слово Homewords. Для сравнения ?logo=mascot возвращает в шапку книжку.
   if (new URLSearchParams(location.search).get("logo") === "mascot") document.documentElement.dataset.logo = "mascot";
 
   applyLang();

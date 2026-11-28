@@ -1276,7 +1276,7 @@ body.home header.top .top-nav button:hover{background:var(--fromt-controls)}
 
 </style>
 <style id="learny-calm">
-/* Learny, спокойная проба (learny-calm*.html). Слой поверх learny-home.css, исходник не меняет.
+/* Homewords, спокойная проба (learny-calm*.html). Слой поверх learny-home.css, исходник не меняет.
    Одна система для лендинга и курса:
    — текст: 5 кеглей с заметным шагом (13 · 16 · 22 · 30 · 38+), 3 насыщенности, 8 стилей, все на токенах --t-*;
    — цвет: один фон, один акцент (фиолетовый = «твой ход»), две поверхности: белая карточка и мятная бумага;
@@ -1841,7 +1841,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
 :root:is(#_#_,[data-calm]) #vb-review:not(:disabled) { box-shadow: none; }
 :root:is(#_#_,[data-calm])[data-hero="b"] body[data-calm-page="cabinet"]:has(.desk-resume:not([hidden])) #vb-review { color: var(--fg); border: 0; box-shadow: inset 0 0 0 1px var(--line); }
 
-/* ---------- логотип: только слово Learny; маскоты остаются внутри продукта (шаги урока, карточка вопроса).
+/* ---------- логотип: только слово Homewords; маскоты остаются внутри продукта (шаги урока, карточка вопроса).
    Прежний вариант с книжкой можно посмотреть по адресу ?logo=mascot ---------- */
 :root[data-calm]:not([data-logo="mascot"]) #brand-home i { display: none; }
 :root:is(#_#_,[data-calm]):not([data-logo="mascot"]) #brand-name { font-size: 26px; letter-spacing: -.04em; }
@@ -2468,8 +2468,8 @@ const UI = {
   parseBadKey:  { ru: "Ключ ИИ не\u00a0подошел. Проверьте его: меню → «ИИ для\u00a0разбора уроков».", en: "The AI key didn't work. Check it: menu → \"AI for lessons\"." },
   aiQuotaDevice:{ ru: "На\u00a0сегодня бесплатный лимит на\u00a0этом устройстве исчерпан. Текст и\u00a0файлы остались на\u00a0месте, завтра можно продолжить.",
                   en: "Today's free limit on this device is used up. Your text and files are still here; you can continue tomorrow." },
-  aiQuotaDay:   { ru: "На\u00a0сегодня общий бесплатный лимит Learny исчерпан. Текст и\u00a0файлы остались на\u00a0месте, завтра можно продолжить.",
-                  en: "Learny's shared free limit for today is used up. Your text and files are still here; you can continue tomorrow." },
+  aiQuotaDay:   { ru: "На\u00a0сегодня общий бесплатный лимит Homewords исчерпан. Текст и\u00a0файлы остались на\u00a0месте, завтра можно продолжить.",
+                  en: "Today's free Homewords limit is used up. Your text and files are still here; you can continue tomorrow." },
   aiServerDown: { ru: "Сервис создания уроков сейчас недоступен. Текст и\u00a0файлы остались на\u00a0месте, попробуйте позже.",
                   en: "The lesson service is unavailable right now. Your text and files are still here; try again later." },
   aiServerBusy: { ru: "Сейчас слишком много запросов. Подождите пару минут и\u00a0попробуйте снова.",
@@ -2477,13 +2477,13 @@ const UI = {
   aiLimitShort: { ru: "Бесплатный лимит ИИ на\u00a0сегодня исчерпан. Свой ключ можно подключить в\u00a0меню «···».",
                   en: "Today's free AI limit is used up. You can connect your own key in the ··· menu." },
   aiDownShort:  { ru: "Сервис ИИ сейчас недоступен. Попробуйте позже.", en: "The AI service is unavailable right now. Try again later." },
-  aiServer:     { ru: "через сервер Learny, без\u00a0ключа", en: "via the Learny server, no key" },
-  aiSheetServer:{ ru: "Ключ не\u00a0обязателен: без\u00a0него уроки создаются через сервер Learny с\u00a0дневным лимитом. Со\u00a0своим ключом лимита нет, а\u00a0запросы идут напрямую в\u00a0ИИ.",
-                  en: "A key is optional: without one, lessons are built through the Learny server with a daily limit. With your own key there is no limit and requests go straight to the AI." },
+  aiServer:     { ru: "через сервер Homewords, без\u00a0ключа", en: "via the Homewords server, no key" },
+  aiSheetServer:{ ru: "Ключ не\u00a0обязателен: без\u00a0него уроки создаются через сервер Homewords с\u00a0дневным лимитом. Со\u00a0своим ключом лимита нет, а\u00a0запросы идут напрямую в\u00a0ИИ.",
+                  en: "A key is optional: without one, lessons are built through the Homewords server with a daily limit. With your own key there is no limit and requests go straight to the AI." },
   fallbackDemo: { ru: "Открыть готовый урок", en: "Open a sample lesson" },
   fallbackKey:  { ru: "Подключить свой ключ ИИ", en: "Use my own AI key" },
-  fileSendServer:{ ru: "По\u00a0нажатию «Распознать текст» файлы отправятся на\u00a0сервер Learny и\u00a0в\u00a0Google Gemini. Результат можно будет проверить перед созданием урока.",
-                  en: "Choosing Extract text sends the files to the Learny server and Google Gemini. You can review the result before building your lesson." },
+  fileSendServer:{ ru: "По\u00a0нажатию «Распознать текст» файлы отправятся на\u00a0сервер Homewords и\u00a0в\u00a0Google Gemini. Результат можно будет проверить перед созданием урока.",
+                  en: "Choosing Extract text sends the files to the Homewords server and Google Gemini. You can review the result before building your lesson." },
   modeMaterial: { ru: "Текст от\u00a0учителя", en: "Teacher's text" },
   modeTopic:    { ru: "Своя тема", en: "My topic" },
   topicBtn:     { ru: "Составить урок", en: "Build the lesson" },
@@ -3861,7 +3861,7 @@ function copyBuiltin(b) {
 }
 function rebuildLessons() {
   const own = customRaw.slice().sort((a, b) => b.createdAt - a.createdAt)
-    .map(r => { try { return buildLesson(r); } catch(e) { console.error("Learny: урок не\u00a0собрался", r?.id, e); return null; } }).filter(Boolean);
+    .map(r => { try { return buildLesson(r); } catch(e) { console.error("Homewords: урок не\u00a0собрался", r?.id, e); return null; } }).filter(Boolean);
   LESSONS = [...own, ...BUILTIN_LESSONS.map(copyBuiltin)];   // копии: правки не должны портить исходные
   applyOverrides();
 }
@@ -4179,7 +4179,7 @@ async function geminiJSON(prompt, { signal, audio, quick, media } = {}) {
   throw lastErr;
 }
 /* null — разбирать некому: так бывает только там, где серверного пути нет */
-/* SERVER_AI_START — без своего ключа запрос идет на сервер Learny: ключ ИИ живет только там, в страницу не попадает */
+/* SERVER_AI_START — без своего ключа запрос идет на сервер Homewords: ключ ИИ живет только там, в страницу не попадает */
 const AI_SERVER_DEFAULT = "https://homework-sync-vika.fly.dev", DEVICE_KEY = "et-device";
 const SERVER_ERRORS = { device_limit: "quota_device", daily_limit: "quota_day", busy: "server_busy", no_key: "server_down", origin: "server_down",
   too_large: "prompt_too_large", refused: "refused", bad_answer: "invalid_json", timeout: "upstream_error", upstream: "upstream_error", bad_request: "upstream_error" };
@@ -4224,7 +4224,7 @@ async function serverJSON(prompt, { signal, media, task = "quick" } = {}) {
   } finally { clearTimeout(timer); signal?.removeEventListener("abort", onAbort); }
 }
 /* SERVER_AI_END */
-/* кто разбирает: Claude на claude.ai; свой ключ, если он подключен; иначе сервер Learny. task — вид задачи для лимитов сервера */
+/* кто разбирает: Claude на claude.ai; свой ключ, если он подключен; иначе сервер Homewords. task — вид задачи для лимитов сервера */
 async function lessonAI({ requireMedia = false, task = "quick" } = {}) {
   const sample = requireMedia ? null : await claudeCap("sample");
   if (sample) return { builtIn: true, json: (prompt, opts) => sample.json(prompt, { ...opts, cache: false }) };
@@ -5144,7 +5144,7 @@ function renderHowMarquee(howSet) {
 function applyLang() {
   document.documentElement.lang = S.lang;
   document.title = document.documentElement.dataset.style === "learny"
-    ? (S.lang === "en" ? "Learny — English practice" : "Learny\u00a0— практика английского")
+    ? (S.lang === "en" ? "Homewords — English practice" : "Homewords\u00a0— практика английского")
     : (S.lang === "en" ? "English homework" : "Домашка по\u00a0английскому");
   $("#footer-year").textContent = new Date().getFullYear();
   $$("[data-ui]").forEach(el => { const v = t(el.dataset.ui); if (typeof v === "string") el.textContent = v; });
@@ -6064,7 +6064,7 @@ function gapWord(q, state, raw) {
   const word = mine || q.a[0], before = stripTags(q.s[0]).trim();
   return !before || /[.!?…]["'”’)]?$/.test(before) ? word.charAt(0).toUpperCase() + word.slice(1) : word;
 }
-/* вторая попытка есть только в рабочей версии Learny */
+/* вторая попытка есть только в рабочей версии Homewords */
 const drillRetry = () => document.documentElement.hasAttribute("data-calm");
 function renderDrill() {
   const l = lesson(), D = l.drill, items = D.items, p = prog().drill;
@@ -7137,8 +7137,8 @@ if (false) addEventListener('load', async () => {
   let mascotCount = 0;
 
   Object.assign(UI, {
-    brandName: { ru: "Learny", en: "Learny" },
-    menuTitle: { ru: "Learny", en: "Learny" },
+    brandName: { ru: "Homewords", en: "Homewords" },
+    menuTitle: { ru: "Homewords", en: "Homewords" },
     homeTitle: { ru: "Из\u00a0текста\u00a0— в\u00a0практику", en: "Turn your text into practice" },
     learnyTitleStart: { ru: "Из\u00a0текста\u00a0—", en: "Turn your text" },
     learnyTitleEnd: { ru: "в\u00a0практику", en: "into practice" },
@@ -7326,7 +7326,7 @@ if (false) addEventListener('load', async () => {
 
 </script>
 <script id="learny-calm-script">
-// Learny, спокойная проба: вход в готовый урок для гостя, раздел «Как устроен урок», варианты первого экрана.
+// Homewords, спокойная проба: вход в готовый урок для гостя, раздел «Как устроен урок», варианты первого экрана.
 (() => {
   const DEMO_LESSON = "modals"; // встроенный урок с вариантами ответа: первый вопрос решается двумя тапами
   const hero = document.documentElement.dataset.hero || "b";
@@ -7339,16 +7339,16 @@ if (false) addEventListener('load', async () => {
       learnyTitleStart: { ru: "Домашка по\u00a0английскому,", en: "English homework," },
       learnyTitleEnd: { ru: "шаг за\u00a0шагом", en: "step by step" },
       homeLede: {
-        ru: "Learny превращает заметки учителя в\u00a0урок: теория, упражнения и\u00a0разговорная практика.",
-        en: "Learny turns your teacher’s notes into a lesson: theory, exercises and speaking practice."
+        ru: "Homewords превращает заметки учителя в\u00a0урок: теория, упражнения и\u00a0разговорная практика.",
+        en: "Homewords turns your teacher’s notes into a lesson: theory, exercises and speaking practice."
       }
     },
     c: {
       learnyTitleStart: { ru: "Что учим", en: "What are you" },
       learnyTitleEnd: { ru: "сегодня?", en: "learning today?" },
       homeLede: {
-        ru: "Вставьте заметки учителя или\u00a0назовите тему. Learny соберет теорию, упражнения и\u00a0разговорную практику.",
-        en: "Paste your teacher’s notes or name a topic. Learny builds the theory, exercises and speaking practice."
+        ru: "Вставьте заметки учителя или\u00a0назовите тему. Homewords соберет теорию, упражнения и\u00a0разговорную практику.",
+        en: "Paste your teacher’s notes or name a topic. Homewords builds the theory, exercises and speaking practice."
       },
       intakePlaceholder: { ru: "Например, «Когда употреблять present perfect?»", en: "For example, “When do I use the present perfect?”" }
     }
@@ -7361,13 +7361,13 @@ if (false) addEventListener('load', async () => {
     // Над полем — одно предложение о том, что делать; куда уходит текст — подписью под кнопкой.
     calmOwnLede: { ru: "Вставьте домашку от\u00a0учителя или\u00a0назовите тему.", en: "Paste your teacher’s homework or name a topic." },
     calmOwnNote: {
-      // Ключ не нужен: без своего ключа текст уходит на сервер Learny. Со своим ключом строка честно говорит другое.
+      // Ключ не нужен: без своего ключа текст уходит на сервер Homewords. Со своим ключом строка честно говорит другое.
       ru: () => aiKey()
         ? "Текст отправится напрямую в\u00a0ИИ по\u00a0вашему ключу."
-        : "Текст отправится на\u00a0сервер Learny и\u00a0в\u00a0Google Gemini для\u00a0разбора.",
+        : "Текст отправится на\u00a0сервер Homewords и\u00a0в\u00a0Google Gemini для\u00a0разбора.",
       en: () => aiKey()
         ? "Your text goes straight to the AI under your own key."
-        : "Your text is sent to the Learny server and Google Gemini to build the lesson."
+        : "Your text is sent to the Homewords server and Google Gemini to build the lesson."
     },
     calmTrLabel: { ru: "Перевод теории", en: "Theory translation" },
     calmTrTap: { ru: "По\u00a0тапу", en: "On tap" },
@@ -7582,7 +7582,7 @@ if (false) addEventListener('load', async () => {
   window.addEventListener("scroll", queueCover, { passive: true });
   window.addEventListener("resize", queueCover);
 
-  /* ---------- меню: заголовок «Learny» только для скринридера, «Reset lesson» в самом низу и красным,
+  /* ---------- меню: заголовок «Homewords» только для скринридера, «Reset lesson» в самом низу и красным,
      перевод теории — сегментом, как язык подсказок и тема, а не строкой, которая меняет надпись по нажатию ---------- */
   $one("#menu-title").classList.add("learny-visually-hidden");
   const resetButton = $one("#reset-btn");
@@ -8095,7 +8095,7 @@ if (false) addEventListener('load', async () => {
   // Темная тема по умолчанию теплая; ?dark=graphite показывает запасной холодный вариант для сравнения.
   if (new URLSearchParams(location.search).get("dark") === "graphite") document.documentElement.dataset.dark = "graphite";
 
-  // Логотип — только слово Learny. Для сравнения ?logo=mascot возвращает в шапку книжку.
+  // Логотип — только слово Homewords. Для сравнения ?logo=mascot возвращает в шапку книжку.
   if (new URLSearchParams(location.search).get("logo") === "mascot") document.documentElement.dataset.logo = "mascot";
 
   applyLang();

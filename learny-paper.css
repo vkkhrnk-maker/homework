@@ -10,10 +10,10 @@
   --paper-cut: #e1e1e7;
   --paper-cut-light: #f2f2f5;
   /* Оптический размер строчной надписи из примерки, с нижним выносом y. */
-  --brand-aspect: 1971 / 868;
-  --brand-width-header: 72px;
-  --brand-width-mobile: 63px;
-  --brand-width-footer: 84px;
+  --brand-aspect: 3658 / 868;
+  --brand-width-header: 134px;
+  --brand-width-mobile: 117px;
+  --brand-width-footer: 156px;
   /* в этот цвет на главной вырастает разделитель урока перед переходом: урок открывается на бумаге, без стола */
   --theory-desk: var(--paper-leaf);
 }
