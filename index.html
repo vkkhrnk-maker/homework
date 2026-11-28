@@ -3260,12 +3260,15 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & #view-speak .speak-q { font-size: 36px; line-height: 1.25; }
   /* текст для чтения: одна колонка удобной для чтения ширины, абзацы через 16, строка диалога — имя полужирным.
      Предложение переводится нажатием, как в теории. Под текстом одна кнопка — к вопросам по нему */
-  & #view-reading { margin-top: 40px; }
+  /* у секций по умолчанию свои 48 сверху; «Текст» стоит так же, как остальные шаги */
+  & #view-reading#view-reading { margin-top: 40px; padding-top: 0; }
+  & #view-reading .section-heading { margin-bottom: 0; }
+  & .reading-body > .reading-p:last-child { margin-bottom: 0; }
   & .reading-body { max-width: 680px; margin-top: 32px; }
   & .reading-p { margin: 0 0 16px; font: 400 20px/1.6 var(--nb-read); color: var(--nb-ink); }
   & .reading-line { margin-bottom: 8px; }
   & .reading-speaker { font-weight: 600; }
-  & .reading-next { margin-top: 48px; }
+  & .reading-next { margin-top: 32px; }
   & .reading-next .primary-btn { height: 64px; padding: 0 36px; font-size: 20px; }
   & .reading-sheet .reading-p { font-size: 18px; }
   & .reading-sheet-title { margin: 0 0 16px; }
@@ -3518,19 +3521,29 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   @media (min-width: 1280px) {
     &[data-nb-side]:not([data-nb-view="home"]) main.wrap { position: relative; left: 136px; }
     &[data-nb-side]:not([data-nb-view="home"]) .nb-side { position: absolute; top: 0; bottom: 0; right: calc(100% + 48px); display: block; width: 224px; }
-    & .nb-side-in { position: sticky; top: 96px; display: flex; flex-direction: column; align-items: flex-start; max-height: calc(100vh - 120px); overflow: auto; scrollbar-width: none; }
-    & .nb-side .lb-title { order: 0; margin: 0 0 16px; padding: 0 16px; overflow: visible; white-space: normal; text-overflow: clip; font: 400 14px/1.35 var(--nb-ui); color: var(--nb-ink-2); }
+    & .nb-side-in { position: sticky; top: 90px; display: flex; flex-direction: column; align-items: flex-start; max-height: calc(100vh - 120px); overflow: auto; scrollbar-width: none; }
+    & .nb-side .lb-title { order: 0; margin: 0 0 8px; padding: 0 16px; overflow: visible; white-space: normal; text-overflow: clip; font: 400 14px/1.35 var(--nb-ui); color: var(--nb-ink-2); }
     & .nb-side #tabs#tabs { display: contents; }
     /* у шага в сайдбаре те же поля 16 слева и справа, что у пилюли в строке: выделение не прилипает к тексту */
     & .nb-side #tabs .tab, & .nb-side #tabs .tab[aria-selected="true"] { order: 2; height: auto; padding: 8px 16px; }
     & .nb-side #tabs .tab[data-view="theory"], & .nb-side #tabs .tab[data-view="theory"][aria-selected="true"] { order: 1; }
     & .nb-side #theory-toc#theory-toc { order: 1; position: static; display: flex; flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: 0; margin: 0 0 8px; padding: 0 16px 0 40px; overflow: visible; }
-    & .nb-side #theory-toc a, & .nb-side #theory-toc a.active { flex: none; padding: 4px 0; font-size: 15px; white-space: normal; }
+    /* раздел в две строки: подчеркивание идет под словами каждой строки, а не на всю ширину колонки — линией текста, не фоном */
+    & .nb-side #theory-toc a, & .nb-side #theory-toc a.active { flex: none; padding: 4px 0; background: none; font-size: 15px; white-space: normal;
+      text-decoration: underline 3px transparent; text-underline-offset: 6px; text-decoration-skip-ink: none; transition: text-decoration-color .2s var(--nb-ease), color .15s var(--nb-ease); }
+    & .nb-side #theory-toc a.active { text-decoration-color: #f6cf3a; }
+    @media (hover: hover) { & .nb-side #theory-toc a:not(.active):hover { text-decoration-color: var(--nb-ink-3); text-decoration-thickness: 1px; } }
+    /* один-два раздела — оглавление ничего не дает: подпунктов нет */
+    & .nb-side #theory-toc:not(:has(a:nth-child(3))) { display: none !important; }
     &:not([data-nb-view="theory"]) .nb-side #theory-toc { display: none !important; }
     &[data-nb-side] #view-theory .learny-rail { display: none; }
     & .nb-side .toc-label { display: none; }
-    /* шаги ушли из колонки: над заданием остается отступ раздела, 48 */
-    &[data-nb-side]:not([data-nb-view="home"]) main.wrap { padding-top: 48px; }
+    /* шаги ушли из колонки. Замер 28 ноября: шапка → первая строка колонки 32 (блок), сайдбар начинается вровень с ней
+       (прилипает на 90 = шапка 58 + 32); полоса вопросов → задание 48 (раздел). Свои 40 у шагов здесь не нужны */
+    &[data-nb-side]:not([data-nb-view="home"]) main.wrap { padding-top: 16px; }
+    &[data-nb-side] :is(#view-drill, #view-match, #view-speak, #view-reading#view-reading) { margin-top: 0; }
+    &[data-nb-side]:is([data-nb-view="drill"], [data-nb-view="match"], [data-nb-view="speak"]) main.wrap > .nb-head { margin-top: 16px; }
+    &[data-nb-side] .nb-head:has(.q-strip:not([hidden])) + .learny-stage .card, &[data-nb-side] .nb-head + .learny-stage > .learny-work > .card:first-child { margin-top: 0; }
   }
   /* кольцо прогресса (компонент progressRing): 36, дуга со скругленными концами, число посередине; цвет — от текста вокруг.
      В кабинете — слева от строки прогресса под названием (28 ноября 2026: маленькое пустое кольцо читалось радиокнопкой,
@@ -3540,7 +3553,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & .progress-ring-track { stroke: currentColor; opacity: .28; }
   & .progress-ring-bar { stroke: currentColor; stroke-linecap: round; }
   & .progress-ring-num { font: 600 12px/1 var(--nb-ui); letter-spacing: 0; font-variant-numeric: tabular-nums; }
-  & #lesson-list .learny-lesson-sub:has(.progress-ring) { display: flex; align-items: center; gap: 12px; }
+  & #lesson-list .learny-lesson-sub:has(.progress-ring) { display: flex; align-items: center; gap: var(--sp-group, 8px); }
   & body:not([data-calm-page="cabinet"]) #lesson-list .progress-ring { display: none; }
   /* карточка — блок: нажимается растянутая кнопка «открыть» поверх всего, «⋯» лежит над ней.
      «⋯» тихие: в правом верхнем углу при наведении и в фокусе, на телефоне — всегда; подложка только под курсором */
@@ -3552,7 +3565,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   & #lesson-list .lesson-card:is(:hover, :focus-within, .menu-open) .lesson-more, & #lesson-list .lesson-more:focus-visible { opacity: .85; }
   & #lesson-list .lesson-card.menu-open .lesson-more { opacity: 1; }
   /* меню карточки: белый листок под «⋯», пункт удаления — красным карандашом */
-  & .card-menu:not([hidden]) { position: fixed; z-index: 60; display: grid; min-width: 180px; padding: 4px; border-radius: 12px; background: #fff;
+  & .card-menu:not([hidden]) { position: fixed; z-index: 60; display: grid; min-width: 180px; padding: 8px; border-radius: 12px; background: #fff;
     box-shadow: 0 0 0 1px rgba(26, 23, 28, .14); animation: nb-rise .16s var(--nb-ease); }
   & .card-menu-item { height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: none; text-align: left; font: 400 16px/1 var(--nb-ui); color: var(--nb-ink); }
   & .card-menu-item.danger { color: var(--nb-pencil-ink); }
@@ -3625,7 +3638,7 @@ html:has(#lesson-composer[open]) { overflow: hidden; }
   @media (hover: hover) { & .nb-new-more:hover { background: var(--nb-ink); color: #fff; } }
   /* то же в окне «Свой урок»: форма уходит, остаются крестик и «Урок готов» */
   & #lesson-composer .nb-card.is-ready > :not(.nb-ready, .composer-close) { display: none; }
-  & #lesson-composer .nb-ready:not([hidden]) { display: grid; gap: 16px; justify-items: center; padding: 24px 0 8px; }
+  & #lesson-composer .nb-ready:not([hidden]) { display: grid; gap: 16px; justify-items: center; padding: 32px 0 0; }
   & #lesson-composer .nb-ready p { margin: 0; }
   & #lesson-composer .nb-ready-title { margin: 0; font: 900 48px/1 var(--nb-disp); color: var(--nb-ink); text-wrap: balance; }
   & #lesson-composer .nb-ready-open { height: 64px; margin-top: 16px; padding: 0 36px; font-size: 20px; }
